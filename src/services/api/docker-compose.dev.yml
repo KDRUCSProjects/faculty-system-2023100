@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  node-api:
+    image: faculty-ms-dev
+    container_name: faculty-ms-api-dev
+    command: npm run dev
+  database:
+    container_name: faculty-ms-db-dev
+    environment:
+      MYSQL_DATABASE: ${DB_DEV_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_DEV_PASS}
+      # MYSQL_USER: ${DB_DEV_USER}
+      # MYSQL_USER: ${DB_USER} :- If the value is root, then
+      # this will cause problem as its already created @ init of db
