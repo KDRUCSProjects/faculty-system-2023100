@@ -1,0 +1,21 @@
+# API -------------------------------------------------
+src/services/api/node_modules
+src/services/api/.env*
+src/services/api/!.env*.example
+
+# -----------------------------------------------------
+
+# Web Client-------------------------------------------
+src/presentation/web/node_modules
+src/presentation/web/.env*
+src/presentation/web/!.env*.example
+
+# -----------------------------------------------------
+
+
+# Mobile ----------------------------------------------
+src/presentation/mobile/node_modules
+src/presentation/mobile/.env*
+src/presentation/mobile/!.env*.example
+
+# -----------------------------------------------------
