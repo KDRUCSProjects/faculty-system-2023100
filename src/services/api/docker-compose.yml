@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  database:
+    image: mariadb:10.7
+    networks:
+      - node-network
+    volumes:
+      - maria-data:/data/db
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-uroot', '-padmin']
+      interval: 5s
+      retries: 10
+    ports:
+      - '3309:3309'
+    environment:
+      MYSQL_TCP_PORT: 3309
+  node-api:
+    build: .
+    ports:
+      - '${PORT}:${PORT}'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - node-network
+    env_file:
+      - docker-compose.env
+    depends_on:
+      database:
+        condition: service_healthy
+volumes:
+  maria-data:
+    driver: local
+networks:
+  node-network:
+    driver: bridge
