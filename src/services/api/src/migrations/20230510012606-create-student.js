@@ -1,4 +1,3 @@
-'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -7,58 +6,61 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       kankorId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       fullname: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       nickname: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+      },
+      fatherName: {
+        type: Sequelize.STRING,
       },
       grandFatherName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       imageUrl: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       province: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       division: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       district: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       engName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       engFatherName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       engGrandFatherName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       educationalYear: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       admissionYear: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Students');
-  }
+  },
 };

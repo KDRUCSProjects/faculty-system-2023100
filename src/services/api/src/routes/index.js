@@ -25,7 +25,6 @@ const defaultRoutes = [
     path: '/students',
     route: studentsRoutes,
   },
-
 ];
 
 const devRoutes = [
