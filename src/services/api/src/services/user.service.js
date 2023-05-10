@@ -82,7 +82,6 @@ const deleteUserById = async (userId) => {
   return user;
 };
 
-
 /**
  * Verify Email and Password
  * @param {Object} User

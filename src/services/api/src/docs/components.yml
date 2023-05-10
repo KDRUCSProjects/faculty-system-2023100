@@ -46,6 +46,59 @@ components:
           type: number
         message:
           type: string
+    
+      
+    Student:
+      type: object
+      properties:
+        id:
+          type: string
+        kankorId:
+          type: string
+        fullName:
+          type: string
+        nickname:
+          type: string
+        fatherName:
+          type: string
+        grandFatherName:
+          type: string
+        province:
+          type: string
+        division:
+          type: number
+        district:
+          type: string
+        engName:
+          type: string
+        engFatherName:
+          type: string
+        engGrandFatherName:
+          type: string
+        educationalYear:
+          type: string
+        admissionYear:
+          type: string  
+        photo:
+          type: file
+
+
+      example:
+          kankorId : L2700283
+          fullName : شمس الله
+          nickname : شمسی
+          fatherName : عبدالروف
+          grandFatherName : محمد طاهر
+          province : کندهار
+          division : 6
+          district : 15 District
+          engName : shamsullah shamsi
+          engFatherName : Abdul Rauf
+          engGrandFatherName : Muhammad Tahir
+          educationalYear: 2023
+          admissionYear : 2019
+          photo : Needs Real Photo Not Value
+
 
   responses:
     DuplicateEmail:
