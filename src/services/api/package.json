@@ -13,7 +13,8 @@
   "scripts": {
     "start": "pm2 start ecosystem.config.json --no-daemon",
     "dev": "cross-env NODE_ENV=development nodemon -L src/index.js",
-    "renew_db": "cross-env NODE_ENV=development npx sequelize db:drop && cross-env NODE_ENV=development npx sequelize db:create",
+    "renew_db:dev": "cross-env NODE_ENV=development npx sequelize db:drop && cross-env NODE_ENV=development npx sequelize db:create && cross-env NODE_ENV=development sequelize db:migrate && cross-env NODE_ENV=development sequelize db:seed --seed add-accounts.js",
+    "renew_db:prod": "cross-env NODE_ENV=production npx sequelize db:drop && cross-env NODE_ENV=production npx sequelize db:create && cross-env NODE_ENV=production sequelize db:migrate && cross-env NODE_ENV=production sequelize db:seed --seed add-accounts.js",
     "test": "jest -i --colors --verbose --detectOpenHandles",
     "test:watch": "jest -i --watchAll",
     "coverage": "jest -i --coverage",
