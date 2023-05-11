@@ -16,7 +16,7 @@ module.exports = {
         },
         {
           name: 'TheExecManager',
-          email: 'admin@example.com',
+          email: 'execManager@example.com',
           password: '$2a$08$Kf7rr0FazlKmp1Xr5SJ3SOAgafLae821r38VrV9tLJyObZ1zapBny',
           // Password: password1 (Only for development)
           role: 'execManager',
@@ -25,7 +25,7 @@ module.exports = {
         },
         {
           name: 'TheTeachingManager',
-          email: 'admin@example.com',
+          email: 'teachingManager@example.com',
           password: '$2a$08$Kf7rr0FazlKmp1Xr5SJ3SOAgafLae821r38VrV9tLJyObZ1zapBny',
           // Password: password1 (Only for development)
           role: 'teachingManager',
@@ -34,7 +34,7 @@ module.exports = {
         },
         {
           name: 'TheTeacher',
-          email: 'admin@example.com',
+          email: 'teacher@example.com',
           password: '$2a$08$Kf7rr0FazlKmp1Xr5SJ3SOAgafLae821r38VrV9tLJyObZ1zapBny',
           // Password: password1 (Only for development)
           role: 'teacher',
