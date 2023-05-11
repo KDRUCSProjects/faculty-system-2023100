@@ -6,7 +6,7 @@ const logger = require('./config/logger');
 const db = require('./models/index');
 
 // Sync tables with models
-db.sequelize.sync();
+// db.sequelize.sync();
 
 // Start server
 const server = app.listen(config.port, () => {
