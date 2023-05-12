@@ -36,9 +36,20 @@ const getEducationalYear = (yearId) => {
   return EducationalYear.findOne({ where: { id: yearId } });
 };
 
+/**
+ * find Educational year by value
+ * @param {ObjectId} year
+ * @returns {Promise<EducationalYear>}
+ */
+const findEducationalYearByValue = (year) => {
+  return EducationalYear.findOne({ where: { year } });
+};
+
+
 module.exports = {
   createEducationalYear,
   getEducationalYears,
   deleteEducationalYear,
   getEducationalYear,
+  findEducationalYearByValue,
 };
