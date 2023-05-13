@@ -6,6 +6,7 @@ const depratmentRoute = require('./department.route');
 const config = require('../config/config');
 const studentsRoutes = require('./student.routes');
 const educationalYearRoutes = require('./educationalYears.routes');
+const classesRoutes = require('./classes.routes');
 
 const router = express.Router();
 
@@ -29,6 +30,10 @@ const defaultRoutes = [
   {
     path: '/years',
     route: educationalYearRoutes,
+  },
+  {
+    path: '/classes',
+    route: classesRoutes,
   },
 ];
 

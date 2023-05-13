@@ -6,7 +6,7 @@ const ApiError = require('../utils/ApiError');
 const createEducationalYear = catchAsync(async (req, res) => {
   const year = await educationalYearService.findEducationalYearByValue(req.body.educationalYear);
   if (year) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Year already created');
-  const results = await educationalYearService.createEducationalYear(req.body);
+  const results = await educationalYearService.createEducationalYear(req.body.educationalYear);
   res.status(httpStatus.CREATED).send({ results });
 });
 
@@ -24,6 +24,7 @@ const deleteEducationalYear = catchAsync(async (req, res) => {
 
 const getEducationalYear = catchAsync(async (req, res) => {
   const year = await educationalYearService.getEducationalYear(req.params.yearId);
+  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
   res.status(httpStatus.OK).send({ year });
 });
 

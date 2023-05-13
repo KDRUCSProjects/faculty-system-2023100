@@ -15,7 +15,15 @@ const password = (value, helpers) => {
   return value;
 };
 
+const checkClass = (value, helpers) => {
+  if (!value.toString().match(/[1-4]/)) {
+    return helpers.message('classes must be between one to four');
+  }
+  return value;
+};
+
 module.exports = {
   objectId,
   password,
+  checkClass,
 };

@@ -1,20 +1,20 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const educationalYearValidation = require('../validations/educationalYear.validation');
-const educationalYearController = require('../controllers/educationalYear.controller');
+const classesValidation = require('../validations/classes.validation');
+const classController = require('../controllers/class.controller');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(auth(), educationalYearController.getEducationalYears)
-  .post(auth(), validate(educationalYearValidation.createEducationalYear), educationalYearController.createEducationalYear);
+  .get(auth(), classController.getClasses)
+  .post(auth(), validate(classesValidation.createClass), classController.createClass);
 
 router
-  .route('/:yearId')
-  .get(auth(), validate(educationalYearValidation.getEducationalYear), educationalYearController.getEducationalYear)
-  .delete(auth(), validate(educationalYearValidation.getEducationalYear), educationalYearController.deleteEducationalYear);
+  .route('/:classId')
+  .get(validate(classesValidation.getClass), classController.getClass)
+  .delete(validate(classesValidation.getClass), classController.deleteClass);
 
 module.exports = router;
 

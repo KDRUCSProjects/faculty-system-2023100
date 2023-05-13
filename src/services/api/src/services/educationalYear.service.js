@@ -3,11 +3,11 @@ const { EducationalYear } = require('../models');
 
 /**
  * Create a EducationalYear
- * @param {Object} yearBody
+ * @param {Object} year
  * @returns {Promise<EducationalYear>}
  */
-const createEducationalYear = (yearBody) => {
-  return EducationalYear.create(yearBody);
+const createEducationalYear = (year) => {
+  return EducationalYear.create({ year });
 };
 
 /**
@@ -44,7 +44,6 @@ const getEducationalYear = (yearId) => {
 const findEducationalYearByValue = (year) => {
   return EducationalYear.findOne({ where: { year } });
 };
-
 
 module.exports = {
   createEducationalYear,
