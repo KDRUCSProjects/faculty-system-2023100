@@ -9,6 +9,26 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      student: {
+        type: Sequelize.STRING,
+        required: true,
+        trim: true,
+      },
+      term: {
+        type: Sequelize.STRING,
+        required: true,
+        trim: true,
+      },
+      startDate: {
+        type: Sequelize.STRING,
+        required: true,
+        trim: true,
+      },
+      EndDate: {
+        type: Sequelize.STRING,
+        required: true,
+        trim: true,
+      },
       year: {
         type: Sequelize.NUMBER
       },
