@@ -100,6 +100,31 @@ components:
           photo : Needs Real Photo Not Value
 
 
+    EducationalYear:
+      type: object
+      properties:
+        year:
+          type: number
+
+          
+      example:
+        year: 2019
+
+
+    Classes:
+      type: object
+      properties:
+        title:
+          type: number
+        educationalYearId: 
+          type : number
+
+          
+      example:
+        title: 2
+        educationalYearId: 1
+
+
   responses:
     DuplicateEmail:
       description: Email already taken
@@ -152,3 +177,12 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+
+    EducationalYear:
+      type: object
+      properties:
+        year:
+          type: number
+      example:
+        year: 2019
