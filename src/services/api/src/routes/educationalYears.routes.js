@@ -21,17 +21,17 @@ module.exports = router;
 /**
  * @swagger
  * tags:
- *   name: Students
- *   description: Students management and retrieval
+ *   name: EducationalYear
+ *   description: Educational Year management and retrieval
  */
 
 /**
  * @swagger
- * /students:
+ * /years:
  *   get:
- *     summary: get all student
- *     description: Get All Students.
- *     tags: [Students]
+ *     summary: get all educational years
+ *     description: Get All EducationalYears.
+ *     tags: [EducationalYear]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -45,7 +45,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Student'
+ *                     $ref: '#/components/schemas/EducationalYear'
  *
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
@@ -55,11 +55,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /students:
+ * /years:
  *   post:
- *     summary: Create a student
- *     description: Add a new student of a faculty.
- *     tags: [Students]
+ *     summary: Create an Educational Year
+ *     description: Add a new educational year.
+ *     tags: [EducationalYear]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -72,29 +72,16 @@ module.exports = router;
  *               - name
  *             properties:
  *               name:
- *                 type: string
+ *                 type: number
  *             example:
- *               kankorId : L2700283
- *               fullName : شمس الله
- *               nickname : شمسی
- *               fatherName : عبدالروف
- *               grandFatherName : محمد طاهر
- *               province : کندهار
- *               division : 6
- *               district : 15 District
- *               engName : shamsullah shamsi
- *               engFatherName : Abdul Rauf
- *               engGrandFatherName : Muhammad Tahir
- *               educationalYear: 2023
- *               admissionYear : 2019
- *               photo : Needs Real Photo Not Value
+ *               educationalYear : 2019
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Student'
+ *                $ref: '#/components/schemas/EducationalYear'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -103,11 +90,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /students/{id}:
+ * /years/{id}:
  *   get:
- *     summary: Get a student
- *     description: get single student based on Id to view his information.
- *     tags: [Students]
+ *     summary: Get an EducationalYear
+ *     description: get single year based on ID.
+ *     tags: [EducationalYear]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -116,68 +103,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Student id
+ *         description: EducationalYearId id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Student'
- *       "401":
- *         $ref: '#/components/responses/Unauthorized'
- *       "403":
- *         $ref: '#/components/responses/Forbidden'
- *       "404":
- *         $ref: '#/components/responses/NotFound'
- *
- *   patch:
- *     summary: Update a Student
- *     description: Update any value of the student.
- *     tags: [Students]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Student id
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *             properties:
- *               name:
- *                 type: string
- *             example:
- *               kankorId : L2700283
- *               fullName : شمس الله
- *               nickname : شمسی
- *               fatherName : عبدالروف
- *               grandFatherName : محمد طاهر
- *               province : کندهار
- *               division : 6
- *               district : 15 District
- *               engName : shamsullah shamsi
- *               engFatherName : Abdul Rauf
- *               engGrandFatherName : Muhammad Tahir
- *               educationalYear: 2023
- *               admissionYear : 2019
- *               photo : Needs Real Photo Not Value
- *     responses:
- *       "201":
- *         description: ACCEPtED
- *         content:
- *           application/json:
- *             schema:
- *                $ref: '#/components/schemas/Student'
- *
+ *                $ref: '#/components/schemas/EducationalYear'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -186,9 +119,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a Student
- *     description: Delete Any Student based on Id.
- *     tags: [Students]
+ *     summary: Delete an Educational Year
+ *     description: Delete an educationalYear based on Id.
+ *     tags: [EducationalYear]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -197,7 +130,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Student id
+ *         description: EducationalYear id
  *     responses:
  *       "200":
  *         description: No content
