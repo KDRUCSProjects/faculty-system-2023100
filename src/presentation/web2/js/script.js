@@ -14,12 +14,36 @@ const profile = document.querySelector('.profile');
 // console.log(profile);
 
 //////////////////////////////////////////////
-const student = {
+const mohammad = {
   Name: 'Mohammad Agha',
   Father: 'Ibrahim Shah Agha',
   GrandFatherName: 'Sultan Shah Agha',
   Id: 'CF000345',
   Score: 195,
+};
+
+const ahmad = {
+  Name: 'Ahmad Rohani',
+  Father: 'Baaz Mohammad',
+  GrandFatherName: 'Toor jan',
+  Id: 'CF000346',
+  Score: 198,
+};
+
+const malik = {
+  Name: 'Abdul Malik',
+  Father: 'Asadullah',
+  GrandFatherName: 'Abdullah',
+  Id: 'CF000347',
+  Score: 190,
+};
+
+const qasim = {
+  Name: 'Mohammad Qasim',
+  Father: 'Ibrahim Jan',
+  GrandFatherName: 'Ahmad Jan',
+  Id: 'CF000348',
+  Score: 199,
 };
 
 input.addEventListener('keydown', function (e) {
