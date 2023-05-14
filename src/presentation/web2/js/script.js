@@ -15,45 +15,51 @@ const profile = document.querySelector('.profile');
 
 //////////////////////////////////////////////
 const mohammad = {
-  Name: 'Mohammad Agha',
-  Father: 'Ibrahim Shah Agha',
-  GrandFatherName: 'Sultan Shah Agha',
-  Id: 'CF000345',
-  Score: 195,
+  name: 'Mohammad Agha',
+  father: 'Ibrahim Shah Agha',
+  grandFatherName: 'Sultan Shah Agha',
+  id: 'CF000345',
+  score: 195,
 };
 
 const ahmad = {
-  Name: 'Ahmad Rohani',
-  Father: 'Baaz Mohammad',
-  GrandFatherName: 'Toor jan',
-  Id: 'CF000346',
-  Score: 198,
+  name: 'Ahmad Rohani',
+  father: 'Baaz Mohammad',
+  grandFatherName: 'Toor jan',
+  id: 'CF000346',
+  score: 198,
 };
 
 const malik = {
-  Name: 'Abdul Malik',
-  Father: 'Asadullah',
-  GrandFatherName: 'Abdullah',
-  Id: 'CF000347',
-  Score: 190,
+  name: 'Abdul Malik',
+  father: 'Asadullah',
+  grandFatherName: 'Abdullah',
+  id: 'CF000347',
+  score: 190,
 };
 
 const qasim = {
-  Name: 'Mohammad Qasim',
-  Father: 'Ibrahim Jan',
-  GrandFatherName: 'Ahmad Jan',
-  Id: 'CF000348',
-  Score: 199,
+  name: 'Mohammad Qasim',
+  father: 'Ibrahim Jan',
+  grandFatherName: 'Ahmad Jan',
+  id: 'CF000348',
+  score: 199,
 };
+
+const students = [mohammad, ahmad, malik, qasim];
 
 input.addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
-    const inputValue = input.value;
+    let inputValue = input.value;
     console.log(inputValue);
 
-    if (inputValue === student.Id) {
-      nameValue.textContent = 'hi';
-      fatherNameValue.textContent = student.Father;
-    }
+    students.forEach(std => {
+      if (inputValue === std.id) {
+        nameValue.textContent = std.name;
+        fatherNameValue.textContent = std.father;
+        grandFNameValue.textContent = std.grandFatherName;
+        kankorInputvalue.textContent = std.id;
+      }
+    });
   }
 });
