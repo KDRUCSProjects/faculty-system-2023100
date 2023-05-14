@@ -78,7 +78,7 @@ input {
   flex-direction: column;
   /* background-color: rgb(21, 21, 21); */
   border-radius: 3px;
-  padding: 5px;
+  /* padding: 5px; */
   color: rgb(71, 71, 71);
   /* color: rgb(202, 202, 202); */
 }
@@ -99,7 +99,9 @@ input {
 .information-box {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  /* justify-content: space-between; */
+  align-items: flex-start;
   padding: 10px 10px;
   /* background-color: blueviolet; */
 }
@@ -132,5 +134,8 @@ input {
   width: 120px;
   height: 30px;
   border-radius: 3px;
-  font-family: SpaceMonoBold;
+  font-family: monospace;
+  font-weight: bolder;
+  color: rgb(71, 71, 71);
+  background-color: white;
 }
