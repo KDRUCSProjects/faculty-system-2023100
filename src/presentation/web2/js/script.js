@@ -53,13 +53,15 @@ input.addEventListener('keydown', function (e) {
     let inputValue = input.value;
     console.log(inputValue);
 
-    students.forEach(std => {
-      if (inputValue === std.id) {
-        nameValue.textContent = std.name;
-        fatherNameValue.textContent = std.father;
-        grandFNameValue.textContent = std.grandFatherName;
-        kankorInputvalue.textContent = std.id;
-      }
-    });
+    setTimeout(() => {
+      students.forEach(std => {
+        if (inputValue === std.id) {
+          nameValue.textContent = std.name;
+          fatherNameValue.textContent = std.father;
+          grandFNameValue.textContent = std.grandFatherName;
+          kankorInputvalue.textContent = std.id;
+        }
+      });
+    }, 3000);
   }
 });
