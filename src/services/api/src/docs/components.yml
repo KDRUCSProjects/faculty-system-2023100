@@ -106,7 +106,6 @@ components:
         year:
           type: number
 
-          
       example:
         year: 2019
 
@@ -116,13 +115,18 @@ components:
       properties:
         title:
           type: number
+          enum: [1, 2, 3, 4]
         educationalYearId: 
           type : number
-
-          
+        EducationalYear:
+          $ref: '#/components/schemas/EducationalYear'
+        
       example:
         title: 2
         educationalYearId: 1
+        EducationalYear: {
+          year: 2019
+        }
 
 
   responses:
@@ -144,6 +148,24 @@ components:
           example:
             code: 400
             message: Department name already taken
+    DuplicateYear:
+      description: year is already created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 406
+            message: Year is already 
+    DuplicateClass:
+      description: Class is already created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 406
+            message: Class is already created
     Unauthorized:
       description: Unauthorized
       content:
