@@ -86,6 +86,8 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
+ *       "406":
+ *         $ref: '#/components/responses/DuplicateYear'
  */
 
 /**
