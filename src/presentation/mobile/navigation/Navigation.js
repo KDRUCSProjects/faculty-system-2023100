@@ -10,11 +10,9 @@ import studentIdScreen from "../screens/studentIdScreen";
 import attendence from "../screens/attendence";
 import teacherScreen from "../screens/teacherScreen";
 import auth from "../screens/auth";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
-//import { createDrawerNavigator } from "@react-navigation/drawer";
-
-export default Navigation = () => {
-  //const drawer = createDrawerNavigator();
+const Navigation = (props) => {
   const mainNavigation = createStackNavigator();
 
   return (
@@ -26,11 +24,6 @@ export default Navigation = () => {
         headerTintColor: "white",
       }}
     >
-      {/* <drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Notifications" component={NotificationsScreen} />
-      </drawer.Navigator> 
-       */}
       <mainNavigation.Screen
         name="authScreen"
         component={auth}
@@ -52,13 +45,13 @@ export default Navigation = () => {
         name="teacherScreen"
         component={teacherScreen}
         options={{
-          headerLeft: () => (
+          headerLeft: (navData) => (
             <HeaderBackButton
-              disabled={true}
+              onPress={props.navigation.toggleDrawer}
               backImage={() => (
                 <ImageBackground
-                  style={{ height: 20, width: 20 }}
-                  source={require("../assets/images/student.png")}
+                  style={{ height: 30, width: 20 }}
+                  source={require("../assets/images/menu.png")}
                 ></ImageBackground>
               )}
             ></HeaderBackButton>
@@ -73,3 +66,13 @@ export default Navigation = () => {
     </mainNavigation.Navigator>
   );
 };
+const DrawerNavigator = (pops) => {
+  const drawer = createDrawerNavigator();
+  return (
+    <drawer.Navigator initialRouteName="Home">
+      <drawer.Screen name="Home" component={Navigation} />
+      <drawer.Screen name="Logout" component={login} />
+    </drawer.Navigator>
+  );
+};
+export default DrawerNavigator;

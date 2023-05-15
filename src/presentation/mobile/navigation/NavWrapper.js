@@ -1,12 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Navigation from "./Navigation";
+import DrawerNavigator from "./Navigation";
 
 const NavWrapper = () => {
   const stacknavigator = createStackNavigator();
   return (
     <NavigationContainer>
-      <Navigation></Navigation>
+      <DrawerNavigator></DrawerNavigator>
     </NavigationContainer>
   );
 };
