@@ -1,9 +1,8 @@
 const Joi = require('joi');
-const { checkClass } = require('./custom.validation');
 
 const createClass = {
   body: Joi.object().keys({
-    title: Joi.number().required().custom(checkClass),
+    title: Joi.number().required().valid(1, 2, 3, 4),
     educationalYearId: Joi.number().required(),
   }),
 };

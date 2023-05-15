@@ -89,7 +89,7 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "406":
  *         $ref: '#/components/responses/DuplicateClass'
-*/
+ */
 
 /**
  * @swagger
