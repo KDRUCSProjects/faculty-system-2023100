@@ -1,17 +1,14 @@
-// project import
-import Routes from 'routes';
-import ThemeCustomization from 'themes';
-import ScrollTop from 'components/ScrollTop';
 
-// ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
+import MiniDrawer from "./Menus/menu";
 
-const App = () => (
 
-    <ThemeCustomization>
-        <ScrollTop>
-            <Routes />
-        </ScrollTop>
-    </ThemeCustomization>
-);
+
+function App() {
+  return (
+    <div className="App">
+     <MiniDrawer/>
+    </div>
+  );
+}
 
 export default App;
