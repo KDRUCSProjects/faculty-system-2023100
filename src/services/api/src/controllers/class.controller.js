@@ -1,10 +1,12 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { classService, semesterService } = require('../services');
+const { classService, semesterService, educationalYearService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const createClass = catchAsync(async (req, res) => {
   const classBody = await classService.findClass(req.body);
+  const year = await educationalYearService.getEducationalYear(req.body.educationalYearId);
+  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'Educational Year Not found with this ID');
   if (classBody) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'class already created');
   const results = await classService.createClass(req.body);
   await semesterService.createFirstSemester(results.id);
