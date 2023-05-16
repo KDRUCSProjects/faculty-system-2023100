@@ -13,8 +13,8 @@ router
 
 router
   .route('/:classId')
-  .get(validate(classesValidation.getClass), classController.getClass)
-  .delete(validate(classesValidation.getClass), classController.deleteClass);
+  .get(auth(), validate(classesValidation.getClass), classController.getClass)
+  .delete(auth(), validate(classesValidation.getClass), classController.deleteClass);
 
 module.exports = router;
 
@@ -87,6 +87,8 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
+ *       "406":
+ *         $ref: '#/components/responses/DuplicateClass'
  */
 
 /**

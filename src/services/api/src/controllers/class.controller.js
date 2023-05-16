@@ -1,12 +1,14 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { classService } = require('../services');
+const { classService, semesterService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const createClass = catchAsync(async (req, res) => {
   const classBody = await classService.findClass(req.body);
   if (classBody) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'class already created');
   const results = await classService.createClass(req.body);
+  await semesterService.createFirstSemester(results.id);
+  await semesterService.createSecondSemester(results.id);
   res.status(httpStatus.CREATED).send({ results });
 });
 
