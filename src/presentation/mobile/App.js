@@ -7,7 +7,9 @@ import { Provider } from "react-redux";
 import { combineReducers, applyMiddleware } from "redux";
 import MainReducer from "./store/reducers/reducer";
 import thunk from "redux-thunk";
-
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider } from "@ui-kitten/components";
+import { default as theme } from "./ui/colors.json";
 export default function App() {
   const store = createStore(
     combineReducers({ MainReducer }),
@@ -15,9 +17,11 @@ export default function App() {
   );
 
   return (
-    <Provider store={store}>
-      <NavWrapper></NavWrapper>
-    </Provider>
+    <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
+      <Provider store={store}>
+        <NavWrapper></NavWrapper>
+      </Provider>
+    </ApplicationProvider>
   );
 }
 

@@ -5,6 +5,7 @@ import { ImageBackground } from "react-native";
 import { useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import colors from "../constants/colors";
+import { Layout } from "@ui-kitten/components";
 
 export default function role(props) {
   const [role, setrole] = useState("Teacher");
@@ -16,26 +17,28 @@ export default function role(props) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Please select your role in University</Text>
+    <Layout style={styles.container}>
+      <View>
+        <Text style={styles.text}>Please select your role in University</Text>
 
-      <View style={styles.roleContainer}>
-        <TouchableWithoutFeedback onPress={onTeacher} style={styles.roleItem}>
-          <ImageBackground
-            style={{ height: 150, width: 150 }}
-            source={require("../assets/images/teacher.png")}
-          ></ImageBackground>
-          <Text style={styles.text}>Teacher</Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={onStudent} style={styles.roleItem}>
-          <ImageBackground
-            style={{ height: 150, width: 150 }}
-            source={require("../assets/images/student.png")}
-          ></ImageBackground>
-          <Text style={styles.text}>Student</Text>
-        </TouchableWithoutFeedback>
+        <View style={styles.roleContainer}>
+          <TouchableWithoutFeedback onPress={onTeacher} style={styles.roleItem}>
+            <ImageBackground
+              style={{ height: 150, width: 150 }}
+              source={require("../assets/images/teacher.png")}
+            ></ImageBackground>
+            <Text style={styles.text}>Teacher</Text>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={onStudent} style={styles.roleItem}>
+            <ImageBackground
+              style={{ height: 150, width: 150 }}
+              source={require("../assets/images/student.png")}
+            ></ImageBackground>
+            <Text style={styles.text}>Student</Text>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
-    </View>
+    </Layout>
   );
 }
 

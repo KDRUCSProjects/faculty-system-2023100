@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const AUTHENTICATE = "AUTHENTICATE";
 export const authenticate = (userName, password) => {
   return async (dispatch) => {
-    const response = await fetch("http://10.0.2.2:4000/auth/login", {
+    const response = await fetch("http://192.168.1.102:4000/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

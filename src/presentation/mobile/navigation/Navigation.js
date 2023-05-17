@@ -18,6 +18,7 @@ const Navigation = (props) => {
   return (
     <mainNavigation.Navigator
       screenOptions={{
+        headerShown: false,
         headerStyle: {
           backgroundColor: colors.secondry,
         },
@@ -36,6 +37,15 @@ const Navigation = (props) => {
       <mainNavigation.Screen
         name="Login"
         component={login}
+        options={{
+          headerLeft: (navData) => (
+            <HeaderBackButton
+              disabled={true}
+              onPress={props.navigation.toggleDrawer}
+              backImage={() => <ImageBackground></ImageBackground>}
+            ></HeaderBackButton>
+          ),
+        }}
       ></mainNavigation.Screen>
       <mainNavigation.Screen
         name="Mark Checking"
