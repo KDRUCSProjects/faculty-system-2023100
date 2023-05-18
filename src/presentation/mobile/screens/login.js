@@ -19,6 +19,7 @@ import { useTogglePasswordVisibility } from "../hooks/useTogglePasswordVisibilit
 import colors from "../constants/colors";
 import { useEffect } from "react";
 import { ActivityIndicator, shadow } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
 export default login = (props) => {
   const [email, setEmail] = useState("");
@@ -28,6 +29,21 @@ export default login = (props) => {
     useTogglePasswordVisibility();
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (event) => {
+      event.preventDefault();
+      Alert.alert("Exit", "Do you want Exit?", [
+        { text: "No", onPress: () => {} },
+        {
+          text: "Yes",
+          onPress: () => {
+            navigation.dispatch(event.data.action);
+          },
+        },
+      ]);
+    });
+  }, [navigation]);
 
   const onLogin = async () => {
     try {
@@ -38,6 +54,7 @@ export default login = (props) => {
     } catch (err) {
       setisLoading(false);
       seterror(err.message);
+      return;
     }
 
     props.navigation.navigate("teacherScreen");

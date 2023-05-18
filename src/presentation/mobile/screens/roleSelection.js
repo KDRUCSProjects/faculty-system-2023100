@@ -1,13 +1,31 @@
-import { TouchableOpacity } from "react-native";
-import { Text, View, StyleSheet } from "react-native";
+import { BackHandler, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Alert } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { ImageBackground } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import colors from "../constants/colors";
-
+import { Layout } from "@ui-kitten/components";
+import { useNavigation } from "@react-navigation/native";
 export default function role(props) {
   const [role, setrole] = useState("Teacher");
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (event) => {
+      event.preventDefault();
+      Alert.alert("Exit", "Do you want Exit?", [
+        { text: "No", onPress: () => {} },
+        {
+          text: "Yes",
+          onPress: () => {
+            BackHandler.exitApp();
+          },
+        },
+      ]);
+    });
+  }, [navigation]);
+
   const onTeacher = () => {
     props.navigation.navigate("Login");
   };
@@ -16,26 +34,28 @@ export default function role(props) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Please select your role in University</Text>
+    <Layout style={styles.container}>
+      <View>
+        <Text style={styles.text}>Please select your role in University</Text>
 
-      <View style={styles.roleContainer}>
-        <TouchableWithoutFeedback onPress={onTeacher} style={styles.roleItem}>
-          <ImageBackground
-            style={{ height: 150, width: 150 }}
-            source={require("../assets/images/teacher.png")}
-          ></ImageBackground>
-          <Text style={styles.text}>Teacher</Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={onStudent} style={styles.roleItem}>
-          <ImageBackground
-            style={{ height: 150, width: 150 }}
-            source={require("../assets/images/student.png")}
-          ></ImageBackground>
-          <Text style={styles.text}>Student</Text>
-        </TouchableWithoutFeedback>
+        <View style={styles.roleContainer}>
+          <TouchableWithoutFeedback onPress={onTeacher} style={styles.roleItem}>
+            <ImageBackground
+              style={{ height: 150, width: 150 }}
+              source={require("../assets/images/teacher.png")}
+            ></ImageBackground>
+            <Text style={styles.text}>Teacher</Text>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={onStudent} style={styles.roleItem}>
+            <ImageBackground
+              style={{ height: 150, width: 150 }}
+              source={require("../assets/images/student.png")}
+            ></ImageBackground>
+            <Text style={styles.text}>Student</Text>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
-    </View>
+    </Layout>
   );
 }
 
