@@ -25,9 +25,13 @@ import { Dashboard } from '../screens/Dashboard';
 import { Teachers } from '../screens/Teachers';
 import {Link} from "react-router-dom";
 import SystemPaths from '../Routes/SystemPaths';
+import { useNavigate } from 'react-router-dom';
+
 
 // import all css here
 import '../Styles/menu.css'
+import { Button } from '@mui/material';
+import Login from '../screens/Login';
 
 
 
@@ -127,9 +131,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function Menu() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
+  };
+  const logout = () => {
+    localStorage.clear()
+    // navigate('/login')
+
   };
 
   const handleDrawerClose = () => {
@@ -141,6 +151,7 @@ export default function Menu() {
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
+       
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -156,9 +167,11 @@ export default function Menu() {
           {/* <Typography variant="h6" noWrap component="div">
             Mini variant 
           </Typography> */}
+           <Button onClick={logout} >Logout</Button>
         </Toolbar>
-          
+        
       </AppBar>
+      
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
