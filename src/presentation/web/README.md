@@ -1,131 +1,70 @@
-# Mantis Free React Material UI Dashboard Template [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Download%20Mantis%20React%20-%20The%20professional%20Material%20designed%20React%20Admin%20Dashboard%20Template%20&url=https://mantisdashboard.io&via=codedthemes&hashtags=reactjs,webdev,developers,javascript)
+# Getting Started with Create React App
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/codedthemes/mantis-free-react-admin-template/blob/main/LICENSE)
-[![GitHub package version](https://img.shields.io/github/package-json/v/codedthemes/mantis-free-react-admin-template)](https://github.com/codedthemes/mantis-free-react-admin-template/)
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Mantis is a free and open source React redux dashboard template made using the Material UI React component library with aim of flexibility and better customizability.
+## Available Scripts
 
-### Name Derived From Nature
+In the project directory, you can run:
 
-Mantis Logo is inspired from the insect name - 'Mantises' as they have triangular heads with flexible Necks. Also, the name is derived from two popular UI frameworks, Material UI and Ant Design (M-Ant-is).
+### `npm start`
 
-Mantis has Ant Design principal on top of the MAterial UI React component library.
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-:star: :star: :star: Support us by giving star (Top right of this page) if you like the theme :star: :star: :star:
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-![mantis-free-react-dashboard-template.jpg](https://mantisdashboard.io/adv-banner-images/og-social-v1.1.0.png)
+### `npm test`
 
-The [Pro version](https://mantisdashboard.io) of Mantis react template includes features such as TypeScript, apps, authentication methods (i.e. JWT, Auth0, Firebase), advance components, form plugins, layouts, widgets, and more.
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-| [Mantis Free](https://mantisdashboard.io/free) | [Mantis Pro](https://mantisdashboard.io)                                         |
-| ---------------------------------------------- | :------------------------------------------------------------------------------- |
-| **7** Demo pages                               | **85+** Demo pages                                                               |
-| -                                              | ✓ Multi-language                                                                 |
-| -                                              | ✓ Dark/Light Mode 🌓                                                             |
-| -                                              | ✓ TypeScript version                                                             |
-| -                                              | ✓ Design files (Figma)                                                           |
-| -                                              | ✓ Multiple color options                                                         |
-| -                                              | ✓ RTL                                                                            |
-| -                                              | ✓ JWT, Firebase, Auth0, AWS authentication                                       |
-| -                                              | ✓ [More components](https://mantisdashboard.io/components-overview/autocomplete) |
-| ✓ MIT License                                  | ✓ [Pro License](https://mui.com/store/license/)                                  |
+### `npm run build`
 
-## Why Mantis?
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-Mantis offers everything needed to build an advanced dashboard application. In the initial release, we included following high-end features,
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
--   Support React18.
--   Professional user interface.
--   Material UI React components.
--   Fully responsive, all modern browser supported.
--   Easy to use code structure
--   Flexible & high-Performance code
--   Simple documentation
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-## Free Mantis React version
+### `npm run eject`
 
-#### Preview
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
--   [Demo](https://mantisdashboard.io/free)
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-#### Download
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
--   [Download from GitHub](https://github.com/codedthemes/mantis-free-react-admin-template)
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Mantis Pro version
+## Learn More
 
-#### Preview
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
--   [Demo](https://mantisdashboard.io)
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-#### Purchase
+### Code Splitting
 
--   [Buy now](https://mui.com/store/items/mantis-react-admin-dashboard-template/)
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-## Table of contents
+### Analyzing the Bundle Size
 
--   [Getting started](#getting-started)
--   [Documentation](#documentation)
--   [Technology stack](#technology-stack)
--   [Author](#author)
--   [Issues?](#issues)
--   [License](#license)
--   [More products](#more-free-react-material-admin-templates)
--   [Follow us](#follow-us)
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-## Getting started
+### Making a Progressive Web App
 
-Clone from GitHub
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-```
-git clone https://github.com/codedthemes/mantis-free-react-admin-template.git
-yarn
-yarn start
-```
+### Advanced Configuration
 
-## Documentation
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-[Mantis documentation](https://codedthemes.gitbook.io/mantis/) helps you out in all aspects from Installation to deployment.
+### Deployment
 
-## Technology stack
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
--   [Material UI V5](https://mui.com/core/)
--   Built with React Hooks API.
--   Redux & React context API for state management.
--   Redux toolkit.
--   React Router for navigation routing.
--   Support for react-script.
--   Code splitting.
--   CSS-in-JS.
+### `npm run build` fails to minify
 
-## Author
-
-Mantis is managed by team [CodedThemes](https://codedthemes.com).
-
-## Issues
-
-Please generate a [GitHub issue](https://github.com/codedthemes/mantis-free-react-admin-template/issues) if you found a bug in any version. We are try our best to resolve the issue.
-
-## License
-
--   Licensed under [MIT](https://github.com/codedthemes/datta-able-bootstrap-dashboard/blob/master/LICENSE)
-
-## Checkout free React Material admin dashboard templates
-
--   [Free Materially](https://codedthemes.com/item/materially-free-reactjs-admin-template/)
--   [Free Berry](https://mui.com/store/items/berry-react-material-admin-free/)
-
-## Checkout premium React Material admin dashboard templates
-
--   [Materially](https://codedthemes.com/item/materially-reactjs-admin-dashboard/)
--   [Berry](https://mui.com/store/items/berry-react-material-admin/)
-
-## Follow us
-
--   Website [https://mantisdashboard.io](https://mantisdashboard.io)
--   Blog [https://blog.mantisdashboard.io](https://blog.mantisdashboard.io)
--   CodedThemes [https://codedthemes.com](https://codedthemes.com)
--   Dribbble [https://dribbble.com/codedthemes](https://dribbble.com/codedthemes)
--   Facebook [https://www.facebook.com/codedthemes](https://www.facebook.com/codedthemes)
--   Twitter [https://twitter.com/codedthemes](https://twitter.com/codedthemes)
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
