@@ -12,6 +12,18 @@ import teacherScreen from "../screens/teacherScreen";
 import auth from "../screens/auth";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
+const authNavigation = (props) => {
+  const authNavigationNavigator = createStackNavigator();
+  return (
+    <authNavigationNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <authNavigationNavigator.Screen
+        name="authScreen"
+        component={auth}
+      ></authNavigationNavigator.Screen>
+    </authNavigationNavigator.Navigator>
+  );
+};
+
 const Navigation = (props) => {
   const mainNavigation = createStackNavigator();
 
@@ -26,8 +38,8 @@ const Navigation = (props) => {
       }}
     >
       <mainNavigation.Screen
-        name="authScreen"
-        component={auth}
+        name="auth"
+        component={authNavigation}
       ></mainNavigation.Screen>
       <mainNavigation.Screen
         name="FCS for University"
@@ -76,10 +88,11 @@ const Navigation = (props) => {
     </mainNavigation.Navigator>
   );
 };
-const DrawerNavigator = (pops) => {
+
+const DrawerNavigator = (props) => {
   const drawer = createDrawerNavigator();
   return (
-    <drawer.Navigator initialRouteName="Home">
+    <drawer.Navigator initialRouteName={authNavigation}>
       <drawer.Screen name="Home" component={Navigation} />
       <drawer.Screen name="Logout" component={login} />
     </drawer.Navigator>
