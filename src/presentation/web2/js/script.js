@@ -52,6 +52,7 @@ input.addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
     let inputValue = input.value;
     console.log(inputValue);
+    input.value = '';
 
     setTimeout(() => {
       students.forEach(std => {
