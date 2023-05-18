@@ -21,9 +21,40 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import GroupsIcon from '@mui/icons-material/Groups';
 import ClassIcon from '@mui/icons-material/Class';
 import SubjectIcon from '@mui/icons-material/Subject';
+import { Dashboard } from '../screens/Dashboard';
+import { Teachers } from '../screens/Teachers';
+import {Link} from "react-router-dom";
+import SystemPaths from '../Routes/SystemPaths';
+
+// import all css here
+import '../Styles/menu.css'
+
+
 
 const menuIcons = [<PeopleAltIcon/>, <GroupsIcon/>, <ClassIcon/>,<SubjectIcon/> ]
 
+const menuItem = [
+  {
+    name: 'Dashboard',
+    path: '/',
+    icon: <PeopleAltIcon/>
+  },
+  {
+    name: 'Teachers',
+    path: '/teacher',
+    icon: <GroupsIcon/>
+  },
+  {
+    name: 'Students',
+    path: '/student',
+    icon: <ClassIcon/>
+  },
+  {
+    name: 'Classes',
+    path: '/class',
+    icon: <SubjectIcon/>
+  },
+]
 
 
 const drawerWidth = 240;
@@ -96,7 +127,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function Menu() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const adminMenu = ['']
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -105,7 +135,7 @@ export default function Menu() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  let [path,setPath] = React.useState('')
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -137,9 +167,12 @@ export default function Menu() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Teachers', 'Students', 'Semesters', 'Classes'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
+
+          {/* // Menu */}
+          {menuItem.map((item, index) => (
+            <Link to={item.path} className='menu-item'> 
+            <ListItem key={item.name} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton onClick={()=>{setPath(item.path)}}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
@@ -153,19 +186,19 @@ export default function Menu() {
                     justifyContent: 'center',
                   }}
                 >
-                  {menuIcons[index]}
+                  {menuItem[index].icon}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary={item.name} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
+            </Link>
+            
           ))}
         </List>
         <Divider />
-
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {/* <DrawerHeader /> */}
-        
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }} className='main-section'>
+          <SystemPaths/>
       </Box>
     </Box>
   );

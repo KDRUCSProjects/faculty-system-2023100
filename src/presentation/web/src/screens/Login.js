@@ -35,6 +35,7 @@ const Login = ({setLogged}) => {
             .then(({data})=>{
                 console.log(data)
               localStorage.setItem('tokens',JSON.stringify(data.tokens))
+              localStorage.setItem('user', JSON.stringify(data.user.role))
               if(data.tokens.access.token){
                   setLogged(true)
               }                
