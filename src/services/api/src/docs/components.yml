@@ -57,7 +57,7 @@ components:
           type: string
         fullName:
           type: string
-        nickname:
+        nickName:
           type: string
         fatherName:
           type: string
@@ -66,7 +66,7 @@ components:
         province:
           type: string
         division:
-          type: number
+          type: string
         district:
           type: string
         engName:
@@ -75,8 +75,8 @@ components:
           type: string
         engGrandFatherName:
           type: string
-        educationalYear:
-          type: string
+        educationalYearId:
+          type: number
         admissionYear:
           type: string  
         photo:
@@ -85,19 +85,10 @@ components:
 
       example:
           kankorId : L2700283
-          fullName : شمس الله
-          nickname : شمسی
-          fatherName : عبدالروف
-          grandFatherName : محمد طاهر
-          province : کندهار
-          division : 6
-          district : 15 District
-          engName : shamsullah shamsi
-          engFatherName : Abdul Rauf
-          engGrandFatherName : Muhammad Tahir
-          educationalYear: 2023
-          admissionYear : 2019
-          photo : Needs Real Photo Not Value
+          fullName : shamsullah shamsi
+          fatherName : Abdul Rauf
+          grandFatherName : Muhammad Tahir
+          educationalYearId: 1
 
 
     EducationalYear:
