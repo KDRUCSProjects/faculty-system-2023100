@@ -9,17 +9,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Classes, { foreignKey: 'classId', as: 'Classes' });
+      this.belongsTo(models.EducationalYear, { foreignKey: 'educationalYearId', as: 'EducationalYear' });
     }
   }
   Semester.init(
     {
       title: DataTypes.INTEGER,
-      classId: {
+      educationalYearId: {
         type: DataTypes.INTEGER,
         required: true,
         references: {
-          model: 'Classes',
+          model: 'EducationalYear',
           key: 'id',
         },
         onDelete: 'cascade',
