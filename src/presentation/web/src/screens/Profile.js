@@ -7,6 +7,12 @@ import image from '../images/k.jpg';
 
 function Profile() {
     const imageStyle = {width:'180px' , marginTop:'65px' }
+    
+    const logout = () => {
+        localStorage.clear()
+
+      };
+
   return (
     <div>
         <Grid container spacing={2}>
@@ -30,7 +36,7 @@ function Profile() {
                     <br/>
                     <br/>
                     <br/>
-                    <Button variant="contained" color="error">
+                    <Button variant="contained" color="error" onClick={logout}>
                         Logout
                     </Button>
                 </Box>
