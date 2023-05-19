@@ -25,13 +25,11 @@ import { Dashboard } from '../screens/Dashboard';
 import { Teachers } from '../screens/Teachers';
 import {Link} from "react-router-dom";
 import SystemPaths from '../Routes/SystemPaths';
-import { useNavigate } from 'react-router-dom';
-
+import image from '../images/k.jpg'
 
 // import all css here
 import '../Styles/menu.css'
-import { Button } from '@mui/material';
-import Login from '../screens/Login';
+import { Avatar, Button } from '@mui/material';
 
 
 
@@ -131,7 +129,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function Menu() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const navigate = useNavigate();
+  const margin={marginLeft:'85%', textDecoration: 'none'}
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -167,9 +165,12 @@ export default function Menu() {
           {/* <Typography variant="h6" noWrap component="div">
             Mini variant 
           </Typography> */}
-           <Button onClick={logout} >Logout</Button>
+          <Link style={margin} to={'/profile'}>
+            <Avatar  alt="Profile" src={image} />
+          </Link>
+         
+
         </Toolbar>
-        
       </AppBar>
       
       <Drawer variant="permanent" open={open}>
