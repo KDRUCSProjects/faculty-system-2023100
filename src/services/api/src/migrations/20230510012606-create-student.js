@@ -10,18 +10,22 @@ module.exports = {
       },
       kankorId: {
         type: Sequelize.STRING,
+        required: true,
       },
-      fullname: {
+      fullName: {
         type: Sequelize.STRING,
+        required: true,
       },
-      nickname: {
+      nickName: {
         type: Sequelize.STRING,
       },
       fatherName: {
         type: Sequelize.STRING,
+        required: true,
       },
       grandFatherName: {
         type: Sequelize.STRING,
+        required: true,
       },
       imageUrl: {
         type: Sequelize.STRING,
@@ -44,8 +48,9 @@ module.exports = {
       engGrandFatherName: {
         type: Sequelize.STRING,
       },
-      educationalYear: {
-        type: Sequelize.DATE,
+      educationalYearId: {
+        type: Sequelize.INTEGER,
+        required: true,
       },
       admissionYear: {
         type: Sequelize.DATE,
