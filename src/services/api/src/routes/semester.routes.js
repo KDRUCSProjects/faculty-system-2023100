@@ -1,37 +1,37 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const classesValidation = require('../validations/classes.validation');
-const classController = require('../controllers/class.controller');
+const semesterValidation = require('../validations/semester.validation');
+const semesterController = require('../controllers/semester.controller');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(auth(), classController.getClasses)
-  .post(auth(), validate(classesValidation.createClass), classController.createClass);
+  .get(semesterController.getSemesters)
+  .post(validate(semesterValidation.createSemester), semesterController.createSemester);
 
 router
-  .route('/:classId')
-  .get(auth(), validate(classesValidation.getClass), classController.getClass)
-  .delete(auth(), validate(classesValidation.getClass), classController.deleteClass);
+  .route('/:semesterId')
+  .get(validate(semesterValidation.getSemester), semesterController.getSemester)
+  .delete(validate(semesterValidation.getSemester), semesterController.deleteSemester);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Classes
- *   description: Classes management and retrieval
+ *   name: Semester
+ *   description: Semester management and retrieval
  */
 
 /**
  * @swagger
- * /classes:
+ * /semesters:
  *   get:
- *     summary: get all Classes
- *     description: Get All Classes.
- *     tags: [Classes]
+ *     summary: get all Semesters
+ *     description: Get All Semesters.
+ *     tags: [Semester]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -45,7 +45,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Classes'
+ *                     $ref: '#/components/schemas/Semester'
  *
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
@@ -55,11 +55,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /classes:
+ * /semesters:
  *   post:
- *     summary: Create an Class
- *     description: Add a new class.
- *     tags: [Classes]
+ *     summary: Create an semester
+ *     description: There is no need of creating semesters when an educational year is created the Eight Semesters will be created automatically. But you can manually create a semester when there is no semester for the specific year
+ *     tags: [Semester]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -74,30 +74,30 @@ module.exports = router;
  *               name:
  *                 type: number
  *             example:
- *               title : 2,
- *               educationalYearId : 1
+ *               title: 2
+ *               educationalYearId: 1
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Classes'
+ *                $ref: '#/components/schemas/Semester'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
  *       "406":
- *         $ref: '#/components/responses/DuplicateClass'
+ *         $ref: '#/components/responses/DuplicateSemester'
  */
 
 /**
  * @swagger
- * /classes/{id}:
+ * /semesters/{id}:
  *   get:
- *     summary: Get an Class
- *     description: get single Class based on ID.
- *     tags: [Classes]
+ *     summary: Get a Semester
+ *     description: get single semester based on ID.
+ *     tags: [Semester]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -106,14 +106,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: classId
+ *         description: semesterId
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Classes'
+ *                $ref: '#/components/schemas/Semester'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -122,9 +122,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete an Class
- *     description: Delete an Class based on Id.
- *     tags: [Classes]
+ *     summary: Delete a semester
+ *     description: Delete an Semester based on Id.
+ *     tags: [Semester]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -133,7 +133,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: classId
+ *         description: semesterId`
  *     responses:
  *       "200":
  *         description: No content

@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         required: true,
       },
-      classId: {
+      educationalYearId: {
         type: Sequelize.INTEGER,
         required: true,
       },
