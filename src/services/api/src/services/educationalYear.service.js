@@ -41,8 +41,8 @@ const getEducationalYear = (yearId) => {
  * @param {ObjectId} year
  * @returns {Promise<EducationalYear>}
  */
-const findEducationalYearByValue = (year) => {
-  return EducationalYear.findOne({ where: { year } });
+const findEducationalYearByValue = async (year) => {
+  return await EducationalYear.findOne({ where: { year } });
 };
 
 module.exports = {

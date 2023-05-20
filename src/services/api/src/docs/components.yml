@@ -13,6 +13,7 @@ components:
         role:
           type: string
           enum: [user, admin]
+
       example:
         id: 5ebac534954b54139806c112
         email: fake@example.com
@@ -46,8 +47,7 @@ components:
           type: number
         message:
           type: string
-    
-      
+
     Student:
       type: object
       properties:
@@ -78,28 +78,23 @@ components:
         educationalYearId:
           type: number
         admissionYear:
-          type: string  
+          type: string
         photo:
           type: file
-
-
       example:
-          kankorId : L2700283
-          fullName : shamsullah shamsi
-          fatherName : Abdul Rauf
-          grandFatherName : Muhammad Tahir
-          educationalYearId: 1
-
+        kankorId: L2700283
+        fullName: shamsullah shamsi
+        fatherName: Abdul Rauf
+        grandFatherName: Muhammad Tahir
+        educationalYearId: 1
 
     EducationalYear:
       type: object
       properties:
         year:
           type: number
-
       example:
         year: 2019
-
 
     Semester:
       type: object
@@ -107,20 +102,50 @@ components:
         title:
           type: number
           enum: [1, 2, 3, 4, 5, 6, 7, 8]
-        educationalYearId: 
-          type : number
+        educationalYearId:
+          type: number
         EducationalYear:
           $ref: '#/components/schemas/EducationalYear'
-        
       example:
         title: 2
         educationalYearId: 1
-        EducationalYear: {
-          year: 2019
-        }
+        EducationalYear: { year: 2019 }
 
+    Taajil:
+      type: object
+      properties:
+        id:
+          type: number
+        studentId:
+          type: string
+        educationalYearId:
+          $ref: '#/components/schemas/EducationalYear'
+        regNumber:
+          type: number
+        attachment:
+          type: string
+        notes:
+          type: string
+
+      example:
+        id: 1
+        studentId: 1
+        educationalYearId: 1
+        regNumber: 459
+        attachment: photo
+        notes: Personal Problems
 
   responses:
+    # Taajils related responses
+    DuplicateTaajil:
+      description: Duplicate Taajil for same student
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Student has already taken taajil
     DuplicateEmail:
       description: Email already taken
       content:
@@ -147,7 +172,7 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             code: 406
-            message: Year is already 
+            message: Year is already
     DuplicateSemester:
       description: Semester is already created
       content:
@@ -190,7 +215,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
 
     EducationalYear:
       type: object
