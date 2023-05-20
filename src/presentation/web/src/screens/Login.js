@@ -11,7 +11,7 @@ const Login = ({setLogged}) => {
     const [password, setPassword] = useState("")
     const [emailError, setEmailError] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
- 
+  
     const handleSubmit = (event) => {
         event.preventDefault()
         console.log(email, password)
@@ -34,6 +34,7 @@ const Login = ({setLogged}) => {
             )
             .then(({data})=>{
                 console.log(data)
+                console.log(data.tokens)
               localStorage.setItem('tokens',JSON.stringify(data.tokens))
               localStorage.setItem('user', JSON.stringify(data.user.role))
               if(data.tokens.access.token){
