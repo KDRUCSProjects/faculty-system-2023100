@@ -28,8 +28,6 @@ import '../Styles/menu.css'
 
 
 
-const menuIcons = [<PeopleAltIcon/>, <GroupsIcon/>, <ClassIcon/>,<SubjectIcon/> ]
-
 const menuItem = [
   {
     name: 'Dashboard',

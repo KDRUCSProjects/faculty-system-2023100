@@ -2,8 +2,31 @@ import React from 'react'
 import '../Styles/teacher.css'
 import PaginationTable from '../components/PaginationTable'
 import DropDown from '../components/MultipleSelect'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Teachers = () => {
+
+    let [data, setData] = useState()
+        data = data ? data : []
+        const token = JSON.parse(localStorage.getItem('tokens'))
+        console.log(token.access.token)
+        const config = {
+            headers: {Authorization: `Bearer ${token.access.token}`}
+        }
+
+        // fetch all teacher data
+        useEffect(()=>{
+            axios.get('http://localhost:4000/users', config)
+            .then((result)=>{
+                setData(result.data)
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+        },[])
+        
+        console.log(data)
   return (
     <div className='full-screen-teacher'>
         <div className='header-teacher'>
@@ -21,7 +44,7 @@ const Teachers = () => {
 
             </div>
             <div className='table-section-body-teacher'>
-                <PaginationTable/>
+                <PaginationTable data = {data} setData = {setData}/>
             </div>
         </div>
     </div>
