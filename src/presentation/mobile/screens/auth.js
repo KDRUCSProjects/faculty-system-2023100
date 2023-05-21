@@ -9,14 +9,14 @@ export default function auth(props) {
     const tryLogin = async () => {
       const userData = await AsyncStorage.getItem("userData");
       if (!userData) {
-        props.navigation.navigate("FCS for University");
+        props.navigation.navigate("Login");
         return;
       }
       const transformedData = JSON.parse(userData);
       const { token, userId, expirationDate } = transformedData;
       const tExpirationDate = new Date(expirationDate);
       if (tExpirationDate <= new Date() || !token || !userId) {
-        props.navigation.navigate("FCS for University");
+        props.navigation.navigate("Login");
         return;
       }
       props.navigation.navigate("teacherScreen");

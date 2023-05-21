@@ -110,7 +110,6 @@ components:
         title: 2
         educationalYearId: 1
         EducationalYear: { year: 2019 }
-
     Taajil:
       type: object
       properties:
@@ -126,7 +125,6 @@ components:
           type: string
         notes:
           type: string
-
       example:
         id: 1
         studentId: 1
@@ -157,7 +155,6 @@ components:
         regNumber: 450
         attachment: photo
         notes: Cause was Taajil or Mahromiat
-
   responses:
     # Taajils related responses
     DuplicateTaajil:
@@ -169,6 +166,7 @@ components:
           example:
             code: 400
             message: Student has already taken taajil
+
     # Reentry related responses
     TripleReentry:
       description: Triple Reentry for this student

@@ -12,7 +12,7 @@ function App() {
       {
       logged
       ?
-      <Menu/>
+      <Menu setLogged={setLogged} />
       :
       <Login setLogged={setLogged}/>
   }

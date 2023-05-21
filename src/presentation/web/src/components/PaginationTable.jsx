@@ -7,33 +7,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import {useState, useEffect} from 'react'
-import axios from 'axios';
 
 
 
-export default function StickyHeadTable() {
+export default function StickyHeadTable({data, setData}) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
     
 
-  let [data, setData] = useState()
-        data = data ? data : []
-        const token = localStorage.getItem('token')
-        const config = {
-            header: {Authorization: `Bearer ${token}`}
-        }
-        useEffect(()=>{
-            axios.get('http://localhost:4000/users', config)
-            .then((result)=>{
-                setData(result.data)
-            })
-            .catch(error=>{
-                console.log(error)
-            })
-        })
-
-        console.log(data)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -46,14 +27,15 @@ export default function StickyHeadTable() {
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 390 }}>
+      <TableContainer sx={{ maxHeight: 420 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
             <TableCell align='center'>No</TableCell>
+            <TableCell align='center'>Id</TableCell>
             <TableCell align='center'>Name</TableCell>
             <TableCell align='center'>Last Name</TableCell>
-            <TableCell align='center'>Role</TableCell>
+            <TableCell align='center'>Email</TableCell>
             <TableCell align='center'>Action</TableCell>
             </TableRow>
           </TableHead>
@@ -64,6 +46,10 @@ export default function StickyHeadTable() {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                     <TableCell align={"center"}>{(index+1)}</TableCell>
+                    <TableCell align={"center"}>{(row.id)}</TableCell>
+                    <TableCell align={"center"}>{(row.name)}</TableCell>
+                    <TableCell align={"center"}>{(row.lastName)}</TableCell>
+                    <TableCell align={"center"}>{(row.email)}</TableCell>
                   </TableRow>
                 );
               })}
