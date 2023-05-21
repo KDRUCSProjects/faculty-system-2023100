@@ -6,7 +6,7 @@ const { Taajil } = require('../models');
 const { educationalYearService } = require('.');
 
 /**
- * Create a department
+ * Create a taajil
  * @param {Object} taajilBody
  * @returns {Promise<Taajil>}
  */
@@ -30,7 +30,11 @@ const createTaajil = async (taajilBody) => {
   });
 };
 
-// Get taajil
+/**
+ * Get Taajil students
+ * @param {Array} taajilBody
+ * @returns {Promise<Taajil>}
+ */
 
 // Delete a taajil
 module.exports = {
