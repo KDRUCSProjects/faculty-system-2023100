@@ -79,7 +79,7 @@ export default function AccountMenu({ setLogged }) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Link style={profileLink} to={"/profile"}>
+        <Link style={profileLink} to={"/profile_view"}>
           <MenuItem onClick={handleClose}>
             <Avatar /> Profile
           </MenuItem>
