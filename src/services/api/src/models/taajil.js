@@ -1,4 +1,4 @@
-const { Model } = require('sequelize');
+const BaseModel = require('./basemodel');
 
 module.exports = (sequelize, DataTypes) => {
   class Taajil extends Model {

@@ -1,11 +1,10 @@
-const { Model } = require('sequelize');
-
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const BaseModel = require('./basemodel');
 const { roles } = require('../config/roles');
 
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class User extends BaseModel {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.

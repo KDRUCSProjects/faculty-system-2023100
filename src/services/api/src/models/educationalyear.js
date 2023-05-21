@@ -1,7 +1,7 @@
-const { Model } = require('sequelize');
+const BaseModel = require('./basemodel');
 
 module.exports = (sequelize, DataTypes) => {
-  class EducationalYear extends Model {
+  class EducationalYear extends BaseModel {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
