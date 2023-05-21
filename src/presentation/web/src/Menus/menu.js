@@ -6,7 +6,6 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -21,11 +20,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import GroupsIcon from '@mui/icons-material/Groups';
 import ClassIcon from '@mui/icons-material/Class';
 import SubjectIcon from '@mui/icons-material/Subject';
-import { Dashboard } from '../screens/Dashboard';
-import { Teachers } from '../screens/Teachers';
 import {Link} from "react-router-dom";
 import SystemPaths from '../Routes/SystemPaths';
-
+import ProfileMenu from '../components/ProfileMenu'
 // import all css here
 import '../Styles/menu.css'
 
@@ -122,13 +119,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function Menu() {
+export default function Menu({setLogged}) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
 
   const handleDrawerClose = () => {
     setOpen(false);
@@ -139,6 +136,7 @@ export default function Menu() {
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
+       
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -154,9 +152,15 @@ export default function Menu() {
           {/* <Typography variant="h6" noWrap component="div">
             Mini variant 
           </Typography> */}
+          {/* <Link style={margin} to={'/profile'}>
+            <Avatar  alt="Profile" src={image} />
+          </Link> */}
+         <Box sx={{marginLeft:'80%'}}>
+            <ProfileMenu setLogged={setLogged}/>
+         </Box>
         </Toolbar>
-          
       </AppBar>
+      
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>

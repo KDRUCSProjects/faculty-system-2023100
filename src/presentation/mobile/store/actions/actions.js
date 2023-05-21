@@ -3,15 +3,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const AUTHENTICATE = "AUTHENTICATE";
 export const authenticate = (userName, password) => {
   return async (dispatch) => {
-    const response = await fetch("http://192.168.1.102:4000/auth/login", {
+    const response = await fetch("http://192.168.1.100:4000/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: "fake@example.com",
-        password: "password1",
+        email: userName,
+        password: password,
       }),
     });
 
+    if (response.status === 400) {
+      throw new Error("UserName and Password Is Required!");
+    }
+    if (response.status === 401) {
+      throw new Error("UserName or Password Is Wrong!");
+    }
+    if (!response.ok) {
+      console.log(response.status);
+      throw new Error("something went wrong");
+    }
     if (!response.ok) {
       console.log(response.status);
       throw new Error("something went wrong");

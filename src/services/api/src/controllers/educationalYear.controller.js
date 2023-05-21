@@ -1,12 +1,20 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { educationalYearService } = require('../services');
+const { educationalYearService, semesterService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const createEducationalYear = catchAsync(async (req, res) => {
   const year = await educationalYearService.findEducationalYearByValue(req.body.educationalYear);
   if (year) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Year already created');
   const results = await educationalYearService.createEducationalYear(req.body.educationalYear);
+  await semesterService.createFirstSemester(results.id);
+  await semesterService.createSecondSemester(results.id);
+  await semesterService.createThirdSemester(results.id);
+  await semesterService.createFourthSemester(results.id);
+  await semesterService.createFifthSemester(results.id);
+  await semesterService.createSixthSemester(results.id);
+  await semesterService.createSeventhSemester(results.id);
+  await semesterService.createEighthSemester(results.id);
   res.status(httpStatus.CREATED).send({ results });
 });
 

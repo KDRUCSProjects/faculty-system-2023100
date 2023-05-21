@@ -60,7 +60,7 @@ module.exports = router;
  * /students:
  *   post:
  *     summary: Create a student
- *     description: Add a new student of a faculty.
+ *     description: Add a new student to faculty. The following fields are required, But you can add nickName   province  division  district  engName engFatherName  engGrandFatherName admissionYear photo these fields too.
  *     tags: [Students]
  *     security:
  *       - bearerAuth: []
@@ -77,19 +77,10 @@ module.exports = router;
  *                 type: string
  *             example:
  *               kankorId : L2700283
- *               fullName : شمس الله
- *               nickname : شمسی
- *               fatherName : عبدالروف
- *               grandFatherName : محمد طاهر
- *               province : کندهار
- *               division : 6
- *               district : 15 District
- *               engName : shamsullah shamsi
- *               engFatherName : Abdul Rauf
- *               engGrandFatherName : Muhammad Tahir
- *               educationalYear: 2023
- *               admissionYear : 2019
- *               photo : Needs Real Photo Not Value
+ *               fullName : Shamsullah Shamsi
+ *               fatherName : Abdul Rauf
+ *               grandFatherName : Muhammad Tahir
+ *               educationalYearId: 1
  *     responses:
  *       "201":
  *         description: Created
@@ -159,19 +150,18 @@ module.exports = router;
  *                 type: string
  *             example:
  *               kankorId : L2700283
- *               fullName : شمس الله
- *               nickname : شمسی
- *               fatherName : عبدالروف
- *               grandFatherName : محمد طاهر
- *               province : کندهار
+ *               fullName : Shamsullah
+ *               nickName : Shamsi
+ *               fatherName : Adbul Rauf
+ *               grandFatherName : Muhammad Tahir
+ *               province : Kandahar
  *               division : 6
  *               district : 15 District
  *               engName : shamsullah shamsi
  *               engFatherName : Abdul Rauf
  *               engGrandFatherName : Muhammad Tahir
- *               educationalYear: 2023
+ *               educationalYear: 1
  *               admissionYear : 2019
- *               photo : Needs Real Photo Not Value
  *     responses:
  *       "201":
  *         description: ACCEPtED

@@ -1,9 +1,11 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { studentService } = require('../services');
+const { studentService, educationalYearService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const registerStudent = catchAsync(async (req, res) => {
+  const year = await educationalYearService.getEducationalYear(req.body.educationalYearId);
+  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'Educational Year Not Found');
   if (req.file) {
     req.body.imageUrl = req.file.path;
   }

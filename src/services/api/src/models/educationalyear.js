@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.Classes);
+      this.hasMany(models.Semester);
     }
   }
   EducationalYear.init(
