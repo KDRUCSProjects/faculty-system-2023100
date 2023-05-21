@@ -149,12 +149,6 @@ export default function Menu({setLogged}) {
           >
             <MenuIcon />
           </IconButton>
-          {/* <Typography variant="h6" noWrap component="div">
-            Mini variant 
-          </Typography> */}
-          {/* <Link style={margin} to={'/profile'}>
-            <Avatar  alt="Profile" src={image} />
-          </Link> */}
          <Box sx={{marginLeft:'80%'}}>
             <ProfileMenu setLogged={setLogged}/>
          </Box>
