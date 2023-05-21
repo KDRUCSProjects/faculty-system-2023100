@@ -8,37 +8,23 @@ import image from '../images/k.jpg';
 function Profile() {
     const imageStyle = {width:'180px' , marginTop:'65px' }
     
-    const logout = () => {
-        localStorage.clear()
-
-      };
-
   return (
     <div>
         <Grid container spacing={2}>
             <Grid item xs={9}>
                 <Box textAlign={'center'} marginTop={'25%'}>
-                    <Link to={'/view_profile'}>
+                    <Link >
                         <Button variant="outlined"  >
                             View Personal information
                         </Button>
                     </Link>
                     <br/>
                     <br/>
-                    <Link to={'/edit_profile'}>
+                    <Link >
                         <Button variant="outlined"  >
                             View Personal information
                         </Button>
                     </Link>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <Button variant="contained" color="error" onClick={logout}>
-                        Logout
-                    </Button>
                 </Box>
                
             </Grid>

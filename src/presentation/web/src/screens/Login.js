@@ -11,12 +11,14 @@ const Login = ({setLogged}) => {
     const [password, setPassword] = useState("")
     const [emailError, setEmailError] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
+    const [data,setData]=useState()
  
     const handleSubmit = (event) => {
         event.preventDefault()
         console.log(email, password)
         setEmailError(false)
         setPasswordError(false)
+        console.log(data)
  
         if (email == '') {
             setEmailError(true)
@@ -33,7 +35,7 @@ const Login = ({setLogged}) => {
                 }
             )
             .then(({data})=>{
-                console.log(data)
+                setData(data)
               localStorage.setItem('tokens',JSON.stringify(data.tokens))
               localStorage.setItem('user', JSON.stringify(data.user.role))
               if(data.tokens.access.token){
@@ -82,9 +84,3 @@ const Login = ({setLogged}) => {
 export default Login;
 
 
-
-
-// headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${log.access.token}`
-    //   }
