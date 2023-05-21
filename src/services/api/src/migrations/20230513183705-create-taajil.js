@@ -8,29 +8,29 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      student: {
-        type: Sequelize.STRING,
-        required: true,
-        trim: true,
-      },
-      term: {
-        type: Sequelize.STRING,
-        required: true,
-        trim: true,
-      },
-      startDate: {
-        type: Sequelize.STRING,
-        required: true,
-        trim: true,
-      },
-      EndDate: {
-        type: Sequelize.STRING,
-        required: true,
-        trim: true,
-      },
-      year: {
+      studentId: {
         type: Sequelize.INTEGER,
+        required: true,
+        trim: true,
+        references: {
+          model: 'Students',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
+      educationalYearId: {
+        type: Sequelize.INTEGER,
+        trim: true,
+        required: true,
+        references: {
+          model: 'EducationalYears',
+          key: 'id',
+        },
+      },
+      regNumber: Sequelize.INTEGER,
+      attachment: Sequelize.STRING,
+      notes: Sequelize.STRING,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
