@@ -6,8 +6,9 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import image from "../images/k.jpg";
+import image from "../images/p.jpg";
 import "../Styles/profile.css";
+import { Link } from "react-router-dom";
 
 export default function Profile() {
   const containerStyle = { marginTop: "90px", marginLeft: "22%", width: "70%" };
@@ -17,7 +18,9 @@ export default function Profile() {
         <Box>
           <h1>Edit Profile</h1>
           <form method="PUT" noValidate>
-            <img className="image" alt="Profile" src={image} />
+            <Link>
+                <img className="image" alt="Profile" src={image} />
+            </Link>
             <Grid container spacing={4}>
               <Grid item sx={6}>
                 <TextField
