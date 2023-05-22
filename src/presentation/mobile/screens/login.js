@@ -57,7 +57,6 @@ export default login = (props) => {
       setisLoading(true);
       await dispatch(authenticate(email, password));
       setisLoading(false);
-      console.log("fff");
     } catch (err) {
       setisLoading(false);
       seterror(err.message);
@@ -154,7 +153,7 @@ export default login = (props) => {
           {isLoading ? (
             <ActivityIndicator size={"small"}></ActivityIndicator>
           ) : (
-            <Text style={styles.loginText}>LOGIN</Text>
+            <Text style={styles.Text}>LOGIN</Text>
           )}
         </TouchableOpacity>
 
@@ -226,8 +225,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 4,
-    borderColor: "#d7d7d7",
   },
   inputField: {
     padding: 14,

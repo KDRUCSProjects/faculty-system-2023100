@@ -91,7 +91,6 @@ const DrawerNavigator = (props) => {
   return (
     <drawer.Navigator drawerContent={(props) => <MainDrawer {...props} />}>
       <drawer.Screen name="Home" component={Navigation} />
-      <drawer.Screen name="Logout" component={login} />
     </drawer.Navigator>
   );
 };
