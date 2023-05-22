@@ -242,6 +242,15 @@ components:
           example:
             code: 404
             message: Not found
+    NoContent:
+      description: No Content
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 204
+            message: No Content
 
   securitySchemes:
     bearerAuth:

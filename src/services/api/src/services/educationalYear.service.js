@@ -1,4 +1,5 @@
 // Sequelize Models
+
 const { EducationalYear } = require('../models');
 
 /**
@@ -6,16 +7,16 @@ const { EducationalYear } = require('../models');
  * @param {Object} year
  * @returns {Promise<EducationalYear>}
  */
-const createEducationalYear = (year) => {
-  return EducationalYear.create({ year });
+const createEducationalYear = async (year) => {
+  return await EducationalYear.create({ year });
 };
 
 /**
  * get all EducationalYears
  * @returns {Promise<EducationalYear>}
  */
-const getEducationalYears = () => {
-  return EducationalYear.findAll();
+const getEducationalYears = async () => {
+  return await EducationalYear.findAll();
 };
 
 /**
@@ -23,8 +24,8 @@ const getEducationalYears = () => {
  * @param {Object} year
  * @returns {Promise<EducationalYear>}
  */
-const deleteEducationalYear = (year) => {
-  if (year instanceof EducationalYear) return year.destroy();
+const deleteEducationalYear = async (year) => {
+  if (year instanceof EducationalYear) return await year.destroy();
 };
 
 /**
@@ -32,8 +33,8 @@ const deleteEducationalYear = (year) => {
  * @param {ObjectId} yearId
  * @returns {Promise<EducationalYear>}
  */
-const getEducationalYear = (yearId) => {
-  return EducationalYear.findOne({ where: { id: yearId } });
+const getEducationalYear = async (yearId) => {
+  return await EducationalYear.findOne({ where: { id: yearId } });
 };
 
 /**
@@ -42,7 +43,10 @@ const getEducationalYear = (yearId) => {
  * @returns {Promise<EducationalYear>}
  */
 const findEducationalYearByValue = async (year) => {
-  return await EducationalYear.findOne({ where: { year } });
+  let theYear = await EducationalYear.findOne({ raw: true, where: { year } });
+
+  // We only want the id
+  return theYear ? theYear.id : null;
 };
 
 module.exports = {

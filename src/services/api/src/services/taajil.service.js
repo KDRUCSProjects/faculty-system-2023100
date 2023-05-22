@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 
 // Sequelize Models
-const { Taajil } = require('../models');
+const { Taajil, Student } = require('../models');
 const { educationalYearService } = require('.');
 
 /**
@@ -12,10 +12,6 @@ const { educationalYearService } = require('.');
  */
 const createTaajil = async (taajilBody) => {
   let educationalYearId = await educationalYearService.findEducationalYearByValue(taajilBody.educationalYear);
-  if (!educationalYearId) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Educational year not found or created');
-  }
-
   // if a student has already been given a taajil
   if (await Taajil.studentAlreadyHaveTaajil(taajilBody.studentId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Student already has Taajil');
@@ -23,7 +19,7 @@ const createTaajil = async (taajilBody) => {
 
   return await Taajil.create({
     studentId: taajilBody.studentId,
-    educationalYearId: educationalYearId.dataValues.id,
+    educationalYearId: educationalYearId,
     regNumber: taajilBody.regNumber,
     notes: taajilBody.notes,
     attachment: taajilBody.attachment,
@@ -36,7 +32,68 @@ const createTaajil = async (taajilBody) => {
  * @returns {Promise<Taajil>}
  */
 
+const taajilStudents = async (query) => {
+  // If filter by year was requested:
+  if (query.educationalYear) {
+    return await getAllStudentsWithTaajilByYear(query.educationalYear);
+  }
+
+  // Get all Taajil students
+  return getAllStudentsWithTaajil();
+};
+
+const getAllStudentsWithTaajil = async () => {
+  return await Taajil.findAll();
+};
+
+const getAllStudentsWithTaajilByYear = async (year) => {
+  let educationalYearId = await educationalYearService.findEducationalYearByValue(year);
+
+  if (!educationalYearId) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'No educational year found');
+  }
+
+  return await Taajil.findAll({
+    where: {
+      educationalYearId,
+    },
+  });
+};
+
+const deleteTaajilByStudentId = async (studentId) => {
+  return await Taajil.destroy({
+    where: {
+      studentId,
+    },
+  });
+};
+
+const deleteTaajil = async (studentId) => {
+  const taajilStudent = await findTaajilByStudentId(studentId);
+
+  if (!taajilStudent) {
+    throw new ApiError(httpStatus.NOT_FOUND, `No taajil-student found by id: ${studentId}`);
+  }
+
+  // Delete/remove taajil from the student
+  await deleteTaajilByStudentId(studentId);
+
+  // Let's send the student that taajil was removed from him/her
+  return await Student.findOne({ where: { id: studentId } });
+};
+
+const findTaajilByStudentId = async (studentId) => {
+  return await Taajil.findOne({
+    where: {
+      studentId,
+    },
+  });
+};
+
 // Delete a taajil
 module.exports = {
   createTaajil,
+  taajilStudents,
+  deleteTaajil,
+  deleteTaajilByStudentId,
 };

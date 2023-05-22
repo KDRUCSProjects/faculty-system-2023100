@@ -10,6 +10,20 @@ const createTaajil = {
   }),
 };
 
+const studentsWithTaajil = {
+  query: Joi.object().keys({
+    educationalYear: Joi.number(),
+  }),
+};
+
+const deleteTaajil = {
+  params: Joi.object().keys({
+    studentId: Joi.number().required('Student Id is required'),
+  }),
+};
+
 module.exports = {
   createTaajil,
+  studentsWithTaajil,
+  deleteTaajil,
 };
