@@ -10,6 +10,20 @@ const createReentry = {
   }),
 };
 
+const studentsWithReentry = {
+  query: Joi.object().keys({
+    educationalYear: Joi.number(),
+  }),
+};
+
+const deleteReentry = {
+  params: Joi.object().keys({
+    id: Joi.number().required('Reentry Id is required'),
+  }),
+};
+
 module.exports = {
   createReentry,
+  studentsWithReentry,
+  deleteReentry,
 };
