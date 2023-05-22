@@ -7,7 +7,12 @@ const reentryController = require('../controllers/reentry.controller');
 const router = express.Router();
 
 // Create department, get, update and delete a department
-router.route('/').post(auth(), validate(reentryValidation.createReentry), reentryController.createReentry);
+router
+  .route('/')
+  .post(validate(reentryValidation.createReentry), reentryController.createReentry)
+  .get(validate(reentryValidation.studentsWithReentry), reentryController.reentryStudents);
+
+router.delete('/:id', validate(reentryValidation.deleteReentry), reentryController.deleteReentry);
 
 module.exports = router;
 
@@ -16,6 +21,40 @@ module.exports = router;
  * tags:
  *   name: Reentries
  *   description: Students' Reentries Management
+ */
+
+/**
+ * @swagger
+ * /reentries:
+ *   get:
+ *     summary: get all student that has been given reentry
+ *     description: Get all students with Reentry.
+ *     tags: [Reentries]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: educationalYear
+ *         schema:
+ *           type: number
+ *         description: Education Year e.g 1402
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Reentry'
+ *
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
  */
 
 /**
@@ -63,4 +102,32 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
+ */
+
+/**
+ * @swagger
+ * /reentries/{id}:
+ *   delete:
+ *     summary: Delete student from re-entry
+ *     description: delete re-entry from students.
+ *     tags: [Reentries]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: re-entry id
+ *     responses:
+ *       "200":
+ *         description: Deleted
+ *         $ref: '#/components/schemas/Student'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  */
