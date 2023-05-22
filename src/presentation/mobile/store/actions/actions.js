@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const AUTHENTICATE = "AUTHENTICATE";
+export const LOGOUT = "LOGOUT";
 export const authenticate = (userName, password) => {
   return async (dispatch) => {
     const response = await fetch("http://192.168.1.100:4000/auth/login", {
@@ -55,6 +56,9 @@ export const authenticate = (userName, password) => {
 //     password,
 //   };
 // };
+export const logout = () => {
+  return { type: LOGOUT };
+};
 
 const saveToken = (token, userId, expirationDate) => {
   AsyncStorage.setItem(
