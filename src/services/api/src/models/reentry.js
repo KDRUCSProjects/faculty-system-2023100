@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'Reentry',
-      timestamps: true,
+      paranoid: true,
     }
   );
   return Reentry;

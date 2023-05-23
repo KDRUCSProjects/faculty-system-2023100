@@ -16,7 +16,10 @@ module.exports = (sequelize) => {
     createdAt: sequelize.DATE,
     updatedAt: sequelize.DATE,
     deletedAt: sequelize.DATE,
-    isDeleted: sequelize.BOOLEAN,
+    isDeleted: {
+      type: sequelize.BOOLEAN,
+      defaultValue: false,
+    },
     createdBy: sequelize.INTEGER,
     updatedBy: sequelize.INTEGER,
     deletedBy: sequelize.INTEGER,
