@@ -2,8 +2,18 @@
     width: 100px;
     height: 120px;
     border-radius: 50%;
-    float: right;
-    margin-right: 130px;
-    margin-top: -80px;
+    position: relative;
+    left: 590px;
+    top: 125px;
+
+}
+.view_profile_image{
+    width: 100px;
+    height: 120px;
+    border-radius: 50%;
+    position: relative;
+    left: 300px;
+   
+    
 
 }

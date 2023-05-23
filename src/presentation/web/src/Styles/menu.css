@@ -9,6 +9,7 @@
     height: 100vh;
 }
 
-.MuiToolbar-root {
-    background-color: #354E57 !important;
+.profile_avatar_design{
+    position: relative;
+    left: 88%;
 }

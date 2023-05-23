@@ -10,20 +10,20 @@ import image from "../images/p.jpg";
 import "../Styles/profile.css";
 import { Link } from "react-router-dom";
 
-export default function Profile() {
-  const containerStyle = { marginTop: "90px", marginLeft: "22%", width: "70%" };
+export default function ProfileView() {
+  const containerStyle = { marginTop: "60px", marginLeft: "22%", width: "70%" };
   return (
     <div>
       <Container style={containerStyle}>
         <Box>
-          <h1>Edit Profile</h1>
+          <img className="view_profile_image" alt="Profile" src={image} />
           <form method="PUT" noValidate>
-            <Link>
-                <img className="image" alt="Profile" src={image} />
-            </Link>
+                
+            <h1>View Profile</h1>
             <Grid container spacing={4}>
               <Grid item sx={6}>
                 <TextField
+                  disabled
                   type="name"
                   sx={{ width: "330px" }}
                   label="First Name"
@@ -32,6 +32,7 @@ export default function Profile() {
               </Grid>
               <Grid item sx={6}>
                 <TextField
+                  disabled
                   type="name"
                   sx={{ width: "330px" }}
                   label="Last Name"
@@ -40,6 +41,7 @@ export default function Profile() {
               </Grid>
               <Grid item sx={12}>
                 <TextField
+                  disabled
                   type="email"
                   sx={{ width: "693px" }}
                   label="Email"
@@ -48,6 +50,7 @@ export default function Profile() {
               </Grid>
               <Grid item sx={12}>
                 <TextField
+                  disabled
                   sx={{ width: "693px" }}
                   label="Password"
                   defaultValue="******"
@@ -56,19 +59,17 @@ export default function Profile() {
               </Grid>
             </Grid>
 
-            <Box sx={{ marginTop: "100px" }}>
-              <Button variant="outlined" color="primary">
-                Cancel
-              </Button>
-
-              <Button
-                type="submit"
-                sx={{ marginLeft: "40px" }}
-                variant="contained"
-                color="primary"
-              >
-                Save
-              </Button>
+            <Box sx={{ marginTop: "50px" }}>
+              <Link to={"/profile_edit"}>
+                <Button
+                    
+                    variant="contained"
+                    color="primary"
+                >
+                    Edit
+                </Button>
+              
+              </Link>
             </Box>
           </form>
         </Box>
