@@ -10,7 +10,7 @@ module.exports = {
         autoIncrement: true,
       },
       subjectId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         required: true,
         trim: true,
         references: {
