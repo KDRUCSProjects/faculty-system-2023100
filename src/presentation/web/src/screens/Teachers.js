@@ -30,7 +30,7 @@ const Teachers = () => {
 
 
     // search dynamically over data
-    const [filteredData, setFilteredData] = useState(data);
+    const [filteredData, setFilteredData] = useState();
     console.log(filteredData)
     const handleInputChange = (event) => {
       const inputValue = event.target.value;

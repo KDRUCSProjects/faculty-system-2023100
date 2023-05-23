@@ -1,16 +1,17 @@
 // import React, {useState} from "react";
 import { useState } from "react";
-import { TextField, FormControl, Button } from "@mui/material";
+import { TextField, FormControl, Button, FormHelperText } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom"
 import '../Styles/loginCard.css'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
  
 const Login = ({setLogged}) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [emailError, setEmailError] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
+    const [unAuthError, setUnAuthError] = useState(null)
 
     const [data,setData]=useState()
 
@@ -40,16 +41,24 @@ const Login = ({setLogged}) => {
               localStorage.setItem('tokens',JSON.stringify(data.tokens))
               localStorage.setItem('user', JSON.stringify(data.user.role))
               if(data.tokens.access.token){
+                  setUnAuthError(null)
                   setLogged(true)
-              }                
+              }               
+            })
+            .catch(err=>{
+                if(err.response.status){
+                    setUnAuthError('You are Unauthorized person. Please register yourself to system')
+                }
             })
         }
     }
      
     return ( 
         <div className="login-card">
+            
         <form autoComplete="off" onSubmit={handleSubmit}>
             <h2 className="login-header">Sign In</h2>
+                {unAuthError && <FormHelperText sx={{color:'red', textAlign:'center',fontSize:'20px' }}>{unAuthError}</FormHelperText> }
                 <TextField 
                     label="Email"
                     onChange={e => setEmail(e.target.value)}
