@@ -21,7 +21,7 @@ module.exports = {
         onUpdate: 'cascade',
       },
       semesterId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         required: true,
         trim: true,
         references: {
