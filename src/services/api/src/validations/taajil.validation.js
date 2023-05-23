@@ -1,16 +1,30 @@
 const Joi = require('joi');
 
-const createtaajil = {
+
+const createTaajil = {
   body: Joi.object().keys({
-    name: Joi.string().required('name is required'),
-    student: Joi.string().required('student name is required'),
-    term: Joi.string().required(' term is required'),
-    startDate: Joi.string().required('start date   is required'),
-    EndDate: Joi.string().required('enddate name is required'),
-    year: Joi.string().required('taaji year  is required'),
+    studentId: Joi.number().required('Student id is required'),
+    educationalYear: Joi.number().required('Educational year is required'),
+    regNumber: Joi.number().required('Registration number of Taajil form is required'),
+    attachment: Joi.string(),
+    notes: Joi.string(),
+  }),
+};
+
+const studentsWithTaajil = {
+  query: Joi.object().keys({
+    educationalYear: Joi.number(),
+  }),
+};
+
+const deleteTaajil = {
+  params: Joi.object().keys({
+    studentId: Joi.number().required('Student Id is required'),
   }),
 };
 
 module.exports = {
-  createtaajil,
+  createTaajil,
+  studentsWithTaajil,
+  deleteTaajil,
 };

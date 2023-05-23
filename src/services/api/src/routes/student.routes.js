@@ -18,6 +18,8 @@ router
   .patch(auth(), upload.single('photo'), validate(studentValidation.updateStudent), studentController.updateStudent)
   .delete(auth(), validate(studentValidation.getStudent), studentController.deleteStudent);
 
+router.route('/kankor/:kankorId').get(auth(), validate(studentValidation.kankor), studentController.getStudentOnKankorId);
+
 module.exports = router;
 
 /**
@@ -60,7 +62,7 @@ module.exports = router;
  * /students:
  *   post:
  *     summary: Create a student
- *     description: Add a new student of a faculty.
+ *     description: Add a new student to faculty. The following fields are required, But you can add nickName   province  division  district  engName engFatherName  engGrandFatherName admissionYear photo these fields too.
  *     tags: [Students]
  *     security:
  *       - bearerAuth: []
@@ -77,19 +79,10 @@ module.exports = router;
  *                 type: string
  *             example:
  *               kankorId : L2700283
- *               fullName : شمس الله
- *               nickname : شمسی
- *               fatherName : عبدالروف
- *               grandFatherName : محمد طاهر
- *               province : کندهار
- *               division : 6
- *               district : 15 District
- *               engName : shamsullah shamsi
- *               engFatherName : Abdul Rauf
- *               engGrandFatherName : Muhammad Tahir
- *               educationalYear: 2023
- *               admissionYear : 2019
- *               photo : Needs Real Photo Not Value
+ *               fullName : Shamsullah Shamsi
+ *               fatherName : Abdul Rauf
+ *               grandFatherName : Muhammad Tahir
+ *               educationalYearId: 1
  *     responses:
  *       "201":
  *         description: Created
@@ -159,19 +152,18 @@ module.exports = router;
  *                 type: string
  *             example:
  *               kankorId : L2700283
- *               fullName : شمس الله
- *               nickname : شمسی
- *               fatherName : عبدالروف
- *               grandFatherName : محمد طاهر
- *               province : کندهار
+ *               fullName : Shamsullah
+ *               nickName : Shamsi
+ *               fatherName : Adbul Rauf
+ *               grandFatherName : Muhammad Tahir
+ *               province : Kandahar
  *               division : 6
  *               district : 15 District
  *               engName : shamsullah shamsi
  *               engFatherName : Abdul Rauf
  *               engGrandFatherName : Muhammad Tahir
- *               educationalYear: 2023
+ *               educationalYear: 1
  *               admissionYear : 2019
- *               photo : Needs Real Photo Not Value
  *     responses:
  *       "201":
  *         description: ACCEPtED
@@ -203,6 +195,37 @@ module.exports = router;
  *     responses:
  *       "200":
  *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /students/kankor/{kankorId}:
+ *   get:
+ *     summary: Get a student
+ *     description: get single student based on Id to view his information.
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: kankorId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Kankor id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Student'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

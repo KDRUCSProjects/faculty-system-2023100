@@ -1,4 +1,5 @@
-'use strict';
+const BaseModel = require('../models/basemodel');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -7,42 +8,39 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
-      student: {
-        type: Sequelize.STRING,
+      studentId: {
+        type: Sequelize.INTEGER,
         required: true,
         trim: true,
+        references: {
+          model: 'Students',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
-      term: {
-        type: Sequelize.STRING,
-        required: true,
+      educationalYearId: {
+        type: Sequelize.INTEGER,
         trim: true,
-      },
-      startDate: {
-        type: Sequelize.STRING,
         required: true,
-        trim: true,
+        references: {
+          model: 'EducationalYears',
+          key: 'id',
+        },
       },
-      EndDate: {
-        type: Sequelize.STRING,
-        required: true,
-        trim: true,
-      },
-      year: {
-        type: Sequelize.NUMBER
-      },
+      regNumber: Sequelize.INTEGER,
+      attachment: Sequelize.STRING,
+      notes: Sequelize.STRING,
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
+      ...BaseModel(Sequelize),
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Taajils');
-  }
+  },
 };

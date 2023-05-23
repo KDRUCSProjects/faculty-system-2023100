@@ -6,6 +6,10 @@ const fileExportRoute = require('./fileExport.route');
 const depratmentRoute = require('./department.route');
 const config = require('../config/config');
 const studentsRoutes = require('./student.routes');
+const educationalYearRoutes = require('./educationalYears.routes');
+const taajilRoutes = require('./taajil.routes');
+const reentriesRoutes = require('./reentry.routes');
+const semesterRoutes = require('./semester.routes');
 
 const router = express.Router();
 
@@ -29,6 +33,22 @@ const defaultRoutes = [
   {
     path: '/ExportExcel',
     route: fileExportRoute,
+  },
+  {
+    path: '/years',
+    route: educationalYearRoutes,
+  },
+  {
+    path: '/semesters',
+    route: semesterRoutes,
+  },
+  {
+    path: '/taajils',
+    route: taajilRoutes,
+  },
+  {
+    path: '/reentries',
+    route: reentriesRoutes,
   },
 ];
 

@@ -1,4 +1,5 @@
 const { Model } = require('sequelize');
+const BaseModel = require('./basemodel');
 
 module.exports = (sequelize, DataTypes) => {
   class Student extends Model {
@@ -9,13 +10,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.EducationalYear, { foreignKey: 'educationalYearId', as: 'EducationalYear' });
     }
   }
   Student.init(
     {
-      kankorId: DataTypes.STRING,
-      fullname: DataTypes.STRING,
-      nickname: DataTypes.STRING,
+      kankorId: {
+        type: DataTypes.STRING,
+        required: true,
+        unique: true,
+        allowNull: false,
+      },
+      fullName: DataTypes.STRING,
+      nickName: DataTypes.STRING,
       fatherName: DataTypes.STRING,
       grandFatherName: DataTypes.STRING,
       imageUrl: DataTypes.STRING,
@@ -25,8 +32,18 @@ module.exports = (sequelize, DataTypes) => {
       engName: DataTypes.STRING,
       engFatherName: DataTypes.STRING,
       engGrandFatherName: DataTypes.STRING,
-      educationalYear: DataTypes.DATE,
+      educationalYearId: {
+        type: DataTypes.INTEGER,
+        required: true,
+        references: {
+          model: 'EducationalYear',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+      },
       admissionYear: DataTypes.DATE,
+      ...BaseModel(DataTypes),
     },
     {
       sequelize,

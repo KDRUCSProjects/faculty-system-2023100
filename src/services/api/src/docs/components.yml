@@ -13,6 +13,7 @@ components:
         role:
           type: string
           enum: [user, admin]
+
       example:
         id: 5ebac534954b54139806c112
         email: fake@example.com
@@ -46,8 +47,7 @@ components:
           type: number
         message:
           type: string
-    
-      
+
     Student:
       type: object
       properties:
@@ -57,7 +57,7 @@ components:
           type: string
         fullName:
           type: string
-        nickname:
+        nickName:
           type: string
         fatherName:
           type: string
@@ -66,7 +66,7 @@ components:
         province:
           type: string
         division:
-          type: number
+          type: string
         district:
           type: string
         engName:
@@ -75,32 +75,108 @@ components:
           type: string
         engGrandFatherName:
           type: string
-        educationalYear:
-          type: string
+        educationalYearId:
+          type: number
         admissionYear:
-          type: string  
+          type: string
         photo:
           type: file
+      example:
+        kankorId: L2700283
+        fullName: shamsullah shamsi
+        fatherName: Abdul Rauf
+        grandFatherName: Muhammad Tahir
+        educationalYearId: 1
 
+    EducationalYear:
+      type: object
+      properties:
+        year:
+          type: number
+      example:
+        year: 2019
+
+    Semester:
+      type: object
+      properties:
+        title:
+          type: number
+          enum: [1, 2, 3, 4, 5, 6, 7, 8]
+        educationalYearId:
+          type: number
+        EducationalYear:
+          $ref: '#/components/schemas/EducationalYear'
+      example:
+        title: 2
+        educationalYearId: 1
+        EducationalYear: { year: 2019 }
+    Taajil:
+      type: object
+      properties:
+        id:
+          type: number
+        studentId:
+          type: string
+        educationalYearId:
+          type: number
+        regNumber:
+          type: number
+        attachment:
+          type: string
+        notes:
+          type: string
+      example:
+        id: 1
+        studentId: 1
+        educationalYearId: 1
+        regNumber: 459
+        attachment: photo
+        notes: Personal Problems
+    Reentry:
+      type: object
+      properties:
+        id:
+          type: number
+        studentId:
+          type: string
+        educationalYearId:
+          type: number
+        regNumber:
+          type: number
+        attachment:
+          type: string
+        notes:
+          type: string
 
       example:
-          kankorId : L2700283
-          fullName : شمس الله
-          nickname : شمسی
-          fatherName : عبدالروف
-          grandFatherName : محمد طاهر
-          province : کندهار
-          division : 6
-          district : 15 District
-          engName : shamsullah shamsi
-          engFatherName : Abdul Rauf
-          engGrandFatherName : Muhammad Tahir
-          educationalYear: 2023
-          admissionYear : 2019
-          photo : Needs Real Photo Not Value
+        id: 1
+        studentId: 1
+        educationalYearId: 1
+        regNumber: 450
+        attachment: photo
+        notes: Cause was Taajil or Mahromiat
+    responses:
+    # Taajils related responses
+    DuplicateTaajil:
+      description: Duplicate Taajil for same student
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Student has already taken taajil
 
-
-  responses:
+    # Reentry related responses
+    TripleReentry:
+      description: Triple Reentry for this student
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Student already has been given reentry two times
     DuplicateEmail:
       description: Email already taken
       content:
@@ -119,6 +195,25 @@ components:
           example:
             code: 400
             message: Department name already taken
+    DuplicateYear:
+      description: year is already created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 406
+            message: Year is already 
+
+    DuplicateSemester:
+      description: Semester is already created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 406
+            message: Semester is already created
     Unauthorized:
       description: Unauthorized
       content:
@@ -146,9 +241,26 @@ components:
           example:
             code: 404
             message: Not found
+    NoContent:
+      description: No Content
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 204
+            message: No Content
 
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+    EducationalYear:
+      type: object
+      properties:
+        year:
+          type: number
+      example:
+        year: 2019

@@ -1,5 +1,6 @@
-'use strict';
 const { Model } = require('sequelize');
+const BaseModel = require('./basemodel');
+
 module.exports = (sequelize, DataTypes) => {
   class Taajil extends Model {
     /**
@@ -8,18 +9,42 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
 
+    static async studentAlreadyHaveTaajil(studentId) {
+      const student = await this.findOne({ where: { studentId } });
+
+      return !!student;
+    }
+
     static associate(models) {
       // define association here
+      this.belongsTo(models.Student, { foreignKey: 'studentId', as: 'Student' });
     }
   }
   Taajil.init(
     {
-      SerialID: DataTypes.STRING,
-      Year: DataTypes.DATE,
-      Studnet: DataTypes.STRING,
-      Term: DataTypes.STRING,
-      StartDate: DataTypes.STRING,
-      HasEnded: DataTypes.BOOLIAN,
+      studentId: {
+        type: DataTypes.INTEGER,
+        required: true,
+        trim: true,
+        references: {
+          model: 'Student',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+      },
+      educationalYearId: {
+        type: DataTypes.INTEGER,
+        required: true,
+        references: {
+          model: 'EducationalYear',
+          key: 'id',
+        },
+      },
+      regNumber: DataTypes.INTEGER,
+      attachment: DataTypes.STRING,
+      notes: DataTypes.STRING,
+      ...BaseModel(DataTypes),
     },
     {
       sequelize,

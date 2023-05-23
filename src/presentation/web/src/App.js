@@ -1,17 +1,24 @@
-// project import
-import Routes from 'routes';
-import ThemeCustomization from 'themes';
-import ScrollTop from 'components/ScrollTop';
 
-// ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
+import Menu from "./Menus/menu";
+import Login from "./screens/Login";
+import { useState } from "react";
 
-const App = () => (
 
-    <ThemeCustomization>
-        <ScrollTop>
-            <Routes />
-        </ScrollTop>
-    </ThemeCustomization>
-);
+function App() {
+  const log = localStorage.getItem('tokens');
+  const [logged,setLogged] = useState(log || false)
+  return (
+    <div className="App">
+      {
+      logged
+      ?
+      <Menu setLogged={setLogged} />
+      :
+      <Login setLogged={setLogged}/>
+  }
+    </div>
+    
+  );
+}
 
 export default App;

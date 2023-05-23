@@ -10,7 +10,7 @@ const db = require('./models/index');
 
 // Start server
 const server = app.listen(config.port, () => {
-  logger.info(`Listening to port ${config.port}`);
+  logger.info(`Listening at http://localhost:${config.port}`);
 });
 
 const exitHandler = () => {
