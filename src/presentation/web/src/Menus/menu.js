@@ -132,7 +132,7 @@ export default function Menu({setLogged}) {
   };
   let [path,setPath] = React.useState('')
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box  sx={{ display: 'flex' , }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -149,7 +149,7 @@ export default function Menu({setLogged}) {
           >
             <MenuIcon />
           </IconButton>
-         <Box sx={{marginLeft:'80%'}}>
+         <Box className='profile_avatar_design'>
             <ProfileMenu setLogged={setLogged}/>
          </Box>
         </Toolbar>
