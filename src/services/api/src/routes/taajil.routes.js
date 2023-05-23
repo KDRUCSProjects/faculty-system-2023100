@@ -10,10 +10,10 @@ const router = express.Router();
 // Create department, get, update and delete a department
 router
   .route('/')
-  .post(validate(taajilValidation.createTaajil), taajilController.createTaajil)
-  .get(validate(taajilValidation.studentsWithTaajil), taajilController.taajilStudents);
+  .post(auth(), validate(taajilValidation.createTaajil), taajilController.createTaajil)
+  .get(auth(), validate(taajilValidation.studentsWithTaajil), taajilController.taajilStudents);
 
-router.delete('/:studentId', validate(taajilValidation.deleteTaajil), taajilController.deleteTaajil);
+router.delete('/:studentId', auth(), validate(taajilValidation.deleteTaajil), taajilController.deleteTaajil);
 
 module.exports = router;
 

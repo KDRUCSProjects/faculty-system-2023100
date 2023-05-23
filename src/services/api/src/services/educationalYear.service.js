@@ -43,7 +43,7 @@ const getEducationalYear = async (yearId) => {
  * @returns {Promise<EducationalYear>}
  */
 const findEducationalYearByValue = async (year) => {
-  let theYear = await EducationalYear.findOne({ raw: true, where: { year } });
+  const theYear = await EducationalYear.findOne({ raw: true, where: { year } });
 
   // We only want the id
   return theYear ? theYear.id : null;

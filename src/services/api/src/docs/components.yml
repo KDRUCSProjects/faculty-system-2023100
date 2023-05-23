@@ -97,8 +97,6 @@ components:
         year: 2019
 
     Semester:
-
-    Semester:
       type: object
       properties:
         title:

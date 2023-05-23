@@ -8,13 +8,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(semesterController.getSemesters)
-  .post(validate(semesterValidation.createSemester), semesterController.createSemester);
+  .get(auth(), semesterController.getSemesters)
+  .post(auth(), validate(semesterValidation.createSemester), semesterController.createSemester);
 
 router
   .route('/:semesterId')
-  .get(validate(semesterValidation.getSemester), semesterController.getSemester)
-  .delete(validate(semesterValidation.getSemester), semesterController.deleteSemester);
+  .get(auth(), validate(semesterValidation.getSemester), semesterController.getSemester)
+  .delete(auth(), validate(semesterValidation.getSemester), semesterController.deleteSemester);
 
 module.exports = router;
 

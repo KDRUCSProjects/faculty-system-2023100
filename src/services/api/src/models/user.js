@@ -3,6 +3,7 @@ const { Model } = require('sequelize');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { roles } = require('../config/roles');
+const BaseModel = require('./basemodel');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -69,6 +70,7 @@ module.exports = (sequelize, DataTypes) => {
           }
         },
       },
+      ...BaseModel(DataTypes),
     },
     {
       sequelize,

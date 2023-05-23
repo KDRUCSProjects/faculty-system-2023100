@@ -6,7 +6,6 @@ const depratmentRoute = require('./department.route');
 const config = require('../config/config');
 const studentsRoutes = require('./student.routes');
 const educationalYearRoutes = require('./educationalYears.routes');
-const semesterRoutes = require('./semester.routes');
 const taajilRoutes = require('./taajil.routes');
 const reentriesRoutes = require('./reentry.routes');
 const semesterRoutes = require('./semester.routes');

@@ -11,7 +11,7 @@ const { educationalYearService } = require('.');
  * @returns {Promise<Taajil>}
  */
 const createTaajil = async (taajilBody) => {
-  let educationalYearId = await educationalYearService.findEducationalYearByValue(taajilBody.educationalYear);
+  const educationalYearId = await educationalYearService.findEducationalYearByValue(taajilBody.educationalYear);
   // if a student has already been given a taajil
   if (await Taajil.studentAlreadyHaveTaajil(taajilBody.studentId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Student already has Taajil');
@@ -19,7 +19,7 @@ const createTaajil = async (taajilBody) => {
 
   return await Taajil.create({
     studentId: taajilBody.studentId,
-    educationalYearId: educationalYearId,
+    educationalYearId,
     regNumber: taajilBody.regNumber,
     notes: taajilBody.notes,
     attachment: taajilBody.attachment,
@@ -47,7 +47,7 @@ const getAllStudentsWithTaajil = async () => {
 };
 
 const getAllStudentsWithTaajilByYear = async (year) => {
-  let educationalYearId = await educationalYearService.findEducationalYearByValue(year);
+  const educationalYearId = await educationalYearService.findEducationalYearByValue(year);
 
   if (!educationalYearId) {
     throw new ApiError(httpStatus.NOT_FOUND, 'No educational year found');

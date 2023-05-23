@@ -11,7 +11,7 @@ const { educationalYearService } = require('.');
  * @returns {Promise<Reentry>}
  */
 const createReentry = async (reentryBody) => {
-  let educationalYearId = await educationalYearService.findEducationalYearByValue(reentryBody.educationalYear);
+  const educationalYearId = await educationalYearService.findEducationalYearByValue(reentryBody.educationalYear);
   if (!educationalYearId) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Educational year not found or created');
   }
@@ -21,7 +21,7 @@ const createReentry = async (reentryBody) => {
 
   return await Reentry.create({
     studentId: reentryBody.studentId,
-    educationalYearId: educationalYearId,
+    educationalYearId,
     regNumber: reentryBody.regNumber,
     notes: reentryBody.notes,
     attachment: reentryBody.attachment,
@@ -49,7 +49,7 @@ const getAllStudentsWithReentry = async () => {
 };
 
 const getAllStudentsWithReentryByYear = async (year) => {
-  let educationalYearId = await educationalYearService.findEducationalYearByValue(year);
+  const educationalYearId = await educationalYearService.findEducationalYearByValue(year);
 
   if (!educationalYearId) {
     throw new ApiError(httpStatus.NOT_FOUND, 'No educational year found');
