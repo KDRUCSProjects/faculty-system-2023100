@@ -15,7 +15,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   Student.init(
     {
-      kankorId: DataTypes.STRING,
+      kankorId: {
+        type: DataTypes.STRING,
+        required: true,
+        unique: true,
+        allowNull: false,
+      },
       fullName: DataTypes.STRING,
       nickName: DataTypes.STRING,
       fatherName: DataTypes.STRING,

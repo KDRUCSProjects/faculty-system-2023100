@@ -18,6 +18,8 @@ router
   .patch(auth(), upload.single('photo'), validate(studentValidation.updateStudent), studentController.updateStudent)
   .delete(auth(), validate(studentValidation.getStudent), studentController.deleteStudent);
 
+router.route('/kankor/:kankorId').get(auth(), validate(studentValidation.kankor), studentController.getStudentOnKankorId);
+
 module.exports = router;
 
 /**
@@ -193,6 +195,37 @@ module.exports = router;
  *     responses:
  *       "200":
  *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /students/kankor/{kankorId}:
+ *   get:
+ *     summary: Get a student
+ *     description: get single student based on Id to view his information.
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: kankorId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Kankor id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Student'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

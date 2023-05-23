@@ -9,6 +9,8 @@ const registerStudent = catchAsync(async (req, res) => {
   if (req.file) {
     req.body.imageUrl = req.file.path;
   }
+  const student = await studentService.getStudentOnKankorId(req.body.kankorId);
+  if (student) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already created on this Kankor Id');
   const results = await studentService.registerStudent(req.body);
   res.status(httpStatus.CREATED).send({ results });
 });
@@ -39,10 +41,17 @@ const getStudents = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ results });
 });
 
+const getStudentOnKankorId = catchAsync(async (req, res) => {
+  const student = await studentService.getStudentOnKankorId(req.params.kankorId);
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not Found');
+  res.status(httpStatus.OK).send({ student });
+});
+
 module.exports = {
   getStudent,
   getStudents,
   updateStudent,
   deleteStudent,
   registerStudent,
+  getStudentOnKankorId,
 };

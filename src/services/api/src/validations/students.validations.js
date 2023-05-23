@@ -49,7 +49,14 @@ const getStudent = {
   }),
 };
 
+const kankor = {
+  params: Joi.object().keys({
+    kankorId: Joi.string().required(),
+  }),
+};
+
 module.exports = {
+  kankor,
   getStudent,
   updateStudent,
   registerStudent,
