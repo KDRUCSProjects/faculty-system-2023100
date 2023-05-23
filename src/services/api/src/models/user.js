@@ -1,9 +1,8 @@
-const { Model } = require('sequelize');
-
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const { roles } = require('../config/roles');
 const BaseModel = require('./basemodel');
+const { roles } = require('../config/roles');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {

@@ -155,7 +155,7 @@ components:
         regNumber: 450
         attachment: photo
         notes: Cause was Taajil or Mahromiat
-  responses:
+    responses:
     # Taajils related responses
     DuplicateTaajil:
       description: Duplicate Taajil for same student
@@ -203,7 +203,8 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             code: 406
-            message: Year is already
+            message: Year is already 
+
     DuplicateSemester:
       description: Semester is already created
       content:
