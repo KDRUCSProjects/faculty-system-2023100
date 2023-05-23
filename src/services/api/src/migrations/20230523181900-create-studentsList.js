@@ -3,11 +3,11 @@ const BaseModel = require('../models/basemodel');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Reentries', {
+    await queryInterface.createTable('StudentsLists', {
       id: {
-        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
+        autoIncrement: true,
       },
       studentId: {
         type: Sequelize.INTEGER,
@@ -20,22 +20,34 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      educationalYearId: {
+      semesterId: {
         type: Sequelize.INTEGER,
-        trim: true,
         required: true,
+        trim: true,
         references: {
-          model: 'EducationalYears',
+          model: 'Semesters',
           key: 'id',
         },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
-      regNumber: Sequelize.INTEGER,
-      attachment: Sequelize.STRING,
-      notes: Sequelize.STRING,
+      // enrollmentYearId: {
+      //   // This is different from Kankor Year.
+      //   // This is used to know when did a student actually enrolls in the faculty
+      //   type: Sequelize.INTEGER,
+      //   required: true,
+      //   trim: true,
+      //   references: {
+      //     model: 'EducationalYears',
+      //     key: 'id',
+      //   },
+      //   onDelete: 'cascade',
+      //   onUpdate: 'cascade',
+      // },
       ...BaseModel(Sequelize),
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Reentries');
+    await queryInterface.dropTable('StudentsLists');
   },
 };
