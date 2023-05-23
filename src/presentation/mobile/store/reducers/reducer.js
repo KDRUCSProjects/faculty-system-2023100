@@ -1,4 +1,5 @@
 import { AUTHENTICATE } from "../actions/actions";
+import { LOGOUT } from "../actions/actions";
 
 const initialState = {
   userid: null,
@@ -12,6 +13,8 @@ const MainReducer = (state = initialState, action) => {
         userid: action.userid,
         token: action.token,
       };
+    case LOGOUT:
+      return { initialState };
 
     default:
       return state;

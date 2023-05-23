@@ -5,8 +5,10 @@ import { ImageBackground } from "react-native";
 import { useState, useEffect } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import colors from "../constants/colors";
-import { Layout } from "@ui-kitten/components";
+import { Layout, TopNavigation } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
+import { Divider } from "react-native-paper";
+
 export default function role(props) {
   const [role, setrole] = useState("Teacher");
 
@@ -34,8 +36,14 @@ export default function role(props) {
   };
 
   return (
-    <Layout style={styles.container}>
-      <View>
+    <Layout style={{ flex: 1 }}>
+      <TopNavigation
+        style={{ height: "10%", marginTop: 10 }}
+        title={"Please Select Your Role"}
+        alignment="center"
+      ></TopNavigation>
+      <Divider></Divider>
+      <Layout style={styles.container}>
         <Text style={styles.text}>Please select your role in University</Text>
 
         <View style={styles.roleContainer}>
@@ -54,17 +62,16 @@ export default function role(props) {
             <Text style={styles.text}>Student</Text>
           </TouchableWithoutFeedback>
         </View>
-      </View>
+      </Layout>
     </Layout>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: colors.primary,
     width: "100%",
-    height: "100%",
+    height: "90%",
     alignItems: "center",
     marginTop: 10,
     justifyContent: "flex-start",

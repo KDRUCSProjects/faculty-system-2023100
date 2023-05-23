@@ -1,25 +1,25 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Taajil extends Model {
+  class Reentry extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
 
-    static async studentAlreadyHaveTaajil(studentId) {
-      const student = await this.findOne({ where: { studentId } });
+    // static async studentAlreadyHaveTwoReentries(studentId) {
+    //   const student = await this.findOne({ where: { studentId } }).count();
 
-      return !!student;
-    }
+    //   return !!student;
+    // }
 
     static associate(models) {
       // define association here
       this.belongsTo(models.Student, { foreignKey: 'studentId', as: 'Student' });
     }
   }
-  Taajil.init(
+  Reentry.init(
     {
       studentId: {
         type: DataTypes.INTEGER,
@@ -46,9 +46,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Taajil',
+      modelName: 'Reentry',
       timestamps: true,
     }
   );
-  return Taajil;
+  return Reentry;
 };
