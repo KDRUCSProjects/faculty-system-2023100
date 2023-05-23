@@ -14,7 +14,7 @@ const taajilStudents = catchAsync(async (req, res) => {
 });
 
 const deleteTaajil = catchAsync(async (req, res) => {
-  let theStudent = await taajilService.deleteTaajil(req.params.studentId);
+  const theStudent = await taajilService.deleteTaajil(req.params.studentId);
 
   res.status(httpStatus.OK).send(theStudent);
 });

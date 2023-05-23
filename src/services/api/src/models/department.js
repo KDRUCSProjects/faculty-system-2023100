@@ -1,4 +1,5 @@
 const { Model } = require('sequelize');
+const BaseModel = require('./basemodel');
 
 module.exports = (sequelize, DataTypes) => {
   class Department extends Model {
@@ -27,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       name: DataTypes.STRING,
+      ...BaseModel(DataTypes),
     },
     {
       sequelize,

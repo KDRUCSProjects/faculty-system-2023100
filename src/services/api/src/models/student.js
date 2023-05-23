@@ -1,4 +1,5 @@
 const { Model } = require('sequelize');
+const BaseModel = require('./basemodel');
 
 module.exports = (sequelize, DataTypes) => {
   class Student extends Model {
@@ -14,7 +15,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   Student.init(
     {
-      kankorId: DataTypes.STRING,
+      kankorId: {
+        type: DataTypes.STRING,
+        required: true,
+        unique: true,
+        allowNull: false,
+      },
       fullName: DataTypes.STRING,
       nickName: DataTypes.STRING,
       fatherName: DataTypes.STRING,
@@ -37,6 +43,7 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: 'cascade',
       },
       admissionYear: DataTypes.DATE,
+      ...BaseModel(DataTypes),
     },
     {
       sequelize,

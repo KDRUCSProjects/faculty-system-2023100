@@ -1,3 +1,5 @@
+const BaseModel = require('../models/basemodel');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -11,14 +13,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
+      ...BaseModel(Sequelize),
     });
   },
   async down(queryInterface, Sequelize) {

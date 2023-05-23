@@ -26,8 +26,8 @@ const deleteSemester = catchAsync(async (req, res) => {
 });
 
 const getSemesters = catchAsync(async (req, res) => {
-  const classes = await semesterService.getAllSemesters();
-  res.status(httpStatus.OK).send({ classes });
+  const semesters = await semesterService.getAllSemesters();
+  res.status(httpStatus.OK).send({ semesters });
 });
 
 module.exports = {

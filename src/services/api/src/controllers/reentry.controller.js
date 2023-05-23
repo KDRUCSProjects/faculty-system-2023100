@@ -14,7 +14,7 @@ const reentryStudents = catchAsync(async (req, res) => {
 });
 
 const deleteReentry = catchAsync(async (req, res) => {
-  let theStudent = await reentryService.deleteReentry(req.params.id);
+  const theStudent = await reentryService.deleteReentry(req.params.id);
 
   res.status(httpStatus.OK).send(theStudent);
 });

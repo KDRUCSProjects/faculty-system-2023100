@@ -53,10 +53,20 @@ const getStudent = (studentId) => {
   return Student.findOne({ where: { id: studentId } });
 };
 
+/**
+ * get Student On Kankor Id
+ * @param {ObjectId} kankorId
+ * @returns {Promise<Student>}
+ */
+const getStudentOnKankorId = (kankorId) => {
+  return Student.findOne({ where: { kankorId } });
+};
+
 module.exports = {
   getStudent,
   getStudents,
   deleteStudent,
   updateStudent,
   registerStudent,
+  getStudentOnKankorId,
 };

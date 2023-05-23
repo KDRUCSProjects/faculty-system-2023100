@@ -1,4 +1,5 @@
 const { Model } = require('sequelize');
+const BaseModel = require('./basemodel');
 
 module.exports = (sequelize, DataTypes) => {
   class EducationalYear extends Model {
@@ -15,10 +16,12 @@ module.exports = (sequelize, DataTypes) => {
   EducationalYear.init(
     {
       year: DataTypes.INTEGER,
+      ...BaseModel(DataTypes),
     },
     {
       sequelize,
       modelName: 'EducationalYear',
+      paranoid: true,
     }
   );
   return EducationalYear;

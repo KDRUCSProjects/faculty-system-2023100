@@ -1,4 +1,5 @@
 const { Model } = require('sequelize');
+const BaseModel = require('./basemodel');
 
 module.exports = (sequelize, DataTypes) => {
   class Taajil extends Model {
@@ -43,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       regNumber: DataTypes.INTEGER,
       attachment: DataTypes.STRING,
       notes: DataTypes.STRING,
+      ...BaseModel(DataTypes),
     },
     {
       sequelize,
