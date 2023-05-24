@@ -2,6 +2,7 @@ const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const docsRoute = require('./docs.route');
+const fileExportRoute = require('./fileExport.route');
 const depratmentRoute = require('./department.route');
 const config = require('../config/config');
 const studentsRoutes = require('./student.routes');
@@ -28,6 +29,10 @@ const defaultRoutes = [
   {
     path: '/students',
     route: studentsRoutes,
+  },
+  {
+    path: '/ExportExcel',
+    route: fileExportRoute,
   },
   {
     path: '/years',

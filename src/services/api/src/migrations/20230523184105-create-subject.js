@@ -3,39 +3,42 @@ const BaseModel = require('../models/basemodel');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Reentries', {
+    await queryInterface.createTable('Subjects', {
       id: {
-        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
+        autoIncrement: true,
       },
-      studentId: {
+      name: {
+        type: Sequelize.STRING,
+        required: true,
+        trim: true,
+      },
+      semesterId: {
         type: Sequelize.INTEGER,
         required: true,
         trim: true,
         references: {
-          model: 'Students',
+          model: 'Semesters',
           key: 'id',
         },
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      educationalYearId: {
+      teacherId: {
         type: Sequelize.INTEGER,
         trim: true,
-        required: true,
         references: {
-          model: 'EducationalYears',
+          model: 'Users',
           key: 'id',
         },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
-      regNumber: Sequelize.INTEGER,
-      attachment: Sequelize.STRING,
-      notes: Sequelize.STRING,
       ...BaseModel(Sequelize),
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Reentries');
+    await queryInterface.dropTable('Subjects');
   },
 };
