@@ -1,6 +1,5 @@
 const Joi = require('joi');
 
-
 const createTaajil = {
   body: Joi.object().keys({
     studentId: Joi.number().required('Student id is required'),
