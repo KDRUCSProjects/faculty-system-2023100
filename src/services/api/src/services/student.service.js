@@ -1,5 +1,6 @@
 // Sequelize Models
-const { Student } = require('../models');
+const { Student, EducationalYear } = require('../models');
+
 
 /**
  * Create a student
@@ -16,7 +17,9 @@ const registerStudent = (studentBody) => {
  * @returns {Promise<Student>}
  */
 const getStudents = () => {
-  return Student.findAll();
+  return Student.findAll(
+    { include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }] }
+  );
 };
 
 /**
@@ -50,7 +53,12 @@ const deleteStudent = (student) => {
  * @returns {Promise<Student>}
  */
 const getStudent = (studentId) => {
-  return Student.findOne({ where: { id: studentId } });
+  return Student.findOne(
+    {
+      where: { id: studentId },
+      include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }]
+    }
+  );
 };
 
 /**

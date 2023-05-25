@@ -13,7 +13,7 @@ const registerStudent = {
     engName: Joi.string(),
     engFatherName: Joi.string(),
     engGrandFatherName: Joi.string(),
-    educationalYearId: Joi.number().required(),
+    educationalYear: Joi.number().required(),
     admissionYear: Joi.date(),
   }),
 };
