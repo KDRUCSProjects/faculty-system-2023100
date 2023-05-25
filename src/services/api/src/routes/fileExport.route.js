@@ -1,6 +1,7 @@
 const express = require('express');
 
 const mime = require('mime');
+
 const app = express();
 const xl = require('excel4node');
 
@@ -33,10 +34,10 @@ const createExcelFile = () => {
 
 router.get('/ExcelExport', (req, res, next) => {
   createExcelFile();
-  const file = __dirname + 'students.xlsx';
+  const file = `${__dirname}students.xlsx`;
   const filename = path.basename(file);
   const mimeType = mime.getType(file);
-  res.setHeader('Content-Disposition', 'attachment;filename' + filename);
+  res.setHeader('Content-Disposition', `attachment;filename${filename}`);
   res.setHeader('Content-Type', mimeType);
   setTimeout(() => {
     res.download(file);
