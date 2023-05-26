@@ -4,14 +4,22 @@ const { studentService, educationalYearService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const registerStudent = catchAsync(async (req, res) => {
-  const year = await educationalYearService.getEducationalYear(req.body.educationalYearId);
-  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'Educational Year Not Found');
+  const student = await studentService.getStudentOnKankorId(req.body.kankorId);
+  if (student) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already created on this Kankor Id');
+  const year = await educationalYearService.findEducationalYearByValue(req.body.educationalYear)
+  let educationalYearId;
+  if (year) {
+    educationalYearId = year;
+  } else {
+    educationalYearId = (await educationalYearService.createEducationalYear(req.body.educationalYear))?.id;
+  }
   if (req.file) {
     req.body.imageUrl = req.file.path;
   }
-  const student = await studentService.getStudentOnKankorId(req.body.kankorId);
-  if (student) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already created on this Kankor Id');
-  const results = await studentService.registerStudent(req.body);
+  const results = await studentService.registerStudent({
+    ...req.body,
+    educationalYearId,
+  });
   res.status(httpStatus.CREATED).send({ results });
 });
 

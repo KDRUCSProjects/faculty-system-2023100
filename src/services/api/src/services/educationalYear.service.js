@@ -15,8 +15,8 @@ const createEducationalYear = async (year) => {
  * get all EducationalYears
  * @returns {Promise<EducationalYear>}
  */
-const getEducationalYears = async () => {
-  return await EducationalYear.findAll();
+const getEducationalYears = () => {
+  return EducationalYear.findAll();
 };
 
 /**

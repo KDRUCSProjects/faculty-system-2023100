@@ -86,7 +86,7 @@ components:
         fullName: shamsullah shamsi
         fatherName: Abdul Rauf
         grandFatherName: Muhammad Tahir
-        educationalYearId: 1
+        educationalYearId: 2020
 
     EducationalYear:
       type: object
