@@ -82,7 +82,7 @@ module.exports = router;
  *               fullName : Shamsullah Shamsi
  *               fatherName : Abdul Rauf
  *               grandFatherName : Muhammad Tahir
- *               educationalYearId: 1
+ *               educationalYear: 2030
  *     responses:
  *       "201":
  *         description: Created
@@ -162,7 +162,7 @@ module.exports = router;
  *               engName : shamsullah shamsi
  *               engFatherName : Abdul Rauf
  *               engGrandFatherName : Muhammad Tahir
- *               educationalYear: 1
+ *               educationalYear: 2030
  *               admissionYear : 2019
  *     responses:
  *       "201":

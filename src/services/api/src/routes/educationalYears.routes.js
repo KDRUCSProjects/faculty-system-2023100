@@ -8,7 +8,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(educationalYearController.getEducationalYears)
+  .get(auth(), educationalYearController.getEducationalYears)
   .post(auth(), validate(educationalYearValidation.createEducationalYear), educationalYearController.createEducationalYear);
 
 router
