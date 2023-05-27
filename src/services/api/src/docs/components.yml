@@ -86,7 +86,7 @@ components:
         fullName: shamsullah shamsi
         fatherName: Abdul Rauf
         grandFatherName: Muhammad Tahir
-        educationalYearId: 2020
+        educationalYearId: 1
 
     EducationalYear:
       type: object
@@ -95,6 +95,21 @@ components:
           type: number
       example:
         year: 2019
+
+    Subject:
+      type: object
+      properties:
+        name:
+          type: string
+        semesterId: 
+          type: number
+        teacherId:
+          type: number
+      example:
+        name: Big Data
+        semesterId: 6
+        teacherId: 12
+
 
     Semester:
       type: object
@@ -155,7 +170,7 @@ components:
         regNumber: 450
         attachment: photo
         notes: Cause was Taajil or Mahromiat
-    responses:
+  responses:
     # Taajils related responses
     DuplicateTaajil:
       description: Duplicate Taajil for same student
