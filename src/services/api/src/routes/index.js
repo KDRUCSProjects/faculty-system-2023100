@@ -10,6 +10,7 @@ const educationalYearRoutes = require('./educationalYears.routes');
 const taajilRoutes = require('./taajil.routes');
 const reentriesRoutes = require('./reentry.routes');
 const semesterRoutes = require('./semester.routes');
+const subjectRoutes = require('./subject.routes');
 
 const router = express.Router();
 
@@ -49,6 +50,10 @@ const defaultRoutes = [
   {
     path: '/reentries',
     route: reentriesRoutes,
+  },
+  {
+    path: '/subjects',
+    route: subjectRoutes,
   },
 ];
 

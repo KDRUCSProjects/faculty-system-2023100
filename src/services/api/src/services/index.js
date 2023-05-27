@@ -7,3 +7,6 @@ module.exports.educationalYearService = require('./educationalYear.service');
 module.exports.semesterService = require('./Semester.service');
 module.exports.taajilService = require('./taajil.service');
 module.exports.reentryService = require('./reentry.service');
+module.exports.subjectService = require('./subject.service');
+module.exports.shokaService = require('./shoka.service');
+module.exports.attendanceService = require('./attendance.service');
