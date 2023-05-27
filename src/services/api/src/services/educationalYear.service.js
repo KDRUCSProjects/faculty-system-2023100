@@ -33,8 +33,8 @@ const deleteEducationalYear = async (year) => {
  * @param {ObjectId} yearId
  * @returns {Promise<EducationalYear>}
  */
-const getEducationalYear = async (yearId) => {
-  return await EducationalYear.findOne({ where: { id: yearId } });
+const getEducationalYear = (yearId) => {
+  return EducationalYear.findOne({ where: { id: yearId } });
 };
 
 /**
