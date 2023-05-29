@@ -16,14 +16,12 @@ const registerStudent = (studentBody) => {
  * @returns {Promise<Student>}
  */
 const getStudents = (offset) => {
-  return Student.findAndCountAll(
-    {
-      order: [['id', 'ASC']],
-      limit: 10,
-      offset: offset,
-      include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }]
-    }
-  );
+  return Student.findAndCountAll({
+    order: [['id', 'ASC']],
+    limit: 10,
+    offset,
+    include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
+  });
 };
 
 /**
