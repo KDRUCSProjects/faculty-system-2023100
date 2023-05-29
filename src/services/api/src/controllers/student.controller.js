@@ -45,8 +45,15 @@ const deleteStudent = catchAsync(async (req, res) => {
 });
 
 const getStudents = catchAsync(async (req, res) => {
-  const results = await studentService.getStudents();
-  res.status(httpStatus.OK).send({ results });
+  const page = req.query?.page ? req.query?.page : 1;
+  const offset = parseInt(((page - 1) * 10), 10);
+  const { rows, count } = await studentService.getStudents(offset);
+  res.status(httpStatus.OK).send({
+    page: parseInt(page, 10),
+    totalPages: Math.ceil(count / 10),
+    total: count,
+    results: rows
+  });
 });
 
 const getStudentOnKankorId = catchAsync(async (req, res) => {

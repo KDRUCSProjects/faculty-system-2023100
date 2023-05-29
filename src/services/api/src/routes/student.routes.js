@@ -2,6 +2,7 @@ const express = require('express');
 const validate = require('../middlewares/validate');
 const studentValidation = require('../validations/students.validations');
 const studentController = require('../controllers/student.controller');
+const shareValidation = require('../validations/share.validation');
 const auth = require('../middlewares/auth');
 const upload = require('../middlewares/multer');
 
@@ -9,7 +10,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(auth(), studentController.getStudents)
+  .get(auth(), validate(shareValidation.paginate), studentController.getStudents)
   .post(auth(), upload.single('photo'), validate(studentValidation.registerStudent), studentController.registerStudent);
 
 router
@@ -18,7 +19,7 @@ router
   .patch(auth(), upload.single('photo'), validate(studentValidation.updateStudent), studentController.updateStudent)
   .delete(auth(), validate(studentValidation.getStudent), studentController.deleteStudent);
 
-router.route('/kankor/:kankorId').get(auth(), validate(studentValidation.kankor), studentController.getStudentOnKankorId);
+router.route(auth(), '/kankor/:kankorId').get(validate(studentValidation.kankor), studentController.getStudentOnKankorId);
 
 module.exports = router;
 
@@ -38,6 +39,12 @@ module.exports = router;
  *     tags: [Students]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *      - name: page
+ *        in: query
+ *        description: The page number for pagination
+ *        schema:
+ *          type: integer
  *     responses:
  *       "200":
  *         description: OK
