@@ -3,13 +3,14 @@ const auth = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
 const reentryValidation = require('../validations/reentry.validation');
 const reentryController = require('../controllers/reentry.controller');
+const upload = require('../middlewares/multer');
 
 const router = express.Router();
 
 // Create department, get, update and delete a department
 router
   .route('/')
-  .post(validate(reentryValidation.createReentry), reentryController.createReentry)
+  .post(upload.single('attachment'), validate(reentryValidation.createReentry), reentryController.createReentry)
   .get(validate(reentryValidation.studentsWithReentry), reentryController.reentryStudents);
 
 router.delete('/:id', validate(reentryValidation.deleteReentry), reentryController.deleteReentry);
@@ -102,6 +103,8 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
+ *       "406":
+ *         $ref: '#/components/responses/DuplicateReentry'
  */
 
 /**

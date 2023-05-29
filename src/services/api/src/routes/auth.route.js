@@ -189,11 +189,11 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - oldPassword
+ *               - currentPassword
  *               - newPassword
- *               - newPasswordConfirm
+ *               - confirmPassword
  *             properties:
- *               oldPassword:
+ *               currentPassword:
  *                 type: string
  *                 format: password
  *                 minLength: 8
@@ -203,15 +203,15 @@ module.exports = router;
  *                 format: password
  *                 minLength: 8
  *                 description: At least one number and one letter
- *               newPasswordConfirm:
+ *               confirmPassword:
  *                 type: string
  *                 format: password
  *                 minLength: 8
  *                 description: At least one number and one letter
  *             example:
- *               oldPassword: password1
+ *               currentPassword: password1
  *               newPassword: password2
- *               newPasswordConfirm: password2
+ *               confirmPassword: password2
  *     responses:
  *       "200":
  *         description: Created

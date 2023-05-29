@@ -10,22 +10,8 @@ const { educationalYearService } = require('.');
  * @param {Object} reentryBody
  * @returns {Promise<Reentry>}
  */
-const createReentry = async (reentryBody) => {
-  const educationalYearId = await educationalYearService.findEducationalYearByValue(reentryBody.educationalYear);
-  if (!educationalYearId) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Educational year not found or created');
-  }
-
-  // if a student has already been given a reentry twice
-  // Should be prevented:
-
-  return await Reentry.create({
-    studentId: reentryBody.studentId,
-    educationalYearId,
-    regNumber: reentryBody.regNumber,
-    notes: reentryBody.notes,
-    attachment: reentryBody.attachment,
-  });
+const createReentry = (reentryBody) => {
+  return Reentry.create(reentryBody);
 };
 
 /**
@@ -92,10 +78,21 @@ const findReentryById = async (id) => {
   });
 };
 
+/**
+ * find reentry by student id and year id
+ * @param {Number} studentId
+ * @param {Number} educationalYearId
+ * @returns {Promise<Reentry>}
+ */
+const findReentryByStdIdAndYearId = (studentId, educationalYearId) => {
+  return Reentry.findOne({ where: { studentId, educationalYearId } });
+};
+
 // Delete a reentry
 module.exports = {
   createReentry,
   deleteReentry,
   reentryStudents,
   deleteReentryById,
+  findReentryByStdIdAndYearId,
 };
