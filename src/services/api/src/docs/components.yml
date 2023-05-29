@@ -218,7 +218,16 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             code: 406
-            message: Year is already 
+            message: Year is already
+    DuplicateReentry:
+      description: duplicate Reentry 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 406
+            message: student has already taken reentry in the year 
 
     DuplicateSemester:
       description: Semester is already created
