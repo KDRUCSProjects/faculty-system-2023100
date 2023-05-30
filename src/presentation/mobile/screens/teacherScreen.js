@@ -1,12 +1,36 @@
-import { StyleSheet, View, ImageBackground, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ImageBackground,
+  SafeAreaView,
+  BackHandler,
+  Alert,
+} from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { HeaderBackButton } from "@react-navigation/stack";
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
 
 import { Layout, Text, TopNavigation, Divider } from "@ui-kitten/components";
 
 export default function teacherScreen(props) {
   const username = useSelector((state) => state.MainReducer.userName);
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (event) => {
+      event.preventDefault();
+      Alert.alert("Exit", "Do you want Exit?", [
+        { text: "No", onPress: () => {} },
+        {
+          text: "Yes",
+          onPress: () => {
+            BackHandler.exitApp();
+          },
+        },
+      ]);
+    });
+  }, [navigation]);
   const onTakeAttendence = () => {
     props.navigation.navigate("attendenceScreen");
   };
