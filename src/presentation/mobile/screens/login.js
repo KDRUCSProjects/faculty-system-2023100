@@ -24,7 +24,13 @@ import colors from "../constants/colors";
 import { useEffect } from "react";
 import { ActivityIndicator, shadow } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { Layout, TopNavigation, Divider } from "@ui-kitten/components";
+import {
+  Layout,
+  TopNavigation,
+  Divider,
+  BottomNavigation,
+  BottomNavigationTab,
+} from "@ui-kitten/components";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default login = (props) => {
@@ -37,6 +43,8 @@ export default login = (props) => {
   const dispatch = useDispatch();
 
   const navigation = useNavigation();
+
+  const onStudent = () => props.navigation.navigate("studentScreen");
   useEffect(() => {
     navigation.addListener("beforeRemove", (event) => {
       event.preventDefault();
@@ -106,7 +114,7 @@ export default login = (props) => {
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.inputField}
-              placeholder="UserName"
+              placeholder="Username"
               onChangeText={(email) => setEmail(email)}
             />
 
@@ -156,13 +164,53 @@ export default login = (props) => {
             <Text style={styles.Text}>LOGIN</Text>
           )}
         </TouchableOpacity>
-
-        <TouchableOpacity style={{ height: "5%", marginTop: "3%" }}>
-          <Text style={styles.Text}>
-            Don't Have Account?/
-            <Text style={{ color: "#EB6A70" }}>Register Now</Text>
-          </Text>
-        </TouchableOpacity>
+        <View
+          style={{
+            height: 50,
+            width: "70%",
+            borderRadius: 15,
+            backgroundColor: "white",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              width: "50%",
+              justifyContent: "center",
+              borderRadius: 15,
+              backgroundColor: "#EB6A70",
+            }}
+          >
+            <Text
+              style={{
+                ...styles.Text,
+                textAlign: "center",
+              }}
+            >
+              Teacher
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={onStudent}
+            style={{
+              width: "50%",
+              justifyContent: "center",
+              borderRadius: 15,
+              backgroundColor: "white",
+            }}
+          >
+            <Text
+              style={{
+                ...styles.Text,
+                textAlign: "center",
+                color: "#EB6A70",
+              }}
+            >
+              Student
+            </Text>
+          </TouchableOpacity>
+        </View>
       </LinearGradient>
     </ScrollView>
   );

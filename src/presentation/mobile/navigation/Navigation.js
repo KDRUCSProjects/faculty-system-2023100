@@ -12,6 +12,24 @@ import teacherScreen from "../screens/teacherScreen";
 import auth from "../screens/auth";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import MainDrawer from "../ui/components/MainDrawer";
+import {
+  TabBar,
+  BottomNavigation,
+  BottomNavigationTab,
+} from "@ui-kitten/components";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+const studentScreen = () => {
+  const stdScreen = createStackNavigator();
+  return (
+    <stdScreen.Navigator screenOptions={{ headerShown: false }}>
+      <stdScreen.Screen
+        name="Mark Checking"
+        component={studentIdScreen}
+      ></stdScreen.Screen>
+    </stdScreen.Navigator>
+  );
+};
 
 const authNavigation = (props) => {
   const authNavigationNavigator = createStackNavigator();
@@ -42,7 +60,11 @@ const Navigation = (props) => {
         name="auth"
         component={authNavigation}
       ></mainNavigation.Screen>
-
+      <mainNavigation.Screen
+        name="studentScreen"
+        component={studentScreen}
+        options={{}}
+      ></mainNavigation.Screen>
       <mainNavigation.Screen
         name="Login"
         component={login}
@@ -56,10 +78,7 @@ const Navigation = (props) => {
           ),
         }}
       ></mainNavigation.Screen>
-      <mainNavigation.Screen
-        name="Mark Checking"
-        component={studentIdScreen}
-      ></mainNavigation.Screen>
+
       <mainNavigation.Screen
         name="teacherScreen"
         component={teacherScreen}
@@ -94,4 +113,5 @@ const DrawerNavigator = (props) => {
     </drawer.Navigator>
   );
 };
+
 export default DrawerNavigator;
