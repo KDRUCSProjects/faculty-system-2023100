@@ -11,6 +11,7 @@ const taajilRoutes = require('./taajil.routes');
 const reentriesRoutes = require('./reentry.routes');
 const semesterRoutes = require('./semester.routes');
 const subjectRoutes = require('./subject.routes');
+const testRoute = require('./test.route');
 
 const router = express.Router();
 
@@ -62,6 +63,10 @@ const devRoutes = [
   {
     path: '/docs',
     route: docsRoute,
+  },
+  {
+    path: '/test',
+    route: testRoute,
   },
 ];
 
