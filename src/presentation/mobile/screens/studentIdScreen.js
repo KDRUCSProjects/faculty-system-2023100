@@ -32,10 +32,54 @@ import {
   BottomNavigationTab,
 } from "@ui-kitten/components";
 import { LinearGradient } from "expo-linear-gradient";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  useAnimatedGestureHandler,
+  withTiming,
+  withSpring,
+  runOnJS,
+  runOnUI,
+} from "react-native-reanimated";
+import { useRef } from "react";
+import { PanGestureHandler } from "react-native-gesture-handler";
 
 export default studentIdScreen = (props) => {
   const onTeacher = () => props.navigation.navigate("Login");
 
+  const translateX = useSharedValue(0);
+  const lenght = useRef(144);
+  const prevValue = useRef(0);
+
+  const panGestureEvent = useAnimatedGestureHandler({
+    onStart: () => {
+      prevValue.current = translateX.value;
+    },
+    onActive: (event) => {
+      console.log(event.velocityX);
+      const distance = Math.sqrt(translateX.value ** 2);
+
+      if (!(event.velocityX < 0)) {
+        translateX.value = event.translationX + prevValue.current;
+        return;
+      }
+    },
+    onEnd: (event) => {
+      const distance = Math.sqrt(translateX.value ** 2);
+      console.log(lenght.current);
+
+      if (distance >= lenght.current / 2 && event.velocityX >= 0) {
+        translateX.value = withSpring(lenght.current);
+        runOnJS(onTeacher)();
+      } else {
+        translateX.value = withTiming(0, 3000);
+      }
+    },
+  });
+
+  const rStyle = useAnimatedStyle(() => {
+    return { transform: [{ translateX: translateX.value }], zIndex: 1 };
+  });
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
       <LinearGradient
@@ -55,14 +99,63 @@ export default studentIdScreen = (props) => {
             marginBottom: "5%",
           }}
         >
+          <View
+            style={{
+              width: "50%",
+              justifyContent: "center",
+              borderRadius: 15,
+              zIndex: 1,
+            }}
+          >
+            <PanGestureHandler onGestureEvent={panGestureEvent}>
+              <Animated.View
+                style={{
+                  flex: 1,
+                  width: "100%",
+                  height: "100%",
+                  justifyContent: "center",
+                  borderRadius: 15,
+                  alignItems: "center",
+
+                  ...rStyle,
+                }}
+                onLayout={(event) => {
+                  var { width } = event.nativeEvent.layout;
+                  lenght.current = width;
+                  console.log(lenght.current);
+                }}
+              >
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={{
+                    backgroundColor: "#EB6A70",
+                    width: "100%",
+                    height: "100%",
+                    justifyContent: "center",
+                    borderRadius: 15,
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...styles.Text,
+                      textAlign: "center",
+                    }}
+                  >
+                    Student
+                  </Text>
+                </TouchableOpacity>
+              </Animated.View>
+            </PanGestureHandler>
+          </View>
+
           <TouchableOpacity
-            onPress={onTeacher}
             style={{
               width: "50%",
               justifyContent: "center",
               borderRadius: 15,
               backgroundColor: "white",
             }}
+            activeOpacity={0.8}
           >
             <Text
               style={{
@@ -72,23 +165,6 @@ export default studentIdScreen = (props) => {
               }}
             >
               Teacher
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              width: "50%",
-              justifyContent: "center",
-              borderRadius: 15,
-              backgroundColor: "#EB6A70",
-            }}
-          >
-            <Text
-              style={{
-                ...styles.Text,
-                textAlign: "center",
-              }}
-            >
-              Student
             </Text>
           </TouchableOpacity>
         </View>
