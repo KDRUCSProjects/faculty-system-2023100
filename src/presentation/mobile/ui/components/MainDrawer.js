@@ -1,5 +1,12 @@
 import React from "react";
-import { ImageBackground, StyleSheet, ViewProps } from "react-native";
+import {
+  ImageBackground,
+  StyleSheet,
+  ViewProps,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import {
   Divider,
   Drawer,
@@ -15,21 +22,30 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../store/actions/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Header = (props) => (
-  <>
-    <ImageBackground
-      style={[props.style, styles.header]}
-      source={require("../../assets/images/student.png")}
-    />
-    <Divider />
-  </>
-);
-
 export default MainDrawer = (props) => {
   const dispatch = useDispatch();
   return (
     <Drawer
-      header={Header}
+      header={() => (
+        <>
+          <ImageBackground
+            style={[props.style, styles.header]}
+            source={require("../../assets/images/student.png")}
+          >
+            <TouchableOpacity
+              style={{ position: "absolute", marginRight: 10 }}
+              onPress={() => props.navigation.closeDrawer()}
+            >
+              <MaterialCommunityIcons
+                name={"window-close"}
+                size={40}
+                color="#232323"
+              />
+            </TouchableOpacity>
+          </ImageBackground>
+          <Divider />
+        </>
+      )}
       selectedIndex={new IndexPath(props.state.index)}
       onSelect={(index) => {
         if (index.row === 1) {
@@ -37,22 +53,28 @@ export default MainDrawer = (props) => {
           AsyncStorage.clear().then().then();
           dispatch(logout());
           props.navigation.navigate("Login");
-          return;
         }
 
         // props.navigation.navigate(props.state.routeNames[index.row]);
       }}
+      style={{}}
     >
       <DrawerItem
         title="Home"
         accessoryLeft={
-          <MaterialCommunityIcons name={"home"} size={25} color="#232323" />
+          <ImageBackground
+            source={require("../../assets/images/home.png")}
+            style={{ height: 30, width: 25 }}
+          ></ImageBackground>
         }
       />
       <DrawerItem
         title="Logout"
         accessoryLeft={
-          <MaterialCommunityIcons name={"logout"} size={25} color="#232323" />
+          <ImageBackground
+            source={require("../../assets/images/logout.png")}
+            style={{ height: 30, width: 25 }}
+          ></ImageBackground>
         }
       />
     </Drawer>
@@ -63,7 +85,8 @@ const styles = StyleSheet.create({
   header: {
     height: 128,
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     marginTop: "10%",
+    justifyContent: "flex-end",
   },
 });

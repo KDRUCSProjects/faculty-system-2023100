@@ -108,8 +108,12 @@ const Navigation = (props) => {
 const DrawerNavigator = (props) => {
   const drawer = createDrawerNavigator();
   return (
-    <drawer.Navigator drawerContent={(props) => <MainDrawer {...props} />}>
+    <drawer.Navigator
+      drawerContent={(props) => <MainDrawer {...props} />}
+      screenOptions={{ swipeEnabled: false, gestureEnabled: false }}
+    >
       <drawer.Screen name="Home" component={Navigation} />
+      <drawer.Screen name="Login" component={login}></drawer.Screen>
     </drawer.Navigator>
   );
 };

@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   BackHandler,
   Alert,
+  Text,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -12,7 +13,8 @@ import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 
-import { Layout, Text, TopNavigation, Divider } from "@ui-kitten/components";
+import { Layout, TopNavigation, Divider } from "@ui-kitten/components";
+import colors from "../constants/colors";
 
 export default function teacherScreen(props) {
   const username = useSelector((state) => state.MainReducer.userName);
@@ -35,73 +37,124 @@ export default function teacherScreen(props) {
     props.navigation.navigate("attendenceScreen");
   };
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Layout style={{ flex: 1 }}>
-        <TopNavigation
-          title="FCS for University"
-          alignment="center"
-          appearance="control"
-          accessoryLeft={() => (
-            <HeaderBackButton
-              onPress={() => props.navigation.toggleDrawer()}
-              backImage={() => (
+    <Layout
+      style={{
+        flex: 1,
+        height: "100%",
+        width: "100%",
+        backgroundColor: "#ced2d9",
+      }}
+    >
+      <View
+        style={{
+          height: "9%",
+          marginTop: "7%",
+          backgroundColor: colors.primary,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <View style={{ width: "20%" }}>
+          <HeaderBackButton
+            onPress={() => props.navigation.toggleDrawer()}
+            backImage={() => (
+              <ImageBackground
+                style={{ height: 25, width: 32 }}
+                source={require("../assets/images/menu.png")}
+              ></ImageBackground>
+            )}
+          ></HeaderBackButton>
+        </View>
+        <View style={{ width: "70%" }}>
+          <Text style={{ color: "white", fontSize: 23 }}>
+            FCS for University
+          </Text>
+        </View>
+      </View>
+
+      <Layout style={styles.container}>
+        <View style={styles.teacherInfo}>
+          <Text style={{ fontSize: 25 }}>Welcome To Third Class</Text>
+        </View>
+
+        <View style={[styles.attendenceContainer, styles.shadowProp]}>
+          <View
+            style={{
+              elevation: 3,
+              shadowColor: "blue",
+              backgroundColor: "#d3d9e3",
+              width: "80%",
+              height: "45%",
+            }}
+          >
+            <TouchableWithoutFeedback
+              style={{
+                height: "100%",
+                width: "100%",
+                alignItems: "center",
+                alignContent: "space-around",
+              }}
+            >
+              <View style={{ height: 180, width: 180 }}>
                 <ImageBackground
-                  style={{ height: 18, width: 25 }}
-                  source={require("../assets/images/menu.png")}
+                  style={{ flex: 1 }}
+                  source={require("../assets/images/viewAttendence.png")}
                 ></ImageBackground>
-              )}
-            ></HeaderBackButton>
-          )}
-          style={{
-            height: "10%",
-            marginTop: 10,
-          }}
-        />
-        <Divider />
-        <Layout style={styles.container}>
-          <View style={styles.container}>
-            <View style={styles.teacherInfo}>
-              <Text>{username}</Text>
-            </View>
-            <View style={styles.teacherInfo}>
-              <Text>Teacher ID</Text>
-            </View>
-            <View style={styles.teacherInfo}>
-              <Text>Teacher ClaSS</Text>
-            </View>
-            <View style={styles.attendenceContainer}>
-              <TouchableWithoutFeedback>
-                <ImageBackground
-                  style={{ height: 100, width: 100 }}
-                  source={require("../assets/images/viewattendence.png")}
-                ></ImageBackground>
-                <Text>View Attendence</Text>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={onTakeAttendence}>
-                <ImageBackground
-                  style={{ height: 100, width: 100 }}
-                  source={require("../assets/images/takeattendence.png")}
-                ></ImageBackground>
-                <Text>Take Attendence</Text>
-              </TouchableWithoutFeedback>
-            </View>
+              </View>
+              <Text style={{ fontSize: 25 }}>View Attendence</Text>
+            </TouchableWithoutFeedback>
           </View>
-        </Layout>
+
+          <View
+            style={{
+              elevation: 3,
+              shadowColor: "blue",
+              backgroundColor: "#d3d9e3",
+              width: "80%",
+              height: "45%",
+            }}
+          >
+            <TouchableWithoutFeedback
+              style={{
+                height: "100%",
+                width: "100%",
+                alignItems: "center",
+                alignContent: "space-around",
+              }}
+              onPress={onTakeAttendence}
+            >
+              <View style={{ height: 180, width: 180 }}>
+                <ImageBackground
+                  style={{ flex: 1 }}
+                  source={require("../assets/images/takeAttendence.png")}
+                ></ImageBackground>
+              </View>
+              <Text style={{ fontSize: 25 }}>Take Attendence</Text>
+            </TouchableWithoutFeedback>
+          </View>
+        </View>
+
+        <View style={{ alignSelf: "flex-start", margin: "2%" }}>
+          <Text style={{ fontSize: 25 }}>Your ID:CS10733854</Text>
+        </View>
       </Layout>
-    </SafeAreaView>
+    </Layout>
   );
 }
 const styles = StyleSheet.create({
   container: {
     height: "85%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    flex: 1,
+    backgroundColor: "#ced2d9",
   },
   teacherInfo: {},
   attendenceContainer: {
-    flexDirection: "row",
-    margin: "30%",
     width: "100%",
-    justifyContent: "space-evenly",
+    height: "80%",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
 });

@@ -12,6 +12,7 @@ import {
   BackHandler,
 } from "react-native";
 import {
+  PanGestureHandler,
   ScrollView,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
@@ -32,6 +33,18 @@ import {
   BottomNavigationTab,
 } from "@ui-kitten/components";
 import { LinearGradient } from "expo-linear-gradient";
+import { useCallback } from "react";
+import { useBackHandler } from "@react-native-community/hooks";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  useAnimatedGestureHandler,
+  withTiming,
+  withSpring,
+  runOnJS,
+  runOnUI,
+} from "react-native-reanimated";
+import { useRef } from "react";
 
 export default login = (props) => {
   const [email, setEmail] = useState("");
@@ -43,13 +56,17 @@ export default login = (props) => {
   const dispatch = useDispatch();
 
   const navigation = useNavigation();
-
-  const onStudent = () => props.navigation.navigate("studentScreen");
   useEffect(() => {
     navigation.addListener("beforeRemove", (event) => {
+      console.log("call");
       event.preventDefault();
       Alert.alert("Exit", "Do you want Exit?", [
-        { text: "No", onPress: () => {} },
+        {
+          text: "No",
+          onPress: () => {
+            return;
+          },
+        },
         {
           text: "Yes",
           onPress: () => {
@@ -60,6 +77,16 @@ export default login = (props) => {
     });
   }, [navigation]);
 
+  var translateX = useSharedValue(0);
+  const lenght = useRef(144);
+  var prevValue = useRef(0);
+
+  const onStudent = () => {
+    setTimeout(() => {
+      translateX.value = 0;
+    }, 500);
+    return props.navigation.navigate("studentScreen");
+  };
   const onLogin = async () => {
     try {
       setisLoading(true);
@@ -81,6 +108,39 @@ export default login = (props) => {
       Alert.alert("Error", error, [<Text>ok</Text>]);
     }
   }, [isLoading, error]);
+
+  const panGestureEvent = useAnimatedGestureHandler({
+    onStart: () => {
+      prevValue.current = translateX.value;
+    },
+    onActive: (event) => {
+      console.log(event.velocityX);
+      const distance = Math.sqrt(translateX.value ** 2);
+      // if (distance < lenght.current && event.velocityX < 0) {
+      //   translateX.value = event.translationX + prevValue.current;
+      // }
+      if (!(event.velocityX < 0)) {
+        translateX.value = event.translationX + prevValue.current;
+
+        return;
+      }
+    },
+    onEnd: (event) => {
+      const distance = Math.sqrt(translateX.value ** 2);
+
+      if (distance >= lenght.current / 2 && event.velocityX >= 0) {
+        translateX.value = withSpring(lenght.current);
+        runOnJS(onStudent)();
+      } else {
+        translateX.value = withTiming(0, 3000);
+      }
+    },
+  });
+
+  const rStyle = useAnimatedStyle(() => {
+    return { transform: [{ translateX: translateX.value }], zIndex: 1 };
+  });
+
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
       <LinearGradient
@@ -174,25 +234,57 @@ export default login = (props) => {
             justifyContent: "space-between",
           }}
         >
-          <TouchableOpacity
+          <View
             style={{
               width: "50%",
               justifyContent: "center",
               borderRadius: 15,
-              backgroundColor: "#EB6A70",
+              zIndex: 1,
             }}
           >
-            <Text
-              style={{
-                ...styles.Text,
-                textAlign: "center",
-              }}
-            >
-              Teacher
-            </Text>
-          </TouchableOpacity>
+            <PanGestureHandler onGestureEvent={panGestureEvent}>
+              <Animated.View
+                style={{
+                  flex: 1,
+                  width: "100%",
+                  height: "100%",
+                  justifyContent: "center",
+                  borderRadius: 15,
+                  alignItems: "center",
+
+                  ...rStyle,
+                }}
+                onLayout={(event) => {
+                  var { width } = event.nativeEvent.layout;
+                  lenght.current = width;
+                  console.log(lenght.current);
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#EB6A70",
+                    width: "100%",
+                    height: "100%",
+                    justifyContent: "center",
+                    borderRadius: 15,
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text
+                    style={{
+                      ...styles.Text,
+                      textAlign: "center",
+                    }}
+                  >
+                    Teacher
+                  </Text>
+                </TouchableOpacity>
+              </Animated.View>
+            </PanGestureHandler>
+          </View>
+
           <TouchableOpacity
-            onPress={onStudent}
+            activeOpacity={0.8}
             style={{
               width: "50%",
               justifyContent: "center",

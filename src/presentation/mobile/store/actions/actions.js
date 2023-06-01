@@ -23,10 +23,7 @@ export const authenticate = (userName, password) => {
       console.log(response.status);
       throw new Error("something went wrong");
     }
-    if (!response.ok) {
-      console.log(response.status);
-      throw new Error("something went wrong");
-    }
+
     const data = await response.json();
     console.log(data.user.id);
     console.log(data.tokens.access.token);
