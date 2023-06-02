@@ -162,7 +162,6 @@ components:
           type: string
         notes:
           type: string
-
       example:
         id: 1
         studentId: 1
@@ -170,6 +169,29 @@ components:
         regNumber: 450
         attachment: photo
         notes: Cause was Taajil or Mahromiat
+
+
+    ShokaList:
+      type: object
+      properties:
+        shokaFK: 
+          type: number
+        studentFK: 
+          type: number
+        midtermMarks: 
+          type: number
+        assignmentOrProjectMarks: 
+          type: number
+        finalMarks: 
+          type: number
+      example:
+        shokaFK: 1
+        studentFK: 5
+        midtermMarks: 16
+        assignmentOrProjectMarks: 11
+        finalMarks: 45
+
+
   responses:
     # Taajils related responses
     DuplicateTaajil:
@@ -238,6 +260,17 @@ components:
           example:
             code: 406
             message: Semester is already created
+
+    DuplicateShokaList:
+      description: Student has Taken Marks in this Shoka
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 406
+            message: Student has Taken Marks in this Shoka
+
     Unauthorized:
       description: Unauthorized
       content:
@@ -280,11 +313,3 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
-    EducationalYear:
-      type: object
-      properties:
-        year:
-          type: number
-      example:
-        year: 2019

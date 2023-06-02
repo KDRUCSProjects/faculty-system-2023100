@@ -1,5 +1,5 @@
 // Sequelize Models
-const { Semester } = require('../models');
+const { Semester, EducationalYear } = require('../models');
 
 /**
  * Create first Semester
@@ -103,7 +103,7 @@ const createEighthSemester = (educationalYearId) => {
  */
 const getAllSemesters = () => {
   return Semester.findAll({
-    include: 'EducationalYear',
+    include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
   });
 };
 
@@ -133,7 +133,10 @@ const createNewSemester = (semesterBody) => {
  * @param {ObjectId} semesterId
  */
 const findSemesterById = (semesterId) => {
-  return Semester.findOne({ where: { id: semesterId }, include: 'EducationalYear' });
+  return Semester.findOne({
+    where: { id: semesterId },
+    include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
+  });
 };
 
 /**

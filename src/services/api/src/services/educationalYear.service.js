@@ -1,5 +1,6 @@
 // Sequelize Models
 
+const semesterService = require('./Semester.service');
 const { EducationalYear } = require('../models');
 
 /**
@@ -8,7 +9,16 @@ const { EducationalYear } = require('../models');
  * @returns {Promise<EducationalYear>}
  */
 const createEducationalYear = async (year) => {
-  return await EducationalYear.create({ year });
+  const newYear = await EducationalYear.create({ year });
+  await semesterService.createFirstSemester(newYear.id);
+  await semesterService.createSecondSemester(newYear.id);
+  await semesterService.createThirdSemester(newYear.id);
+  await semesterService.createFourthSemester(newYear.id);
+  await semesterService.createFifthSemester(newYear.id);
+  await semesterService.createSixthSemester(newYear.id);
+  await semesterService.createSeventhSemester(newYear.id);
+  await semesterService.createEighthSemester(newYear.id);
+  return newYear;
 };
 
 /**

@@ -7,20 +7,12 @@ const createEducationalYear = catchAsync(async (req, res) => {
   const year = await educationalYearService.findEducationalYearByValue(req.body.educationalYear);
   if (year) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Year already created');
   const results = await educationalYearService.createEducationalYear(req.body.educationalYear);
-  await semesterService.createFirstSemester(results.id);
-  await semesterService.createSecondSemester(results.id);
-  await semesterService.createThirdSemester(results.id);
-  await semesterService.createFourthSemester(results.id);
-  await semesterService.createFifthSemester(results.id);
-  await semesterService.createSixthSemester(results.id);
-  await semesterService.createSeventhSemester(results.id);
-  await semesterService.createEighthSemester(results.id);
-  res.status(httpStatus.CREATED).send({ results });
+  res.status(httpStatus.CREATED).send(results);
 });
 
 const getEducationalYears = catchAsync(async (req, res) => {
   const results = await educationalYearService.getEducationalYears();
-  res.status(httpStatus.OK).send({ results });
+  res.status(httpStatus.OK).send(results);
 });
 
 const deleteEducationalYear = catchAsync(async (req, res) => {
@@ -33,7 +25,7 @@ const deleteEducationalYear = catchAsync(async (req, res) => {
 const getEducationalYear = catchAsync(async (req, res) => {
   const year = await educationalYearService.getEducationalYear(req.params.yearId);
   if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
-  res.status(httpStatus.OK).send({ year });
+  res.status(httpStatus.OK).send(year);
 });
 
 module.exports = {

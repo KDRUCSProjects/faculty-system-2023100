@@ -9,13 +9,13 @@ const createSemester = catchAsync(async (req, res) => {
   const semester = await semesterService.findSemester(req.body);
   if (semester) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Semester is already created');
   const results = await semesterService.createNewSemester(req.body);
-  res.status(httpStatus.CREATED).send({ results });
+  res.status(httpStatus.CREATED).send(results);
 });
 
 const getSemester = catchAsync(async (req, res) => {
   const semester = await semesterService.findSemesterById(req.params.semesterId);
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'Semester Not Found');
-  res.status(httpStatus.OK).send({ semester });
+  res.status(httpStatus.OK).send(semester);
 });
 
 const deleteSemester = catchAsync(async (req, res) => {
@@ -27,7 +27,7 @@ const deleteSemester = catchAsync(async (req, res) => {
 
 const getSemesters = catchAsync(async (req, res) => {
   const semesters = await semesterService.getAllSemesters();
-  res.status(httpStatus.OK).send({ semesters });
+  res.status(httpStatus.OK).send(semesters);
 });
 
 module.exports = {
