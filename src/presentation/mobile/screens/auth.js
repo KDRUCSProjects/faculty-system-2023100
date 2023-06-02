@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Spinner } from "@ui-kitten/components";
 import { useEffect } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -36,7 +37,7 @@ export default function auth(props) {
         style={{ height: 500, width: 141, overflow: "hidden", margin: 10 }}
       ></Image>
 
-      <ActivityIndicator size={"large"} color="#5DA3FF"></ActivityIndicator>
+      <ActivityIndicator size={"large"} color="blue"></ActivityIndicator>
     </View>
   );
 }

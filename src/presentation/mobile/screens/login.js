@@ -12,6 +12,7 @@ import {
   BackHandler,
 } from "react-native";
 import {
+  PanGestureHandler,
   ScrollView,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
@@ -24,8 +25,26 @@ import colors from "../constants/colors";
 import { useEffect } from "react";
 import { ActivityIndicator, shadow } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { Layout, TopNavigation, Divider } from "@ui-kitten/components";
+import {
+  Layout,
+  TopNavigation,
+  Divider,
+  BottomNavigation,
+  BottomNavigationTab,
+} from "@ui-kitten/components";
 import { LinearGradient } from "expo-linear-gradient";
+import { useCallback } from "react";
+import { useBackHandler } from "@react-native-community/hooks";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  useAnimatedGestureHandler,
+  withTiming,
+  withSpring,
+  runOnJS,
+  runOnUI,
+} from "react-native-reanimated";
+import { useRef } from "react";
 
 export default login = (props) => {
   const [email, setEmail] = useState("");
@@ -39,9 +58,15 @@ export default login = (props) => {
   const navigation = useNavigation();
   useEffect(() => {
     navigation.addListener("beforeRemove", (event) => {
+      console.log("call");
       event.preventDefault();
       Alert.alert("Exit", "Do you want Exit?", [
-        { text: "No", onPress: () => {} },
+        {
+          text: "No",
+          onPress: () => {
+            return;
+          },
+        },
         {
           text: "Yes",
           onPress: () => {
@@ -52,6 +77,16 @@ export default login = (props) => {
     });
   }, [navigation]);
 
+  var translateX = useSharedValue(0);
+  const lenght = useRef(144);
+  var prevValue = useRef(0);
+
+  const onStudent = () => {
+    setTimeout(() => {
+      translateX.value = 0;
+    }, 500);
+    return props.navigation.navigate("studentScreen");
+  };
   const onLogin = async () => {
     try {
       setisLoading(true);
@@ -73,6 +108,39 @@ export default login = (props) => {
       Alert.alert("Error", error, [<Text>ok</Text>]);
     }
   }, [isLoading, error]);
+
+  const panGestureEvent = useAnimatedGestureHandler({
+    onStart: () => {
+      prevValue.current = translateX.value;
+    },
+    onActive: (event) => {
+      console.log(event.velocityX);
+      const distance = Math.sqrt(translateX.value ** 2);
+      // if (distance < lenght.current && event.velocityX < 0) {
+      //   translateX.value = event.translationX + prevValue.current;
+      // }
+      if (!(event.velocityX < 0)) {
+        translateX.value = event.translationX + prevValue.current;
+
+        return;
+      }
+    },
+    onEnd: (event) => {
+      const distance = Math.sqrt(translateX.value ** 2);
+
+      if (distance >= lenght.current / 2 && event.velocityX >= 0) {
+        translateX.value = withSpring(lenght.current);
+        runOnJS(onStudent)();
+      } else {
+        translateX.value = withTiming(0, 3000);
+      }
+    },
+  });
+
+  const rStyle = useAnimatedStyle(() => {
+    return { transform: [{ translateX: translateX.value }], zIndex: 1 };
+  });
+
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
       <LinearGradient
@@ -106,7 +174,7 @@ export default login = (props) => {
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.inputField}
-              placeholder="UserName"
+              placeholder="Username"
               onChangeText={(email) => setEmail(email)}
             />
 
@@ -156,13 +224,85 @@ export default login = (props) => {
             <Text style={styles.Text}>LOGIN</Text>
           )}
         </TouchableOpacity>
+        <View
+          style={{
+            height: 50,
+            width: "70%",
+            borderRadius: 15,
+            backgroundColor: "white",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <View
+            style={{
+              width: "50%",
+              justifyContent: "center",
+              borderRadius: 15,
+              zIndex: 1,
+            }}
+          >
+            <PanGestureHandler onGestureEvent={panGestureEvent}>
+              <Animated.View
+                style={{
+                  flex: 1,
+                  width: "100%",
+                  height: "100%",
+                  justifyContent: "center",
+                  borderRadius: 15,
+                  alignItems: "center",
 
-        <TouchableOpacity style={{ height: "5%", marginTop: "3%" }}>
-          <Text style={styles.Text}>
-            Don't Have Account?/
-            <Text style={{ color: "#EB6A70" }}>Register Now</Text>
-          </Text>
-        </TouchableOpacity>
+                  ...rStyle,
+                }}
+                onLayout={(event) => {
+                  var { width } = event.nativeEvent.layout;
+                  lenght.current = width;
+                  console.log(lenght.current);
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#EB6A70",
+                    width: "100%",
+                    height: "100%",
+                    justifyContent: "center",
+                    borderRadius: 15,
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text
+                    style={{
+                      ...styles.Text,
+                      textAlign: "center",
+                    }}
+                  >
+                    Teacher
+                  </Text>
+                </TouchableOpacity>
+              </Animated.View>
+            </PanGestureHandler>
+          </View>
+
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={{
+              width: "50%",
+              justifyContent: "center",
+              borderRadius: 15,
+              backgroundColor: "white",
+            }}
+          >
+            <Text
+              style={{
+                ...styles.Text,
+                textAlign: "center",
+                color: "#EB6A70",
+              }}
+            >
+              Student
+            </Text>
+          </TouchableOpacity>
+        </View>
       </LinearGradient>
     </ScrollView>
   );

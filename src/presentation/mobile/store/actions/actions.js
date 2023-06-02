@@ -4,7 +4,7 @@ export const AUTHENTICATE = "AUTHENTICATE";
 export const LOGOUT = "LOGOUT";
 export const authenticate = (userName, password) => {
   return async (dispatch) => {
-    const response = await fetch("http://192.168.1.100:4000/auth/login", {
+    const response = await fetch("http://192.168.1.102:4000/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -23,10 +23,7 @@ export const authenticate = (userName, password) => {
       console.log(response.status);
       throw new Error("something went wrong");
     }
-    if (!response.ok) {
-      console.log(response.status);
-      throw new Error("something went wrong");
-    }
+
     const data = await response.json();
     console.log(data.user.id);
     console.log(data.tokens.access.token);
