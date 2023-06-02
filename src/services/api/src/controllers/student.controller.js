@@ -20,7 +20,7 @@ const registerStudent = catchAsync(async (req, res) => {
     ...req.body,
     educationalYearId,
   });
-  res.status(httpStatus.CREATED).send({ results });
+  res.status(httpStatus.CREATED).send(results);
 });
 
 const updateStudent = catchAsync(async (req, res) => {
@@ -28,13 +28,13 @@ const updateStudent = catchAsync(async (req, res) => {
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not found');
   if (req.file) req.body.imageUrl = req.file.path;
   const results = await studentService.updateStudent(student, req.body);
-  return res.status(httpStatus.ACCEPTED).send({ results });
+  return res.status(httpStatus.ACCEPTED).send(results);
 });
 
 const getStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudent(req.params.studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not Found');
-  res.status(httpStatus.OK).send({ student });
+  res.status(httpStatus.OK).send(student);
 });
 
 const deleteStudent = catchAsync(async (req, res) => {
@@ -59,7 +59,7 @@ const getStudents = catchAsync(async (req, res) => {
 const getStudentOnKankorId = catchAsync(async (req, res) => {
   const student = await studentService.getStudentOnKankorId(req.params.kankorId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not Found');
-  res.status(httpStatus.OK).send({ student });
+  res.status(httpStatus.OK).send(student);
 });
 
 module.exports = {

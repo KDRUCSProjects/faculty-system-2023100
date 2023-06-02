@@ -11,6 +11,7 @@ const taajilRoutes = require('./taajil.routes');
 const reentriesRoutes = require('./reentry.routes');
 const semesterRoutes = require('./semester.routes');
 const subjectRoutes = require('./subject.routes');
+const shokaListRoutes = require('./shoka.list.routes');
 const testRoute = require('./test.route');
 
 const router = express.Router();
@@ -55,6 +56,10 @@ const defaultRoutes = [
   {
     path: '/subjects',
     route: subjectRoutes,
+  },
+  {
+    path: '/shokaList',
+    route: shokaListRoutes,
   },
 ];
 

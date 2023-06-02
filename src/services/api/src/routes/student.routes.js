@@ -19,7 +19,7 @@ router
   .patch(auth(), upload.single('photo'), validate(studentValidation.updateStudent), studentController.updateStudent)
   .delete(auth(), validate(studentValidation.getStudent), studentController.deleteStudent);
 
-router.route(auth(), '/kankor/:kankorId').get(validate(studentValidation.kankor), studentController.getStudentOnKankorId);
+router.route('/kankor/:kankorId').get(auth(), validate(studentValidation.kankor), studentController.getStudentOnKankorId);
 
 module.exports = router;
 

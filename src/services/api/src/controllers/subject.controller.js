@@ -11,12 +11,12 @@ const createSubject = catchAsync(async (req, res) => {
   const results = await subjectService.createSubject(req.body);
   await shokaService.createShoka({ subjectId: results.id });
   await attendanceService.createAttendance({ subjectId: results.id });
-  res.status(httpStatus.CREATED).send({ results });
+  res.status(httpStatus.CREATED).send(results);
 });
 
 const getSubjects = catchAsync(async (req, res) => {
   const results = await subjectService.getSubjects();
-  res.status(httpStatus.OK).send({ results });
+  res.status(httpStatus.OK).send(results);
 });
 
 const deleteSubject = catchAsync(async (req, res) => {
@@ -29,7 +29,7 @@ const deleteSubject = catchAsync(async (req, res) => {
 const getSubject = catchAsync(async (req, res) => {
   const subject = await subjectService.getSubject(req.params.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
-  res.status(httpStatus.OK).send({ subject });
+  res.status(httpStatus.OK).send(subject);
 });
 
 module.exports = {
