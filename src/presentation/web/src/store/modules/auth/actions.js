@@ -8,32 +8,36 @@ export default {
       password: payload.password,
     };
 
-    const response = await axios({
-      url: '/api/auth/login',
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data,
-    });
+    try {
+      const response = await axios({
+        url: '/api/auth/login',
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data,
+      });
 
-    console.log(response);
+      console.log(response);
 
-    const responseData = response.data;
+      const responseData = response.data;
 
-    localStorage.setItem('refreshToken', responseData.tokens.refresh.token);
-    localStorage.setItem('token', responseData.tokens.access.token);
-    localStorage.setItem('userId', responseData.user.id);
-    localStorage.setItem('email', responseData.user.email);
-    localStorage.setItem('userData', JSON.stringify(responseData.user));
+      localStorage.setItem('refreshToken', responseData.tokens.refresh.token);
+      localStorage.setItem('token', responseData.tokens.access.token);
+      localStorage.setItem('userId', responseData.user.id);
+      localStorage.setItem('email', responseData.user.email);
+      localStorage.setItem('userData', JSON.stringify(responseData.user));
 
-    context.commit('setUser', {
-      refreshToken: responseData.refreshToken,
-      token: responseData.tokens.access.token,
-      userId: responseData.user.id,
-      email: responseData.user.email,
-      userData: responseData.user,
-    });
+      context.commit('setUser', {
+        refreshToken: responseData.refreshToken,
+        token: responseData.tokens.access.token,
+        userId: responseData.user.id,
+        email: responseData.user.email,
+        userData: responseData.user,
+      });
+    } catch (e) {
+      throw e.response.data.message;
+    }
   },
   setUserData(context, payload) {
     localStorage.setItem('userData', JSON.stringify(payload.userData));
@@ -60,7 +64,7 @@ export default {
   },
   async logout(context) {
     try {
-      const refreshToken = context.rootGetters.refreshToken;
+      const refreshToken = localStorage.getItem('refreshToken');
 
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('token');
@@ -78,7 +82,7 @@ export default {
 
       // Also, Send a req to the server to remove the token
 
-      const response = await axios({
+      await axios({
         url: '/api/auth/logout',
         method: 'post',
         headers: {
@@ -88,8 +92,6 @@ export default {
           refreshToken,
         },
       });
-
-      console.log(response);
     } catch (e) {
       console.log(e);
     }

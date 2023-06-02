@@ -17,4 +17,7 @@ export default {
   userData(state) {
     return state.userData;
   },
+  isAdmin(state) {
+    return state.userData && state.userData.role === 'admin' ? true : false;
+  },
 };
