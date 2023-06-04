@@ -57,7 +57,7 @@ export default {
         {
           title: 'Students',
           icon: 'mdi-account-school',
-          to: '/teachers',
+          to: '/students',
         },
         {
           title: 'Settings',

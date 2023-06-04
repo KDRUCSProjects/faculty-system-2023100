@@ -10,8 +10,17 @@ const routes = [
     },
   },
   {
+    // We will redirect the user to /dashboard once it's ready.
     path: '/',
-    redirect: '/dashboard',
+    redirect: '/teachers',
+  },
+  {
+    path: '/teachers',
+    component: () => import('@/views/teachers/TeachersList.vue'),
+  },
+  {
+    path: '/change-password',
+    component: () => import('@/components/profile/ChangePassword.vue'),
   },
   {
     path: '/auth',

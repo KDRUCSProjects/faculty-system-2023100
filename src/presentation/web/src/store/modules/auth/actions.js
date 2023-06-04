@@ -18,8 +18,6 @@ export default {
         data,
       });
 
-      console.log(response);
-
       const responseData = response.data;
 
       localStorage.setItem('refreshToken', responseData.tokens.refresh.token);
@@ -36,6 +34,7 @@ export default {
         userData: responseData.user,
       });
     } catch (e) {
+      console.log(e);
       throw e.response.data.message;
     }
   },
