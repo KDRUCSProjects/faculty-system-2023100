@@ -23,6 +23,10 @@ const routes = [
     component: () => import('@/components/profile/ChangePassword.vue'),
   },
   {
+    path: '/settings',
+    component: () => import('@/views/Settings.vue'),
+  },
+  {
     path: '/auth',
     component: () => import('@/views/auth/TheLogin.vue'),
     meta: {
