@@ -13,6 +13,8 @@ const semesterRoutes = require('./semester.routes');
 const subjectRoutes = require('./subject.routes');
 const shokaListRoutes = require('./shoka.list.routes');
 const testRoute = require('./test.route');
+const attendanceRoutes = require('./attendance.list.routes');
+const studentListRoutes = require('./student.list.routes');
 
 const router = express.Router();
 
@@ -60,6 +62,14 @@ const defaultRoutes = [
   {
     path: '/shokaList',
     route: shokaListRoutes,
+  },
+  {
+    path: '/attendance',
+    route: attendanceRoutes,
+  },
+  {
+    path: '/studentList',
+    route: studentListRoutes,
   },
 ];
 

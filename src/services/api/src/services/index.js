@@ -11,3 +11,5 @@ module.exports.subjectService = require('./subject.service');
 module.exports.shokaService = require('./shoka.service');
 module.exports.attendanceService = require('./attendance.service');
 module.exports.shokaListService = require('./shoka.list.service');
+module.exports.studentListService = require('./student.list.service');
+module.exports.attendanceListService = require('./attendance.list.service');

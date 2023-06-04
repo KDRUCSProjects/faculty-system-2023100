@@ -1,33 +1,33 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const shokaListValidation = require('../validations/shoka.list.validation');
-const shokaListController = require('../controllers/shoka.list.controller');
+const attendanceValidation = require('../validations/attendance.list.validation');
+const attendanceController = require('../controllers/attendance.controller');
 const shareValidation = require('../validations/share.validation');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
-router.route('/').post(validate(shokaListValidation.createShokaList), shokaListController.createShokaList);
+router.route('/').post(validate(attendanceValidation.createAttendance), attendanceController.createAttendance);
 
 router
   .route('/:shokaId')
-  .get(validate({ ...shokaListValidation.getShokaList, ...shareValidation.paginate }), shokaListController.getShokaList);
+  .get(validate({ ...attendanceValidation.getAttendance, ...shareValidation.paginate }), attendanceController.getAttendance);
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: ShokaList
- *   description: Shoka List management and retrieval
+ *   name: Attendance
+ *   description: Attendance List management and retrieval
  */
 
 /**
  * @swagger
- * /shokaList:
+ * /attendance:
  *   post:
- *     summary: Create shoka list student
- *     description: Add a new shoka list.
- *     tags: [ShokaList]
+ *     summary: create student attendance
+ *     description: create student attendance
+ *     tags: [Attendance]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -39,31 +39,26 @@ module.exports = router;
  *             required:
  *               - name
  *             properties:
- *               shokaFK:
- *                 type: number
+ *               subjectFK:
+ *                 type: string
  *               studentFK:
  *                 type: number
- *               midtermMarks:
- *                 type: number
- *               assignmentOrProjectMarks:
- *                 type: number
- *               finalMarks:
- *                 type: number
+ *               isPresent:
+ *                 type: boolean
+ *               date:
+ *                  type: integer
  *             example:
- *               shokaFK: 1
+ *               subjectFK: 1
  *               studentFK: 5
- *               midtermMarks: 16
- *               assignmentOrProjectMarks: 11
- *               finalMarks: 45
+ *               isPresent: true
+ *               date: 1685763095780
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/ShokaList'
- *       "406":
- *          $ref: '#/components/responses/DuplicateShokaList'
+ *                $ref: '#/components/schemas/Attendance'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -74,11 +69,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /shokaList/{id}:
+ * /attendance/{id}:
  *   get:
- *     summary: Get shoka list
- *     description: get a shoka list.
- *     tags: [ShokaList]
+ *     summary: Get Attendance list
+ *     description: get a Attendance list.
+ *     tags: [Attendance]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -87,14 +82,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: shoka id
+ *         description: Attendance id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/ShokaList'
+ *                $ref: '#/components/schemas/Attendance'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
