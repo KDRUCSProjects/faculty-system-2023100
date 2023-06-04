@@ -32,9 +32,18 @@ const getSubject = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(subject);
 });
 
+const getTeacherSubjects = catchAsync(async (req, res) => {
+  const { teacherId } = req.params;
+  const teacher = await userService.getTeacher(teacherId);
+  if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'teacher not found');
+  const subjects = await subjectService.getTeacherSubjects(teacherId);
+  return res.status(httpStatus.OK).send(subjects);
+});
+
 module.exports = {
   getSubjects,
   getSubject,
   deleteSubject,
   createSubject,
+  getTeacherSubjects,
 };

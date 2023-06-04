@@ -16,6 +16,9 @@ router
   .get(auth(), validate(subjectValidations.getSubject), subjectController.getSubject)
   .delete(auth(), validate(subjectValidations.getSubject), subjectController.deleteSubject);
 
+router
+  .route('/teachers/:teacherId')
+  .get(validate(subjectValidations.getTeacherSubjects), subjectController.getTeacherSubjects);
 module.exports = router;
 
 /**
@@ -140,6 +143,37 @@ module.exports = router;
  *     responses:
  *       "200":
  *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /subjects/teachers/{teacherId}:
+ *   get:
+ *     summary: Get all subjects of the teacher
+ *     description: Get all subjects of the teacher.
+ *     tags: [Subject]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: teacherId
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: teacher id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Subject'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

@@ -36,9 +36,19 @@ const getSubject = (subjectId) => {
   return Subject.findOne({ where: { id: subjectId } });
 };
 
+/**
+ * get teacher subjects
+ * @param {ObjectId} teacherId
+ * @returns {Promise<Student>}
+ */
+const getTeacherSubjects = (teacherId) => {
+  return Subject.findAll({ where: { teacherId } });
+};
+
 module.exports = {
   getSubject,
   createSubject,
   getSubjects,
   deleteSubject,
+  getTeacherSubjects,
 };
