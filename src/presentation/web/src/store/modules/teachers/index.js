@@ -3,13 +3,10 @@ import actions from './actions.js';
 import getters from './getters.js';
 
 export default {
+  namespaced: true,
   state() {
     return {
-      userId: null,
-      token: null,
-      email: null,
-      userData: null,
-      didAutoLogout: false,
+      teachers: [],
     };
   },
   getters,

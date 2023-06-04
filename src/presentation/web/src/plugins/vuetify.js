@@ -24,10 +24,15 @@ export default createVuetify({
     themes: {
       light: {
         colors: {
-          primary: '#3F51B5',
+          primary: '#1A237E',
           secondary: '#5CBBF6',
         },
       },
     },
   },
 });
+
+// Some best hex colors to choose from
+// 1. #231E39
+// 2. #3F51B5
+// 3. #FF5722 (Deep Orange)
