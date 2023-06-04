@@ -3,10 +3,10 @@
     <v-card elevation="0" width="400">
       <v-card-item>
         <v-form ref="loginForm" :fast-fail="false" @submit.prevent="submitForm">
-          <v-card-title class="text-h4">LOGIN</v-card-title>
-          <v-card-subtitle class="mt-1"> Welcome back. Please enter your details </v-card-subtitle>
+          <v-card-title class="text-h4" style="text-align: center;margin-bottom: 50px;">LOGIN</v-card-title>
+          <v-card-subtitle class="mt-1" style="text-align: center;"> Welcome back. Please enter your details </v-card-subtitle>
 
-          <div class="my-3"></div>
+         
 
           <v-text-field v-model="email" :rules="rules.email" clearable label="E-mail" type="email"></v-text-field>
 
@@ -18,10 +18,17 @@
             :type="show ? 'text' : 'password'"
             @click:append-inner="show = !show"
           ></v-text-field>
+          <v-checkbox 
+            label="Remember me"
+            color="primary"
+          />
+          
 
           <v-btn :loading="isLoading" class="mt-2" block variant="flat" size="large" type="submit" elevation="0">
             Continue
           </v-btn>
+
+
 
           <v-alert v-if="!!serverResponse" type="error" class="pa-2 my-2 font-weight-medium">
             {{ serverResponse }}
