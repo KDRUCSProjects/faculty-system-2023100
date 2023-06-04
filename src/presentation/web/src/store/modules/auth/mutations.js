@@ -12,4 +12,7 @@ export default {
     // Set user data only
     state.userData = payload;
   },
+  setEmail(state, newEmail) {
+    state.email = newEmail;
+  },
 };

@@ -19,4 +19,7 @@ export default {
       throw e.response.data.message;
     }
   },
+  async deleteTeacher(context) {
+    context.commit('removeTeacher');
+  },
 };
