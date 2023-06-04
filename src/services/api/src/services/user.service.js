@@ -101,6 +101,14 @@ const updateUser = (userBody) => {
   return userBody.save(userBody);
 };
 
+/**
+ * get teacher
+ * @param {ObjectId} teacherId
+ * @returns {Promise<Object>}
+ */
+const getTeacher = (teacherId) => {
+  return User.findOne({ where: { id: teacherId, role: 'teacher' } });
+};
 module.exports = {
   createUser,
   queryUsers,
@@ -110,4 +118,5 @@ module.exports = {
   deleteUserById,
   verifyEmailAndPassword,
   updateUser,
+  getTeacher,
 };

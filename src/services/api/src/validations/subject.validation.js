@@ -14,7 +14,13 @@ const getSubject = {
   }),
 };
 
+const getTeacherSubjects = {
+  params: Joi.object().keys({
+    teacherId: Joi.number().required(),
+  }),
+};
 module.exports = {
   createSubject,
   getSubject,
+  getTeacherSubjects,
 };
