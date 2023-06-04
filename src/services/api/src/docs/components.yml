@@ -191,6 +191,33 @@ components:
         assignmentOrProjectMarks: 11
         finalMarks: 45
 
+    Attendance:
+      type: object
+      properties:
+        subjectFK: 
+          type: number
+        studentFK: 
+          type: number
+        isPresent: 
+          type: boolean
+        date: 
+          type: date
+      example:
+        subjectFK: 1
+        studentFK: 5
+        isPresent: true
+        date: 1685763095780
+
+    StudentList:
+      type: object
+      properties:
+        studentId: 
+          type: number
+        semesterId: 
+          type: number
+      example:
+        subjectFK: 1
+        studentFK: 5
 
   responses:
     # Taajils related responses
