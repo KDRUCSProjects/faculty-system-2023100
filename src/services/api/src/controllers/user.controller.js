@@ -26,7 +26,14 @@ const getUser = catchAsync(async (req, res) => {
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  const user = await userService.updateUserById(req.params.userId, req.body);
+  const { userId } = req.params;
+  if (req.user.id !== parseInt(userId, 10)) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'unauthorized');
+  }
+  if (req.file) {
+    req.body.photo = req.file.path;
+  }
+  const user = await userService.updateUserById(req.user, req.body);
   res.send(user);
 });
 

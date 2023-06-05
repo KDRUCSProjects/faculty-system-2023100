@@ -23,6 +23,7 @@ module.exports = {
         type: Sequelize.STRING,
         required: true,
       },
+      photo: Sequelize.STRING,
       password: {
         type: Sequelize.STRING,
         required: true,

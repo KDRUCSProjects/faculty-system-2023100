@@ -60,9 +60,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: { min: 8 },
       },
+      photo: DataTypes.STRING,
       role: {
         type: DataTypes.STRING,
-        defaultValue: 'user',
+        defaultValue: 'Teacher',
         validate(value) {
           if (!roles.includes(value)) {
             throw new Error('Unknown role');

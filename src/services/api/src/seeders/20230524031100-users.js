@@ -8,6 +8,7 @@ const users = [...Array(10)].map((user) => {
     lastName: faker.name.lastName(),
     email: faker.internet.email(),
     password: faker.internet.password(),
+    photo: faker.image.imageUrl(),
     role: roles[faker.datatype.number({ min: 0, max: 2 })],
   };
 });
