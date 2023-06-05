@@ -1,5 +1,5 @@
 // Sequelize Models
-const { Subject } = require('../models');
+const { Subject, StudentsList, Student } = require('../models');
 
 /**
  * Create a Subject
@@ -45,7 +45,26 @@ const getTeacherSubjects = (teacherId) => {
   return Subject.findAll({ where: { teacherId } });
 };
 
+/**
+ * get teach
+ * @param {ObjectId} semesterId
+ * @returns {Promise<StudentsList>}
+ */
+const getSemesterStudents = (semesterId) => {
+  return StudentsList.findAll({
+    where: { semesterId },
+    include: [
+      {
+        model: Student,
+        as: 'Student',
+        required: true,
+      },
+    ],
+  });
+};
+
 module.exports = {
+  getSemesterStudents,
   getSubject,
   createSubject,
   getSubjects,
