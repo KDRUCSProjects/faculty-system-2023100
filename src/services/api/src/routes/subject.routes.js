@@ -19,6 +19,10 @@ router
 router
   .route('/teachers/:teacherId')
   .get(validate(subjectValidations.getTeacherSubjects), subjectController.getTeacherSubjects);
+
+router
+  .route('/students/:subjectId')
+  .get(validate(subjectValidations.getSemesterStudents), subjectController.getSemesterStudents);
 module.exports = router;
 
 /**
@@ -167,6 +171,37 @@ module.exports = router;
  *         schema:
  *           type: number
  *         description: teacher id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Subject'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /subjects/students/{subjectId}:
+ *   get:
+ *     summary: Get all students to related subject or semester.
+ *     description: Get all students to related subject or semester.
+ *     tags: [Subject]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: subjectId
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: subject id
  *     responses:
  *       "200":
  *         description: OK
