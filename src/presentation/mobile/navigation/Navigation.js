@@ -1,8 +1,9 @@
 import {
+  CardStyleInterpolators,
   HeaderBackButton,
   createStackNavigator,
 } from "@react-navigation/stack";
-import { ImageBackground, Text } from "react-native";
+import { Easing, ImageBackground, Text } from "react-native";
 import colors from "../constants/colors";
 import role from "../screens/roleSelection";
 import login from "../screens/login";
@@ -12,12 +13,14 @@ import teacherScreen from "../screens/teacherScreen";
 import auth from "../screens/auth";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import MainDrawer from "../ui/components/MainDrawer";
+import { TransitionSpecs } from "@react-navigation/stack";
 import {
   TabBar,
   BottomNavigation,
   BottomNavigationTab,
 } from "@ui-kitten/components";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { timing } from "react-native-reanimated";
 
 const studentScreen = () => {
   const stdScreen = createStackNavigator();
@@ -54,6 +57,15 @@ const Navigation = (props) => {
           backgroundColor: colors.secondry,
         },
         headerTintColor: "white",
+
+        transitionSpec: {
+          open: {
+            animation: "timing",
+            config: { duration: 200, easing: Easing.sin },
+          },
+          close: TransitionSpecs.ScaleFromCenterAndroidSpec,
+        },
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
     >
       <mainNavigation.Screen
@@ -65,6 +77,7 @@ const Navigation = (props) => {
         component={studentScreen}
         options={{}}
       ></mainNavigation.Screen>
+
       <mainNavigation.Screen
         name="Login"
         component={login}

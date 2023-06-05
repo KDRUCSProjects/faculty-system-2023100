@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="drawer" app width="220" color="primary">
+  <v-navigation-drawer v-model="drawer" app width="220" color="primary" permanent>
     <!-- App/Drawer name -->
     <v-list-item class="my-4">
       <v-list-item-content>
@@ -57,7 +57,7 @@ export default {
         {
           title: 'Students',
           icon: 'mdi-account-school',
-          to: '/teachers',
+          to: '/students',
         },
         {
           title: 'Settings',
@@ -70,8 +70,8 @@ export default {
   },
   methods: {
     async logout() {
-      // await this.$store.dispatch("logout");
-      // this.$router.replace("/auth");
+      await this.$store.dispatch('logout');
+      this.$router.replace('/auth');
     },
   },
 };
