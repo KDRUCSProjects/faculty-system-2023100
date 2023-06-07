@@ -59,8 +59,8 @@ export default studentIdScreen = (props) => {
       console.log(event.velocityX);
       const distance = Math.sqrt(translateX.value ** 2);
 
-      if (!(event.velocityX < 0)) {
-        translateX.value = event.translationX + prevValue.current;
+      if (!(event.velocityX > 0)) {
+        translateX.value = -(event.translationX + prevValue.current);
         return;
       }
     },
@@ -68,7 +68,7 @@ export default studentIdScreen = (props) => {
       const distance = Math.sqrt(translateX.value ** 2);
       console.log(lenght.current);
 
-      if (distance >= lenght.current / 2 && event.velocityX >= 0) {
+      if (distance >= lenght.current / 2 && event.velocityX <= 0) {
         translateX.value = withSpring(lenght.current);
         runOnJS(onTeacher)();
       } else {
@@ -78,7 +78,7 @@ export default studentIdScreen = (props) => {
   });
 
   const rStyle = useAnimatedStyle(() => {
-    return { transform: [{ translateX: translateX.value }], zIndex: 1 };
+    return { transform: [{ translateX: -translateX.value }], zIndex: 1 };
   });
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
@@ -99,6 +99,25 @@ export default studentIdScreen = (props) => {
             marginBottom: "5%",
           }}
         >
+          <TouchableOpacity
+            style={{
+              width: "50%",
+              justifyContent: "center",
+              borderRadius: 15,
+              backgroundColor: "white",
+            }}
+            activeOpacity={0.8}
+          >
+            <Text
+              style={{
+                ...styles.Text,
+                textAlign: "center",
+                color: "#EB6A70",
+              }}
+            >
+              Teacher
+            </Text>
+          </TouchableOpacity>
           <View
             style={{
               width: "50%",
@@ -147,26 +166,6 @@ export default studentIdScreen = (props) => {
               </Animated.View>
             </PanGestureHandler>
           </View>
-
-          <TouchableOpacity
-            style={{
-              width: "50%",
-              justifyContent: "center",
-              borderRadius: 15,
-              backgroundColor: "white",
-            }}
-            activeOpacity={0.8}
-          >
-            <Text
-              style={{
-                ...styles.Text,
-                textAlign: "center",
-                color: "#EB6A70",
-              }}
-            >
-              Teacher
-            </Text>
-          </TouchableOpacity>
         </View>
       </LinearGradient>
     </ScrollView>

@@ -21,6 +21,7 @@ import {
 } from "@ui-kitten/components";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { timing } from "react-native-reanimated";
+import Setting from "../screens/Setting";
 
 const studentScreen = () => {
   const stdScreen = createStackNavigator();
@@ -61,7 +62,7 @@ const Navigation = (props) => {
         transitionSpec: {
           open: {
             animation: "timing",
-            config: { duration: 200, easing: Easing.sin },
+            config: { duration: 300, easing: Easing.sin },
           },
           close: TransitionSpecs.ScaleFromCenterAndroidSpec,
         },
@@ -75,6 +76,12 @@ const Navigation = (props) => {
       <mainNavigation.Screen
         name="studentScreen"
         component={studentScreen}
+        options={{}}
+      ></mainNavigation.Screen>
+
+      <mainNavigation.Screen
+        name="settingsScreen"
+        component={Setting}
         options={{}}
       ></mainNavigation.Screen>
 
@@ -127,6 +134,7 @@ const DrawerNavigator = (props) => {
     >
       <drawer.Screen name="Home" component={Navigation} />
       <drawer.Screen name="Login" component={login}></drawer.Screen>
+      <drawer.Screen name="Settings" component={Setting}></drawer.Screen>
     </drawer.Navigator>
   );
 };
