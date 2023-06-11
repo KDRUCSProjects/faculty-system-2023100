@@ -2,13 +2,15 @@
   <div>
     <v-card max-width="450" class="mx-auto">
       <v-card-item>
-        <v-text-field v-model="name" label="Name"></v-text-field>
-        <v-text-field v-model="nickname" label="Surname"></v-text-field>
-        <v-text-field v-model="email" label="Password"></v-text-field>
+        <v-form @submit.prevent="submitForm">
+          <v-text-field v-model="name" label="Name"></v-text-field>
+          <v-text-field v-model="nickname" label="Surname"></v-text-field>
+          <v-text-field v-model="email" label="Password"></v-text-field>
 
-        <v-card-actions>
-          <v-btn @click="showAlert" block variant="flat">Save Changes</v-btn>
-        </v-card-actions>
+          <v-card-actions>
+            <v-btn @click="showAlert" block variant="flat">Save Changes</v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card-item>
     </v-card>
   </div>
@@ -28,8 +30,8 @@ export default {
       this.nickname = data.nickname;
       this.email = data.email;
     },
-    showAlert() {
-      alert(this.name);
+    submitForm() {
+      // this.$store.dispatch('')
     },
   },
   mounted() {

@@ -95,4 +95,28 @@ export default {
       console.log(e);
     }
   },
+  async changePassword(context, payload) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: '/api/auth/change-password',
+        method: 'patch',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data: payload,
+      });
+
+      const responseData = response;
+
+      console.log(responseData);
+
+      // Show a success or error message
+    } catch (e) {
+      console.log(e);
+      throw e.response.data.message;
+    }
+  },
 };
