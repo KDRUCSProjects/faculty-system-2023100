@@ -16,9 +16,11 @@
 
       <v-window v-model="tab">
         <v-window-item class="pa-3">
-          <view-edit-profile></view-edit-profile>
+          <view-edit-profile> </view-edit-profile>
         </v-window-item>
-        <v-window-item class="pa-3"></v-window-item>
+        <v-window-item class="pa-3">
+          <change-password></change-password>
+        </v-window-item>
       </v-window>
     </div>
   </base-contents>
@@ -26,10 +28,12 @@
 
 <script>
 import ViewEditProfile from '@/components/profile/ViewEditProfile.vue';
+import ChangePassword from '@/components/profile/ChangePassword.vue';
 
 export default {
   components: {
     ViewEditProfile,
+    ChangePassword,
   },
   data: () => ({
     tab: null,

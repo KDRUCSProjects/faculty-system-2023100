@@ -42,9 +42,7 @@
               <v-divider class="my-1"></v-divider>
               <v-btn variant="text" block> Profile </v-btn>
               <v-divider class="my-1"></v-divider>
-              <v-btn variant="text" block to="/change-password"> Change Password </v-btn>
-              <v-divider class="my-1"></v-divider>
-              <v-btn variant="text" block> Logout </v-btn>
+              <v-btn variant="text" block to="/settings"> Settings </v-btn>
             </div>
           </v-card-text>
         </v-card>
