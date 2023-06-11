@@ -19,8 +19,15 @@ const getTeacherSubjects = {
     teacherId: Joi.number().required(),
   }),
 };
+
+const getSemesterStudents = {
+  params: Joi.object().keys({
+    subjectId: Joi.number().required(),
+  }),
+};
 module.exports = {
   createSubject,
   getSubject,
+  getSemesterStudents,
   getTeacherSubjects,
 };

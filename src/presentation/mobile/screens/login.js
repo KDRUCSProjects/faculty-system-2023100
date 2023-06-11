@@ -163,10 +163,10 @@ export default login = (props) => {
               flexDirection: "row",
             }}
           >
-            <Text style={{ fontSize: 40, color: "white" }}>Hello</Text>
+            <Text style={{ fontSize: 40, color: "white" }}>AssalamAlaikum</Text>
           </View>
 
-          <Text style={{ fontSize: 20, color: "white" }}>
+          <Text style={{ fontSize: 20, color: "white", textAlign: "center" }}>
             Sign in to your account
           </Text>
         </View>
@@ -221,7 +221,7 @@ export default login = (props) => {
           {isLoading ? (
             <ActivityIndicator size={"small"}></ActivityIndicator>
           ) : (
-            <Text style={styles.Text}>LOGIN</Text>
+            <Text style={{ fontSize: 18, color: "white" }}>LOGIN</Text>
           )}
         </TouchableOpacity>
         <View
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   loginBtn: {
-    width: "90%",
+    width: "80%",
     borderRadius: 15,
 
     height: 60,
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     shadowColor: colors.secondry,
   },
   Text: {
-    fontSize: 18,
+    fontSize: 16,
     color: "white",
   },
 });

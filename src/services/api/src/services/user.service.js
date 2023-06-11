@@ -45,27 +45,24 @@ const getUserById = async (id) => {
  * @param {string} email
  * @returns {Promise<User>}
  */
-const getUserByEmail = async (email) => {
+const getUserByEmail = (email) => {
   return User.findOne({ where: { email } });
 };
 
 /**
  * Update user by id
- * @param {ObjectId} userId
- * @param {Object} updateBody
+ * @param {Object} oldUser
+ * @param {Object} newUserBody
  * @returns {Promise<User>}
  */
-const updateUserById = async (userId, updateBody) => {
-  const user = await getUserById(userId);
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+const updateUserById = (oldUser, newUserBody) => {
+  if (oldUser instanceof User) {
+    oldUser.set({
+      ...newUserBody,
+    });
+    return oldUser.save();
   }
-  if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  }
-  Object.assign(user, updateBody);
-  await user.save();
-  return user;
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
 
 /**

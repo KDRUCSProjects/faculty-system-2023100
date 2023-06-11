@@ -10,15 +10,21 @@ components:
           format: email
         name:
           type: string
+        lastName:
+          type: string
+        photo:
+          type: string
         role:
           type: string
-          enum: [user, admin]
+          enum: [Teacher, admin]
 
       example:
-        id: 5ebac534954b54139806c112
+        id: 1
         email: fake@example.com
         name: fake name
-        role: user
+        lastName: fake last Name
+        photo: src/images/example.png
+        role: Teacher
 
     Token:
       type: object

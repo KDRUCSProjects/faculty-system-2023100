@@ -42,7 +42,7 @@ export default function teacherScreen(props) {
         flex: 1,
         height: "100%",
         width: "100%",
-        backgroundColor: "#ced2d9",
+        backgroundColor: "#5DA3FF",
       }}
     >
       <View
