@@ -85,7 +85,7 @@ const deleteUserById = async (userId) => {
  * @param {password} string
  * @returns {Promise<Object>}
  */
-const verifyEmailAndPassword = async (reqUser, password) => {
+const verifyEmailAndPassword = (reqUser, password) => {
   return reqUser.isPasswordMatch(password);
 };
 

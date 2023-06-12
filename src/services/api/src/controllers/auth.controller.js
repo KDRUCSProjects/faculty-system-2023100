@@ -47,6 +47,13 @@ const updateProfile = catchAsync(async (req, res) => {
   return res.status(httpStatus.ACCEPTED).send(results);
 });
 
+const checkPassword = catchAsync(async (req, res) => {
+  const { password } = req.body;
+  const results = await userService.verifyEmailAndPassword(req.user, password);
+  if (results) return res.status(httpStatus.OK).send();
+  throw new ApiError(httpStatus.UNAUTHORIZED, 'unauthorized');
+});
+
 module.exports = {
   register,
   login,
@@ -55,4 +62,5 @@ module.exports = {
   resetPassword,
   changePassword,
   updateProfile,
+  checkPassword,
 };
