@@ -73,6 +73,12 @@ const updateProfile = {
     .min(1),
 };
 
+const checkPassword = {
+  body: Joi.object().keys({
+    password: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   register,
   login,
@@ -81,6 +87,7 @@ module.exports = {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  checkPassword,
   changePassword,
   updateProfile,
 };

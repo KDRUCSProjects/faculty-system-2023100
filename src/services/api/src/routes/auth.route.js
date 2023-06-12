@@ -19,6 +19,7 @@ router.patch(
   validate(authValidation.updateProfile),
   authController.updateProfile
 );
+router.post('/checkPassword', auth(), validate(authValidation.checkPassword), authController.checkPassword);
 
 module.exports = router;
 
@@ -276,6 +277,38 @@ module.exports = router;
  *                $ref: '#/components/schemas/User'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *
+ */
+
+/**
+ * @swagger
+ * /auth/checkPassword:
+ *   post:
+ *     summary: Check Your Password
+ *     description: Check Your Password
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *             example:
+ *               password: password1
+ *     responses:
+ *       "200":
+ *         description: NO Content
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
