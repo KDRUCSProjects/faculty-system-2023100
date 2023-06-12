@@ -27,14 +27,11 @@ const getUser = catchAsync(async (req, res) => {
 
 const updateUser = catchAsync(async (req, res) => {
   const { userId } = req.params;
-  if (req.user.id !== parseInt(userId, 10)) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'unauthorized');
-  }
-  if (req.file) {
-    req.body.photo = req.file.path;
-  }
-  const user = await userService.updateUserById(req.user, req.body);
-  res.send(user);
+  const user = await userService.getUserById(userId);
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'user not found');
+  if (req.file) req.body.photo = req.file.path;
+  const results = await userService.updateUserById(user, req.body);
+  res.send(results);
 });
 
 const deleteUser = catchAsync(async (req, res) => {

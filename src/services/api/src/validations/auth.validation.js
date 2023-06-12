@@ -61,6 +61,18 @@ const changePassword = {
   }),
 };
 
+const updateProfile = {
+  body: Joi.object()
+    .keys({
+      email: Joi.string().email(),
+      password: Joi.string().custom(password),
+      name: Joi.string(),
+      lastName: Joi.string(),
+      photo: Joi.string(),
+    })
+    .min(1),
+};
+
 module.exports = {
   register,
   login,
@@ -70,4 +82,5 @@ module.exports = {
   resetPassword,
   verifyEmail,
   changePassword,
+  updateProfile,
 };
