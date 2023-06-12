@@ -2,19 +2,22 @@
   <v-app-bar class="px-4" elevation="0" border>
     <!-- The Menu -->
     <!-- navigation button/collapser -->
-    <div style="width: 500px">
-      <v-text-field
-        clearable=""
-        :loading="loading"
-        density="compact"
-        variant="outlined"
-        label="Find student by id"
-        prepend-inner-icon="mdi-magnify"
-        single-line
-        hide-details
-        @click:append-inner="onClick"
-      ></v-text-field>
-    </div>
+
+    <slot>
+      <div style="width: 500px">
+        <v-text-field
+          clearable=""
+          :loading="loading"
+          density="compact"
+          variant="outlined"
+          label="Find student by id"
+          prepend-inner-icon="mdi-magnify"
+          single-line
+          hide-details
+          @click:append-inner="onClick"
+        ></v-text-field>
+      </div>
+    </slot>
 
     <v-spacer></v-spacer>
 
