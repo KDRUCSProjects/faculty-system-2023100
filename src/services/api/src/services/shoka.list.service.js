@@ -16,7 +16,7 @@ const createShokaList = (shokaListBody) => {
  * @returns {Promise<ShokaList>}
  */
 const getShokaList = (shokaId) => {
-  return ShokaList.findAll({ where: { shokaId: shokaId } });
+  return ShokaList.findAll({ where: { shokaId } });
 };
 
 /**
