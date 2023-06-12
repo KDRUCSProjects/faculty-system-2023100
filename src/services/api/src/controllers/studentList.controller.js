@@ -9,6 +9,8 @@ const createStudentList = catchAsync(async (req, res) => {
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
   const semester = await semesterService.findSemesterById(semesterId);
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+  const studentList = await studentListService.findListedStudentByStudentId(studentId);
+  if (studentList) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student already exists in a semester');
   const result = await studentListService.createStudentList(req.body);
   return res.send(result);
 });

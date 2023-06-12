@@ -10,22 +10,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.Shoka, { foreignKey: 'shakaId', as: 'Shoka' });
+      this.belongsTo(models.Student, { foreignKey: 'studentId', as: 'Student' });
     }
   }
   ShokaList.init(
     {
-      shokaFK: {
+      shokaId: {
         type: DataTypes.INTEGER,
         required: true,
         trim: true,
         references: {
-          model: 'Subjects',
+          model: 'Shokas',
           key: 'id',
         },
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      studentFK: {
+      studentId: {
         type: DataTypes.INTEGER,
         required: true,
         trim: true,

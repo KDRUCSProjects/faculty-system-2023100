@@ -55,9 +55,18 @@ const kankor = {
   }),
 };
 
+const deleteStudents = {
+  body: Joi.array()
+    .items({
+      studentId: Joi.number(),
+    })
+    .min(1),
+};
+
 module.exports = {
   kankor,
   getStudent,
   updateStudent,
+  deleteStudents,
   registerStudent,
 };

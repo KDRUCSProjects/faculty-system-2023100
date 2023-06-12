@@ -16,7 +16,7 @@ const createAttendance = (attendanceBody) => {
  * @returns {Promise<Attendance>}
  */
 const getAttendance = (attendanceId) => {
-  return Attendance.findById(attendanceId);
+  return Attendance.findOne({ where: { id: attendanceId } });
 };
 
 /**

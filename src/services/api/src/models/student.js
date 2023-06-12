@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.EducationalYear, { foreignKey: 'educationalYearId', as: 'EducationalYear' });
-      this.hasOne(models.StudentsList);
+      this.hasMany(models.StudentsList);
     }
   }
   Student.init(
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         required: true,
         references: {
-          model: 'EducationalYear',
+          model: 'EducationalYears',
           key: 'id',
         },
         onDelete: 'cascade',

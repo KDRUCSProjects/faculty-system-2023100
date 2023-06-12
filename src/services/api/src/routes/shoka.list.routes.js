@@ -39,9 +39,9 @@ module.exports = router;
  *             required:
  *               - name
  *             properties:
- *               shokaFK:
+ *               shokaId:
  *                 type: number
- *               studentFK:
+ *               studentId:
  *                 type: number
  *               midtermMarks:
  *                 type: number
@@ -50,8 +50,8 @@ module.exports = router;
  *               finalMarks:
  *                 type: number
  *             example:
- *               shokaFK: 1
- *               studentFK: 5
+ *               shokaId: 1
+ *               studentId: 5
  *               midtermMarks: 16
  *               assignmentOrProjectMarks: 11
  *               finalMarks: 45

@@ -10,18 +10,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      subjectFK: {
+      attendanceId: {
         type: Sequelize.INTEGER,
         required: true,
         trim: true,
         references: {
-          model: 'attendances',
+          model: 'Attendances',
           key: 'id',
         },
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      studentFK: {
+      studentId: {
         type: Sequelize.INTEGER,
         required: true,
         trim: true,
@@ -34,10 +34,6 @@ module.exports = {
       },
       isPresent: {
         type: Sequelize.BOOLEAN,
-        required: true,
-      },
-      date: {
-        type: Sequelize.DATE,
         required: true,
       },
       ...BaseModel(Sequelize),

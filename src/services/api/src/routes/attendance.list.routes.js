@@ -35,23 +35,22 @@ module.exports = router;
  *       content:
  *         application/json:
  *           schema:
- *             type: object
+ *             type: array
  *             required:
  *               - name
- *             properties:
- *               subjectFK:
- *                 type: string
- *               studentFK:
- *                 type: number
- *               isPresent:
- *                 type: boolean
- *               date:
- *                  type: integer
- *             example:
- *               subjectFK: 1
- *               studentFK: 5
- *               isPresent: true
- *               date: 1685763095780
+ *             items:
+ *              type: objects
+ *              properties:
+ *                attendanceId:
+ *                  type: string
+ *                studentId:
+ *                  type: number
+ *                isPresent:
+ *                  type: boolean
+ *              example:
+ *                attendanceId: 1
+ *                studentId: 5
+ *                isPresent: true
  *     responses:
  *       "201":
  *         description: Created

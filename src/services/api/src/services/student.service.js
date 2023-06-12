@@ -70,11 +70,21 @@ const getStudentOnKankorId = (kankorId) => {
   return Student.findOne({ where: { kankorId } });
 };
 
+/**
+ * delete Student By id
+ * @param {ObjectId} studentId
+ * @returns {Promise<Student>}
+ */
+const deleteStudentById = (studentId) => {
+  return Student.destroy({ where: { id: studentId } });
+};
+
 module.exports = {
   getStudent,
   getStudents,
   deleteStudent,
   updateStudent,
   registerStudent,
+  deleteStudentById,
   getStudentOnKankorId,
 };
