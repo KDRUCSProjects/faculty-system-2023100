@@ -7,26 +7,24 @@
       </v-card-subtitle>
 
       <v-card-text class="my-3">
-        <!-- <p class="mb-1">Password should be and must contain the followings:</p> -->
-
         <v-row style="text-align: center">
           <v-col :class="{ 'text-success': passwordRules.chars8 }">
             <b>8+</b>
             <p>Character</p>
           </v-col>
-          <v-col>
+          <v-col :class="{ 'text-success': passwordRules.uppercase }">
             <b>AA</b>
             <p>Uppercase</p>
           </v-col>
-          <v-col>
+          <v-col :class="{ 'text-success': passwordRules.lowercase }">
             <b>aa</b>
             <p>Lowercase</p>
           </v-col>
-          <v-col>
+          <v-col :class="{ 'text-success': passwordRules.number }">
             <b>123</b>
             <p>Number</p>
           </v-col>
-          <v-col>
+          <v-col :class="{ 'text-success': passwordRules.symbols }">
             <b>@$#</b>
             <p>Symbol</p>
           </v-col>
@@ -48,7 +46,7 @@
             variant="solo"
           ></v-text-field>
           <v-btn
-            :disabled="newChanges"
+            :disabled="disabledBtn"
             type="submit"
             block
             class="text-none mb-4"
@@ -66,13 +64,26 @@
       </v-card-text>
     </v-card-item>
   </v-card>
+  <v-dialog v-model="dialog" max-width="400">
+    <v-card>
+      <v-card-title>Confirm Password</v-card-title>
+      <div class="mx-3">
+        <v-text-field label="Enter your old password"></v-text-field>
+      </div>
+      <v-card-actions>
+        <v-btn variant="elevated" color="primary">Confirm</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
 export default {
   data: () => ({
+    dialog: true,
     currentPassword: '',
     newPassword: '',
+    disabledBtn: true,
     confirmPassword: '',
     isLoading: false,
     errorMessage: null,
@@ -84,10 +95,12 @@ export default {
       number: false,
       symbols: false,
     },
+
   }),
   methods: {
     async submitForm() {
       this.isLoading = true;
+      dialog = true;
 
       try {
         await this.$store.dispatch('changePassword', {
@@ -108,13 +121,40 @@ export default {
       this.passwordRules.chars8 = false;
       this.passwordRules.uppercase = false;
       this.passwordRules.lowercase = false;
-      this.passwordRules.symbol = false;
+      this.passwordRules.symbols = false;
       this.passwordRules.number = false;
 
       // Condition 1:
       // Check if newly entered password contains at least 8 chars
       if (newValue.length > 8) {
         this.passwordRules.chars8 = true;
+      }
+      // Check if newly entered password contains uppercase letter
+      if (/[A-Z]/.test(newValue)) {
+        this.passwordRules.uppercase = true;
+      }
+      // Check if newly entered password contains lowercase letter
+      if (/[a-z]/.test(newValue)) {
+        this.passwordRules.lowercase = true;
+      }
+      // Check if newly entered password contains number
+      if (/[0-9]/.test(newValue)) {
+        this.passwordRules.number = true;
+      }
+      // Check if newly entered password contains symbols
+      if (/[#?!@$_+:"{'`~,.<>'};%^&*(-)]/.test(newValue)) {
+        this.passwordRules.symbols = true;
+      }
+      // Check all condition that is true or false 
+      console.log(this.confirmPassword)
+      if (
+        this.passwordRules.chars8 &&
+        this.passwordRules.lowercase &&
+        this.passwordRules.number &&
+        this.passwordRules.symbols &&
+        this.passwordRules.uppercase
+      ) {
+        this.disabledBtn = false;
       }
     },
   },
