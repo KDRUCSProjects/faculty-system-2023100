@@ -1,12 +1,13 @@
 const Joi = require('joi');
 
 const createAttendance = {
-  body: Joi.object().keys({
-    subjectFK: Joi.number().required(),
-    studentFK: Joi.number().required(),
-    isPresent: Joi.boolean().required(),
-    date: Joi.date().required(),
-  }),
+  body: Joi.array()
+    .items({
+      attendanceId: Joi.number().required(),
+      studentId: Joi.number().required(),
+      isPresent: Joi.boolean().required(),
+    })
+    .min(1),
 };
 
 const getAttendance = {

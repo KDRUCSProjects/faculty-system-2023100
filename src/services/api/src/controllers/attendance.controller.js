@@ -11,27 +11,47 @@ const {
 const ApiError = require('../utils/ApiError');
 
 const createAttendance = catchAsync(async (req, res) => {
-    const { studentFK, subjectFK, date } = req.body;
-    const isStudentHasAttendance = await attendanceListService.findAttendanceByDateAndStudentId(studentFK, subjectFK, date);
-    if (isStudentHasAttendance) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has attendance');
-    const student = await studentService.getStudent(studentFK);
-    if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not Found');
-    const listStudent = await studentListService.findListedStudentByStudentId(studentFK);
-    if (!listStudent) throw new ApiError(httpStatus.NOT_FOUND, 'student needs to be added to a semester');
-    const attendance = await attendanceService.findAttendanceBySubjectId(subjectFK);
-    if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, 'attendance not found');
-    const subject = await subjectService.getSubject(attendance.subjectId);
-    const semester = await semesterService.findSemesterById(subject.semesterId);
-    if (semester.id === listStudent?.semesterId) {
-        const attendance = await attendanceListService.createAttendance(req.body);
-        return res.status(httpStatus.CREATED).send(attendance);
-    } else {
-        throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student does not exists in this semester');
+    let results = [];
+    let messages = [];
+    for await (const std of req.body) {
+        const { studentId, attendanceId } = std;
+        const isStudentHasAttendance = await attendanceListService.findAttendanceByDateAndStudentId(studentId, attendanceId);
+        if (isStudentHasAttendance) {
+            messages.push({ student: std, message: 'student has attendance' });
+            continue;
+        }
+        const student = await studentService.getStudent(studentId);
+        if (!student) {
+            messages.push({ student: std, message: 'Student Not Found' });
+            continue
+        }
+        const listStudent = await studentListService.findListedStudentByStudentId(studentId);
+        if (!listStudent) {
+            messages.push({ record: std, message: 'students needs to be added to this semester' });
+            continue;
+        }
+        const attendance = await attendanceService.getAttendance(attendanceId);
+        if (!attendance) {
+            messages.push({ student: std, message: 'attendance not found' });
+            continue;
+        }
+        const subject = await subjectService.getSubject(attendance.subjectId);
+        const semester = await semesterService.findSemesterById(subject.semesterId);
+        if (semester.id === listStudent?.semesterId) {
+            results.push(std);
+            continue;
+        } else {
+            messages.push({ student: std, message: 'student is not in this semester' });
+            continue;
+        }
     }
+    const attendance = await attendanceListService.createAttendance(results);
+    return res.status(httpStatus.ACCEPTED).send({ results: attendance, messages });
 });
 
 const getAttendance = catchAsync(async (req, res) => {
-
+    const results = await attendanceListService.getAttendance()
+    return res.status(200).send(results);
 });
 
 module.exports = {

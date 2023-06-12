@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Subject, { foreignKey: 'subjectId' });
+      this.belongsTo(models.Subject, { foreignKey: 'subjectId', as: 'subject' });
+      this.hasMany(models.AttendanceList);
     }
   }
   Attendance.init(
@@ -25,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
         trim: true,
         references: {
-          model: 'Subject',
+          model: 'Subjects',
           key: 'id',
         },
         onDelete: 'cascade',

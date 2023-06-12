@@ -11,7 +11,8 @@ const router = express.Router();
 router
   .route('/')
   .get(auth(), validate(shareValidation.paginate), studentController.getStudents)
-  .post(auth(), upload.single('photo'), validate(studentValidation.registerStudent), studentController.registerStudent);
+  .post(auth(), upload.single('photo'), validate(studentValidation.registerStudent), studentController.registerStudent)
+  .delete(auth(), validate(studentValidation.deleteStudents), studentController.deleteStudents);
 
 router
   .route('/:studentId')
@@ -90,6 +91,38 @@ module.exports = router;
  *               fatherName : Abdul Rauf
  *               grandFatherName : Muhammad Tahir
  *               educationalYear: 2030
+ *     responses:
+ *       "201":
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Student'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ 
+ *   delete:
+ *     summary: delete a bunch of students
+ *     description: delete a bunch of students.
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             required:
+ *               - name
+ *             items:
+ *              type: object
+ *              properties:
+ *                studentId: number
+ *              example: 
+ *                studentId: 1
  *     responses:
  *       "201":
  *         description: Created

@@ -9,18 +9,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      shokaFK: {
+      shokaId: {
         type: Sequelize.INTEGER,
         required: true,
         trim: true,
         references: {
-          model: 'Subjects',
+          model: 'Shokas',
           key: 'id',
         },
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      studentFK: {
+      studentId: {
         type: Sequelize.INTEGER,
         required: true,
         trim: true,

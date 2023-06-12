@@ -62,11 +62,23 @@ const getStudentOnKankorId = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(student);
 });
 
+const deleteStudents = catchAsync(async (req, res) => {
+  let results = [];
+  for await (const std of req.body) {
+    const result = await studentService.deleteStudentById(std.studentId);
+    results.push(result);
+  }
+  res.status(httpStatus.OK).send(results);
+});
+
+
+
 module.exports = {
   getStudent,
   getStudents,
   updateStudent,
   deleteStudent,
+  deleteStudents,
   registerStudent,
   getStudentOnKankorId,
 };
