@@ -39,6 +39,14 @@ const changePassword = catchAsync(async (req, res) => {
   return res.status(httpStatus.ACCEPTED).send(results);
 });
 
+const updateProfile = catchAsync(async (req, res) => {
+  if (req.file) {
+    req.body.photo = req.file.path;
+  }
+  const results = await userService.updateUserById(req.user, req.body);
+  return res.status(httpStatus.ACCEPTED).send(results);
+});
+
 module.exports = {
   register,
   login,
@@ -46,4 +54,5 @@ module.exports = {
   refreshTokens,
   resetPassword,
   changePassword,
+  updateProfile,
 };
