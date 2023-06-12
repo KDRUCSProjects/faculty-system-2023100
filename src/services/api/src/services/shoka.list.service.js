@@ -16,18 +16,18 @@ const createShokaList = (shokaListBody) => {
  * @returns {Promise<ShokaList>}
  */
 const getShokaList = (shokaId) => {
-  return ShokaList.findAll({ where: { shokaFK: shokaId } });
+  return ShokaList.findAll({ where: { shokaId: shokaId } });
 };
 
 /**
  * find Student if he has gotten marks in same subject
- * @param {ObjectId} shokaFK
- * @param {ObjectId} studentFK
+ * @param {ObjectId} shokaId
+ * @param {ObjectId} studentId
  * @returns {Promise<ShokaList>}
  */
-const isStudentListedInShokaList = (shokaFK, studentFK) => {
+const isStudentListedInShokaList = (shokaId, studentId) => {
   return ShokaList.findOne({
-    where: { shokaFK, studentFK },
+    where: { shokaId, studentId },
   });
 };
 

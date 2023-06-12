@@ -2,8 +2,8 @@ const Joi = require('joi');
 
 const createShokaList = {
   body: Joi.object().keys({
-    shokaFK: Joi.number().required(),
-    studentFK: Joi.number().required(),
+    shokaId: Joi.number().required(),
+    studentId: Joi.number().required(),
     midtermMarks: Joi.number().required().min(0).max(20),
     assignmentOrProjectMarks: Joi.number().required().min(0).max(20),
     finalMarks: Joi.number().required().min(0).max(60),

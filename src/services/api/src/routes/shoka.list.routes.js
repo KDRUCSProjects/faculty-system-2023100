@@ -7,11 +7,11 @@ const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
-router.route('/').post(validate(shokaListValidation.createShokaList), shokaListController.createShokaList);
+router.route('/').post(auth(), validate(shokaListValidation.createShokaList), shokaListController.createShokaList);
 
 router
   .route('/:shokaId')
-  .get(validate({ ...shokaListValidation.getShokaList, ...shareValidation.paginate }), shokaListController.getShokaList);
+  .get(auth(), validate({ ...shokaListValidation.getShokaList, ...shareValidation.paginate }), shokaListController.getShokaList);
 module.exports = router;
 
 /**
