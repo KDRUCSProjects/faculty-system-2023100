@@ -15,6 +15,7 @@ const shokaListRoutes = require('./shoka.list.routes');
 const testRoute = require('./test.route');
 const attendanceRoutes = require('./attendance.list.routes');
 const studentListRoutes = require('./student.list.routes');
+const teacherRoutes = require('./teachers.routes');
 
 const router = express.Router();
 
@@ -70,6 +71,10 @@ const defaultRoutes = [
   {
     path: '/studentList',
     route: studentListRoutes,
+  },
+  {
+    path: '/teachers',
+    route: teacherRoutes,
   },
 ];
 

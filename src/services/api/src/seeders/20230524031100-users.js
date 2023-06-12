@@ -1,6 +1,6 @@
 const faker = require('faker');
 
-const roles = ['admin', 'teacher', 'student'];
+const roles = ['admin', 'user', 'student'];
 
 const users = [...Array(10)].map((user) => {
   return {

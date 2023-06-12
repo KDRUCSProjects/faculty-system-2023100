@@ -34,6 +34,7 @@ module.exports = {
       role: {
         type: Sequelize.STRING,
         required: true,
+        defaultValue: 'user',
       },
       ...BaseModel(Sequelize),
     });

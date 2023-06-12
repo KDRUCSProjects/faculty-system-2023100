@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
       photo: DataTypes.STRING,
       role: {
         type: DataTypes.STRING,
-        defaultValue: 'Teacher',
+        defaultValue: 'user',
         validate(value) {
           if (!roles.includes(value)) {
             throw new Error('Unknown role');
@@ -76,6 +76,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'User',
       paranoid: true,
+      timestamps: true,
     }
   );
 
