@@ -1,15 +1,40 @@
 <template>
-  <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow">
-    <!-- <span class="pro"></span> -->
+  <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
+    <!-- <span class="pro">  </span> -->
     <v-avatar size="120">
       <v-img src="@/assets/images/2.jpg" alt="user" />
     </v-avatar>
     <v-card-title class="pb-0">{{ fullName }}</v-card-title>
-    <v-card-subtitle>{{ nickname }}</v-card-subtitle>
+    <v-card-subtitle class="py-0 my-0" style="font-family: monospace">{{ nickname }}</v-card-subtitle>
+    <v-divider></v-divider>
+    <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle>
 
-    <v-card-actions class="my-3">
-      <v-btn color="primary" block variant="flat">View Profile</v-btn>
-      <!-- <v-btn color="secondary">Subject</v-btn> -->
+    <v-card-actions class="mt-3">
+      <v-btn color="primary" variant="elevated">Profile</v-btn>
+      <v-btn color="secondary" variant="tonal"> Subjects</v-btn>
+
+      <v-menu transition="slide-y-transition" elevation="0">
+        <template v-slot:activator="{ props }">
+          <v-btn color="primary" v-bind="props" icon>
+            <v-icon icon="mdi-dots-vertical"></v-icon>
+          </v-btn>
+        </template>
+
+        <v-list density="compact">
+          <v-list-item>
+            <v-btn prepend-icon="mdi-key" variant="text" color="dark">Change Password</v-btn>
+          </v-list-item>
+          <v-list-item>
+            <v-btn prepend-icon="mdi-book-open-variant" variant="text" color="dark">Assign subject </v-btn>
+          </v-list-item>
+          <!-- <v-list-item>
+            <v-btn prepend-icon="mdi-delete" variant="text" color="dark">Disable Account</v-btn>
+          </v-list-item> -->
+          <v-list-item>
+            <v-btn prepend-icon="mdi-delete" variant="text" color="error">Delete Account</v-btn>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-card-actions>
   </v-card>
 </template>
@@ -38,7 +63,7 @@ export default {
 </script>
 
 <style scoped>
-.card-container .pro {
+.pro {
   color: #231e39;
   background-color: #febb0b;
   border-radius: 3px;
@@ -56,6 +81,11 @@ export default {
   border-radius: 10px;
 }
 
+.v-card {
+  /* border: 1px dotted '#333333'; */
+}
+
 .v-avatar {
+  /* border: 1px solid rgb(var(--v-theme-primary)); */
 }
 </style>

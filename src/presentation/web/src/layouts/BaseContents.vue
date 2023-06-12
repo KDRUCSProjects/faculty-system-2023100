@@ -1,7 +1,9 @@
 <template>
   <div>
     <the-navigation></the-navigation>
-    <the-appbar> </the-appbar>
+    <the-appbar>
+      <slot name="bar"></slot>
+    </the-appbar>
 
     <div class="pa-2 ma-2">
       <slot>
