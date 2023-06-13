@@ -1,28 +1,26 @@
 <template>
   <v-dialog v-model="dialog" :max-width="modalWidth" transition="slide-y-transition">
-    <template>
-      <div class="text-center">
-        <v-sheet :width="modalWidth" class="px-7 pt-7 pb-4 mx-auto text-center d-inline-block" color="light darken-5" dark>
-          <h3 class="grey--text text--lighten-1 mb-4" dir="ltr">
-            <span class="font-weight-bold error--text">
-              {{ warningTitle }}
-            </span>
-            <span class="ml-1">:</span>
-            <span>
-              {{ title }}
-            </span>
-            <br />
-            <span v-if="subtitle" class="info--text my-1"> [ {{ subtitle }} ] </span>
-          </h3>
+    <div class="text-center">
+      <v-sheet :width="modalWidth" class="px-7 pt-7 pb-4 mx-auto text-center d-inline-block" color="light darken-5" dark>
+        <h3 class="grey--text text--lighten-1 mb-4">
+          <span class="font-weight-bold text-error">
+            {{ warningTitle }}
+          </span>
+          <span class="ml-1">:</span>
+          <span>
+            {{ title }}
+          </span>
+          <br />
+          <span v-if="subtitle" class="info--text my-1"> [ {{ subtitle }} ] </span>
+        </h3>
 
-          <v-btn class="ma-1" color="error" @click="confirm">
-            {{ okButton }}
-          </v-btn>
+        <v-btn class="ma-1" color="error" @click="confirm">
+          {{ okButton }}
+        </v-btn>
 
-          <v-btn class="ma-1" color="secondary" @click="cancel"> Cancel </v-btn>
-        </v-sheet>
-      </div>
-    </template>
+        <v-btn class="ma-1" color="secondary" @click="cancel"> Cancel </v-btn>
+      </v-sheet>
+    </div>
   </v-dialog>
 </template>
 <script>

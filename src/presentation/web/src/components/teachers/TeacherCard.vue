@@ -31,17 +31,25 @@
             <v-btn prepend-icon="mdi-delete" variant="text" color="dark">Disable Account</v-btn>
           </v-list-item> -->
           <v-list-item>
-            <v-btn prepend-icon="mdi-delete" variant="text" color="error">Delete Account</v-btn>
+            <v-btn prepend-icon="mdi-delete" variant="text" color="error" @click="deleteTeacher(teacherId)"
+              >Delete Account</v-btn
+            >
           </v-list-item>
         </v-list>
       </v-menu>
     </v-card-actions>
+
+    <!-- Dialogs -->
+    <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
   </v-card>
 </template>
 
 <script>
 export default {
   props: {
+    teacherId: {
+      type: Number,
+    },
     photo: {
       type: String,
       default: '@/assets/images/1.jpg',
@@ -57,6 +65,25 @@ export default {
     email: {
       type: String,
       default: 'm@example.com',
+    },
+  },
+  methods: {
+    async deleteTeacher(teacherId) {
+      // Show confirm dialog by access it with $ref
+
+      let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: 'Warning',
+        title: 'Are you sure you want to delete this teacher?',
+        okButton: 'Yes',
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return false;
+      }
+
+      // Otherwise, continue deleting the teacher from the database
+      await this.$store.dispatch('teachers/deleteTeacher', teacherId);
     },
   },
 };
