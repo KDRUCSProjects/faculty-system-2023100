@@ -42,7 +42,6 @@ export default function teacherScreen(props) {
         flex: 1,
         height: "100%",
         width: "100%",
-        backgroundColor: "#5DA3FF",
       }}
     >
       <View
@@ -83,7 +82,7 @@ export default function teacherScreen(props) {
             style={{
               elevation: 3,
               shadowColor: "blue",
-              backgroundColor: "#d3d9e3",
+              borderRadius: 15,
               width: "80%",
               height: "45%",
             }}
@@ -110,7 +109,7 @@ export default function teacherScreen(props) {
             style={{
               elevation: 3,
               shadowColor: "blue",
-              backgroundColor: "#d3d9e3",
+              borderRadius: 15,
               width: "80%",
               height: "45%",
             }}
@@ -148,7 +147,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     flex: 1,
-    backgroundColor: "#ced2d9",
   },
   teacherInfo: {},
   attendenceContainer: {

@@ -21,8 +21,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/actions/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState } from "react";
 
 export default MainDrawer = (props) => {
+  const [selectedItem, setselectedItem] = useState(0);
   const dispatch = useDispatch();
   return (
     <Drawer
@@ -65,20 +67,21 @@ export default MainDrawer = (props) => {
           </TouchableOpacity>
         </View>
       )}
-      selectedIndex={new IndexPath(props.state.index)}
+      selectedIndex={new IndexPath(selectedItem)}
       onSelect={(index) => {
         if (index.row === 0) {
           console.log(index);
-
+          setselectedItem(0);
           props.navigation.navigate("teacherScreen");
         }
         if (index.row === 1) {
           console.log(index);
-
+          setselectedItem(1);
           props.navigation.navigate("settingsScreen");
         }
         if (index.row === 2) {
           console.log(index);
+
           AsyncStorage.clear().then().then();
           dispatch(logout());
           props.navigation.navigate("Login");
