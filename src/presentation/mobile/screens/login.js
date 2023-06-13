@@ -257,7 +257,6 @@ export default login = (props) => {
                 onLayout={(event) => {
                   var { width } = event.nativeEvent.layout;
                   lenght.current = width;
-                  console.log(lenght.current);
                 }}
               >
                 <TouchableOpacity
