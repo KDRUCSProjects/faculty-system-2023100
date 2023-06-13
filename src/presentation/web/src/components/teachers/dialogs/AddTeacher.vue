@@ -13,8 +13,8 @@
 
           <v-card-text>
             <v-form @submit.prevent="submitForm" ref="addTeacherForm">
-              <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Fullname"></v-text-field>
-              <v-text-field v-model="lastName" variant="outlined" label="Nickname"></v-text-field>
+              <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Full Name"></v-text-field>
+              <v-text-field v-model="lastName" variant="outlined" label="Nick Name"></v-text-field>
               <v-text-field
                 type="email"
                 :rules="rules.email"
@@ -63,13 +63,20 @@ export default {
     rules() {
       return {
         name: [(v) => !!v || 'Please enter teacher name'],
+        // email validation 
         email: [
           (v) => !!v || 'Please enter teacher email address',
           (v) => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
         ],
+
+        // password validation 
         password: [
           (v) => !!v || 'Please enter teacher account password',
-          (v) => v.length >= 6 || 'Password length should be greater than 6 characters',
+          (v) => /[A-Z]/.test(v) || 'Password must contain uppercase',
+          (v) => /[a-z]/.test(v) || 'Password must contain lowercase',
+          (v) => /[0-9]/.test(v) || 'Password must contain number',
+          (v) => /[#?!@$_+:"{'`~,.<>'};%^&*(-)]/.test(v) || 'Password must contain Symbols',
+          (v) => v.length >= 8 || 'Password length must be greater than 8 characters',
         ],
       };
     },
