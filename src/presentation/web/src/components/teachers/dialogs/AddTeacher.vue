@@ -12,6 +12,10 @@
           </v-card-item>
 
           <v-card-text>
+            <v-form>
+              <base-photo-uploader></base-photo-uploader>
+            </v-form>
+
             <v-form @submit.prevent="submitForm" ref="addTeacherForm">
               <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Full Name"></v-text-field>
               <v-text-field v-model="lastName" variant="outlined" label="Nick Name"></v-text-field>

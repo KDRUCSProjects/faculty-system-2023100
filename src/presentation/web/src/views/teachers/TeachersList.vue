@@ -19,7 +19,13 @@
     <v-row no-gutters>
       <v-col v-for="(teacher, index) in teachers" :key="index" cols="3">
         <v-sheet class="ma-2 pa-2">
-          <teacher-card :fullName="teacher.name" :email="teacher.email" :lastName="teacher.lastName" :photo="teacher.photo">
+          <teacher-card
+            :fullName="teacher.name"
+            :email="teacher.email"
+            :lastName="teacher.lastName"
+            :teacherId="teacher.id"
+            :photo="teacher.photo"
+          >
           </teacher-card>
         </v-sheet>
       </v-col>

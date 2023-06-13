@@ -2,6 +2,10 @@
   <v-app>
     <v-main>
       <router-view />
+
+      <v-container>
+        <div id="notifications"></div>
+      </v-container>
     </v-main>
   </v-app>
 </template>

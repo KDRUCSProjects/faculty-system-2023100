@@ -11,8 +11,12 @@
   "dependencies": {
     "@mdi/font": "7.0.96",
     "axios": "^1.4.0",
+    "filepond": "^4.30.4",
+    "filepond-plugin-file-validate-type": "^1.2.8",
+    "filepond-plugin-image-preview": "^4.6.11",
     "roboto-fontface": "*",
     "vue": "^3.2.0",
+    "vue-filepond": "^7.0.3",
     "vue-router": "^4.0.0",
     "vuetify": "^3.0.0",
     "vuex": "^4.0.2",
