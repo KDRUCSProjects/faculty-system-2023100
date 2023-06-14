@@ -83,8 +83,8 @@ export default {
     dialog: true,
     currentPassword: '',
     newPassword: '',
-    disabledBtn: true,
     confirmPassword: '',
+    disabledBtn: true,
     isLoading: false,
     errorMessage: null,
     newChanges: false,
@@ -95,12 +95,11 @@ export default {
       number: false,
       symbols: false,
     },
-
   }),
   methods: {
     async submitForm() {
       this.isLoading = true;
-      dialog = true;
+      this.dialog = true;
 
       try {
         await this.$store.dispatch('changePassword', {
@@ -123,6 +122,7 @@ export default {
       this.passwordRules.lowercase = false;
       this.passwordRules.symbols = false;
       this.passwordRules.number = false;
+      this.disabledBtn = true;
 
       // Condition 1:
       // Check if newly entered password contains at least 8 chars
@@ -145,8 +145,7 @@ export default {
       if (/[#?!@$_+:"{'`~,.<>'};%^&*(-)]/.test(newValue)) {
         this.passwordRules.symbols = true;
       }
-      // Check all condition that is true or false 
-      console.log(this.confirmPassword)
+      // Check all condition that is true or false
       if (
         this.passwordRules.chars8 &&
         this.passwordRules.lowercase &&
