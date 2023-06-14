@@ -54,11 +54,12 @@ export default login = (props) => {
     useTogglePasswordVisibility();
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const [emailError, setemailError] = useState(false);
+  const [passwordError, setpasswordError] = useState(false);
 
   const navigation = useNavigation();
   useEffect(() => {
     navigation.addListener("beforeRemove", (event) => {
-      console.log("call");
       event.preventDefault();
       Alert.alert("Exit", "Do you want Exit?", [
         {
@@ -88,6 +89,28 @@ export default login = (props) => {
     return props.navigation.navigate("studentScreen");
   };
   const onLogin = async () => {
+    const emailRegEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const paswordRegEx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,}$/;
+    if (email == "") {
+      setemailError("email is Required");
+      return;
+    }
+    if (!emailRegEx.test(email)) {
+      setemailError("Please enter a valid Email");
+      return;
+    }
+    if (password == "") {
+      setpasswordError("password is Required");
+      return;
+    }
+
+    if (!paswordRegEx.test(password)) {
+      setpasswordError(
+        "password should be at least 7 characters which contain at least one numeric digit"
+      );
+      return;
+    }
+
     try {
       setisLoading(true);
       await dispatch(authenticate(email, password));
@@ -99,6 +122,8 @@ export default login = (props) => {
     }
 
     props.navigation.navigate("teacherScreen");
+    setEmail("");
+    setPassword("");
   };
 
   useEffect(() => {
@@ -114,7 +139,6 @@ export default login = (props) => {
       prevValue.current = translateX.value;
     },
     onActive: (event) => {
-      console.log(event.velocityX);
       const distance = Math.sqrt(translateX.value ** 2);
       // if (distance < lenght.current && event.velocityX < 0) {
       //   translateX.value = event.translationX + prevValue.current;
@@ -171,11 +195,23 @@ export default login = (props) => {
           </Text>
         </View>
         <View style={styles.inputFieldsContainer}>
-          <View style={styles.inputContainer}>
+          <View
+            style={[
+              styles.inputContainer,
+              {
+                borderColor: emailError ? "red" : "white",
+                borderWidth: emailError ? 1.8 : 0,
+              },
+            ]}
+          >
             <TextInput
               style={styles.inputField}
-              placeholder="Username"
-              onChangeText={(email) => setEmail(email)}
+              placeholder="Email"
+              onChangeText={(email) => {
+                setEmail(email);
+                setemailError(false);
+              }}
+              value={email}
             />
 
             <MaterialCommunityIcons
@@ -185,7 +221,22 @@ export default login = (props) => {
               color="#232323"
             />
           </View>
-          <View style={styles.inputContainer}>
+          <View style={{ width: "90%" }}>
+            {emailError ? (
+              <Text style={styles.errorText}>{emailError}</Text>
+            ) : (
+              <></>
+            )}
+          </View>
+          <View
+            style={[
+              styles.inputContainer,
+              {
+                borderColor: passwordError ? "red" : "white",
+                borderWidth: passwordError ? 1.8 : 0,
+              },
+            ]}
+          >
             <TextInput
               style={styles.inputField}
               name="password"
@@ -196,7 +247,10 @@ export default login = (props) => {
               secureTextEntry={passwordVisibility}
               value={password}
               enablesReturnKeyAutomatically
-              onChangeText={(text) => setPassword(text)}
+              onChangeText={(text) => {
+                setPassword(text);
+                setpasswordError(false);
+              }}
             />
             <Pressable
               onPress={handlePasswordVisibility}
@@ -209,7 +263,13 @@ export default login = (props) => {
               />
             </Pressable>
           </View>
-
+          <View style={{ width: "90%" }}>
+            {passwordError ? (
+              <Text style={styles.errorText}>{passwordError}</Text>
+            ) : (
+              <></>
+            )}
+          </View>
           <TouchableOpacity
             style={{ flexDirection: "row", justifyContent: "flex-end" }}
           >
@@ -360,6 +420,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     backgroundColor: "white",
+
     width: "90%",
     borderRadius: 8,
     flexDirection: "row",
@@ -374,5 +435,9 @@ const styles = StyleSheet.create({
   Text: {
     fontSize: 16,
     color: "white",
+  },
+  errorText: {
+    fontSize: 16,
+    color: "red",
   },
 });
