@@ -10,7 +10,7 @@ const router = express.Router();
 // Create user, get a user
 router
   .route('/')
-  .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
+  .post(auth('manageUsers'), upload.single('photo'), validate(userValidation.createUser), userController.createUser)
   .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
 
 // Get a user, update a user, delete a user
