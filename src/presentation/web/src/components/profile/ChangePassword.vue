@@ -30,7 +30,7 @@
           </v-col>
         </v-row>
 
-        <v-form class="pa-3" @submit.prevent="submitForm">
+        <v-form class="pa-3" @submit.prevent="submitForm" ref="changePasswordForm">
           <v-text-field
             v-model="newPassword"
             type="password"
@@ -60,24 +60,29 @@
           <v-alert v-if="!!errorMessage" type="error" class="pa-2 my-2 font-weight-medium">
             {{ errorMessage }}
           </v-alert>
+          <v-alert
+            v-if="serverResponse"
+            type="success"
+            title="Success"
+            text="Password has been changed successfully."
+          ></v-alert>
         </v-form>
       </v-card-text>
     </v-card-item>
+
+    <!-- Dialogs -->
+    <base-confirm-password ref="baseConfirmPassword" @confirm-password-answer="getOldPassword"></base-confirm-password>
   </v-card>
-  <v-dialog v-model="dialog" max-width="400">
-    <v-card>
-      <v-card-title>Confirm Password</v-card-title>
-      <div class="mx-3">
-        <v-text-field label="Enter your old password"></v-text-field>
-      </div>
-      <v-card-actions>
-        <v-btn variant="elevated" color="primary">Confirm</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
 </template>
 
 <script>
+const initiatePasswordRules = () => ({
+  chars8: false,
+  uppercase: false,
+  lowercase: false,
+  number: false,
+  symbols: false,
+});
 export default {
   data: () => ({
     dialog: true,
@@ -88,25 +93,45 @@ export default {
     isLoading: false,
     errorMessage: null,
     newChanges: false,
-    passwordRules: {
-      chars8: false,
-      uppercase: false,
-      lowercase: false,
-      number: false,
-      symbols: false,
-    },
+    serverResponse: false,
+    passwordRules: initiatePasswordRules(),
   }),
   methods: {
+    getOldPassword(getOldPassword) {
+      this.currentPassword = getOldPassword;
+    },
+    resetForm() {
+      this.newPassword = '';
+      this.currentPassword = '';
+      this.confirmPassword = '';
+      this.passwordRules = initiatePasswordRules();
+    },
     async submitForm() {
       this.isLoading = true;
-      this.dialog = true;
 
       try {
+        // Let's ask the user to re-enter their password
+        let answer = await this.$refs.baseConfirmPassword.show();
+
+        if (!answer) {
+          // Reset the form and return
+          await this.$refs.changePasswordForm.reset();
+          this.resetForm();
+          return false;
+        }
+
         await this.$store.dispatch('changePassword', {
           currentPassword: this.currentPassword,
           newPassword: this.newPassword,
           confirmPassword: this.confirmPassword,
         });
+
+        // If no error message, that means the password has changes.
+        // Remember, a 200 OK only comes with a successful password change, otherwise this line won't even hit
+        this.serverResponse = true;
+        // Later, we will render the message from the server/api.
+        // Now, let's reset the form
+        this.resetForm();
       } catch (e) {
         this.errorMessage = e;
       } finally {
