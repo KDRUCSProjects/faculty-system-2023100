@@ -12,6 +12,7 @@ const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes');
 const { errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
+const path = require('path');
 
 const app = express();
 
@@ -48,6 +49,8 @@ if (config.env === 'production') {
   app.use('/auth', authLimiter);
 }
 
+// static route for images 
+app.use('/src//images', express.static(path.join(__dirname, 'images')));
 // v1 api routes
 app.use(routes);
 
