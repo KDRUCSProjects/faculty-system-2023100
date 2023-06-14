@@ -119,4 +119,28 @@ export default {
       throw e.response.data.message;
     }
   },
+  async confirmPassword(context, password) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: '/api/auth/checkPassword',
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data: { password },
+      });
+
+      const responseData = response;
+
+      console.log(responseData);
+
+      // Show a success or error message
+    } catch (e) {
+      console.log(e);
+      throw e.response.data.message;
+    }
+  },
 };
