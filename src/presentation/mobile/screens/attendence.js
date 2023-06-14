@@ -25,15 +25,12 @@ import Animated, {
 import { HeaderBackButton } from "@react-navigation/stack";
 import { useRef } from "react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function attendence(props) {
   var [offSetX, setOffSetX] = useState(0);
   const scrollRef = useRef({});
-  const students = [
-    [1, "khan"],
-    [2, "jan"],
-    [3, "Naveed"],
-  ];
+  const students = useSelector((state) => state.studentReducer.students);
 
   const onScroll = (event) => {
     setOffSetX(event.nativeEvent.contentOffset.x);

@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import React from "react";
 import { combineReducers, applyMiddleware } from "redux";
 import MainReducer from "./store/reducers/reducer";
+import studentReducer from "./store/reducers/studentReducer";
 import thunk from "redux-thunk";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
@@ -15,7 +16,7 @@ import { default as theme } from "./ui/colors.json";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 export default function App() {
   const store = createStore(
-    combineReducers({ MainReducer }),
+    combineReducers({ MainReducer, studentReducer }),
     applyMiddleware(thunk)
   );
 
