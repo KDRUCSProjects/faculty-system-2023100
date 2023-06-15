@@ -50,7 +50,7 @@ if (config.env === 'production') {
 }
 
 // static route for images 
-app.use('/src//images', express.static(path.join(__dirname, 'images')));
+app.use('/storage/images', express.static(path.join(__dirname, 'storage', 'images')));
 // v1 api routes
 app.use(routes);
 
