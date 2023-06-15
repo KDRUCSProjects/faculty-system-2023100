@@ -16,11 +16,55 @@ const createDepartment = async (userBody) => {
   return Department.create(userBody);
 };
 
-// Update department
+/**
+ * find department by id
+ * @param {ObjectId} departmentId
+ * @returns {Promise<Department>}
+ */
+const findById = (departmentId) => {
+  return Department.findOne({ where: { id: departmentId } });
+};
 
-// Get departments
+/**
+ * get all departments
+ * @returns {Promise<Department>}
+ */
+const getDepartments = () => {
+  return Department.findAll({ order: [['id', 'ASC']] });
+};
 
-// Delete a department
+/**
+ * delete a departments
+ * @param {Object} departmentBody
+ * @returns {Promise<Department>}
+ */
+const deleteDepartment = (departmentBody) => {
+  if (departmentBody instanceof Department) {
+    return departmentBody.destroy();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'some thing went wrong');
+};
+
+/**
+ * update department
+ * @param {Object} oldDepartment
+ * @param {Object} newDepartment
+ * @returns {Promise<Department>}
+ */
+const updateDepartment = (oldDepartment, newDepartment) => {
+  if (oldDepartment instanceof Department) {
+    oldDepartment.set({
+      ...oldDepartment,
+      ...newDepartment,
+    });
+    return oldDepartment.save();
+  }
+};
+
 module.exports = {
+  findById,
+  getDepartments,
+  updateDepartment,
+  deleteDepartment,
   createDepartment,
 };
