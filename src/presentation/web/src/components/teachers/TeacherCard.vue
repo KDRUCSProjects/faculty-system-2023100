@@ -1,11 +1,9 @@
 <template>
   <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
     <!-- <span class="pro">  </span> -->
-    <v-avatar size="120">
-      <v-img src="@/assets/images/2.jpg" alt="user" />
-    </v-avatar>
+    <v-avatar size="120"> <v-img :src="`${apiRoute}/${photo}`" alt="user" /> </v-avatar>
     <v-card-title class="pb-0">{{ fullName }}</v-card-title>
-    <v-card-subtitle class="py-0 my-0" style="font-family: monospace">{{ nickname }}</v-card-subtitle>
+    <v-card-subtitle class="py-0 my-0" style="font-family: monospace">{{ lastName || 'Teacher' }}</v-card-subtitle>
     <v-divider></v-divider>
     <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle>
 
@@ -46,6 +44,9 @@
 
 <script>
 export default {
+  data: () => ({
+    apiRoute: 'http://localhost:4000/storage/images',
+  }),
   props: {
     teacherId: {
       type: Number,
@@ -58,9 +59,8 @@ export default {
       type: String,
       default: 'Mohammad Nabi',
     },
-    nickname: {
+    lastName: {
       type: String,
-      default: 'Hotak',
     },
     email: {
       type: String,

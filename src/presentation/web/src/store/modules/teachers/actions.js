@@ -23,17 +23,18 @@ export default {
     try {
       const token = context.rootGetters.token;
 
-      const response = await axios({
-        url: '/api/users',
-        method: 'post',
+      const formData = new FormData();
+
+      for (let key in payload) {
+        formData.append(key, payload[key]);
+      }
+
+      const response = await axios.post('/api/users', formData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
-        data: payload,
       });
-
-      console.log(response);
 
       context.commit('saveTeacher', response.data);
     } catch (e) {
