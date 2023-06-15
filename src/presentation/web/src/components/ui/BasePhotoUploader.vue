@@ -2,12 +2,9 @@
   <div id="app">
     <file-pond
       class="filepond"
-      name="test"
       ref="pond"
       label-idle="Select profile image"
       accepted-file-types="image/jpeg, image/png"
-      server="/api/users"
-      v-bind:files="myFiles"
       v-on:init="handleFilePondInit"
       imagePreviewHeight="170"
       imageCropAspectRatio="1:1"
@@ -16,6 +13,8 @@
       stylePanelLayout="compact circle"
       styleLoadIndicatorPosition="right bottom"
       styleButtonRemoveItemPosition="left bottom"
+      @addfile="handleFile"
+      @removefile="$emit('photo', null)"
     />
   </div>
 </template>
@@ -43,7 +42,7 @@ const FilePond = vueFilePond(FilePondPluginFileValidateType, FilePondPluginImage
 export default {
   name: 'app',
   data: function () {
-    return { myFiles: ['cat.jpeg'] };
+    return {};
   },
   methods: {
     handleFilePondInit: function () {
@@ -51,9 +50,20 @@ export default {
 
       // FilePond instance methods are available on `this.$refs.pond`
     },
+    handleFile() {
+      let theFile = this.$refs.pond._pond.getFile();
+
+      this.$emit('photo', theFile.file || null);
+    },
   },
   components: {
     FilePond,
+  },
+  emits: ['photo'],
+  watch: {
+    myFiles(v) {
+      console.log(v);
+    },
   },
 };
 </script>
