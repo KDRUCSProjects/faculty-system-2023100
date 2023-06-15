@@ -6,7 +6,9 @@ const { userService } = require('../services');
 
 
 const createUser = catchAsync(async (req, res) => {
-  if (req.file) req.body.photo = req.file.path;
+  if (req.file) {
+    req.body.photo = req.file.path.split('\\')[3];
+  }
   const user = await userService.createUser(req.body);
   res.status(httpStatus.CREATED).send(user);
 });
@@ -31,7 +33,9 @@ const updateUser = catchAsync(async (req, res) => {
   const { userId } = req.params;
   const user = await userService.getUserById(userId);
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'user not found');
-  if (req.file) req.body.photo = req.file.path;
+  if (req.file) {
+    req.body.photo = req.file.path.split('\\')[3];
+  }
   const results = await userService.updateUserById(user, req.body);
   res.send(results);
 });

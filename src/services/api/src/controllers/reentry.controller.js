@@ -18,7 +18,7 @@ const createReentry = catchAsync(async (req, res) => {
   }
   // check for reentry file if it was attached
   if (req.file) {
-    req.body.attachment = req.file.path;
+    req.body.attachment = req.file.path.split('\\')[3];
   }
   req.body.educationalYearId = educationalYearId;
   const reentry = await reentryService.createReentry(req.body);
