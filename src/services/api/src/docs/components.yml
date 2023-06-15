@@ -212,7 +212,6 @@ components:
         subjectFK: 1
         studentFK: 5
         isPresent: true
-        date: 1685763095780
 
     StudentList:
       type: object
@@ -224,6 +223,14 @@ components:
       example:
         subjectFK: 1
         studentFK: 5
+
+    Departments:
+      type: object
+      properties:
+        name: 
+          type: string
+      example:
+        name: Database
 
   responses:
     # Taajils related responses
