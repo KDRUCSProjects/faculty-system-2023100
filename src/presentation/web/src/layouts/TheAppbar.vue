@@ -61,6 +61,8 @@
 </template>
 
 <script>
+import globalMixins from '@/mixins/global.mixins';
+
 export default {
   data: () => ({
     user: {

@@ -2,7 +2,7 @@
   <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
     <!-- <span class="pro">  </span> -->
     <v-avatar class="my-3" size="120" color="secondary" variant="tonal">
-      <v-img v-if="photo" :src="`${imageResource}/${photo}`" alt="user" />
+      <v-img v-if="photo" :src="`${imagesResource}/${photo}`" alt="user" />
       <div v-else>
         <span class="text-h5">{{ abbreviation }}</span>
       </div>
