@@ -74,13 +74,6 @@ export default {
       await this.$store.dispatch('logout');
       this.$router.replace('/auth');
     },
-    getUserData(field) {
-      if (!this.$store.getters['userData']) return null;
-
-      if (!this.$store.getters['userData'][field]) return null;
-
-      return this.$store.getters['userData'][field];
-    },
   },
   computed: {
     items() {
@@ -94,19 +87,19 @@ export default {
       ];
     },
     userPhoto() {
-      return this.getUserData('photo');
+      return this.$store.getters['photo'];
     },
     userFullName() {
-      return this.getUserData('name');
+      return this.$store.getters['fullName'];
     },
     userLastName() {
-      return this.getUserData('lastName');
+      return this.$store.getters['lastName'];
     },
     userEmail() {
-      return this.getUserData('email');
+      return this.$store.getters['email'];
     },
     abbreviation() {
-      return this.buildAbbreviation(this.userFullName || '');
+      return this.buildAbbreviation(this.userFullName);
     },
   },
 };

@@ -8,7 +8,9 @@
       </div>
     </v-avatar>
     <v-card-title class="pb-0">{{ fullName }}</v-card-title>
-    <v-card-subtitle class="py-0 my-0" style="font-family: monospace">{{ lastName || 'Teacher' }}</v-card-subtitle>
+    <v-card-subtitle class="py-0 my-0" style="font-family: monospace">
+      {{ lastName || 'Teacher' }}
+    </v-card-subtitle>
     <v-divider></v-divider>
     <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle>
 

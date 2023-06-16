@@ -23,6 +23,8 @@ export function registerPlugins(app) {
     },
     methods: {
       buildAbbreviation(str) {
+        // null length cannot be read, hence let's change it to string
+        if (!str) str = '';
         let result = '';
         let upperCaseCount = 0;
 
