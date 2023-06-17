@@ -87,7 +87,9 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.beforeSave(async (user) => {
-    user.password = await bcrypt.hash(user.password, 8);
+    if (user.password) {
+      user.password = await bcrypt.hash(user.password, 8);
+    }
   });
 
   return User;

@@ -49,11 +49,13 @@ const getUserByEmail = (email) => {
  * @returns {Promise<User>}
  */
 const updateUserById = (oldUser, newUserBody) => {
+  // delete password attribute so that it will not be hashed
+  delete oldUser?.dataValues?.password;
+  delete oldUser?._previousDataValues?.password;
+
+  // save other fields
   if (oldUser instanceof User) {
-    oldUser.set({
-      ...newUserBody,
-    });
-    return oldUser.save();
+    return oldUser.update({ ...oldUser, ...newUserBody });
   }
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
