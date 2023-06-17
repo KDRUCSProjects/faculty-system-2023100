@@ -5,6 +5,13 @@ export default {
     },
   },
   methods: {
+    attachTableNumber(array, page, itemsPerPage) {
+      return array.map((item, index) => {
+        let number = index + 1 + (page - 1) * itemsPerPage;
+        item['no'] = number;
+        return item;
+      });
+    },
     buildAbbreviation(str) {
       // null length cannot be read, hence let's change it to string
       if (!str) str = '';
