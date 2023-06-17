@@ -4,6 +4,9 @@ const { authService, userService, tokenService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const register = catchAsync(async (req, res) => {
+  if (req.file) {
+    req.body.photo = req.file.path.split('\\')[3];
+  }
   const user = await userService.createUser(req.body);
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user, tokens });
@@ -41,7 +44,7 @@ const changePassword = catchAsync(async (req, res) => {
 
 const updateProfile = catchAsync(async (req, res) => {
   if (req.file) {
-    req.body.photo = req.file.path;
+    req.body.photo = req.file.path.split('\\')[3];
   }
   const results = await userService.updateUserById(req.user, req.body);
   return res.status(httpStatus.ACCEPTED).send(results);

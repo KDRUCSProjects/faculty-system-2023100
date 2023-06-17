@@ -247,11 +247,13 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               name:
+ *                 type: string
+ *               lastName:
  *                 type: string
  *               email:
  *                 type: string
@@ -262,12 +264,12 @@ module.exports = router;
  *                 format: password
  *                 minLength: 8
  *                 description: At least one number and one letter
- *             example:
- *               name: fake name
- *               lastName: fake Last Name
- *               photo: image or Url of Photo
- *               email: fake@example.com
- *               password: password1
+ *               role:
+ *                 type: string
+ *                 enum: [user, admin]
+ *               photo:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       "200":
  *         description: OK
