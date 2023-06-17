@@ -143,4 +143,40 @@ export default {
       throw e.response.data.message;
     }
   },
+  async updateProfile(context, updatedData) {
+    try {
+      const token = context.rootGetters.token;
+
+      const formData = new FormData();
+
+      for (let key in updatedData) {
+        formData.append(key, updatedData[key]);
+      }
+
+      const response = await axios({
+        url: '/api/auth/updateProfile',
+        method: 'patch',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+        data: formData,
+      });
+
+      const responseData = response;
+
+      console.log(responseData);
+
+      context.commit('setUserData', {
+        name: response.data.name,
+        lastName: response.data.lastName,
+        photo: response.data.photo,
+      });
+
+      // Show a success or error message
+    } catch (e) {
+      console.log(e);
+      throw e.response.data.message;
+    }
+  },
 };

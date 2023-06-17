@@ -2,17 +2,21 @@
   <div>
     <v-card max-width="450" class="mx-auto" v-if="editProfile">
       <v-card-text>
-        <v-form @submit.prevent="submitForm">
-          <base-photo-uploader @photo="getPhoto"></base-photo-uploader>
+        <v-form @submit.prevent="submitForm" ref="editProfileForm">
+          <base-photo-uploader
+            @photo="getPhoto"
+            :defaultPhoto="`${imagesResource}/${photo}`"
+            :defaultPhotoName="photo"
+          ></base-photo-uploader>
 
-          <v-text-field v-model="name" label="Name" variant="outlined"></v-text-field>
-          <v-text-field v-model="nickname" label="Surname" variant="outlined"></v-text-field>
-          <v-text-field v-model="email" label="Password" variant="outlined"></v-text-field>
+          <v-text-field :rules="rules.name" v-model="name" label="Name" variant="outlined"></v-text-field>
+          <v-text-field v-model="lastName" label="Last Name" variant="outlined"></v-text-field>
+          <!-- <v-text-field v-model="email" label="Email" variant="outlined"></v-text-field> -->
         </v-form>
       </v-card-text>
       <v-card-actions>
         <v-btn @click="toggleView" variant="outlined" prepend-icon="mdi-arrow-left">Back to Profile</v-btn>
-        <v-btn @click="showAlert" variant="flat">Save Changes</v-btn>
+        <v-btn @click="submitForm" variant="flat" :disabled="!newChanges">Save Changes</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -31,8 +35,8 @@
           </div>
         </v-avatar>
         <v-card-title class="pb-0">{{ name }}</v-card-title>
-        <v-card-subtitle v-if="nickname" class="py-0 my-0 text-center" style="font-family: monospace">
-          {{ nickname }}
+        <v-card-subtitle v-if="lastName" class="py-0 my-0 text-center" style="font-family: monospace">
+          {{ lastName }}
         </v-card-subtitle>
         <!-- <v-divider></v-divider> -->
         <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle>
@@ -48,44 +52,98 @@
 export default {
   data: () => ({
     name: '',
-    nickname: '',
+    lastName: '',
     email: '',
     photo: '',
+    newPhoto: '',
     editProfile: false,
+    newChanges: false,
+    serverResponse: null,
+    errorMessage: null,
   }),
   methods: {
     toggleView() {
       this.editProfile = !this.editProfile;
     },
     getPhoto(photo) {
-      this.photo = photo;
+      this.newPhoto = photo;
     },
     setData(data) {
-      // Data = {fullName, nickName, email}
+      // Data = {fullName, lastName, email}
       this.name = data.name;
-      this.nickname = data.nickname;
+      this.lastName = data.lastName;
       this.email = data.email;
       this.photo = data.photo;
     },
-    submitForm() {
-      // this.$store.dispatch('')
+    async submitForm() {
+      let { valid } = await this.$refs.editProfileForm.validate();
+
+      if (!valid) return false;
+
+      try {
+        const data = {
+          name: this.name,
+          lastName: this.lastName,
+        };
+
+        if (this.newPhoto.name !== this.photo) {
+          data['photo'] = this.newPhoto;
+        }
+
+        console.log(data);
+
+        await this.$store.dispatch('updateProfile', data);
+
+        // Once the update is completed, toggle back to view profile
+        this.toggleView();
+      } catch (e) {
+        this.errorMessage = e;
+      }
+    },
+    checkChanges(field, newValue) {
+      let theValue = this.$store.getters['userData'][field];
+      if (theValue !== newValue) {
+        this.newChanges = true;
+      } else {
+        this.newChanges = false;
+      }
     },
   },
   computed: {
     abbreviation() {
       return this.buildAbbreviation(this.name);
     },
+    rules() {
+      return {
+        name: [(v) => !!v || 'Name is required'],
+      };
+    },
   },
-  mounted() {
+  created() {
     // @ component mount
     const userData = this.$store.getters['userData'];
 
     this.setData({
       name: userData.name,
       email: userData.email,
-      nickname: userData.nickname,
+      lastName: userData.lastName,
       photo: userData.photo,
     });
+  },
+  watch: {
+    name(newV) {
+      this.checkChanges('name', newV);
+    },
+    lastName(newV) {
+      this.checkChanges('lastName', newV ? newV : null);
+    },
+    newPhoto(newValue) {
+      if (newValue?.name !== this.photo) {
+        this.newChanges = true;
+      } else {
+        this.newChanges = false;
+      }
+    },
   },
 };
 </script>

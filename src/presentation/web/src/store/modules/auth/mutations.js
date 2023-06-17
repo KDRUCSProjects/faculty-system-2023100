@@ -15,4 +15,9 @@ export default {
   setEmail(state, newEmail) {
     state.email = newEmail;
   },
+  setProfile(state, payload) {
+    state.name = payload.name;
+    state.photo = payload.photo;
+    state.lastName = payload.lastName;
+  },
 };

@@ -4,6 +4,7 @@
       class="filepond"
       ref="pond"
       label-idle="Select profile image"
+      v-bind:files="myFiles"
       accepted-file-types="image/jpeg, image/png"
       v-on:init="handleFilePondInit"
       imagePreviewHeight="170"
@@ -40,14 +41,15 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 const FilePond = vueFilePond(FilePondPluginFileValidateType, FilePondPluginImagePreview);
 
 export default {
+  props: ['defaultPhoto'],
   name: 'app',
   data: function () {
-    return {};
+    return {
+      myFiles: [],
+    };
   },
   methods: {
     handleFilePondInit: function () {
-      console.log('FilePond has initialized');
-
       // FilePond instance methods are available on `this.$refs.pond`
     },
     handleFile() {
@@ -60,10 +62,10 @@ export default {
     FilePond,
   },
   emits: ['photo'],
-  watch: {
-    myFiles(v) {
-      console.log(v);
-    },
+  created() {
+    if (this.defaultPhoto) {
+      this.myFiles.push(this.defaultPhoto);
+    }
   },
 };
 </script>
