@@ -5,7 +5,6 @@
       <v-card-subtitle class="text-center">
         <p>Just type it twice and try not to forget it.</p>
       </v-card-subtitle>
-
       <v-card-text class="my-3">
         <v-row style="text-align: center">
           <v-col :class="{ 'text-success': passwordRules.chars8 }">
@@ -29,7 +28,6 @@
             <p>Symbol</p>
           </v-col>
         </v-row>
-
         <v-form class="pa-3" @submit.prevent="submitForm" ref="changePasswordForm">
           <v-text-field
             v-model="newPassword"
@@ -45,18 +43,18 @@
             placeholder="Enter the above password"
             variant="solo"
           ></v-text-field>
+          <span class="text-error" v-if="passwordComparison"> New password and confirm password doesn't match. </span>
           <v-btn
             :disabled="disabledBtn"
             type="submit"
             block
-            class="text-none mb-4"
+            class="text-none my-5"
             color="primary"
             size="x-large"
             variant="elevated"
           >
             Save Changes
           </v-btn>
-
           <v-alert v-if="!!errorMessage" type="error" class="pa-2 my-2 font-weight-medium">
             {{ errorMessage }}
           </v-alert>
@@ -69,12 +67,10 @@
         </v-form>
       </v-card-text>
     </v-card-item>
-
     <!-- Dialogs -->
     <base-confirm-password ref="baseConfirmPassword" @confirm-password-answer="getOldPassword"></base-confirm-password>
   </v-card>
 </template>
-
 <script>
 const initiatePasswordRules = () => ({
   chars8: false,
@@ -96,6 +92,11 @@ export default {
     serverResponse: false,
     passwordRules: initiatePasswordRules(),
   }),
+  computed: {
+    passwordComparison() {
+      return this.newPassword && this.confirmPassword && this.confirmPassword !== this.newPassword ? true : false;
+    },
+  },
   methods: {
     getOldPassword(getOldPassword) {
       this.currentPassword = getOldPassword;
@@ -108,24 +109,20 @@ export default {
     },
     async submitForm() {
       this.isLoading = true;
-
       try {
         // Let's ask the user to re-enter their password
         let answer = await this.$refs.baseConfirmPassword.show();
-
         if (!answer) {
           // Reset the form and return
           await this.$refs.changePasswordForm.reset();
           this.resetForm();
           return false;
         }
-
         await this.$store.dispatch('changePassword', {
           currentPassword: this.currentPassword,
           newPassword: this.newPassword,
           confirmPassword: this.confirmPassword,
         });
-
         // If no error message, that means the password has changes.
         // Remember, a 200 OK only comes with a successful password change, otherwise this line won't even hit
         this.serverResponse = true;
@@ -138,9 +135,7 @@ export default {
         this.isLoading = false;
       }
     },
-  },
-  watch: {
-    newPassword(newValue) {
+    passwordValidation(newValue, compareWith) {
       // Reset everything on change
       this.passwordRules.chars8 = false;
       this.passwordRules.uppercase = false;
@@ -148,7 +143,6 @@ export default {
       this.passwordRules.symbols = false;
       this.passwordRules.number = false;
       this.disabledBtn = true;
-
       // Condition 1:
       // Check if newly entered password contains at least 8 chars
       if (newValue.length > 8) {
@@ -176,15 +170,26 @@ export default {
         this.passwordRules.lowercase &&
         this.passwordRules.number &&
         this.passwordRules.symbols &&
-        this.passwordRules.uppercase
+        this.passwordRules.uppercase &&
+        compareWith === newValue
       ) {
         this.disabledBtn = false;
+      } else {
+        this.disabledBtn = true;
       }
+    },
+  },
+  watch: {
+    newPassword(newValue) {
+      this.passwordValidation(newValue, this.confirmPassword);
+    },
+    confirmPassword(newValue) {
+      // Also, re-check password validation
+      this.passwordValidation(newValue, this.newPassword);
     },
   },
 };
 </script>
-
 <style scoped>
 .container {
   padding: 25px 180px 25px 180px;
