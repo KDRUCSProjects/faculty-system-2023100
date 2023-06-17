@@ -16,14 +16,16 @@ const routes = [
   },
   {
     path: '/teachers',
+    meta: {
+      requiresAuth: true,
+    },
     component: () => import('@/views/teachers/TeachersList.vue'),
   },
   {
-    path: '/change-password',
-    component: () => import('@/components/profile/ChangePassword.vue'),
-  },
-  {
     path: '/settings',
+    meta: {
+      requiresAuth: true,
+    },
     component: () => import('@/views/Settings.vue'),
   },
   {
@@ -34,8 +36,11 @@ const routes = [
     },
   },
   {
-    path: '/test',
-    component: () => import('@/views/TestPage.vue'),
+    path: '/students',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/students/StudentsTable.vue'),
   },
 ];
 

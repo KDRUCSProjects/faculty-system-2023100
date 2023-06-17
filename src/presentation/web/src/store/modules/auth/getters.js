@@ -1,3 +1,11 @@
+function getUserData(userData, field) {
+  if (!userData) return null;
+
+  if (!userData[field]) return null;
+
+  return userData[field];
+}
+
 export default {
   userId(state) {
     return state.userId;
@@ -19,5 +27,14 @@ export default {
   },
   isAdmin(state) {
     return state.userData && state.userData.role === 'admin' ? true : false;
+  },
+  photo(state) {
+    return getUserData(state.userData, 'photo');
+  },
+  fullName(state) {
+    return getUserData(state.userData, 'name');
+  },
+  lastName(state) {
+    return getUserData(state.userData, 'lastName');
   },
 };

@@ -18,7 +18,7 @@
     "vue": "^3.2.0",
     "vue-filepond": "^7.0.3",
     "vue-router": "^4.0.0",
-    "vuetify": "^3.0.0",
+    "vuetify": "^3.3.3",
     "vuex": "^4.0.2",
     "webfontloader": "^1.0.0"
   },

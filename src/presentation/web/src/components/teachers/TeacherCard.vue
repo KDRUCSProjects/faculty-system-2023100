@@ -1,9 +1,16 @@
 <template>
   <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
     <!-- <span class="pro">  </span> -->
-    <v-avatar size="120"> <v-img :src="`${apiRoute}/${photo}`" alt="user" /> </v-avatar>
+    <v-avatar class="my-3" size="120" color="secondary" variant="tonal">
+      <v-img v-if="photo" :src="`${imagesResource}/${photo}`" alt="user" />
+      <div v-else>
+        <span class="text-h5">{{ abbreviation }}</span>
+      </div>
+    </v-avatar>
     <v-card-title class="pb-0">{{ fullName }}</v-card-title>
-    <v-card-subtitle class="py-0 my-0" style="font-family: monospace">{{ lastName || 'Teacher' }}</v-card-subtitle>
+    <v-card-subtitle class="py-0 my-0" style="font-family: monospace">
+      {{ lastName || 'Teacher' }}
+    </v-card-subtitle>
     <v-divider></v-divider>
     <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle>
 
@@ -44,9 +51,7 @@
 
 <script>
 export default {
-  data: () => ({
-    apiRoute: 'http://localhost:4000/storage/images',
-  }),
+  data: () => ({}),
   props: {
     teacherId: {
       type: Number,
@@ -65,6 +70,13 @@ export default {
     email: {
       type: String,
       default: 'm@example.com',
+    },
+  },
+  computed: {
+    abbreviation() {
+      if (this.photo) return null;
+
+      return this.buildAbbreviation(this.fullName);
     },
   },
   methods: {

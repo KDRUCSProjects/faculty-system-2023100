@@ -23,29 +23,35 @@
 
     <!-- Dropdown user profile menu -->
     <div id="the-menu">
-      <v-cards-title class="d-inline mx-2">{{ user.fullName }}</v-cards-title>
+      <v-cards-title class="d-inline mx-2">{{ userFullName }}</v-cards-title>
       <v-menu min-width="200px" rounded>
         <template v-slot:activator="{ props }">
           <v-btn icon v-bind="props">
-            <v-avatar>
-              <v-img src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"></v-img>
+            <v-avatar color="primary" variant="flat">
+              <v-img v-if="userPhoto" :src="`${imagesResource}/${userPhoto}`"></v-img>
+              <span v-else class="text-h7">
+                {{ abbreviation }}
+              </span>
             </v-avatar>
           </v-btn>
         </template>
         <v-card class="pa-3">
           <v-card-text>
             <div class="mx-auto text-center">
-              <v-avatar size="60px" class="mb-3">
-                <v-img src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"></v-img>
+              <v-avatar size="60px" class="mb-3" color="primary" variant="flat">
+                <v-img v-if="userPhoto" :src="`${imagesResource}/${userPhoto}`"></v-img>
+                <span v-else class="text-h6">
+                  {{ abbreviation }}
+                </span>
               </v-avatar>
-              <h3>{{ user.fullName }}</h3>
+              <h3>{{ userFullName }}</h3>
               <p class="text-caption">
-                {{ user.email }}
+                {{ userEmail }}
               </p>
               <v-divider class="my-1"></v-divider>
-              <v-btn variant="text" block> Profile </v-btn>
+              <v-btn variant="text" block to="/settings" color="dark"> Settings </v-btn>
               <v-divider class="my-1"></v-divider>
-              <v-btn variant="text" block to="/settings"> Settings </v-btn>
+              <v-btn variant="text" block @click="logout" color="error"> Logout </v-btn>
             </div>
           </v-card-text>
         </v-card>
@@ -55,6 +61,8 @@
 </template>
 
 <script>
+import globalMixins from '@/mixins/global.mixins';
+
 export default {
   data: () => ({
     user: {
@@ -65,8 +73,8 @@ export default {
   }),
   methods: {
     async logout() {
-      // await this.$store.dispatch("logout");
-      // this.$router.replace("/auth");
+      await this.$store.dispatch('logout');
+      this.$router.replace('/auth');
     },
   },
   computed: {
@@ -79,6 +87,21 @@ export default {
         },
         { title: 'Logout', icon: 'mdi-exit-to-app' },
       ];
+    },
+    userPhoto() {
+      return this.$store.getters['photo'];
+    },
+    userFullName() {
+      return this.$store.getters['fullName'];
+    },
+    userLastName() {
+      return this.$store.getters['lastName'];
+    },
+    userEmail() {
+      return this.$store.getters['email'];
+    },
+    abbreviation() {
+      return this.buildAbbreviation(this.userFullName);
     },
   },
 };
