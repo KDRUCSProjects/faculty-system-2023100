@@ -1,3 +1,5 @@
+const BaseModel = require('../models/basemodel');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -10,18 +12,22 @@ module.exports = {
       },
       kankorId: {
         type: Sequelize.STRING,
+        required: true,
       },
-      fullname: {
+      fullName: {
         type: Sequelize.STRING,
+        required: true,
       },
-      nickname: {
+      nickName: {
         type: Sequelize.STRING,
       },
       fatherName: {
         type: Sequelize.STRING,
+        required: true,
       },
       grandFatherName: {
         type: Sequelize.STRING,
+        required: true,
       },
       imageUrl: {
         type: Sequelize.STRING,
@@ -44,20 +50,14 @@ module.exports = {
       engGrandFatherName: {
         type: Sequelize.STRING,
       },
-      educationalYear: {
-        type: Sequelize.DATE,
+      educationalYearId: {
+        type: Sequelize.INTEGER,
+        required: true,
       },
       admissionYear: {
         type: Sequelize.DATE,
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
+      ...BaseModel(Sequelize),
     });
   },
   async down(queryInterface, Sequelize) {

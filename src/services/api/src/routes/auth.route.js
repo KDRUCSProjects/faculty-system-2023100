@@ -3,6 +3,7 @@ const validate = require('../middlewares/validate');
 const authValidation = require('../validations/auth.validation');
 const authController = require('../controllers/auth.controller');
 const auth = require('../middlewares/auth');
+const upload = require('../middlewares/multer');
 
 const router = express.Router();
 
@@ -11,6 +12,14 @@ router.post('/login', validate(authValidation.login), authController.login);
 router.post('/logout', validate(authValidation.logout), authController.logout);
 router.post('/refresh-tokens', validate(authValidation.refreshTokens), authController.refreshTokens);
 router.patch('/change-password', auth(), validate(authValidation.changePassword), authController.changePassword);
+router.patch(
+  '/updateProfile',
+  auth(),
+  upload.single('photo'),
+  validate(authValidation.updateProfile),
+  authController.updateProfile
+);
+router.post('/checkPassword', auth(), validate(authValidation.checkPassword), authController.checkPassword);
 
 module.exports = router;
 
@@ -189,11 +198,11 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - oldPassword
+ *               - currentPassword
  *               - newPassword
- *               - newPasswordConfirm
+ *               - confirmPassword
  *             properties:
- *               oldPassword:
+ *               currentPassword:
  *                 type: string
  *                 format: password
  *                 minLength: 8
@@ -203,15 +212,15 @@ module.exports = router;
  *                 format: password
  *                 minLength: 8
  *                 description: At least one number and one letter
- *               newPasswordConfirm:
+ *               confirmPassword:
  *                 type: string
  *                 format: password
  *                 minLength: 8
  *                 description: At least one number and one letter
  *             example:
- *               oldPassword: password1
+ *               currentPassword: password1
  *               newPassword: password2
- *               newPasswordConfirm: password2
+ *               confirmPassword: password2
  *     responses:
  *       "200":
  *         description: Created
@@ -223,5 +232,90 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
+ *
+ */
+
+/**
+ * @swagger
+ * /auth/updateProfile:
+ *   patch:
+ *     summary: Update your profile
+ *     description: update your profile
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: must be unique
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 minLength: 8
+ *                 description: At least one number and one letter
+ *               role:
+ *                 type: string
+ *                 enum: [user, admin]
+ *               photo:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/User'
+ *       "400":
+ *         $ref: '#/components/responses/DuplicateEmail'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *
+ */
+
+/**
+ * @swagger
+ * /auth/checkPassword:
+ *   post:
+ *     summary: Check Your Password
+ *     description: Check Your Password
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *             example:
+ *               password: password1
+ *     responses:
+ *       "200":
+ *         description: NO Content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  *
  */

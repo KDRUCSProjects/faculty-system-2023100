@@ -51,13 +51,31 @@ const verifyEmail = {
 
 const changePassword = {
   body: Joi.object().keys({
-    currentPassword: Joi.string().required().custom(password),
+    currentPassword: Joi.string().required(),
     newPassword: Joi.string().required().custom(password),
     confirmPassword: Joi.string()
       .required()
       .valid(Joi.ref('newPassword'))
       .custom(password)
       .messages({ 'any.only': 'the new password and the confirm password must be same' }),
+  }),
+};
+
+const updateProfile = {
+  body: Joi.object()
+    .keys({
+      email: Joi.string().email(),
+      password: Joi.string().custom(password),
+      name: Joi.string(),
+      lastName: Joi.string(),
+      photo: Joi.string(),
+    })
+    .min(1),
+};
+
+const checkPassword = {
+  body: Joi.object().keys({
+    password: Joi.string().required(),
   }),
 };
 
@@ -69,5 +87,7 @@ module.exports = {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  checkPassword,
   changePassword,
+  updateProfile,
 };

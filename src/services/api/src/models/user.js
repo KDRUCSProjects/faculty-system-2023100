@@ -1,7 +1,7 @@
-const { Model } = require('sequelize');
-
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const { Model } = require('sequelize');
+const BaseModel = require('./basemodel');
 const { roles } = require('../config/roles');
 
 module.exports = (sequelize, DataTypes) => {
@@ -60,6 +60,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: { min: 8 },
       },
+      photo: DataTypes.STRING,
       role: {
         type: DataTypes.STRING,
         defaultValue: 'user',
@@ -69,10 +70,12 @@ module.exports = (sequelize, DataTypes) => {
           }
         },
       },
+      ...BaseModel(DataTypes),
     },
     {
       sequelize,
       modelName: 'User',
+      paranoid: true,
       timestamps: true,
     }
   );
@@ -84,7 +87,9 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.beforeSave(async (user) => {
-    user.password = await bcrypt.hash(user.password, 8);
+    if (user.password) {
+      user.password = await bcrypt.hash(user.password, 8);
+    }
   });
 
   return User;

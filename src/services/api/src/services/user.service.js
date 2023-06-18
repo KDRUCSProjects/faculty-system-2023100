@@ -17,18 +17,11 @@ const createUser = async (userBody) => {
 };
 
 /**
- * Query for users
- * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
+ * get all users
  * @returns {Promise<QueryResult>}
  */
-const queryUsers = async (filter, options) => {
-  // const users = await User.paginate(filter, options);
-  const users = await User.findAll();
-  return users;
+const queryUsers = () => {
+  return User.findAll({ order: [['createdAt', 'ASC']] });
 };
 
 /**
@@ -45,27 +38,26 @@ const getUserById = async (id) => {
  * @param {string} email
  * @returns {Promise<User>}
  */
-const getUserByEmail = async (email) => {
+const getUserByEmail = (email) => {
   return User.findOne({ where: { email } });
 };
 
 /**
  * Update user by id
- * @param {ObjectId} userId
- * @param {Object} updateBody
+ * @param {Object} oldUser
+ * @param {Object} newUserBody
  * @returns {Promise<User>}
  */
-const updateUserById = async (userId, updateBody) => {
-  const user = await getUserById(userId);
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+const updateUserById = (oldUser, newUserBody) => {
+  // delete password attribute so that it will not be hashed
+  delete oldUser?.dataValues?.password;
+  delete oldUser?._previousDataValues?.password;
+
+  // save other fields
+  if (oldUser instanceof User) {
+    return oldUser.update({ ...oldUser, ...newUserBody });
   }
-  if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  }
-  Object.assign(user, updateBody);
-  await user.save();
-  return user;
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
 
 /**
@@ -88,7 +80,7 @@ const deleteUserById = async (userId) => {
  * @param {password} string
  * @returns {Promise<Object>}
  */
-const verifyEmailAndPassword = async (reqUser, password) => {
+const verifyEmailAndPassword = (reqUser, password) => {
   return reqUser.isPasswordMatch(password);
 };
 
@@ -101,6 +93,14 @@ const updateUser = (userBody) => {
   return userBody.save(userBody);
 };
 
+/**
+ * get teacher
+ * @param {ObjectId} teacherId
+ * @returns {Promise<Object>}
+ */
+const getTeacher = (teacherId) => {
+  return User.findOne({ where: { id: teacherId, role: 'teacher' } });
+};
 module.exports = {
   createUser,
   queryUsers,
@@ -110,4 +110,5 @@ module.exports = {
   deleteUserById,
   verifyEmailAndPassword,
   updateUser,
+  getTeacher,
 };

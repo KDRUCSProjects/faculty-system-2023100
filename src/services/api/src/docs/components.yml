@@ -10,14 +10,21 @@ components:
           format: email
         name:
           type: string
+        lastName:
+          type: string
+        photo:
+          type: string
         role:
           type: string
-          enum: [user, admin]
+          enum: [Teacher, admin]
+
       example:
-        id: 5ebac534954b54139806c112
+        id: 1
         email: fake@example.com
         name: fake name
-        role: user
+        lastName: fake last Name
+        photo: src/images/example.png
+        role: Teacher
 
     Token:
       type: object
@@ -46,8 +53,7 @@ components:
           type: number
         message:
           type: string
-    
-      
+
     Student:
       type: object
       properties:
@@ -57,7 +63,7 @@ components:
           type: string
         fullName:
           type: string
-        nickname:
+        nickName:
           type: string
         fatherName:
           type: string
@@ -66,7 +72,7 @@ components:
         province:
           type: string
         division:
-          type: number
+          type: string
         district:
           type: string
         engName:
@@ -75,32 +81,179 @@ components:
           type: string
         engGrandFatherName:
           type: string
-        educationalYear:
-          type: string
+        educationalYearId:
+          type: number
         admissionYear:
-          type: string  
+          type: string
         photo:
           type: file
-
-
       example:
-          kankorId : L2700283
-          fullName : شمس الله
-          nickname : شمسی
-          fatherName : عبدالروف
-          grandFatherName : محمد طاهر
-          province : کندهار
-          division : 6
-          district : 15 District
-          engName : shamsullah shamsi
-          engFatherName : Abdul Rauf
-          engGrandFatherName : Muhammad Tahir
-          educationalYear: 2023
-          admissionYear : 2019
-          photo : Needs Real Photo Not Value
+        kankorId: L2700283
+        fullName: shamsullah shamsi
+        fatherName: Abdul Rauf
+        grandFatherName: Muhammad Tahir
+        educationalYearId: 1
 
+    EducationalYear:
+      type: object
+      properties:
+        year:
+          type: number
+      example:
+        year: 2019
+
+    Subject:
+      type: object
+      properties:
+        name:
+          type: string
+        semesterId: 
+          type: number
+        teacherId:
+          type: number
+      example:
+        name: Big Data
+        semesterId: 6
+        teacherId: 12
+
+
+    Semester:
+      type: object
+      properties:
+        title:
+          type: number
+          enum: [1, 2, 3, 4, 5, 6, 7, 8]
+        educationalYearId:
+          type: number
+        EducationalYear:
+          $ref: '#/components/schemas/EducationalYear'
+      example:
+        title: 2
+        educationalYearId: 1
+        EducationalYear: { year: 2019 }
+    Taajil:
+      type: object
+      properties:
+        id:
+          type: number
+        studentId:
+          type: string
+        educationalYearId:
+          type: number
+        regNumber:
+          type: number
+        attachment:
+          type: string
+        notes:
+          type: string
+      example:
+        id: 1
+        studentId: 1
+        educationalYearId: 1
+        regNumber: 459
+        attachment: photo
+        notes: Personal Problems
+    Reentry:
+      type: object
+      properties:
+        id:
+          type: number
+        studentId:
+          type: string
+        educationalYearId:
+          type: number
+        regNumber:
+          type: number
+        attachment:
+          type: string
+        notes:
+          type: string
+      example:
+        id: 1
+        studentId: 1
+        educationalYearId: 1
+        regNumber: 450
+        attachment: photo
+        notes: Cause was Taajil or Mahromiat
+
+
+    ShokaList:
+      type: object
+      properties:
+        shokaFK: 
+          type: number
+        studentFK: 
+          type: number
+        midtermMarks: 
+          type: number
+        assignmentOrProjectMarks: 
+          type: number
+        finalMarks: 
+          type: number
+      example:
+        shokaFK: 1
+        studentFK: 5
+        midtermMarks: 16
+        assignmentOrProjectMarks: 11
+        finalMarks: 45
+
+    Attendance:
+      type: object
+      properties:
+        subjectFK: 
+          type: number
+        studentFK: 
+          type: number
+        isPresent: 
+          type: boolean
+        date: 
+          type: date
+      example:
+        subjectFK: 1
+        studentFK: 5
+        isPresent: true
+
+    StudentList:
+      type: object
+      properties:
+        studentId: 
+          type: number
+        semesterId: 
+          type: number
+      example:
+        subjectFK: 1
+        studentFK: 5
+
+    Departments:
+      type: object
+      properties:
+        name: 
+          type: string
+      example:
+        name: Database
 
   responses:
+    # Taajils related responses
+    DuplicateTaajil:
+      description: Duplicate Taajil for same student
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Student has already taken taajil
+
+    # Reentry related responses
+    TripleReentry:
+      description: Triple Reentry for this student
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Student already has been given reentry two times
     DuplicateEmail:
       description: Email already taken
       content:
@@ -119,6 +272,45 @@ components:
           example:
             code: 400
             message: Department name already taken
+    DuplicateYear:
+      description: year is already created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 406
+            message: Year is already
+    DuplicateReentry:
+      description: duplicate Reentry 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 406
+            message: student has already taken reentry in the year 
+
+    DuplicateSemester:
+      description: Semester is already created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 406
+            message: Semester is already created
+
+    DuplicateShokaList:
+      description: Student has Taken Marks in this Shoka
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 406
+            message: Student has Taken Marks in this Shoka
+
     Unauthorized:
       description: Unauthorized
       content:
@@ -146,6 +338,15 @@ components:
           example:
             code: 404
             message: Not found
+    NoContent:
+      description: No Content
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 204
+            message: No Content
 
   securitySchemes:
     bearerAuth:

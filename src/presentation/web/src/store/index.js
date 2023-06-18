@@ -1,15 +1,18 @@
-// third-party
-import { configureStore } from '@reduxjs/toolkit';
+import { createStore } from 'vuex';
 
-// project import
-import reducers from './reducers';
+// Import vuex modules
+import authModule from './modules/auth';
+import teachersModule from './modules/teachers';
+import studentsModule from './modules/students';
 
-// ==============================|| REDUX TOOLKIT - MAIN STORE ||============================== //
-
-const store = configureStore({
-    reducer: reducers
+export default createStore({
+  modules: {
+    auth: authModule,
+    teachers: teachersModule,
+    students: studentsModule,
+  },
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {},
 });
-
-const { dispatch } = store;
-
-export { store, dispatch };

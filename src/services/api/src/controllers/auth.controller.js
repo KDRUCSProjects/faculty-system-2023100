@@ -4,6 +4,9 @@ const { authService, userService, tokenService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const register = catchAsync(async (req, res) => {
+  if (req.file) {
+    req.body.photo = req.file.path.split('\\')[3];
+  }
   const user = await userService.createUser(req.body);
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user, tokens });
@@ -39,6 +42,21 @@ const changePassword = catchAsync(async (req, res) => {
   return res.status(httpStatus.ACCEPTED).send(results);
 });
 
+const updateProfile = catchAsync(async (req, res) => {
+  if (req.file) {
+    req.body.photo = req.file.path.split('\\')[3];
+  }
+  const results = await userService.updateUserById(req.user, req.body);
+  return res.status(httpStatus.ACCEPTED).send(results);
+});
+
+const checkPassword = catchAsync(async (req, res) => {
+  const { password } = req.body;
+  const results = await userService.verifyEmailAndPassword(req.user, password);
+  if (results) return res.status(httpStatus.OK).send();
+  throw new ApiError(httpStatus.UNAUTHORIZED, 'unauthorized');
+});
+
 module.exports = {
   register,
   login,
@@ -46,4 +64,6 @@ module.exports = {
   refreshTokens,
   resetPassword,
   changePassword,
+  updateProfile,
+  checkPassword,
 };

@@ -1,3 +1,5 @@
+const BaseModel = require('../models/basemodel');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -21,6 +23,7 @@ module.exports = {
         type: Sequelize.STRING,
         required: true,
       },
+      photo: Sequelize.STRING,
       password: {
         type: Sequelize.STRING,
         required: true,
@@ -31,15 +34,9 @@ module.exports = {
       role: {
         type: Sequelize.STRING,
         required: true,
+        defaultValue: 'user',
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
+      ...BaseModel(Sequelize),
     });
   },
   async down(queryInterface, Sequelize) {
