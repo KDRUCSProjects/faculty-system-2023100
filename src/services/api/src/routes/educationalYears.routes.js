@@ -16,6 +16,9 @@ router
   .get(auth(), validate(educationalYearValidation.getEducationalYear), educationalYearController.getEducationalYear)
   .delete(auth(), validate(educationalYearValidation.getEducationalYear), educationalYearController.deleteEducationalYear);
 
+router
+  .route('/value/:year')
+  .get(auth(), validate(educationalYearValidation.getYearByValue), educationalYearController.getEducationalYearByValue);
 module.exports = router;
 
 /**
@@ -142,4 +145,34 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /years/value/{year}:
+ *   get:
+ *     summary: get year by value
+ *     description: Get EducationalYears by value.
+ *     tags: [EducationalYear]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *      - in: path
+ *        name: year
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: value of year
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *              $ref: '#/components/schemas/EducationalYear'
+ *
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
  */

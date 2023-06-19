@@ -12,7 +12,14 @@ const getEducationalYear = {
   }),
 };
 
+const getYearByValue = {
+  params: Joi.object().keys({
+    year: Joi.number().required(),
+  }),
+};
+
 module.exports = {
+  getYearByValue,
   createEducationalYear,
   getEducationalYear,
 };
