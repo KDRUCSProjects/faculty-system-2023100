@@ -7,8 +7,15 @@ const students = [...Array(100)].map((student) => {
     fatherName: faker.name.firstName(),
     grandFatherName: faker.name.firstName(),
     educationalYearId: faker.datatype.number(10),
-    createdAt: faker.date.past(),
-    updatedAt: faker.date.recent(),
+    nickName: faker.name.firstName(),
+    province: faker.address.city(),
+    district: faker.address.state(),
+    imageUrl: faker.internet.avatar(),
+    engName: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    engFatherName: faker.name.firstName(),
+    engGrandFatherName: faker.name.firstName(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 });
 /** @type {import('sequelize-cli').Migration} */
