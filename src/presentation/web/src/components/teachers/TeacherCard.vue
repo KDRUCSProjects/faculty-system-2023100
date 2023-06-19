@@ -18,7 +18,7 @@
       <v-btn color="primary" variant="elevated">Profile</v-btn>
       <v-btn color="secondary" variant="tonal"> Subjects</v-btn>
 
-      <v-menu transition="slide-y-transition" elevation="0">
+      <v-menu transition="slide-y-transition" elevation="0" v-model="menu">
         <template v-slot:activator="{ props }">
           <v-btn color="primary" v-bind="props" icon>
             <v-icon icon="mdi-dots-vertical"></v-icon>
@@ -26,6 +26,18 @@
         </template>
 
         <v-list density="compact">
+          <v-list-item>
+            <!-- Update Account -->
+            <add-edit-teacher
+              :updateAccount="true"
+              activator-color="dark"
+              activator-variant="text"
+              activator-prepend-icon="mdi-account"
+              :teacher-id="teacherId"
+              @dialog-close="closeMenu"
+            >
+            </add-edit-teacher>
+          </v-list-item>
           <v-list-item>
             <v-btn prepend-icon="mdi-key" variant="text" color="dark">Change Password</v-btn>
           </v-list-item>
@@ -36,9 +48,9 @@
             <v-btn prepend-icon="mdi-delete" variant="text" color="dark">Disable Account</v-btn>
           </v-list-item> -->
           <v-list-item>
-            <v-btn prepend-icon="mdi-delete" variant="text" color="error" @click="deleteTeacher(teacherId)"
-              >Delete Account</v-btn
-            >
+            <v-btn prepend-icon="mdi-delete" variant="text" color="error" @click="deleteTeacher(teacherId)">
+              Delete Account
+            </v-btn>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -50,8 +62,14 @@
 </template>
 
 <script>
+import AddEditTeacher from './dialogs/AddEditTeacher.vue';
 export default {
-  data: () => ({}),
+  components: {
+    AddEditTeacher,
+  },
+  data: () => ({
+    menu: false,
+  }),
   props: {
     teacherId: {
       type: Number,
@@ -78,8 +96,19 @@ export default {
 
       return this.buildAbbreviation(this.fullName);
     },
+    accountData() {
+      return {
+        id: this.teacherId,
+        name: this.fullName,
+        lastName: this.lastName,
+        email: this.email,
+      };
+    },
   },
   methods: {
+    closeMenu() {
+      this.menu = false;
+    },
     async deleteTeacher(teacherId) {
       // Show confirm dialog by access it with $ref
 

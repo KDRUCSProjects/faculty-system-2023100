@@ -1,8 +1,9 @@
+script
 <template>
   <div>
     <!-- Default Btn/Slot -->
-    <v-btn color="primary" variant="flat">
-      Add Teacher
+    <v-btn :color="activatorColor" :variant="activatorVariant" :prepend-icon="activatorPrependIcon">
+      {{ title }}
 
       <v-dialog max-width="550" activator="parent" v-model="dialog">
         <v-card class="pa-1" :loading="isLoading">
@@ -25,6 +26,7 @@
                 label="Email"
               ></v-text-field>
               <v-text-field
+                v-if="!updateAccount"
                 :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="show ? 'text' : 'password'"
                 @click:append-inner="show = !show"
@@ -38,7 +40,9 @@
             <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
           </v-card-text>
           <v-card-actions class="mx-4">
-            <v-btn @click="submitForm" variant="flat" :loading="isLoading">Add Account</v-btn>
+            <v-btn @click="submitForm" variant="flat" :loading="isLoading">
+              {{ title }}
+            </v-btn>
             <v-btn @click="closeDialog" color="error">Cancel</v-btn>
           </v-card-actions>
         </v-card>
@@ -49,6 +53,27 @@
 
 <script>
 export default {
+  props: {
+    updateAccount: {
+      type: Boolean,
+      default: false,
+    },
+    teacherId: {
+      type: Number,
+    },
+    activatorVariant: {
+      type: String,
+      default: 'flat',
+    },
+    activatorColor: {
+      type: String,
+      default: 'primary',
+    },
+    activatorPrependIcon: {
+      type: String,
+      default: '',
+    },
+  },
   data: () => ({
     alert: false,
     dialog: false,
@@ -62,6 +87,12 @@ export default {
     errorMessage: null,
   }),
   computed: {
+    title() {
+      return !this.updateAccount ? 'Add Teacher' : 'Update Account';
+    },
+    accountOldData() {
+      return this.$store.getters['teachers/teacherById'](this.teacherId);
+    },
     rules() {
       return {
         name: [(v) => !!v || 'Please enter teacher name'],
@@ -87,6 +118,12 @@ export default {
     getPhoto(photo) {
       this.photo = photo;
     },
+    setAccountOldData() {
+      if (!this.updateAccount) return false;
+      this.name = this.accountOldData.name;
+      this.lastName = this.accountOldData.lastName;
+      this.email = this.accountOldData.email;
+    },
     async submitForm() {
       // Validate the form first
       let { valid } = await this.$refs.addTeacherForm.validate();
@@ -110,7 +147,20 @@ export default {
         if (this.photo) {
           data['photo'] = this.photo;
         }
-        await this.$store.dispatch('teachers/addTeacher', data);
+
+        // Remove password if updating account
+        if (this.updateAccount) {
+          delete data.role;
+          delete data.password;
+          delete data.photo;
+
+          // Push teacherId
+          data.teacherId = this.accountOldData.id;
+        }
+
+        const actionType = !this.updateAccount ? 'addTeacher' : 'updateTeacher';
+
+        await this.$store.dispatch(`teachers/${actionType}`, data);
 
         this.closeDialog();
       } catch (e) {
@@ -127,6 +177,17 @@ export default {
       this.photo = null;
     },
   },
+  created() {
+    if (this.updateAccount) {
+      this.setAccountOldData();
+    }
+  },
+  watch: {
+    dialog(v) {
+      if (!v) this.$emit('dialog-close');
+    },
+  },
+  emits: ['dialog-close'],
 };
 </script>
 
