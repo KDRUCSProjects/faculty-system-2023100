@@ -59,10 +59,20 @@ const findEducationalYearByValue = async (year) => {
   return theYear ? theYear.id : null;
 };
 
+/**
+ * get educational year by value
+ * @param {Number} year
+ * @returns {Promise<EducationalYear>}
+ */
+const getEducationalYearByValue = (year) => {
+  return EducationalYear.findOne({ where: { year } });
+};
+
 module.exports = {
   createEducationalYear,
   getEducationalYears,
   deleteEducationalYear,
   getEducationalYear,
   findEducationalYearByValue,
+  getEducationalYearByValue,
 };
