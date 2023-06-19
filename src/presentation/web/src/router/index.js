@@ -42,6 +42,10 @@ const routes = [
     },
     component: () => import('@/views/students/StudentsTable.vue'),
   },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/auth',
+  },
 ];
 
 import store from '@/store';
