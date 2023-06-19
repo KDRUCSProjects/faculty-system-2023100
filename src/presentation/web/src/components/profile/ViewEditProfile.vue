@@ -3,11 +3,7 @@
     <v-card max-width="450" class="mx-auto" v-if="editProfile">
       <v-card-text>
         <v-form @submit.prevent="submitForm" ref="editProfileForm">
-          <base-photo-uploader
-            @photo="getPhoto"
-            :defaultPhoto="`${imagesResource}/${photo}`"
-            :defaultPhotoName="photo"
-          ></base-photo-uploader>
+          <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo" :defaultPhotoName="photo"></base-photo-uploader>
 
           <v-text-field :rules="rules.name" v-model="name" label="Name" variant="outlined"></v-text-field>
           <v-text-field v-model="lastName" label="Last Name" variant="outlined"></v-text-field>

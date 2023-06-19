@@ -28,15 +28,7 @@
         <v-list density="compact">
           <v-list-item>
             <!-- Update Account -->
-            <add-edit-teacher
-              :updateAccount="true"
-              activator-color="dark"
-              activator-variant="text"
-              activator-prepend-icon="mdi-account"
-              :teacher-id="teacherId"
-              @dialog-close="closeMenu"
-            >
-            </add-edit-teacher>
+            <v-btn>Update Account</v-btn>
           </v-list-item>
           <v-list-item>
             <v-btn prepend-icon="mdi-key" variant="text" color="dark">Change Password</v-btn>
@@ -62,11 +54,7 @@
 </template>
 
 <script>
-import AddEditTeacher from './dialogs/AddEditTeacher.vue';
 export default {
-  components: {
-    AddEditTeacher,
-  },
   data: () => ({
     menu: false,
   }),
@@ -95,14 +83,6 @@ export default {
       if (this.photo) return null;
 
       return this.buildAbbreviation(this.fullName);
-    },
-    accountData() {
-      return {
-        id: this.teacherId,
-        name: this.fullName,
-        lastName: this.lastName,
-        email: this.email,
-      };
     },
   },
   methods: {
