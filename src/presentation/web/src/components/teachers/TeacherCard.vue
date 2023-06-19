@@ -28,7 +28,7 @@
         <v-list density="compact">
           <v-list-item>
             <!-- Update Account -->
-            <v-btn>Update Account</v-btn>
+            <update-teacher :teacherId="teacherId" @dialog-close="closeMenu"></update-teacher>
           </v-list-item>
           <v-list-item>
             <v-btn prepend-icon="mdi-key" variant="text" color="dark">Change Password</v-btn>
@@ -48,13 +48,19 @@
       </v-menu>
     </v-card-actions>
 
-    <!-- Dialogs -->
+    <!-- All Dialogs -->
+    <!-- Delete Dialog -->
     <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
+    <!-- Update Dialog -->
   </v-card>
 </template>
 
 <script>
+import UpdateTeacher from './dialogs/UpdateTeacher.vue';
 export default {
+  components: {
+    UpdateTeacher,
+  },
   data: () => ({
     menu: false,
   }),
@@ -87,7 +93,11 @@ export default {
   },
   methods: {
     closeMenu() {
+      // For some reasons, the dialog won't close when the item is clicked in the menu in Vuetify 3 when using a dialog. Let's use this hack for now.
       this.menu = false;
+    },
+    updateTeacher(teacherId) {
+      this.$emit('update-teacher', teacherId);
     },
     async deleteTeacher(teacherId) {
       // Show confirm dialog by access it with $ref
@@ -107,6 +117,7 @@ export default {
       await this.$store.dispatch('teachers/deleteTeacher', teacherId);
     },
   },
+  emits: ['update-teacher'],
 };
 </script>
 
