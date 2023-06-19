@@ -37,7 +37,7 @@
 
 <script>
 import TeacherCard from '@/components/teachers/TeacherCard.vue';
-import AddTeacher from '@/components/teachers/dialogs/AddTeacher.vue';
+import AddTeacher from '@/components/teachers/dialogs/AddEditTeacher.vue';
 export default {
   data: () => ({}),
   components: {

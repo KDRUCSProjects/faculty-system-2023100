@@ -90,9 +90,10 @@ export default {
           data['photo'] = this.newPhoto;
         }
 
-        console.log(data);
-
         await this.$store.dispatch('updateProfile', data);
+
+        // Now, also update the [photo]
+        this.photo = this.$store.getters['userData'].photo;
 
         // Once the update is completed, toggle back to view profile
         this.toggleView();
