@@ -79,9 +79,25 @@ export default {
         },
       });
 
-      console.log(response);
-
       context.commit('updateTeacher', response.data);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async loadTeacherById(context, teacherId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios.get(`/api/users/${teacherId}`, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // context.commit();
+
+      return response;
     } catch (e) {
       throw e.response.data.message;
     }

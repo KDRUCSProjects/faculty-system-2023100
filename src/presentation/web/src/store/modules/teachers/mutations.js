@@ -12,6 +12,7 @@ export default {
         teacher.name = updatedTeacherInfo.name;
         teacher.lastName = updatedTeacherInfo.lastName;
         teacher.email = updatedTeacherInfo.email;
+        teacher.photo = updatedTeacherInfo.photo;
       }
 
       return teacher;

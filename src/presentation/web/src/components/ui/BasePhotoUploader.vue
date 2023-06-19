@@ -64,7 +64,7 @@ export default {
   emits: ['photo'],
   created() {
     if (this.defaultPhoto) {
-      this.myFiles.push(this.defaultPhoto);
+      this.myFiles.push(`${this.imagesResource}/${this.defaultPhoto}`);
     }
   },
 };
