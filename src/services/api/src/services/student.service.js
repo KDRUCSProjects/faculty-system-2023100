@@ -17,7 +17,7 @@ const registerStudent = (studentBody) => {
  */
 const getStudents = (offset) => {
   return Student.findAndCountAll({
-    order: [['id', 'ASC']],
+    order: [['createdAt', 'ASC']],
     limit: 10,
     offset,
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
