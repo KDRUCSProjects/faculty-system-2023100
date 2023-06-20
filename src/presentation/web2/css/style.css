@@ -5,22 +5,22 @@
 }
 
 @font-face {
-  font-family: SpaceMonoBold;
+  font-family: LatoBold;
   src: url(../fonts/SpaceMono-Bold.ttf);
 }
 
 @font-face {
-  font-family: SpaceMonoRegular;
+  font-family: LatoRegular;
   src: url(../fonts/SpaceMono-Regular.ttf);
 }
 
 @font-face {
-  font-family: SpaceMonoBoldItalic;
+  font-family: LatoLight;
   src: url(../fonts/SpaceMono-BoldItalic.ttf);
 }
 
 @font-face {
-  font-family: SpaceMonoitalic;
+  font-family: LatoBlack;
   src: url(../fonts/SpaceMono-Italic.ttf);
 }
 
@@ -49,7 +49,7 @@ body {
 /* /////////////////// */
 
 input {
-  width: 700px;
+  width: 40rem;
   height: 60px;
   padding: 0px 60px 0px 40px;
   font-size: 16px;

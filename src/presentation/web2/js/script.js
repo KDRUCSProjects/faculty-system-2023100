@@ -66,3 +66,25 @@ input.addEventListener('keydown', function (e) {
     }, 3000);
   }
 });
+
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+
+// const getApiFun = id => {
+//   fetch(`http://localhost:4000/students/kankor/${id}`)
+//     .then(response => {
+//       if (!response.ok) throw new Error(response.status);
+
+//       return response.json();
+//     })
+//     .then(data => {
+//       if (data.kankorId) {
+//         console.log('hey');
+//       } else {
+//         console.log('bay');
+//       }
+//     })
+//     .catch(err => alert(`${err} Name Not Found`));
+// };
+
+// getApiFun('butezhvss');
