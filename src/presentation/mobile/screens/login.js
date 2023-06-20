@@ -118,6 +118,7 @@ export default login = (props) => {
     } catch (err) {
       setisLoading(false);
       seterror(err.message);
+      props.navigation.navigate("teacherScreen");
       return;
     }
 

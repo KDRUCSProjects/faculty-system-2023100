@@ -1,26 +1,33 @@
-import { AUTHENTICATE } from "../actions/actions";
+import { AUTHENTICATE, ISABSENT, ISPRESENT } from "../actions/actions";
 import { LOGOUT } from "../actions/actions";
 
 const initialState = {
   students: [
-    [1, "khan"],
-    [2, "Zabih"],
-    [3, "Naveed"],
-    [4, "ahmad"],
-    [5, "wahid"],
-    [6, "karim"],
+    { id: 1, name: "Abdullah", isPresent: false },
+    { id: 2, name: "Zabih", isPresent: false },
+    { id: 3, name: "Naveed", isPresent: false },
+    { id: 4, name: "ahmad", isPresent: false },
+    { id: 5, name: "wahid", isPresent: false },
+    { id: 6, name: "karim", isPresent: false },
   ],
 };
 
 const studentReducer = (state = initialState, action) => {
   switch (action.type) {
-    // case AUTHENTICATE:
-    //   return {
-    //     userid: action.userid,
-    //     token: action.token,
-    //   };
-    // case LOGOUT:
-    //   return { initialState };
+    case ISPRESENT:
+      const selectedPresentStudent = state.students.findIndex(
+        (student) => student.id == action.studentId
+      );
+      state.students[selectedPresentStudent].isPresent = true;
+
+      return state;
+    case ISABSENT:
+      const selectedAbsentStudent = state.students.findIndex(
+        (student) => student.id == action.studentId
+      );
+      state.students[selectedAbsentStudent].isPresent = false;
+
+      return state;
 
     default:
       return state;
