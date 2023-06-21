@@ -76,7 +76,6 @@ profile.addEventListener('click', function () {
 input.addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
     let inputValue = input.value;
-    console.log(inputValue);
     input.value = '';
 
     setTimeout(() => {
@@ -97,7 +96,6 @@ const getApiFun = id => {
     })
     .then(data => {
       if (data.kankorId) {
-        console.log('hey');
         console.log(data.id);
         idID.textContent = data.id;
         kankorId.textContent = kankorInputvalue.textContent = data.kankorId;
@@ -111,6 +109,6 @@ const getApiFun = id => {
       } else {
         console.log('bay');
       }
-    });
-  // .catch(err => alert(`${err} Name Not Found`));
+    })
+    .catch(err => alert(`${err} Name Not Found`));
 };
