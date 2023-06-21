@@ -6,29 +6,29 @@
 
 @font-face {
   font-family: LatoBold;
-  src: url(../fonts/SpaceMono-Bold.ttf);
+  src: url(../fonts/Lato-Bold.ttf);
 }
 
 @font-face {
   font-family: LatoRegular;
-  src: url(../fonts/SpaceMono-Regular.ttf);
+  src: url(../fonts/Lato-Regular.ttf);
 }
 
 @font-face {
   font-family: LatoLight;
-  src: url(../fonts/SpaceMono-BoldItalic.ttf);
+  src: url(../fonts/Lato-Light.ttf);
 }
 
 @font-face {
   font-family: LatoBlack;
-  src: url(../fonts/SpaceMono-Italic.ttf);
+  src: url(../fonts/Lato-Black.ttf);
 }
 
 body {
   background: linear-gradient(to right, #3a7bd5, #00d2ff);
   /* background: url(../image/Searchs_127.png); */
   background-size: cover;
-  font-family: SpaceMonoRegular;
+  font-family: LatoRegular;
   background-repeat: no-repeat;
   height: 100vh;
 }
@@ -55,7 +55,7 @@ input {
   font-size: 16px;
   border: none;
   border-radius: 5px;
-  font-family: SpaceMonoRegular;
+  font-family: LatoRegular;
   /* outline: ; */
 }
 
@@ -76,11 +76,10 @@ input {
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  /* background-color: rgb(21, 21, 21); */
+
   border-radius: 3px;
-  /* padding: 5px; */
+
   color: rgb(71, 71, 71);
-  /* color: rgb(202, 202, 202); */
 }
 
 #top-box {
@@ -88,9 +87,6 @@ input {
   flex-direction: row;
   justify-content: space-between;
   background-color: white;
-  /* margin-top: 10px; */
-  /* background-color: rebeccapurple; */
-  /* background-color: rgba(21, 21, 21, 0.902); */
 
   border-radius: 3px;
   padding: 10px 0px;
@@ -100,10 +96,9 @@ input {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* justify-content: space-between; */
+
   align-items: flex-start;
   padding: 10px 10px;
-  /* background-color: blueviolet; */
 }
 
 .information-box h4 {
@@ -113,17 +108,16 @@ input {
 .first-heading {
   border-bottom: 1px gray solid;
   font-size: 14px;
-  /* font-family: SpaceMonoBold; */
-  font-family: monospace;
+
+  font-family: LatoRegular;
 }
 
 .second-heading {
   font-size: 12px;
-  font-family: monospace;
+  font-family: LatoRegular;
 }
 
 .result-bottom-box {
-  /* background-color: aquamarine; */
   display: flex;
   justify-content: flex-end;
 }
@@ -134,7 +128,7 @@ input {
   width: 120px;
   height: 30px;
   border-radius: 3px;
-  font-family: monospace;
+  font-family: LatoRegular;
   font-weight: bolder;
   color: rgb(71, 71, 71);
   background-color: white;
