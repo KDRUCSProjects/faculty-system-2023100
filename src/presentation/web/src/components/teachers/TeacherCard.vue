@@ -28,7 +28,7 @@
         <v-list density="compact">
           <v-list-item>
             <!-- Update Account -->
-            <update-teacher :teacherId="teacherId" @dialog-close="closeMenu"></update-teacher>
+            <update-teacher :teacherId="teacherId" @dialog-close="closeMenu" activator-color="text"> </update-teacher>
           </v-list-item>
           <v-list-item>
             <v-btn prepend-icon="mdi-key" variant="text" color="dark">Change Password</v-btn>
