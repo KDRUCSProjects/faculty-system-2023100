@@ -11,30 +11,30 @@
                 <span class="text-h5">{{ abbreviation }}</span>
               </div> -->
             </v-avatar>
-            <v-card-title class="font-weight-bold mt-3">Mohammad Nabi</v-card-title>
-            <v-card-subtitle class="">Hotak</v-card-subtitle>
+            <v-card-title class="font-weight-bold mt-3">{{ fullName }}</v-card-title>
+            <v-card-subtitle :class="{ 'text-error': !nickName }">{{ nickName || 'N/A' }}</v-card-subtitle>
           </v-card-item>
           <v-card-text>
             <span class="text-center mx-auto d-flex flex-column justify-center align-center">
               <div class="d-flex">
                 <v-chip color="primary" variant="tonal" label class="mx-2">
                   <v-icon start icon="mdi-identifier"></v-icon>
-                  Database ID: 1
+                  Database ID: {{ dbId }}
                 </v-chip>
                 <v-chip label color="primary" variant="tonal">
                   <v-icon start icon="mdi-card-account-details"></v-icon>
-                  Admission Year: 2019
+                  Admission Year: {{ admissionYear || 'NA' }}
                 </v-chip>
               </div>
 
               <div class="d-flex my-3">
                 <v-chip label color="dark" variant="tonal" class="mx-2">
                   <v-icon start icon="mdi-identifier"></v-icon>
-                  Kankor Id: M27004983
+                  Kankor Id: {{ kankorId }}
                 </v-chip>
                 <v-chip label color="dark" variant="tonal">
                   <v-icon start icon="mdi-calendar-month"></v-icon>
-                  Kankor Year: 2019
+                  Kankor Year: {{ kankorYear || 'NA' }}
                 </v-chip>
               </div>
             </span>
@@ -48,127 +48,52 @@
         </v-card>
       </v-col>
       <v-col cols="8">
-        <v-card class="theShadow pa-1">
-          <v-card-item>
-            <v-card-title class="font-weight-bold">Biography</v-card-title>
-            <v-card-subtitle>Student all personal information </v-card-subtitle>
-          </v-card-item>
-          <v-card-text>
-            <v-list lines="two">
-              <v-list-subheader>Personal</v-list-subheader>
-
-              <v-divider></v-divider>
-              <v-list-item v-for="rec in personal" :key="rec.title">
-                <v-list-item-title class="">{{ rec.title }}</v-list-item-title>
-                <v-list-item-subtitle>{{ rec.subtitle }}</v-list-item-subtitle>
-                <template v-slot:prepend>
-                  <v-avatar color="primary-lighten-1" variant="outlined">
-                    <!-- <v-icon color="white">mdi-account</v-icon> -->
-                    <span class="h5-text" color="white">{{ buildAbbreviation(rec.subtitle) }}</span>
-                  </v-avatar>
-                </template>
-
-                <template v-slot:append>
-                  <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
-                </template>
-              </v-list-item>
-
-              <v-divider></v-divider>
-
-              <v-list-subheader>Location</v-list-subheader>
-
-              <v-list-item v-for="location in locations" :key="location.title">
-                <v-list-item-title>{{ location.title }}</v-list-item-title>
-                <v-list-item-subtitle>{{ location.subtitle }}</v-list-item-subtitle>
-
-                <template v-slot:prepend>
-                  <v-avatar color="primary-lighten-1" variant="outlined">
-                    <!-- <v-icon color="white">{{ location.icon }}</v-icon> -->
-                    <span class="h5-text" color="white">{{ buildAbbreviation(location.subtitle) }}</span>
-                  </v-avatar>
-                </template>
-
-                <template v-slot:append>
-                  <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
-                </template>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-        </v-card>
+        <router-view>
+          <personal-data :id="id"></personal-data>
+        </router-view>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
+import PersonalData from './PersonalData.vue';
 export default {
+  components: {
+    PersonalData,
+  },
   data: () => ({
-    locations: [
-      {
-        color: 'blue',
-        icon: 'mdi-clipboard-text',
-        subtitle: 'Province',
-        title: 'Kandahar',
-      },
-      {
-        color: 'amber',
-        icon: 'mdi-gesture-tap-button',
-        subtitle: 'Division',
-        title: 'Shahrwali',
-      },
-      {
-        color: 'amber',
-        icon: 'mdi-gesture-tap-button',
-        subtitle: 'District',
-        title: 'District 9',
-      },
-    ],
-    personal: [
-      {
-        subtitle: 'Full Name',
-        title: 'Mohammad Nabi',
-      },
-      {
-        subtitle: 'Last Name',
-        title: 'Hotak',
-      },
-      {
-        subtitle: 'Father Name',
-        title: 'Sadiq Nabi',
-      },
-
-      {
-        subtitle: 'Grand Father Name',
-        title: 'Abdul Ghani',
-      },
-    ],
-    personalSecondary: [
-      {
-        subtitle: 'Fullname',
-        title: 'Mohammad Nabi',
-      },
-      {
-        subtitle: 'Last Name',
-        title: 'Hotak',
-      },
-      {
-        subtitle: 'Father Name',
-        title: 'Sadiq Nabi',
-      },
-
-      {
-        subtitle: 'Grand Father Name',
-        title: 'Abdul Ghani',
-      },
-    ],
+    fullName: null,
+    nickName: null,
+    dbId: null,
+    kankorId: null,
+    admissionYear: null,
+    kankorYear: null,
+    imageUrl: null,
   }),
   props: {
     id: {
       type: String,
     },
   },
-  methods: {},
+  methods: {
+    async setData(studentId) {
+      const student = await this.$store.dispatch('students/loadStudentById', studentId);
+      if (!student.data) return false;
+
+      this.fullName = student.data.fullName;
+      this.nickName = student.data.nickName;
+      this.dbId = student.data.id;
+      this.kankorId = student.data.kankorId;
+      this.admissionYear = student.data.admissionYear;
+      this.kankorYear = student.data.EducationalYear;
+      this.imageUrl = student.data.imageUrl;
+    },
+  },
   computed: {},
+  async created() {
+    await this.setData(this.id);
+  },
 };
 </script>
 

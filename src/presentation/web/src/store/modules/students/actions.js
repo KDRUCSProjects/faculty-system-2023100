@@ -26,4 +26,22 @@ export default {
       throw e.response.data.message;
     }
   },
+  async loadStudentById(context, studentId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios.get(`/api/students/${studentId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // context.commit();
+
+      return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
 };
