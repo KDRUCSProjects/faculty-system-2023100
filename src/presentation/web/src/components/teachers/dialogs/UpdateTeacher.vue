@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Default Btn/Slot -->
-    <v-btn color="primary" variant="flat">
+    <v-btn :color="activatorColor" :variant="activatorVariant" :prepend-icon="activatorIcon">
       Update Teacher
 
       <v-dialog max-width="550" activator="parent" v-model="dialog">
@@ -35,7 +35,23 @@
 
 <script>
 export default {
-  props: ['teacherId'],
+  props: {
+    teacherId: {
+      type: Number,
+    },
+    activatorIcon: {
+      type: String,
+      default: 'mdi-account',
+    },
+    activatorVariant: {
+      type: String,
+      default: 'text',
+    },
+    activatorColor: {
+      type: String,
+      default: 'primary',
+    },
+  },
   data: () => ({
     alert: false,
     dialog: false,

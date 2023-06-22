@@ -1,4 +1,5 @@
 <template>
+  <v-overlay></v-overlay>
   <v-dialog v-model="dialog" :max-width="modalWidth" transition="slide-y-transition">
     <div class="text-center">
       <v-sheet :width="modalWidth" class="px-7 pt-7 pb-4 mx-auto text-center d-inline-block" color="light darken-5" dark>
@@ -11,7 +12,7 @@
             {{ title }}
           </span>
           <br />
-          <span v-if="subtitle" class="info--text my-1"> [ {{ subtitle }} ] </span>
+          <span v-if="subtitle" class="text-info"> [ {{ subtitle }} ] </span>
         </h3>
 
         <v-btn class="ma-1" color="error" @click="confirm">
