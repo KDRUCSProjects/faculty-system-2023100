@@ -70,18 +70,14 @@ export default MainDrawer = (props) => {
       selectedIndex={new IndexPath(selectedItem)}
       onSelect={(index) => {
         if (index.row === 0) {
-          console.log(index);
           setselectedItem(0);
           props.navigation.navigate("teacherScreen");
         }
         if (index.row === 1) {
-          console.log(index);
           setselectedItem(1);
           props.navigation.navigate("settingsScreen");
         }
         if (index.row === 2) {
-          console.log(index);
-
           AsyncStorage.clear().then().then();
           dispatch(logout());
           props.navigation.navigate("Login");

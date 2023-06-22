@@ -99,7 +99,7 @@ const updateUser = (userBody) => {
  * @returns {Promise<Object>}
  */
 const getTeacher = (teacherId) => {
-  return User.findOne({ where: { id: teacherId, role: 'teacher' } });
+  return User.findOne({ where: { id: teacherId, role: 'user' } });
 };
 module.exports = {
   createUser,
