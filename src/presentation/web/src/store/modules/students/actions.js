@@ -44,6 +44,25 @@ export default {
       throw e.response.data.message;
     }
   },
+  async deleteStudentById(context, studentId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios.delete(`/api/students/${studentId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Instead of committing, let's reload all students
+      context.dispatch('loadAllStudents');
+
+      return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
   async updateStudent(context, payload) {
     try {
       const token = context.rootGetters.token;
@@ -66,8 +85,6 @@ export default {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log(response.data);
 
       context.commit('updateStudent', {
         fields: payload,

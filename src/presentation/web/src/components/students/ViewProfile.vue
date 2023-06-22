@@ -43,7 +43,7 @@
           <v-divider></v-divider>
           <v-card-actions>
             <v-btn variant="flat" color="secondary">Assign to semester </v-btn>
-            <v-btn variant="flat" color="error" class="px-6">Delete </v-btn>
+            <v-btn variant="flat" color="error" class="px-6" @click="deleteStudent(student.id)">Delete </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -53,6 +53,9 @@
         </router-view>
       </v-col>
     </v-row>
+
+    <!-- Dialogs -->
+    <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
   </div>
 </template>
 
@@ -73,6 +76,23 @@ export default {
   methods: {
     async loadStudent(studentId) {
       await this.$store.dispatch('students/loadStudentById', studentId);
+    },
+    async deleteStudent(studentId) {
+      let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: 'Warning',
+        title: 'Are you sure you want to delete this student?',
+        subtitle: this.student?.fullName,
+        okButton: 'Yes',
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return false;
+      }
+
+      await this.$store.dispatch('students/deleteStudentById', studentId);
+      // Let's redirect(replace) the user to /students
+      this.$router.replace('/students');
     },
   },
   computed: {
