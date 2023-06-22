@@ -11,30 +11,30 @@
                 <span class="text-h5">{{ abbreviation }}</span>
               </div> -->
             </v-avatar>
-            <v-card-title class="font-weight-bold mt-3">{{ fullName }}</v-card-title>
-            <v-card-subtitle :class="{ 'text-error': !nickName }">{{ nickName || 'N/A' }}</v-card-subtitle>
+            <v-card-title class="font-weight-bold mt-3">{{ student?.fullName }}</v-card-title>
+            <v-card-subtitle :class="{ 'text-error': !student?.nickName }">{{ student?.nickName || 'N/A' }}</v-card-subtitle>
           </v-card-item>
           <v-card-text>
             <span class="text-center mx-auto d-flex flex-column justify-center align-center">
               <div class="d-flex">
                 <v-chip color="primary" variant="tonal" label class="mx-2">
                   <v-icon start icon="mdi-identifier"></v-icon>
-                  Database ID: {{ dbId }}
+                  Database ID: {{ student?.id }}
                 </v-chip>
                 <v-chip label color="primary" variant="tonal">
                   <v-icon start icon="mdi-card-account-details"></v-icon>
-                  Admission Year: {{ admissionYear || 'NA' }}
+                  Admission Year: {{ student?.admissionYear || 'NA' }}
                 </v-chip>
               </div>
 
               <div class="d-flex my-3">
                 <v-chip label color="dark" variant="tonal" class="mx-2">
                   <v-icon start icon="mdi-identifier"></v-icon>
-                  Kankor Id: {{ kankorId }}
+                  Kankor Id: {{ student?.kankorId }}
                 </v-chip>
                 <v-chip label color="dark" variant="tonal">
                   <v-icon start icon="mdi-calendar-month"></v-icon>
-                  Kankor Year: {{ kankorYear || 'NA' }}
+                  Kankor Year: {{ student?.admissionYear || 'NA' }}
                 </v-chip>
               </div>
             </span>
@@ -63,13 +63,7 @@ export default {
     PersonalData,
   },
   data: () => ({
-    fullName: null,
-    nickName: null,
-    dbId: null,
-    kankorId: null,
-    admissionYear: null,
-    kankorYear: null,
-    imageUrl: null,
+    photo: null,
   }),
   props: {
     id: {
@@ -77,22 +71,17 @@ export default {
     },
   },
   methods: {
-    async setData(studentId) {
-      const student = await this.$store.dispatch('students/loadStudentById', studentId);
-      if (!student.data) return false;
-
-      this.fullName = student.data.fullName;
-      this.nickName = student.data.nickName;
-      this.dbId = student.data.id;
-      this.kankorId = student.data.kankorId;
-      this.admissionYear = student.data.admissionYear;
-      this.kankorYear = student.data.EducationalYear;
-      this.imageUrl = student.data.imageUrl;
+    async loadStudent(studentId) {
+      await this.$store.dispatch('students/loadStudentById', studentId);
     },
   },
-  computed: {},
+  computed: {
+    student() {
+      return this.$store.getters['students/currentStudent'];
+    },
+  },
   async created() {
-    await this.setData(this.id);
+    await this.loadStudent(this.id);
   },
 };
 </script>

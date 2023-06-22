@@ -24,7 +24,15 @@
             </template>
 
             <template v-slot:append>
-              <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
+              <base-update-dialog
+                :title="rec.subtitle"
+                @update="updateField"
+                :fieldLabel="rec.subtitle"
+                :fieldValue="rec.title"
+                :fieldName="rec.fieldName"
+              >
+                <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
+              </base-update-dialog>
             </template>
           </v-list-item>
 
@@ -46,12 +54,22 @@
             </template>
 
             <template v-slot:append>
-              <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
+              <base-update-dialog
+                :title="location.subtitle"
+                @update="updateField"
+                :fieldLabel="location.subtitle"
+                :fieldValue="location.title"
+                :fieldName="location.fieldName"
+              >
+                <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
+              </base-update-dialog>
             </template>
           </v-list-item>
         </v-list>
       </v-card-text>
     </v-card>
+
+    <!-- Dialogs -->
   </div>
 </template>
 
@@ -63,42 +81,40 @@ export default {
     },
   },
   data: () => ({
-    personalData: {
-      fullName: null,
-      nickName: null,
-      fatherName: null,
-      grandFatherName: null,
-    },
-    personalDataSecondary: {
-      fullName: null,
-      nickName: null,
-      fatherName: null,
-      grandFatherName: null,
-    },
-    locationsData: {
-      province: null,
-      division: null,
-      district: null,
-    },
+    fullName: null,
+    nickName: null,
+    fatherName: null,
+    grandFatherName: null,
+    engFullName: null,
+    engNickName: null,
+    engFatherName: null,
+    engGrandFatherName: null,
+    province: null,
+    division: null,
+    district: null,
   }),
   computed: {
     personal() {
       return [
         {
           subtitle: 'Full Name',
-          title: this.personalData.fullName,
+          title: this.student?.fullName,
+          fieldName: 'fullName',
         },
         {
           subtitle: 'Last Name',
-          title: this.personalData.nickName,
+          title: this.student?.nickName,
+          fieldName: 'nickName',
         },
         {
           subtitle: 'Father Name',
-          title: this.personalData.fatherName,
+          title: this.student?.fatherName,
+          fieldName: 'fatherName',
         },
         {
           subtitle: 'Grand Father Name',
-          title: this.personalData.grandFatherName,
+          title: this.student?.grandFatherName,
+          fieldName: 'grandFatherName',
         },
       ];
     },
@@ -106,19 +122,23 @@ export default {
       return [
         {
           subtitle: 'Fullname',
-          title: this.personalDataSecondary.fullName,
+          title: this.student?.engFullName,
+          fieldName: 'engFullName',
         },
         {
           subtitle: 'Last Name',
-          title: this.personalDataSecondary.nickName,
+          title: this.student?.engLastName,
+          fieldName: 'engLastName',
         },
         {
           subtitle: 'Father Name',
-          title: this.personalDataSecondary.fatherName,
+          title: this.student?.engFatherName,
+          fieldName: 'engFatherName',
         },
         {
           subtitle: 'Grand Father Name',
-          title: this.personalDataSecondary.grandFatherName,
+          title: this.student?.engGrandFatherName,
+          fieldName: 'engGrandFatherName',
         },
       ];
     },
@@ -128,48 +148,40 @@ export default {
           color: 'blue',
           icon: 'mdi-clipboard-text',
           subtitle: 'Province',
-          title: this.locationsData.province,
+          title: this.student?.province,
+          fieldName: 'province',
         },
         {
           color: 'amber',
           icon: 'mdi-gesture-tap-button',
           subtitle: 'Division',
-          title: this.locationsData.division,
+          title: this.student?.division,
+          fieldName: 'division',
         },
         {
           color: 'amber',
           icon: 'mdi-gesture-tap-button',
           subtitle: 'District',
-          title: this.locationsData.district,
+          title: this.student?.district,
+          fieldName: 'district',
         },
       ];
     },
+    student() {
+      return this.$store.getters['students/currentStudent'];
+    },
   },
   methods: {
-    async setData(studentId) {
-      const student = await this.$store.dispatch('students/loadStudentById', studentId);
-      if (!student.data) return false;
-
-      // Set Personal Data
-      this.personalData.fullName = student.data.fullName;
-      this.personalData.nickName = student.data.nickName;
-      this.personalData.fatherName = student.data.fatherName;
-      this.personalData.grandFatherName = student.data.grandFatherName;
-
-      // Set Personal Secondary Data
-      this.personalDataSecondary.name = student.data.engName;
-      this.personalDataSecondary.lastName = student.data.lastName;
-      this.personalDataSecondary.fatherName = student.data.engFatherName;
-      this.personalDataSecondary.lastName = student.data.engGrandFatherName;
-
-      // Set Location Data
-      this.locationsData.province = student.data.province;
-      this.locationsData.division = student.data.division;
-      this.locationsData.district = student.data.district;
+    async loadStudent(studentId) {
+      // This is duplicate, and will be removed in the future.
+      await this.$store.dispatch('students/loadStudentById', studentId);
+    },
+    async updateField({ field, fieldValue }) {
+      await this.$store.dispatch('students/updateStudent', { [field]: fieldValue, studentId: this.id });
     },
   },
   async created() {
-    await this.setData(this.id);
+    await this.loadStudent(this.id);
   },
 };
 </script>

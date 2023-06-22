@@ -37,9 +37,44 @@ export default {
         },
       });
 
-      // context.commit();
+      context.commit('setStudent', response.data);
 
       return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async updateStudent(context, payload) {
+    try {
+      const token = context.rootGetters.token;
+
+      const formData = new FormData();
+
+      console.log(payload);
+
+      for (let key in payload) {
+        // Skip teacherId
+        if (key === 'studentId') continue;
+
+        console.log(key, payload[key]);
+        formData.append(key, payload[key]);
+      }
+
+      const response = await axios.patch(`/api/students/${payload.studentId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(response.data);
+
+      context.commit('updateStudent', {
+        fields: payload,
+        update: response.data,
+      });
+
+      context.commit('setStudent', response.data);
     } catch (e) {
       throw e.response.data.message;
     }
