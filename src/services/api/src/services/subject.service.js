@@ -42,7 +42,7 @@ const getSubject = (subjectId) => {
  * @returns {Promise<Student>}
  */
 const getTeacherSubjects = (teacherId) => {
-  return Subject.findAll({ where: { teacherId } });
+  return Subject.findAll({ where: { teacherId }, order: [['createdAt', 'ASC']] });
 };
 
 /**
