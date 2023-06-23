@@ -247,8 +247,8 @@ components:
           type: number
       example:
         id: 38
-        subjectName: 'Software Engineering'
-        subjectCredit: 4
+        name: 'Software Engineering'
+        credit: 4
         teacherId: 2
         semesterId: 2
         teacherName: 'Navid Ahmad'

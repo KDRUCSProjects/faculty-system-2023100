@@ -20,8 +20,8 @@ const createSubject = (subjectBody) => {
 const getSubjects = () => {
   return sequelize.query(`
     select subject.id as id,
-    subject.name as subjectName,
-    subject.credit as subjectCredit,
+    subject.name as name,
+    subject.credit as credit,
     subject.teacherId as teacherId,
     subject.semesterId as semesterId,
     user.name as teacherName,
