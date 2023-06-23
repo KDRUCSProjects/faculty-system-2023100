@@ -21,7 +21,7 @@ const createUser = async (userBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryUsers = () => {
-  return User.findAll({ order: [['createdAt', 'ASC']] });
+  return User.findAll({ where: { role: 'user' }, order: [['createdAt', 'ASC']] });
 };
 
 /**
