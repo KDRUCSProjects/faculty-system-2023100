@@ -58,23 +58,25 @@ export default {
       throw e.response.data.message;
     }
   },
-  async updateSubject(context, data) {
+  async updateSubject(context, payload) {
     try {
       const token = context.rootGetters.token;
 
-      // Remove subject id from data
-      delete data.subjectId;
+      const formData = new FormData();
 
-      const response = await axios({
-        url: `/api/subjects/${data.subjectId}`,
-        method: 'patch',
+      for (let key in payload) {
+        // Skip subjectId
+        if (key === 'subjectId') continue;
+
+        formData.append(key, payload[key]);
+      }
+
+      const response = await axios.patch(`/api/subjects/${payload.subjectId}`, formData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
-        data: data
       });
-
 
       context.commit('updateSubject', response.data);
     } catch (e) {

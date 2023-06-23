@@ -9,6 +9,7 @@
           <v-card-text>
             <v-form  @submit.prevent="submitForm" ref="addSubjectForm">
               <v-text-field :rules="rules.name" v-model="name" type="text" variant="outlined" label="Subject Name"></v-text-field>
+              <v-text-field :rules="rules.credit" v-model="credit" type="number" variant="outlined" label="Subject Credit"></v-text-field>
               
             </v-form>
             <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
@@ -29,6 +30,7 @@ export default {
     alert: false,
     dialog: false,
     name: null,
+    credit: null,
     show: true,
     isLoading: false,
     errorMessage: null,
@@ -36,7 +38,8 @@ export default {
   computed: {
     rules() {
       return {
-        name: [(v) => !!v || 'Please enter Subject name'],
+        name: [(v) => !!v || 'Please enter Subject  Name'],
+        credit: [(v) => !!v || 'Please enter Subject Credit'],
       };
     },
   },
@@ -55,6 +58,7 @@ export default {
       try {
         const data = {
           name: this.name,
+          credit: this.credit,
           teacherId: 15,
           semesterId: 1
         };

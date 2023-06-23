@@ -4,7 +4,7 @@
     
     <v-card-title class="pb-0">{{ subjectName }}</v-card-title>
     <v-card-subtitle class="py-1 text-h6 " style="font-family: monospace">
-      {{ semesterId }}th semester
+      {{ subjectCredit }} Credit
     </v-card-subtitle>
     <v-card-subtitle class="text-primary ">{{ teacherId }}</v-card-subtitle>
 
@@ -36,6 +36,10 @@ export default {
     subjectName: {
       type: String, 
       default: 'Big Data',
+    },
+    subjectCredit: {
+      type: Number, 
+      default: 4,
     },
     teacherId: {
       type: String, 

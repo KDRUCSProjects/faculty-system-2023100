@@ -23,6 +23,7 @@
             :semesterId="subject.semesterId"
             :teacherId="subject.teacherId"
             :subjectId="subject.id"
+            :subjectCredit="subject.credit"
 
           ></subject-card>
         </v-sheet>
