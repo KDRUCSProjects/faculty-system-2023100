@@ -48,6 +48,25 @@ const getSemesterStudents = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send(students);
 });
 
+const updatedSubject = catchAsync(async (req, res) => {
+  const subject = await subjectService.getSubject(req.params.subjectId);
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  const results = await subjectService.updatedSubject(subject, req.body);
+  res.status(httpStatus.ACCEPTED).send(results);
+});
+
+
+const assignSubjectToTeacher = catchAsync(async (req, res) => {
+  const subject = await subjectService.getSubject(req.body.subjectId);
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  const teacher = await userService.getTeacher(req.body.teacherId);
+  if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'Teacher Not Found');
+  const results = await subjectService.updatedSubject(subject, { teacherId: req.body.teacherId })
+  return res.status(httpStatus.ACCEPTED).send(results);
+});
+
+
+
 module.exports = {
   getSubjects,
   getSubject,
@@ -55,4 +74,6 @@ module.exports = {
   createSubject,
   getSemesterStudents,
   getTeacherSubjects,
+  updatedSubject,
+  assignSubjectToTeacher,
 };
