@@ -30,14 +30,12 @@ const getSemesters = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(semesters);
 });
 
-
 const getYearSemesters = catchAsync(async (req, res) => {
   const year = await educationalYearService.getEducationalYearByValue(req.params.year);
   if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
   const semesters = await semesterService.getYearSemesters(year.id);
   return res.status(httpStatus.OK).send(semesters);
 });
-
 
 module.exports = {
   getSemester,
