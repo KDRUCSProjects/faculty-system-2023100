@@ -20,8 +20,8 @@
         <v-sheet class="ma-2 pa-2">
           <subject-card
             :subjectName="subject.name"
-            :semesterId="subject.semesterId"
-            :teacherId="subject.teacherId"
+            :semesterTitle="subject.semesterTitle"
+            :teacherName="subject.teacherName"
             :subjectId="subject.id"
             :subjectCredit="subject.credit"
 
@@ -29,10 +29,6 @@
         </v-sheet>
       </v-col>
     </v-row>
-        
-
-
-
       </base-contents>
   </template>
   

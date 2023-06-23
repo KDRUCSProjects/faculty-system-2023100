@@ -59,7 +59,7 @@ export default {
         const data = {
           name: this.name,
           credit: this.credit,
-          teacherId: 15,
+          teacherId: 1,
           semesterId: 1
         };
 

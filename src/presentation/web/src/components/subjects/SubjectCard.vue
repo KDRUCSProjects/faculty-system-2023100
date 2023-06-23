@@ -4,9 +4,10 @@
     
     <v-card-title class="pb-0">{{ subjectName }}</v-card-title>
     <v-card-subtitle class="py-1 text-h6 " style="font-family: monospace">
-      {{ subjectCredit }} Credit
+      {{ teacherName }}
     </v-card-subtitle>
-    <v-card-subtitle class="text-primary ">{{ teacherId }}</v-card-subtitle>
+    <v-card-subtitle class="text-primary ">{{ semesterTitle }}</v-card-subtitle>
+    <v-card-subtitle class="text-primary ">{{ subjectCredit }} Credit</v-card-subtitle>
 
     
       <v-card-actions class="mt-2 ">
@@ -29,28 +30,26 @@ export default {
     subjectId: {
       type: Number
     },
-    semesterId: {
+    semesterTitle: {
       type: Number,
-      default: 1,
+      default: 'No semester Title',
     },
     subjectName: {
       type: String, 
-      default: 'Big Data',
+      default: 'No Subject Name',
     },
     subjectCredit: {
       type: Number, 
       default: 4,
     },
-    teacherId: {
+    teacherName: {
       type: String, 
-      default: '6th Semester',
+      default: 'No Teacher Name',
     },
   },
  methods:{
   async deleteSubject(subjectId) {
       // Show confirm dialog by access it with $ref
-      console.log(subjectId)
-
       let res = await this.$refs.baseConfirmDialog.show({
         warningTitle: 'Warning',
         title: 'Are you sure you want to delete this Subject?',
