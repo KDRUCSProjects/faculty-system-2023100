@@ -18,7 +18,7 @@ const createSubject = catchAsync(async (req, res) => {
 
 const getSubjects = catchAsync(async (req, res) => {
   const results = await subjectService.getSubjects();
-  res.status(httpStatus.OK).send(results);
+  res.status(httpStatus.OK).send(results[0]);
 });
 
 const deleteSubject = catchAsync(async (req, res) => {
