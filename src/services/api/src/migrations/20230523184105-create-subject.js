@@ -14,6 +14,11 @@ module.exports = {
         required: true,
         trim: true,
       },
+      credit: {
+        type: Sequelize.INTEGER,
+        required: true,
+        allowNull: false,
+      },
       semesterId: {
         type: Sequelize.INTEGER,
         required: true,

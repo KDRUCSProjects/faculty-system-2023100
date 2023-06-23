@@ -4,8 +4,10 @@ const { subjectService, shokaService, attendanceService, userService, semesterSe
 const ApiError = require('../utils/ApiError');
 
 const createSubject = catchAsync(async (req, res) => {
-  const teacher = await userService.getUserById(req.body.teacherId);
-  if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'Teacher not found');
+  if (req.body.teacherId) {
+    const teacher = await userService.getTeacher(req.body.teacherId);
+    if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'Teacher not found');
+  }
   const semester = await semesterService.findSemesterById(req.body.semesterId);
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
   const results = await subjectService.createSubject(req.body);
@@ -49,6 +51,10 @@ const getSemesterStudents = catchAsync(async (req, res) => {
 });
 
 const updatedSubject = catchAsync(async (req, res) => {
+  if (req.body.teacherId) {
+    const teacher = await userService.getTeacher(req.body.teacherId);
+    if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'Teacher not found');
+  }
   const subject = await subjectService.getSubject(req.params.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
   const results = await subjectService.updatedSubject(subject, req.body);
