@@ -2,8 +2,9 @@ const faker = require('faker');
 
 const subjects = [...Array(48)].map((re) => {
   return {
-    semesterId: faker.datatype.number({ min: 1, max: 3 }),
     name: faker.name.firstName(),
+    credit: faker.datatype.number({ min: 1, max: 4 }),
+    semesterId: faker.datatype.number({ min: 1, max: 3 }),
     teacherId: faker.datatype.number({ min: 1, max: 3 }),
   };
 });

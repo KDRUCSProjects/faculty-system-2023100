@@ -89,12 +89,15 @@ module.exports = router;
  *             properties:
  *               name:
  *                 type: string
+ *               credit:
+ *                 type: number
  *               semesterId:
  *                 type: number
  *               teacherId:
  *                 type: number
  *             example:
  *               name: Big Data
+ *               credit: 4
  *               semesterId: 8
  *               teacherId: 3
  *     responses:
@@ -163,16 +166,19 @@ module.exports = router;
  *             properties:
  *               name:
  *                 type: string
+ *               credit:
+ *                 type: number
  *               semesterId:
  *                 type: number
  *               teacherId:
  *                 type: number
  *             example:
  *               name: Big Data
+ *               credit: 4
  *               semesterId: 8
  *               teacherId: 3
  *     responses:
- *       "201":
+ *       "202":
  *         description: ACCEPTED
  *         content:
  *           application/json:

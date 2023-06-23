@@ -26,6 +26,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         required: true,
         trim: true,
+        allowNull: false,
+      },
+      credit: {
+        type: DataTypes.INTEGER,
+        required: true,
+        allowNull: false,
       },
       semesterId: {
         type: DataTypes.INTEGER,
