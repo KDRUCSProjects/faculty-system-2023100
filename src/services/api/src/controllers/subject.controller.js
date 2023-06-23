@@ -66,6 +66,14 @@ const assignSubjectToTeacher = catchAsync(async (req, res) => {
 });
 
 
+const takeBackSubjectFromTeacher = catchAsync(async (req, res) => {
+  const subject = await subjectService.getSubject(req.body.subjectId);
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  if (subject.teacherId !== req.body.teacherId) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'this subject is not related to this teacher');
+  const results = await subjectService.updatedSubject(subject, { teacherId: null })
+  return res.status(httpStatus.ACCEPTED).send(results);
+});
+
 
 module.exports = {
   getSubjects,
@@ -76,4 +84,5 @@ module.exports = {
   getTeacherSubjects,
   updatedSubject,
   assignSubjectToTeacher,
+  takeBackSubjectFromTeacher,
 };
