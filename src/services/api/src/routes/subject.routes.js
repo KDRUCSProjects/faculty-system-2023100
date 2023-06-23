@@ -14,6 +14,7 @@ router
 router
   .route('/:subjectId')
   .get(auth(), validate(subjectValidations.getSubject), subjectController.getSubject)
+  .patch(auth(), validate(subjectValidations.updatedSubject), subjectController.updatedSubject)
   .delete(auth(), validate(subjectValidations.getSubject), subjectController.deleteSubject);
 
 router
@@ -23,6 +24,10 @@ router
 router
   .route('/students/:subjectId')
   .get(validate(subjectValidations.getSemesterStudents), subjectController.getSemesterStudents);
+
+router
+  .route('/assign')
+  .post(auth(), validate(subjectValidations.assignSubjectToTeacher), subjectController.assignSubjectToTeacher)
 module.exports = router;
 
 /**
@@ -130,7 +135,51 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- *
+ *   patch:
+ *     summary: Update a Subject
+ *     description: Update a Subject
+ *     tags: [Subject]
+ *     security: 
+ *      - bearerAuth: []
+ *     parameters: 
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        schema:
+ *          type: number
+ *        description: subject id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *               semesterId:
+ *                 type: number
+ *               teacherId:
+ *                 type: number
+ *             example:
+ *               name: Big Data
+ *               semesterId: 8
+ *               teacherId: 3
+ *     responses:
+ *       "201":
+ *         description: ACCEPTED
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Subject'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  *   delete:
  *     summary: Delete a Subject
  *     description: Delete a subject based on Id.
@@ -154,6 +203,48 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
+
+
+/**
+ * @swagger
+ * /subjects/assign:
+ *   post:
+ *     summary: Assign Subjects to Teachers
+ *     description: Assign Subjects to Teachers.
+ *     tags: [Subject]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - subjectId
+ *             properties:
+ *               subjectId:
+ *                 type: number
+ *               teacherId:
+ *                 type: number
+ *             example:
+ *               subjectId: 8
+ *               teacherId: 3
+ *     responses:
+ *       "201":
+ *         description: ACCEPTED
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Subject'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
 
 /**
  * @swagger
