@@ -96,7 +96,6 @@ const getApiFun = id => {
     })
     .then(data => {
       if (data.kankorId) {
-        console.log(data.id);
         idID.textContent = data.id;
         kankorId.textContent = kankorInputvalue.textContent = data.kankorId;
         nameValue.textContent = fullName.textContent = data.fullName;
@@ -107,7 +106,6 @@ const getApiFun = id => {
         admDate.textContent = data.createdAt;
         updateDate.textContent = data.updatedAt;
       } else {
-        console.log('bay');
       }
     })
     .catch(err => alert(`${err} Name Not Found`));
