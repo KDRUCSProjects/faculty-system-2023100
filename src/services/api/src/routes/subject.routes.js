@@ -28,6 +28,10 @@ router
 router
   .route('/assign')
   .post(auth(), validate(subjectValidations.assignSubjectToTeacher), subjectController.assignSubjectToTeacher)
+
+router
+  .route('/take')
+  .post(auth(), validate(subjectValidations.assignSubjectToTeacher), subjectController.takeBackSubjectFromTeacher);
 module.exports = router;
 
 /**
@@ -231,7 +235,48 @@ module.exports = router;
  *               subjectId: 8
  *               teacherId: 3
  *     responses:
- *       "201":
+ *       "202":
+ *         description: ACCEPTED
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Subject'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+
+/**
+ * @swagger
+ * /subjects/take:
+ *   post:
+ *     summary: Take Back Subjects from Teachers
+ *     description: Take Back Subjects from Teachers.
+ *     tags: [Subject]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - subjectId
+ *             properties:
+ *               subjectId:
+ *                 type: number
+ *               teacherId:
+ *                 type: number
+ *             example:
+ *               subjectId: 8
+ *               teacherId: 3
+ *     responses:
+ *       "202":
  *         description: ACCEPTED
  *         content:
  *           application/json:
