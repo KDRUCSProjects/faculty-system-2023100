@@ -16,9 +16,15 @@
       <add-subject  ></add-subject >
     </template>
     <v-row no-gutters>
-      <v-col  v-for="i=1 in 8" cols="3">
+      <v-col  v-for="(subject, index) in subjects" :key="index" cols="3">
         <v-sheet class="ma-2 pa-2">
-          <subject-card></subject-card>
+          <subject-card
+            :subjectName="subject.name"
+            :semesterId="subject.semesterId"
+            :teacherId="subject.teacherId"
+            :subjectId="subject.id"
+
+          ></subject-card>
         </v-sheet>
       </v-col>
     </v-row>
@@ -37,6 +43,16 @@ export default {
   components: {
     SubjectCard,
     AddSubject,
+  },
+  computed: {
+    subjects() {
+      return this.$store.getters['subjects/subjects'];
+    },
+  },
+  methods: {},
+  async mounted() {
+    // Load subjects at app mount
+    await this.$store.dispatch('subjects/loadSubjects');
   },
 
 };
