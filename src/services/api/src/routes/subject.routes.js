@@ -56,12 +56,9 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 results:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Subject'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/CustomSubject'
  *
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
