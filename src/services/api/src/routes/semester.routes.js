@@ -16,9 +16,13 @@ router
   .get(auth(), validate(semesterValidation.getSemester), semesterController.getSemester)
   .delete(auth(), validate(semesterValidation.getSemester), semesterController.deleteSemester);
 
+
+router
+  .route('/value/:year')
+  .get(auth(), validate(semesterValidation.getYearSemesters), semesterController.getYearSemesters)
 module.exports = router;
 
-/**
+/** 
  * @swagger
  * tags:
  *   name: Semester
@@ -144,3 +148,38 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
+
+
+/**
+ * @swagger
+ * /semesters/value/{year}:
+ *   get:
+ *     summary: Get all semesters of the year
+ *     description: get all semesters of the year.
+ *     tags: [Semester]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: year
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: year
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Semester'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
