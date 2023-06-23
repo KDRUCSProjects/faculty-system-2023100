@@ -7,7 +7,8 @@ export default {
   state() {
     return {
       students: [],
-      counts: {},
+      currentStudent: null,
+      counts: null,
     };
   },
   getters,

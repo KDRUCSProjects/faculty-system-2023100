@@ -81,7 +81,8 @@ export default function teacherScreen(props) {
           <View
             style={{
               elevation: 3,
-              shadowColor: "blue",
+              shadowColor: "rgba(100, 100, 111, 0.4)",
+
               borderRadius: 15,
               width: "80%",
               height: "45%",
@@ -92,10 +93,10 @@ export default function teacherScreen(props) {
                 height: "100%",
                 width: "100%",
                 alignItems: "center",
-                alignContent: "space-around",
+                justifyContent: "space-around",
               }}
             >
-              <View style={{ height: 180, width: 180 }}>
+              <View style={{ height: 90, width: 90 }}>
                 <ImageBackground
                   style={{ flex: 1 }}
                   source={require("../assets/images/viewAttendence.png")}
@@ -108,7 +109,7 @@ export default function teacherScreen(props) {
           <View
             style={{
               elevation: 3,
-              shadowColor: "blue",
+              shadowColor: "rgba(100, 100, 111, 0.4)",
               borderRadius: 15,
               width: "80%",
               height: "45%",
@@ -119,11 +120,11 @@ export default function teacherScreen(props) {
                 height: "100%",
                 width: "100%",
                 alignItems: "center",
-                alignContent: "space-around",
+                justifyContent: "space-around",
               }}
               onPress={onTakeAttendence}
             >
-              <View style={{ height: 180, width: 180 }}>
+              <View style={{ height: 90, width: 90 }}>
                 <ImageBackground
                   style={{ flex: 1 }}
                   source={require("../assets/images/takeAttendence.png")}

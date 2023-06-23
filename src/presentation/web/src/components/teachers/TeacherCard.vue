@@ -18,7 +18,7 @@
       <v-btn color="primary" variant="elevated">Profile</v-btn>
       <v-btn color="secondary" variant="tonal"> Subjects</v-btn>
 
-      <v-menu transition="slide-y-transition" elevation="0">
+      <v-menu transition="slide-y-transition" elevation="0" v-model="menu">
         <template v-slot:activator="{ props }">
           <v-btn color="primary" v-bind="props" icon>
             <v-icon icon="mdi-dots-vertical"></v-icon>
@@ -26,6 +26,10 @@
         </template>
 
         <v-list density="compact">
+          <v-list-item>
+            <!-- Update Account -->
+            <update-teacher :teacherId="teacherId" @dialog-close="closeMenu" activator-color="text"> </update-teacher>
+          </v-list-item>
           <v-list-item>
             <v-btn prepend-icon="mdi-key" variant="text" color="dark">Change Password</v-btn>
           </v-list-item>
@@ -36,22 +40,30 @@
             <v-btn prepend-icon="mdi-delete" variant="text" color="dark">Disable Account</v-btn>
           </v-list-item> -->
           <v-list-item>
-            <v-btn prepend-icon="mdi-delete" variant="text" color="error" @click="deleteTeacher(teacherId)"
-              >Delete Account</v-btn
-            >
+            <v-btn prepend-icon="mdi-delete" variant="text" color="error" @click="deleteTeacher(teacherId)">
+              Delete Account
+            </v-btn>
           </v-list-item>
         </v-list>
       </v-menu>
     </v-card-actions>
 
-    <!-- Dialogs -->
+    <!-- All Dialogs -->
+    <!-- Delete Dialog -->
     <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
+    <!-- Update Dialog -->
   </v-card>
 </template>
 
 <script>
+import UpdateTeacher from './dialogs/UpdateTeacher.vue';
 export default {
-  data: () => ({}),
+  components: {
+    UpdateTeacher,
+  },
+  data: () => ({
+    menu: false,
+  }),
   props: {
     teacherId: {
       type: Number,
@@ -80,6 +92,13 @@ export default {
     },
   },
   methods: {
+    closeMenu() {
+      // For some reasons, the dialog won't close when the item is clicked in the menu in Vuetify 3 when using a dialog. Let's use this hack for now.
+      this.menu = false;
+    },
+    updateTeacher(teacherId) {
+      this.$emit('update-teacher', teacherId);
+    },
     async deleteTeacher(teacherId) {
       // Show confirm dialog by access it with $ref
 
@@ -98,6 +117,7 @@ export default {
       await this.$store.dispatch('teachers/deleteTeacher', teacherId);
     },
   },
+  emits: ['update-teacher'],
 };
 </script>
 

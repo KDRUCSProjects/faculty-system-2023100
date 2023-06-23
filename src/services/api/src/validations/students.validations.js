@@ -25,8 +25,8 @@ const updateStudent = {
   body: Joi.object()
     .keys({
       kankorId: Joi.string(),
-      fullname: Joi.string(),
-      nickname: Joi.string(),
+      fullName: Joi.string(),
+      nickName: Joi.string(),
       fatherName: Joi.string(),
       grandFatherName: Joi.string(),
       imageUrl: Joi.string(),

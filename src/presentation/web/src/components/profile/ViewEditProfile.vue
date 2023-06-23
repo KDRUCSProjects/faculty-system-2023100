@@ -3,11 +3,7 @@
     <v-card max-width="450" class="mx-auto" v-if="editProfile">
       <v-card-text>
         <v-form @submit.prevent="submitForm" ref="editProfileForm">
-          <base-photo-uploader
-            @photo="getPhoto"
-            :defaultPhoto="`${imagesResource}/${photo}`"
-            :defaultPhotoName="photo"
-          ></base-photo-uploader>
+          <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo" :defaultPhotoName="photo"></base-photo-uploader>
 
           <v-text-field :rules="rules.name" v-model="name" label="Name" variant="outlined"></v-text-field>
           <v-text-field v-model="lastName" label="Last Name" variant="outlined"></v-text-field>
@@ -90,9 +86,10 @@ export default {
           data['photo'] = this.newPhoto;
         }
 
-        console.log(data);
-
         await this.$store.dispatch('updateProfile', data);
+
+        // Now, also update the [photo]
+        this.photo = this.$store.getters['userData'].photo;
 
         // Once the update is completed, toggle back to view profile
         this.toggleView();
