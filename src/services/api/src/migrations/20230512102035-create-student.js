@@ -50,9 +50,18 @@ module.exports = {
       engGrandFatherName: {
         type: Sequelize.STRING,
       },
+      dob: {
+        type: Sequelize.DATE,
+      },
       educationalYearId: {
         type: Sequelize.INTEGER,
         required: true,
+        references: {
+          model: 'EducationalYears',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
       admissionYear: {
         type: Sequelize.DATE,
