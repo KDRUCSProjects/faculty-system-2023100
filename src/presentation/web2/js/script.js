@@ -23,11 +23,16 @@ const grandFatherName = document.querySelector('.grand-father-name');
 const eYear = document.querySelector('.e-year');
 const admDate = document.querySelector('.adm-date');
 const updateDate = document.querySelector('.update-date');
+const errorClose = document.querySelector('.error-close');
+const errorDiv = document.querySelector('.error-message-div');
+
+console.log(errorDiv);
 
 // console.log(profile);
 
 //////////////////////////////////////////////
 
+/////////////////////////////////////////////
 iconClose.addEventListener('click', function () {
   profileCard.classList.add('hidden');
   overlay.classList.add('hidden');
@@ -37,6 +42,16 @@ profile.addEventListener('click', function () {
   profileCard.classList.remove('hidden');
   overlay.classList.remove('hidden');
 });
+
+errorClose.addEventListener('click', function () {
+  errorDiv.style.display = 'none';
+  console.log('hey');
+});
+
+// profile.addEventListener('click', function () {
+//   profileCard.classList.remove('hidden');
+//   overlay.classList.remove('hidden');
+// });
 
 /////////////////////////////////////////////
 // const mohammad = {
@@ -108,5 +123,7 @@ const getApiFun = id => {
       } else {
       }
     })
-    .catch(err => alert(`${err} This Name is Not In The List Of Kankor`));
+    .catch(err => {
+      errorDiv.style.display = 'flex';
+    });
 };
