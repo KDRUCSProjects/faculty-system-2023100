@@ -214,51 +214,44 @@ module.exports = router;
  *             properties:
  *               kankorId:
  *                 type: string
- *                 required: true
  *                 format: text
  *               fullName:
  *                 type: string
- *                 required: true
  *                 format: text
  *               fatherName:
  *                 type: string
- *                 required: true
  *                 format: text
  *               grandFatherName:
  *                 type: string
- *                 required: true
  *                 format: text
  *               province:
  *                 type: string
- *                 required: true
  *                 format: number
  *               division:
  *                 type: string
- *                 required: true
  *                 format: number
  *               district:
  *                 type: string
- *                 required: true
  *                 format: number
  *               engName:
  *                 type: string
- *                 required: true
  *                 format: number
  *               engFatherName:
  *                 type: string
- *                 required: true
  *                 format: number
  *               engGrandFatherName:
  *                 type: string
- *                 required: true
  *                 format: number
+ *               dob:
+ *                 type: string
+ *                 format: date
+ *                 example: "2023-06-25"
+ *                 description: 'please select date using date picker'
  *               educationalYear:
  *                 type: string
- *                 required: true
  *                 format: number
  *               admissionYear:
  *                 type: string
- *                 required: true
  *                 format: number
  *               photo:
  *                 type: string

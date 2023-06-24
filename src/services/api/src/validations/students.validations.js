@@ -16,6 +16,7 @@ const registerStudent = {
     educationalYear: Joi.number().required(),
     admissionYear: Joi.date(),
     photo: Joi.string(),
+    dob: Joi.date(),
   }),
 };
 
@@ -39,6 +40,7 @@ const updateStudent = {
       educationalYear: Joi.date(),
       admissionYear: Joi.date(),
       photo: Joi.string(),
+      dob: Joi.date(),
     })
     .min(1)
     .required(),

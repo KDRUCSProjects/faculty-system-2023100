@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       engName: DataTypes.STRING,
       engFatherName: DataTypes.STRING,
       engGrandFatherName: DataTypes.STRING,
+      dob: DataTypes.DATE,
       educationalYearId: {
         type: DataTypes.INTEGER,
         required: true,
