@@ -6,15 +6,19 @@
           <span class="pro"> ASSIGNED </span>
           <v-card-item class="text-center mb-1">
             <v-avatar class="my-2" size="160" color="secondary" variant="tonal">
-              <v-img :src="`${imagesResource}/16872037529921-1.jpg`" alt="user" />
-              <!-- <div v-else>
-                <span class="text-h5">{{ abbreviation }}</span>
-              </div> -->
+              <v-img v-if="student?.imageUrl" :src="`${imagesResource}/${student?.imageUrl}`" alt="user" />
+              <div v-else>
+                <span class="text-h5">{{ buildAbbreviation(student?.fullName) }}</span>
+              </div>
             </v-avatar>
             <v-card-title class="font-weight-bold mt-3">{{ student?.fullName }}</v-card-title>
             <v-card-subtitle :class="{ 'text-error': !student?.nickName }">{{ student?.nickName || 'N/A' }}</v-card-subtitle>
+
+            <base-update-dialog :photo="true" title="Change Photo" @update="updatePhoto">
+              <v-btn color="primary" variant="flat" size="small">Update Photo</v-btn>
+            </base-update-dialog>
           </v-card-item>
-          <v-card-text>
+          <v-card-text class="my-8">
             <span class="text-center mx-auto d-flex flex-column justify-center align-center">
               <div class="d-flex">
                 <v-chip color="primary" variant="tonal" label class="mx-2">
@@ -74,6 +78,10 @@ export default {
     },
   },
   methods: {
+    async updatePhoto(photo) {
+      console.log(photo);
+      await this.$store.dispatch('students/updateStudent', { ['photo']: photo.fieldValue, studentId: this.id });
+    },
     async loadStudent(studentId) {
       await this.$store.dispatch('students/loadStudentById', studentId);
     },
