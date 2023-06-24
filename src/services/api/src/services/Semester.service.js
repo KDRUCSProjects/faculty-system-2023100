@@ -148,6 +148,16 @@ const deleteSemester = (semester) => {
   if (semester instanceof Semester) return semester.destroy();
 };
 
+/**
+ * get Semesters of the year
+ * @param {ObjectId} educationalYearId
+ * @returns {Promise<Semester>}
+ */
+const getYearSemesters = (educationalYearId) => {
+  return Semester.findAll({ where: { educationalYearId }, order: [['title', 'ASC']] })
+};
+
+
 module.exports = {
   createFirstSemester,
   createSecondSemester,
@@ -162,4 +172,5 @@ module.exports = {
   createNewSemester,
   findSemesterById,
   deleteSemester,
+  getYearSemesters,
 };

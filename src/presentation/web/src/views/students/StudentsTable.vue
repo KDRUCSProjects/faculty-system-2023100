@@ -13,9 +13,9 @@
         hide-default-footer
       >
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon small @click="deleteStudent(item)" color="error"> mdi-delete </v-icon>
-          <v-icon small @click="editStudent(item)" color="secondary"> mdi-pencil </v-icon>
-          <v-icon small @click="viewStudent(item)" color="primary"> mdi-eye </v-icon>
+          <v-btn @click="viewStudent(item)" variant="text" color="primary" size="small" text prepend-icon="mdi-eye">
+            View
+          </v-btn>
         </template>
 
         <template v-slot:top>
@@ -104,7 +104,15 @@ export default {
   methods: {
     deleteStudent() {},
     editStudent() {},
-    viewStudent() {},
+    viewStudent(item) {
+      const { raw } = item;
+      this.$router.push({
+        name: 'view-student',
+        params: {
+          id: raw.id,
+        },
+      });
+    },
     async loadStudents(options = { page: this.page, like: '' }) {
       try {
         this.loading = true;

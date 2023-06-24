@@ -23,21 +23,21 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 import { HeaderBackButton } from "@react-navigation/stack";
-import { useRef } from "react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+
+import { useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { saveAttendence } from "../store/actions/actions";
 
 export default function attendence(props) {
+  const childRef = useRef(null);
   var [offSetX, setOffSetX] = useState(0);
   const scrollRef = useRef({});
   const students = useSelector((state) => state.studentReducer.students);
 
+  let StudentsSize = students.length;
+
   const onScroll = (event) => {
     setOffSetX(event.nativeEvent.contentOffset.x);
-
-    // if (event.contentOffset.x > 230 && scrollRef.current != {}) {
-    //   // scrollTo(scrollRef, 250, 0, false);
-    // }
   };
   const onPresent = () => {
     const { width } = Dimensions.get("window");
@@ -47,6 +47,11 @@ export default function attendence(props) {
       animated: true,
     });
   };
+  const saveAttendenceDispatch = useDispatch();
+  const onSaveAttendence = () => {
+    saveAttendenceDispatch(saveAttendence(students));
+  };
+
   return (
     <View style={styles.container}>
       <View
@@ -85,8 +90,17 @@ export default function attendence(props) {
           <View style={{ width: "15%" }}>
             <HeaderBackButton
               onPress={() =>
-                Alert.alert("Save?", "Are You sure to save attendence?", [
-                  <Button title="Ok"></Button>,
+                Alert.alert("Save?", "Do you want save attendence?", [
+                  {
+                    text: "No",
+                    onPress: () => {
+                      return;
+                    },
+                  },
+                  {
+                    text: "Yes",
+                    onPress: onSaveAttendence,
+                  },
                 ])
               }
               backImage={() => (
@@ -98,23 +112,32 @@ export default function attendence(props) {
             ></HeaderBackButton>
           </View>
         </View>
+
         <ScrollView
           horizontal={true}
           contentContainerStyle={styles.Scroll}
           onScroll={onScroll}
           scrollEventThrottle={16}
+          showsHorizontalScrollIndicator={false}
           pagingEnabled
           ref={scrollRef}
         >
-          {students.map((student) => {
-            const studentName = student[1];
-            const studentId = student[0];
+          {students.map((student, index) => {
+            const studentName = student.name;
+            const studentId = student.id;
+            const isPresent = student.isPresent;
+
             return (
               <AttendenceItem
                 key={studentId}
+                ref={childRef}
                 studentName={studentName}
                 studentId={studentId}
+                isPresent={isPresent}
                 onPresent={onPresent}
+                studentsSize={StudentsSize}
+                index={index}
+                students={students}
               ></AttendenceItem>
             );
           })}

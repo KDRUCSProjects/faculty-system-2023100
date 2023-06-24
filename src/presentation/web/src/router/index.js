@@ -37,10 +37,26 @@ const routes = [
   },
   {
     path: '/students',
+    component: () => import('@/views/students/StudentsTable.vue'),
+  },
+  {
+    path: '/student/:id',
+    component: () => import('@/views/students/Student.vue'),
     meta: {
       requiresAuth: true,
     },
-    component: () => import('@/views/students/StudentsTable.vue'),
+    children: [
+      {
+        path: '',
+        name: 'view-student',
+        component: () => import('@/components/students/ViewProfile.vue'),
+        props: true,
+      },
+    ],
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/auth',
   },
 ];
 

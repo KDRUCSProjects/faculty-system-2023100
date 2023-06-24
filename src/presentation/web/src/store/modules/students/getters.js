@@ -5,4 +5,7 @@ export default {
   counts(state) {
     return state.counts;
   },
+  currentStudent(state) {
+    return state.currentStudent;
+  },
 };

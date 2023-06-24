@@ -10,14 +10,13 @@ export default {
   },
   setUserData(state, payload) {
     // Set user data only
-    state.userData = payload;
+
+    const updatedUserData = { ...state.userData, name: payload.name, lastName: payload.lastName, photo: payload.photo };
+
+    state.userData = updatedUserData;
+    localStorage.setItem('userData', JSON.stringify(updatedUserData));
   },
   setEmail(state, newEmail) {
     state.email = newEmail;
-  },
-  setProfile(state, payload) {
-    state.name = payload.name;
-    state.photo = payload.photo;
-    state.lastName = payload.lastName;
   },
 };

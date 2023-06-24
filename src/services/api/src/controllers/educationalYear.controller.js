@@ -28,9 +28,16 @@ const getEducationalYear = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(year);
 });
 
+const getEducationalYearByValue = catchAsync(async (req, res) => {
+  const year = await educationalYearService.getEducationalYearByValue(req.params.year);
+  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
+  res.status(httpStatus.OK).send(year);
+});
+
 module.exports = {
   getEducationalYears,
   getEducationalYear,
   deleteEducationalYear,
   createEducationalYear,
+  getEducationalYearByValue,
 };
