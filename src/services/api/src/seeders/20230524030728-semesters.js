@@ -1,15 +1,16 @@
 /** @type {import('sequelize-cli').Migration} */
-
 const faker = require('faker');
 
-const semesters = [...Array(24)].map((element, index) => {
-  return {
-    title: faker.datatype.number(8),
-    educationalYearId: faker.datatype.number(3),
+let number = 0;
+const semesters = [];
+for (let index = 0; index < 8; index++) {
+  semesters.push({
+    title: ++number,
+    educationalYearId: 12,
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
-  };
-});
+  });
+}
 
 module.exports = {
   async up(queryInterface, Sequelize) {

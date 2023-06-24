@@ -154,9 +154,8 @@ const deleteSemester = (semester) => {
  * @returns {Promise<Semester>}
  */
 const getYearSemesters = (educationalYearId) => {
-  return Semester.findAll({ where: { educationalYearId }, order: [['title', 'ASC']] })
+  return Semester.findAll({ where: { educationalYearId }, order: [['title', 'ASC']] });
 };
-
 
 module.exports = {
   createFirstSemester,

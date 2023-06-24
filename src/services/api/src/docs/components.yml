@@ -224,6 +224,38 @@ components:
         subjectFK: 1
         studentFK: 5
 
+    CustomSubject:
+      type: object
+      properties:
+        id: 
+          type: number
+        subjectName: 
+          type: string
+        subjectCredit: 
+          type: number
+        teacherId: 
+          type: number
+        semesterId: 
+          type: number
+        teacherName: 
+          type: string
+        semesterTitle: 
+          type: number
+        educationalYearId: 
+          type: number
+        educationalYear: 
+          type: number
+      example:
+        id: 38
+        name: 'Software Engineering'
+        credit: 4
+        teacherId: 2
+        semesterId: 2
+        teacherName: 'Navid Ahmad'
+        semesterTitle: 4
+        educationalYearId: 12
+        educationalYear: 1401
+
     Departments:
       type: object
       properties:

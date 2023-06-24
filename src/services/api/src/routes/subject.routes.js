@@ -27,7 +27,7 @@ router
 
 router
   .route('/assign')
-  .post(auth(), validate(subjectValidations.assignSubjectToTeacher), subjectController.assignSubjectToTeacher)
+  .post(auth(), validate(subjectValidations.assignSubjectToTeacher), subjectController.assignSubjectToTeacher);
 
 router
   .route('/take')
@@ -56,12 +56,9 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 results:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Subject'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/CustomSubject'
  *
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
@@ -146,9 +143,9 @@ module.exports = router;
  *     summary: Update a Subject
  *     description: Update a Subject
  *     tags: [Subject]
- *     security: 
+ *     security:
  *      - bearerAuth: []
- *     parameters: 
+ *     parameters:
  *      - in: path
  *        name: id
  *        required: true
@@ -214,7 +211,6 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  */
 
-
 /**
  * @swagger
  * /subjects/assign:
@@ -255,7 +251,6 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  */
 
-
 /**
  * @swagger
  * /subjects/take:
@@ -295,7 +290,6 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-
 
 /**
  * @swagger

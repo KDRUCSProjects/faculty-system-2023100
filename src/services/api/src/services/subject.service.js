@@ -1,6 +1,7 @@
 // Sequelize Models
 const httpStatus = require('http-status');
-const { Subject, StudentsList, Student } = require('../models');
+const { QueryTypes } = require('sequelize');
+const { Subject, StudentsList, Student, User, Semester, sequelize } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -17,7 +18,21 @@ const createSubject = (subjectBody) => {
  * @returns {Promise<Subject>}
  */
 const getSubjects = () => {
-  return Subject.findAll();
+  return sequelize.query(`
+    select subject.id as id,
+    subject.name as name,
+    subject.credit as credit,
+    subject.teacherId as teacherId,
+    subject.semesterId as semesterId,
+    user.name as teacherName,
+    semester.title as semesterTitle,
+    semester.educationalYearId as educationalYearId,
+    educationalYear.year as educationalYear
+    from subjects as subject
+    left join users as user on user.id = subject.teacherId
+    left join semesters as semester on semester.id = subject.semesterId
+    left join educationalYears as educationalYear on educationalYear.id = semester.educationalYearId
+  `);
 };
 
 /**
@@ -65,8 +80,6 @@ const getSemesterStudents = (semesterId) => {
   });
 };
 
-
-
 /**
  * update subject
  * @param {Object} oldSubjectBody
@@ -76,13 +89,12 @@ const getSemesterStudents = (semesterId) => {
 const updatedSubject = (oldSubjectBody, newSubjectBody) => {
   if (oldSubjectBody instanceof Subject) {
     oldSubjectBody.set({
-      ...newSubjectBody
+      ...newSubjectBody,
     });
     return oldSubjectBody.save();
   }
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
-
 
 module.exports = {
   getSemesterStudents,

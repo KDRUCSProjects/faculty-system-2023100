@@ -16,13 +16,10 @@ router
   .get(auth(), validate(semesterValidation.getSemester), semesterController.getSemester)
   .delete(auth(), validate(semesterValidation.getSemester), semesterController.deleteSemester);
 
-
-router
-  .route('/value/:year')
-  .get(auth(), validate(semesterValidation.getYearSemesters), semesterController.getYearSemesters)
+router.route('/value/:year').get(auth(), validate(semesterValidation.getYearSemesters), semesterController.getYearSemesters);
 module.exports = router;
 
-/** 
+/**
  * @swagger
  * tags:
  *   name: Semester
@@ -149,7 +146,6 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  */
 
-
 /**
  * @swagger
  * /semesters/value/{year}:
@@ -182,4 +178,3 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-
