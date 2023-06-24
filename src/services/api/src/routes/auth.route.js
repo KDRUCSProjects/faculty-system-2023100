@@ -6,7 +6,6 @@ const auth = require('../middlewares/auth');
 const upload = require('../middlewares/multer');
 const { attachImageToBody } = require('../middlewares/attachFileToBody');
 
-
 const router = express.Router();
 
 router.post('/register', validate(authValidation.register), authController.register);

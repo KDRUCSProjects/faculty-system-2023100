@@ -12,3 +12,4 @@ module.exports.studentListController = require('./studentList.controller');
 module.exports.subjectController = require('./subject.controller');
 module.exports.taajilController = require('./taajil.controller');
 module.exports.teacherController = require('./teacher.controller');
+module.exports.tabdiliController = require('./tabdili.controller');

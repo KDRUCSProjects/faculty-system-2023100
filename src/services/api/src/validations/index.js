@@ -13,3 +13,4 @@ module.exports.studentValidation = require('./students.validations');
 module.exports.subjectValidation = require('./subject.validation');
 module.exports.taajilValidation = require('./taajil.validation');
 module.exports.teacherValidation = require('./teachers.validation');
+module.exports.tabdiliValidation = require('./tabdili.validation');

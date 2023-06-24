@@ -5,7 +5,7 @@ const studentLists = [];
 
 for (let i = 1; i < 9; i++) {
   for (let j = 0; j < 10; j++) {
-    ++stdId
+    ++stdId;
     studentLists.push({
       studentId: stdId,
       semesterId: i,
