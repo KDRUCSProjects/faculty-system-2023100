@@ -4,7 +4,7 @@ let stdId = 80;
 const tajils = [];
 
 for (let j = 0; j < 5; j++) {
-  ++stdId
+  ++stdId;
   tajils.push({
     studentId: stdId,
     educationalYearId: 12,
@@ -15,7 +15,6 @@ for (let j = 0; j < 5; j++) {
     updatedAt: faker.date.recent(),
   });
 }
-
 
 module.exports = {
   async up(queryInterface, Sequelize) {

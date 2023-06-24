@@ -7,19 +7,30 @@ const auth = require('../middlewares/auth');
 const upload = require('../middlewares/multer');
 const { attachImageToBody } = require('../middlewares/attachFileToBody');
 
-
 const router = express.Router();
 
 router
   .route('/')
   .get(auth(), validate(shareValidation.paginate), studentController.getStudents)
-  .post(auth(), upload.single('photo'), attachImageToBody, validate(studentValidation.registerStudent), studentController.registerStudent)
+  .post(
+    auth(),
+    upload.single('photo'),
+    attachImageToBody,
+    validate(studentValidation.registerStudent),
+    studentController.registerStudent
+  )
   .delete(auth(), validate(studentValidation.deleteStudents), studentController.deleteStudents);
 
 router
   .route('/:studentId')
   .get(auth(), validate(studentValidation.getStudent), studentController.getStudent)
-  .patch(auth(), upload.single('photo'), attachImageToBody, validate(studentValidation.updateStudent), studentController.updateStudent)
+  .patch(
+    auth(),
+    upload.single('photo'),
+    attachImageToBody,
+    validate(studentValidation.updateStudent),
+    studentController.updateStudent
+  )
   .delete(auth(), validate(studentValidation.getStudent), studentController.deleteStudent);
 
 router.route('/kankor/:kankorId').get(validate(studentValidation.kankor), studentController.getStudentOnKankorId);
