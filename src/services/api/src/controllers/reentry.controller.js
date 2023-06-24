@@ -16,10 +16,6 @@ const createReentry = catchAsync(async (req, res) => {
     educationalYearId = (await educationalYearService.createEducationalYear(req.body.educationalYear))?.id;
     if (!educationalYearId) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'some thing went wrong try again');
   }
-  // check for reentry file if it was attached
-  if (req.file) {
-    req.body.attachment = req.file.path.split('\\')[3];
-  }
   req.body.educationalYearId = educationalYearId;
   const reentry = await reentryService.createReentry(req.body);
   res.status(httpStatus.CREATED).send(reentry);

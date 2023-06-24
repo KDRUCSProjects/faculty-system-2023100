@@ -5,19 +5,21 @@ const studentController = require('../controllers/student.controller');
 const shareValidation = require('../validations/share.validation');
 const auth = require('../middlewares/auth');
 const upload = require('../middlewares/multer');
+const { attachImageToBody } = require('../middlewares/attachFileToBody');
+
 
 const router = express.Router();
 
 router
   .route('/')
   .get(auth(), validate(shareValidation.paginate), studentController.getStudents)
-  .post(auth(), upload.single('photo'), validate(studentValidation.registerStudent), studentController.registerStudent)
+  .post(auth(), upload.single('photo'), attachImageToBody, validate(studentValidation.registerStudent), studentController.registerStudent)
   .delete(auth(), validate(studentValidation.deleteStudents), studentController.deleteStudents);
 
 router
   .route('/:studentId')
   .get(auth(), validate(studentValidation.getStudent), studentController.getStudent)
-  .patch(auth(), upload.single('photo'), validate(studentValidation.updateStudent), studentController.updateStudent)
+  .patch(auth(), upload.single('photo'), attachImageToBody, validate(studentValidation.updateStudent), studentController.updateStudent)
   .delete(auth(), validate(studentValidation.getStudent), studentController.deleteStudent);
 
 router.route('/kankor/:kankorId').get(auth(), validate(studentValidation.kankor), studentController.getStudentOnKankorId);
@@ -77,20 +79,33 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
- *             required:
- *               - name
  *             properties:
- *               name:
+ *               kankorId:
  *                 type: string
- *             example:
- *               kankorId : L2700283
- *               fullName : Shamsullah Shamsi
- *               fatherName : Abdul Rauf
- *               grandFatherName : Muhammad Tahir
- *               educationalYear: 2030
+ *                 required: true
+ *                 format: text
+ *               fullName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               fatherName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               grandFatherName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               educationalYear:
+ *                 type: string
+ *                 required: true
+ *                 format: number
+ *               photo:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       "201":
  *         description: Created
@@ -182,28 +197,61 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
- *             required:
- *               - name
  *             properties:
- *               name:
+ *               kankorId:
  *                 type: string
- *             example:
- *               kankorId : L2700283
- *               fullName : Shamsullah
- *               nickName : Shamsi
- *               fatherName : Adbul Rauf
- *               grandFatherName : Muhammad Tahir
- *               province : Kandahar
- *               division : 6
- *               district : 15 District
- *               engName : shamsullah shamsi
- *               engFatherName : Abdul Rauf
- *               engGrandFatherName : Muhammad Tahir
- *               educationalYear: 2030
- *               admissionYear : 2019
+ *                 required: true
+ *                 format: text
+ *               fullName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               fatherName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               grandFatherName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               province:
+ *                 type: string
+ *                 required: true
+ *                 format: number
+ *               division:
+ *                 type: string
+ *                 required: true
+ *                 format: number
+ *               district:
+ *                 type: string
+ *                 required: true
+ *                 format: number
+ *               engName:
+ *                 type: string
+ *                 required: true
+ *                 format: number
+ *               engFatherName:
+ *                 type: string
+ *                 required: true
+ *                 format: number
+ *               engGrandFatherName:
+ *                 type: string
+ *                 required: true
+ *                 format: number
+ *               educationalYear:
+ *                 type: string
+ *                 required: true
+ *                 format: number
+ *               admissionYear:
+ *                 type: string
+ *                 required: true
+ *                 format: number
+ *               photo:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       "201":
  *         description: ACCEPtED

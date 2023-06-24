@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.STRING,
         required: true,
       },
-      imageUrl: {
+      photo: {
         type: Sequelize.STRING,
       },
       province: {
