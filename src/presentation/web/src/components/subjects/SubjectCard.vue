@@ -11,7 +11,8 @@
 
     
       <v-card-actions class="mt-2 ">
-      <v-btn color="primary" prepend-icon="mdi-pencil" variant="text">Edit</v-btn>
+      <update-subject :subjectId="subjectId"  activator-color="primary"> </update-subject> 
+      <!-- <v-btn color="primary" prepend-icon="mdi-pencil" variant="text">Edit</v-btn> -->
       <v-btn prepend-icon="mdi-delete" variant="text" color="error" @click="deleteSubject(subjectId)">
               Delete
             </v-btn>
@@ -25,7 +26,12 @@
 </template>
 
 <script>
+import UpdateSubject from './dialogs/UpdateSubject.vue';
+
 export default {
+  components: {
+    UpdateSubject,
+  },
   props: {
     subjectId: {
       type: Number
@@ -47,7 +53,18 @@ export default {
       default: 'No Teacher Name',
     },
   },
+  computed: {
+    abbreviation() {
+      if (this.photo) return null;
+
+      return this.buildAbbreviation(this.subjectName);
+    },
+  },
  methods:{
+  updateTeacher(subjectId) {
+      this.$emit('update-subject', subjectId);
+    },
+
   async deleteSubject(subjectId) {
       // Show confirm dialog by access it with $ref
       let res = await this.$refs.baseConfirmDialog.show({
@@ -65,8 +82,8 @@ export default {
       // Otherwise, continue deleting the subject from the database
       await this.$store.dispatch('subjects/deleteSubject', subjectId);
     },
- }
- 
+ },
+ emits: ['update-subject'],
 };
 </script>
 
