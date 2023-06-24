@@ -53,7 +53,7 @@
       </v-col>
       <v-col cols="8">
         <router-view>
-          <personal-data :id="id"></personal-data>
+          <student-details :id="id"></student-details>
         </router-view>
       </v-col>
     </v-row>
@@ -64,10 +64,10 @@
 </template>
 
 <script>
-import PersonalData from './PersonalData.vue';
+import StudentDetails from '@/components/students/StudentDetails.vue';
 export default {
   components: {
-    PersonalData,
+    StudentDetails,
   },
   data: () => ({
     photo: null,
