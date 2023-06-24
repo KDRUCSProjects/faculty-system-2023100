@@ -8,6 +8,7 @@ const createUser = {
     name: Joi.string().required(),
     role: Joi.string().required().valid('user', 'admin'),
     lastName: Joi.string(),
+    photo: Joi.string(),
   }),
 };
 

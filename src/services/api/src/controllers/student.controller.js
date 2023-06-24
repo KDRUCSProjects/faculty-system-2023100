@@ -13,9 +13,6 @@ const registerStudent = catchAsync(async (req, res) => {
   } else {
     educationalYearId = (await educationalYearService.createEducationalYear(req.body.educationalYear))?.id;
   }
-  if (req.file) {
-    req.body.imageUrl = req.file.path.split('\\')[3];
-  }
   const results = await studentService.registerStudent({
     ...req.body,
     educationalYearId,
@@ -26,9 +23,6 @@ const registerStudent = catchAsync(async (req, res) => {
 const updateStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudent(req.params.studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not found');
-  if (req.file) {
-    req.body.imageUrl = req.file.path.split('\\')[3];
-  }
   const results = await studentService.updateStudent(student, req.body);
   return res.status(httpStatus.ACCEPTED).send(results);
 });
