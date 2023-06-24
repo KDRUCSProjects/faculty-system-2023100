@@ -108,5 +108,5 @@ const getApiFun = id => {
       } else {
       }
     })
-    .catch(err => alert(`${err} Name Not Found`));
+    .catch(err => alert(`${err} This Name is Not In The List Of Kankor`));
 };
