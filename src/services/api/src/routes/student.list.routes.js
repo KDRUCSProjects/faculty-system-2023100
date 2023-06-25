@@ -8,13 +8,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(validate(shareValidation.paginate), studentListController.getStudentLists)
-  .post(validate(studentListValidation.createStudentList), studentListController.createStudentList)
-  .delete(validate(shareValidation.deleteBunch), studentListController.deleteBunch);
+  .get(auth(), validate(shareValidation.paginate), studentListController.getStudentLists)
+  .post(auth(), validate(studentListValidation.createStudentList), studentListController.createStudentList)
+  .delete(auth(), validate(shareValidation.deleteBunch), studentListController.deleteBunch);
 
 router
   .route('/:studentListId')
-  .delete(validate(studentListValidation.getStudentList), studentListController.deleteStudentList);
+  .delete(auth(), validate(studentListValidation.getStudentList), studentListController.deleteStudentList);
 
 module.exports = router;
 

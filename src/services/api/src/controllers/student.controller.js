@@ -67,6 +67,11 @@ const deleteStudents = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(results);
 });
 
+const getUnRegisteredStudents = catchAsync(async (req, res) => {
+  const students = await studentService.getUnRegisteredStudents();
+  return res.status(httpStatus.OK).send(students[0]);
+});
+
 
 
 module.exports = {
@@ -77,4 +82,5 @@ module.exports = {
   deleteStudents,
   registerStudent,
   getStudentOnKankorId,
+  getUnRegisteredStudents,
 };
