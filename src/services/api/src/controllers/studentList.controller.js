@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { studentService, semesterService, studentListService } = require('../services');
+const { studentService, semesterService, studentListService, taajilService, tabdiliService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const createStudentList = catchAsync(async (req, res) => {
@@ -11,6 +11,10 @@ const createStudentList = catchAsync(async (req, res) => {
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
   const studentList = await studentListService.findListedStudentByStudentId(studentId);
   if (studentList) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student already exists in a semester');
+  const studentTajil = await taajilService.findTaajilByStudentId(studentId);
+  if (studentTajil) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has tajil');
+  const studentTabdili = await tabdiliService.findTabdiliByStudentId(studentId);
+  if (studentTabdili) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has got tabdili');
   const result = await studentListService.createStudentList(req.body);
   return res.send(result);
 });
