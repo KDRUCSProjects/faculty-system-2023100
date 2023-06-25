@@ -236,13 +236,16 @@ module.exports = router;
  *                 format: number
  *               engName:
  *                 type: string
- *                 format: number
+ *                 format: text
+ *               engLastName:
+ *                 type: string
+ *                 format: text
  *               engFatherName:
  *                 type: string
- *                 format: number
+ *                 format: text
  *               engGrandFatherName:
  *                 type: string
- *                 format: number
+ *                 format: text
  *               dob:
  *                 type: string
  *                 format: date

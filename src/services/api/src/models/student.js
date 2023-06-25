@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       division: DataTypes.STRING,
       district: DataTypes.STRING,
       engName: DataTypes.STRING,
+      engLastName: DataTypes.STRING,
       engFatherName: DataTypes.STRING,
       engGrandFatherName: DataTypes.STRING,
       dob: DataTypes.DATE,

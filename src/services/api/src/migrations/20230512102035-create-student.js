@@ -44,6 +44,9 @@ module.exports = {
       engName: {
         type: Sequelize.STRING,
       },
+      engLastName: {
+        type: Sequelize.STRING,
+      },
       engFatherName: {
         type: Sequelize.STRING,
       },

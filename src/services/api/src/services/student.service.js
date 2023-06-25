@@ -97,6 +97,7 @@ const getUnRegisteredStudents = () => {
   student.division as division,
   student.district as district,
   student.engName as engName,
+  student.engLastName as engLastName,
   student.engFatherName as engFatherName,
   student.engGrandFatherName as engGrandFatherName,
   student.dob as dob,
