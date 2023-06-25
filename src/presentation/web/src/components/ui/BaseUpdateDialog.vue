@@ -85,6 +85,9 @@ export default {
         field: this.fieldName,
         fieldValue: this.field,
       });
+
+      // Now close the dialog
+      this.cancel();
     },
     cancel() {
       this.dialog = false;
