@@ -7,6 +7,12 @@ const createStudentList = {
   }),
 };
 
+const getStudentList = {
+  params: Joi.object().keys({
+    studentListId: Joi.number().required(),
+  }),
+};
 module.exports = {
+  getStudentList,
   createStudentList,
 };

@@ -1,12 +1,20 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const { studentListValidation } = require('../validations');
+const { studentListValidation, shareValidation } = require('../validations');
 const { studentListController } = require('../controllers');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
-router.route('/').post(validate(studentListValidation.createStudentList), studentListController.createStudentList);
+router
+  .route('/')
+  .get(validate(shareValidation.paginate), studentListController.getStudentLists)
+  .post(validate(studentListValidation.createStudentList), studentListController.createStudentList)
+  .delete(validate(shareValidation.deleteBunch), studentListController.deleteBunch);
+
+router
+  .route('/:studentListId')
+  .delete(validate(studentListValidation.getStudentList), studentListController.deleteStudentList);
 
 module.exports = router;
 
@@ -20,6 +28,27 @@ module.exports = router;
 /**
  * @swagger
  * /studentList:
+ *   get:
+ *     summary: get all student list
+ *     description: get all student list
+ *     tags: [StudentList]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                type: array
+ *                items:
+ *                  $ref: '#/components/schemas/StudentList'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  *   post:
  *     summary: add student to a semester
  *     description: add student to a semester
@@ -49,6 +78,63 @@ module.exports = router;
  *           application/json:
  *             schema:
  *                $ref: '#/components/schemas/StudentList'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *   delete:
+ *     summary: delete a bunch of students from a semester
+ *     description: delete a bunch of students from a semester
+ *     tags: [StudentList]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: integer
+ *               enum: [1,2,3,4,5]
+ *             example:
+ *               [1,2,4,5]
+ *     responses:
+ *       "201":
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/StudentList'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /studentList/{studentListId}:
+ *   delete:
+ *     summary: delete student list
+ *     description: delete student list
+ *     tags: [StudentList]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: studentListId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: student list Id
+ *     responses:
+ *       "204":
+ *         description: NO_CONTENT
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

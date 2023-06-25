@@ -82,7 +82,6 @@ const deleteTaajil = async (studentId) => {
   return await Student.findOne({ where: { id: studentId } });
 };
 
-
 /**
  * find tajil by student id
  * @param {ObjectId} studentId
