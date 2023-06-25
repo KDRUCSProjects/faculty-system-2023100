@@ -82,8 +82,13 @@ const deleteTaajil = async (studentId) => {
   return await Student.findOne({ where: { id: studentId } });
 };
 
-const findTaajilByStudentId = async (studentId) => {
-  return await Taajil.findOne({
+/**
+ * find tajil by student id
+ * @param {ObjectId} studentId
+ * @returns {Promise<Taajil>}
+ */
+const findTaajilByStudentId = (studentId) => {
+  return Taajil.findOne({
     where: {
       studentId,
     },
@@ -95,5 +100,6 @@ module.exports = {
   createTaajil,
   taajilStudents,
   deleteTaajil,
+  findTaajilByStudentId,
   deleteTaajilByStudentId,
 };

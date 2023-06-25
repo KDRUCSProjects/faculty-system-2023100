@@ -1,2 +1,16 @@
 module.exports.authValidation = require('./auth.validation');
 module.exports.userValidation = require('./user.validation');
+module.exports.attendanceValidation = require('./attendance.validation');
+module.exports.attendanceListValidation = require('./attendance.list.validation');
+module.exports.departmentValidation = require('./department.validation');
+module.exports.educationalYearValidation = require('./educationalYear.validation');
+module.exports.reentryValidation = require('./reentry.validation');
+module.exports.semesterValidation = require('./semester.validation');
+module.exports.shareValidation = require('./share.validation');
+module.exports.shokaListValidation = require('./shoka.list.validation');
+module.exports.studentListValidation = require('./student.list.validation');
+module.exports.studentValidation = require('./students.validations');
+module.exports.subjectValidation = require('./subject.validation');
+module.exports.taajilValidation = require('./taajil.validation');
+module.exports.teacherValidation = require('./teachers.validation');
+module.exports.tabdiliValidation = require('./tabdili.validation');

@@ -28,8 +28,17 @@ const findAttendanceBySubjectId = (subjectId) => {
   return Attendance.findOne({ where: { subjectId } });
 };
 
+/**
+ * get all Attendances
+ * @returns {Promise<Attendance>}
+ */
+const getAttendances = () => {
+  return Attendance.findAll({ order: [['createdAt', 'ASC']] });
+};
+
 module.exports = {
-  createAttendance,
   getAttendance,
+  getAttendances,
+  createAttendance,
   findAttendanceBySubjectId,
 };

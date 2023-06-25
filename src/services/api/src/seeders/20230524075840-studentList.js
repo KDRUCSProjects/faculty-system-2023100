@@ -1,12 +1,19 @@
 const faker = require('faker');
 
-const studentLists = [...Array(25)].map((re) => {
-  return {
-    studentId: faker.datatype.number({ min: 1, max: 100 }),
-    semesterId: faker.datatype.number({ min: 1, max: 3 }),
-  };
-});
+let stdId = 0;
+const studentLists = [];
 
+for (let i = 1; i < 9; i++) {
+  for (let j = 0; j < 10; j++) {
+    ++stdId;
+    studentLists.push({
+      studentId: stdId,
+      semesterId: i,
+      createdAt: faker.date.past(),
+      updatedAt: faker.date.recent(),
+    });
+  }
+}
 module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert('studentslists', studentLists, {});

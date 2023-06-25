@@ -4,6 +4,7 @@ const authValidation = require('../validations/auth.validation');
 const authController = require('../controllers/auth.controller');
 const auth = require('../middlewares/auth');
 const upload = require('../middlewares/multer');
+const { attachImageToBody } = require('../middlewares/attachFileToBody');
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.patch(
   '/updateProfile',
   auth(),
   upload.single('photo'),
+  attachImageToBody,
   validate(authValidation.updateProfile),
   authController.updateProfile
 );

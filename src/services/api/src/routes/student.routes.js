@@ -1,24 +1,38 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const studentValidation = require('../validations/students.validations');
-const studentController = require('../controllers/student.controller');
-const shareValidation = require('../validations/share.validation');
+const { studentValidation, shareValidation } = require('../validations');
+const { studentController } = require('../controllers');
 const auth = require('../middlewares/auth');
 const upload = require('../middlewares/multer');
+const { attachImageToBody } = require('../middlewares/attachFileToBody');
 
 const router = express.Router();
 
 router
   .route('/')
   .get(auth(), validate(shareValidation.paginate), studentController.getStudents)
-  .post(auth(), upload.single('photo'), validate(studentValidation.registerStudent), studentController.registerStudent)
-  .delete(auth(), validate(studentValidation.deleteStudents), studentController.deleteStudents);
+  .delete(auth(), validate(studentValidation.deleteStudents), studentController.deleteStudents)
+  .post(
+    auth(),
+    upload.single('photo'),
+    attachImageToBody,
+    validate(studentValidation.registerStudent),
+    studentController.registerStudent
+  );
+
+router.route('/unRegistered').get(auth(), validate(shareValidation.paginate), studentController.getUnRegisteredStudents);
 
 router
   .route('/:studentId')
   .get(auth(), validate(studentValidation.getStudent), studentController.getStudent)
-  .patch(auth(), upload.single('photo'), validate(studentValidation.updateStudent), studentController.updateStudent)
-  .delete(auth(), validate(studentValidation.getStudent), studentController.deleteStudent);
+  .delete(auth(), validate(studentValidation.getStudent), studentController.deleteStudent)
+  .patch(
+    auth(),
+    upload.single('photo'),
+    attachImageToBody,
+    validate(studentValidation.updateStudent),
+    studentController.updateStudent
+  );
 
 router.route('/kankor/:kankorId').get(validate(studentValidation.kankor), studentController.getStudentOnKankorId);
 
@@ -77,20 +91,33 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
- *             required:
- *               - name
  *             properties:
- *               name:
+ *               kankorId:
  *                 type: string
- *             example:
- *               kankorId : L2700283
- *               fullName : Shamsullah Shamsi
- *               fatherName : Abdul Rauf
- *               grandFatherName : Muhammad Tahir
- *               educationalYear: 2030
+ *                 required: true
+ *                 format: text
+ *               fullName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               fatherName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               grandFatherName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               educationalYear:
+ *                 type: string
+ *                 required: true
+ *                 format: number
+ *               photo:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       "201":
  *         description: Created
@@ -182,28 +209,54 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
- *             required:
- *               - name
  *             properties:
- *               name:
+ *               kankorId:
  *                 type: string
- *             example:
- *               kankorId : L2700283
- *               fullName : Shamsullah
- *               nickName : Shamsi
- *               fatherName : Adbul Rauf
- *               grandFatherName : Muhammad Tahir
- *               province : Kandahar
- *               division : 6
- *               district : 15 District
- *               engName : shamsullah shamsi
- *               engFatherName : Abdul Rauf
- *               engGrandFatherName : Muhammad Tahir
- *               educationalYear: 2030
- *               admissionYear : 2019
+ *                 format: text
+ *               fullName:
+ *                 type: string
+ *                 format: text
+ *               fatherName:
+ *                 type: string
+ *                 format: text
+ *               grandFatherName:
+ *                 type: string
+ *                 format: text
+ *               province:
+ *                 type: string
+ *                 format: number
+ *               division:
+ *                 type: string
+ *                 format: number
+ *               district:
+ *                 type: string
+ *                 format: number
+ *               engName:
+ *                 type: string
+ *                 format: number
+ *               engFatherName:
+ *                 type: string
+ *                 format: number
+ *               engGrandFatherName:
+ *                 type: string
+ *                 format: number
+ *               dob:
+ *                 type: string
+ *                 format: date
+ *                 example: "2023-06-25"
+ *                 description: 'please select date using date picker'
+ *               educationalYear:
+ *                 type: string
+ *                 format: number
+ *               admissionYear:
+ *                 type: string
+ *                 format: number
+ *               photo:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       "201":
  *         description: ACCEPtED
@@ -272,4 +325,35 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /students/unRegistered:
+ *   get:
+ *     summary: get all student who are not registered in any semester
+ *     description: get all student who are not registered in any semester
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *      - name: page
+ *        in: query
+ *        description: The page number for pagination
+ *        schema:
+ *          type: integer
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Student'
+ *
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
  */

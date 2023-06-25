@@ -14,3 +14,4 @@ module.exports.shokaListService = require('./shoka.list.service');
 module.exports.studentListService = require('./student.list.service');
 module.exports.attendanceListService = require('./attendance.list.service');
 module.exports.teacherService = require('./teacher.service');
+module.exports.tabdiliService = require('./tabdili.service');

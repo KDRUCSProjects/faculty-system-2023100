@@ -4,20 +4,27 @@ const validate = require('../middlewares/validate');
 const userValidation = require('../validations/user.validation');
 const userController = require('../controllers/user.controller');
 const upload = require('../middlewares/multer');
+const { attachImageToBody } = require('../middlewares/attachFileToBody');
 
 const router = express.Router();
 
 // Create user, get a user
 router
   .route('/')
-  .post(auth('manageUsers'), upload.single('photo'), validate(userValidation.createUser), userController.createUser)
+  .post(
+    auth('manageUsers'),
+    upload.single('photo'),
+    attachImageToBody,
+    validate(userValidation.createUser),
+    userController.createUser
+  )
   .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
 
 // Get a user, update a user, delete a user
 router
   .route('/:userId')
   .get(auth('getUsers'), validate(userValidation.getUser), userController.getUser)
-  .patch(auth(), upload.single('photo'), validate(userValidation.updateUser), userController.updateUser)
+  .patch(auth(), upload.single('photo'), attachImageToBody, validate(userValidation.updateUser), userController.updateUser)
   .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
 
 module.exports = router;
