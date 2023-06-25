@@ -1,8 +1,7 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const studentListValidation = require('../validations/student.list.validation');
-const studentListController = require('../controllers/studentList.controller');
-const shareValidation = require('../validations/share.validation');
+const { studentListValidation } = require('../validations');
+const { studentListController } = require('../controllers');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();

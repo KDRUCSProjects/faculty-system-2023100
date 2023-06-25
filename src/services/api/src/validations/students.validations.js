@@ -15,7 +15,7 @@ const registerStudent = {
     engGrandFatherName: Joi.string(),
     educationalYear: Joi.number().required(),
     admissionYear: Joi.date(),
-    photo: Joi.string(),
+    photo: Joi.string().allow(null),
     dob: Joi.date(),
   }),
 };
@@ -39,7 +39,7 @@ const updateStudent = {
       engGrandFatherName: Joi.string(),
       educationalYear: Joi.date(),
       admissionYear: Joi.date(),
-      photo: Joi.string(),
+      photo: Joi.string().allow(null),
       dob: Joi.date(),
     })
     .min(1)
