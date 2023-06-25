@@ -19,11 +19,33 @@ const createStudentList = catchAsync(async (req, res) => {
   return res.send(result);
 });
 
-const getStudentList = catchAsync(async (req, res) => {
-  return res.send('get student list');
+const getStudentLists = catchAsync(async (req, res) => {
+  const studentList = await studentListService.getStudentLists();
+  return res.status(httpStatus.OK).send(studentList);
+});
+
+const deleteStudentList = catchAsync(async (req, res) => {
+  const studentList = await studentListService.findStudentListById(req.params.studentListId);
+  if (!studentList) throw new ApiError(httpStatus.NOT_FOUND, 'student list not found');
+  await studentListService.deleteStudentList(studentList);
+  return res.status(httpStatus.NO_CONTENT).send();
+});
+
+const deleteBunch = catchAsync(async (req, res) => {
+  const results = [];
+  for await (const studentListId of req.body) {
+    const studentList = await studentListService.findStudentListById(studentListId);
+    if (studentList) {
+      const result = await studentListService.deleteStudentList(studentList);
+      results.push(result);
+    }
+  }
+  return res.status(httpStatus.NO_CONTENT).send();
 });
 
 module.exports = {
-  getStudentList,
+  deleteBunch,
+  getStudentLists,
+  deleteStudentList,
   createStudentList,
 };
