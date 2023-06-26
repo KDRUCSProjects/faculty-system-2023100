@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
         trim: true,
         references: {
-          model: 'Subject',
+          model: 'Subjects',
           key: 'id',
         },
         onDelete: 'cascade',
