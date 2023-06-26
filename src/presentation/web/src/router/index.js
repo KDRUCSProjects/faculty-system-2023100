@@ -40,6 +40,10 @@ const routes = [
     component: () => import('@/views/students/StudentsTable.vue'),
   },
   {
+    path: '/departments',
+    component: () => import('@/views/departments/departmentList.vue'),
+  },
+  {
     path: '/student/:id',
     component: () => import('@/views/students/Student.vue'),
     meta: {
