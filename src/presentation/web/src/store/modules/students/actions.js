@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default {
-  async loadStudents(context, options) {
+  async loadStudents(context, options = { page: 1 }) {
     try {
       const token = context.rootGetters.token;
 
@@ -56,7 +56,7 @@ export default {
       });
 
       // Instead of committing, let's reload all students
-      context.dispatch('loadAllStudents');
+      context.dispatch('loadStudents');
 
       return response;
     } catch (e) {
@@ -69,13 +69,10 @@ export default {
 
       const formData = new FormData();
 
-      console.log(payload);
-
       for (let key in payload) {
         // Skip teacherId
         if (key === 'studentId') continue;
 
-        console.log(key, payload[key]);
         formData.append(key, payload[key]);
       }
 
@@ -92,6 +89,34 @@ export default {
       });
 
       context.commit('setStudent', response.data);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async addStudent(context, payload) {
+    try {
+      const token = context.rootGetters.token;
+
+      const formData = new FormData();
+
+      for (let key in payload) {
+        const value = payload[key];
+        if (value) {
+          formData.append(key, payload[key]);
+        } else {
+          formData.append(key, null);
+        }
+      }
+
+      await axios.post(`/api/students`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Instead of adding the student, let's reload. This will be changed later as this is not good for performance.
+      context.dispatch('loadStudents');
     } catch (e) {
       throw e.response.data.message;
     }
