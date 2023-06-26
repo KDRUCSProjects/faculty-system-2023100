@@ -24,7 +24,11 @@ const getSubjects = catchAsync(async (req, res) => {
 const deleteSubject = catchAsync(async (req, res) => {
   const subject = await subjectService.getSubject(req.params.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
-  await subjectService.deleteSubject(subject);
+  const attendance = await attendanceService.findAttendanceBySubjectId(subject.id);
+  if (attendance) await attendanceService.deleteAttendance(attendance);
+  const shoka = await shokaService.findShokaBySubjectId(subject.id);
+  if (shoka) await shokaService.deleteShoka(shoka);
+  await subjectService.deleteSubject(req.user, subject);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

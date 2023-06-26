@@ -1,5 +1,7 @@
 // Sequelize Models
+const httpStatus = require('http-status');
 const { Attendance } = require('../models');
+const ApiError = require('../utils/ApiError');
 
 /**
  * Create a Attendance
@@ -36,9 +38,22 @@ const getAttendances = () => {
   return Attendance.findAll({ order: [['createdAt', 'ASC']] });
 };
 
+/**
+ * delete Attendance
+ * @param {Object} attendance
+ * @returns {Promise<Attendance>}
+ */
+const deleteAttendance = (attendance) => {
+  if (attendance instanceof Attendance) {
+    return attendance.destroy();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
+};
+
 module.exports = {
   getAttendance,
   getAttendances,
   createAttendance,
+  deleteAttendance,
   findAttendanceBySubjectId,
 };

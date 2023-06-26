@@ -24,6 +24,7 @@ const getSubjects = () => {
     subject.credit as credit,
     subject.teacherId as teacherId,
     subject.semesterId as semesterId,
+    subject.deletedAt as deletedAt,
     user.name as teacherName,
     semester.title as semesterTitle,
     semester.educationalYearId as educationalYearId,
@@ -32,16 +33,22 @@ const getSubjects = () => {
     left join users as user on user.id = subject.teacherId
     left join semesters as semester on semester.id = subject.semesterId
     left join educationalYears as educationalYear on educationalYear.id = semester.educationalYearId
+    where subject.deletedAt IS NULL
   `);
 };
 
 /**
  * delete a subject
  * @param {Object} subject
+ * @param {Object} user
  * @returns {Promise<Subject>}
  */
-const deleteSubject = (subject) => {
-  if (subject instanceof Subject) return subject.destroy();
+const deleteSubject = (user, subject) => {
+  if (subject instanceof Subject) {
+    subject.set({ deletedBy: user.id, isDeleted: true });
+    return subject.destroy();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
 };
 
 /**
