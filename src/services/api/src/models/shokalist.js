@@ -38,9 +38,30 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      midtermMarks: DataTypes.INTEGER,
-      assignmentOrProjectMarks: DataTypes.INTEGER,
-      finalMarks: DataTypes.INTEGER,
+      midtermMarks: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          min: 0,
+          max: 20,
+        }
+      },
+      assignmentOrProjectMarks: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          min: 0,
+          max: 20,
+        }
+      },
+      finalMarks: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          min: 0,
+          max: 60,
+        }
+      },
       ...BaseModel(DataTypes),
     },
     {
