@@ -17,7 +17,7 @@ const registerStudent = (studentBody) => {
  */
 const getStudents = (offset) => {
   return Student.findAndCountAll({
-    order: [['createdAt', 'ASC']],
+    order: [['createdAt', 'DESC']],
     limit: 10,
     offset,
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
@@ -111,7 +111,8 @@ const getUnRegisteredStudents = () => {
   student.updatedBy as updatedBy,
   student.deletedBy as deletedBy
   from students as student
-  where not exists (select 1 from studentslists where student.id = studentslists.studentId);
+  where not exists (select 1 from studentslists where student.id = studentslists.studentId)
+  order by student.createdAt DESC;
   `);
 };
 
