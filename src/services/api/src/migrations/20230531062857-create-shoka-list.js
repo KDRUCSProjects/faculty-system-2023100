@@ -37,7 +37,7 @@ module.exports = {
         required: true,
         validate: {
           min: 0,
-          max: 20
+          max: 20,
         },
       },
       assignmentOrProjectMarks: {
@@ -46,7 +46,7 @@ module.exports = {
         required: true,
         validate: {
           min: 0,
-          max: 20
+          max: 20,
         },
       },
       finalMarks: {
@@ -55,7 +55,7 @@ module.exports = {
         required: true,
         validate: {
           min: 0,
-          max: 60
+          max: 60,
         },
       },
       ...BaseModel(Sequelize),

@@ -18,6 +18,7 @@ const attendanceRoutes = require('./attendance.routes');
 const studentListRoutes = require('./student.list.routes');
 const teacherRoutes = require('./teachers.routes');
 const tabdiliRoutes = require('./tabdili.routes');
+const shokaRoutes = require('./shoka.routes');
 
 const router = express.Router();
 
@@ -85,6 +86,10 @@ const defaultRoutes = [
   {
     path: '/tabdili',
     route: tabdiliRoutes,
+  },
+  {
+    path: '/shoka',
+    route: shokaRoutes,
   },
 ];
 

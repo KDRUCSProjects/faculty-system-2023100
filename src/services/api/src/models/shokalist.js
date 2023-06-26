@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           min: 0,
           max: 20,
-        }
+        },
       },
       assignmentOrProjectMarks: {
         type: DataTypes.INTEGER,
@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           min: 0,
           max: 20,
-        }
+        },
       },
       finalMarks: {
         type: DataTypes.INTEGER,
@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           min: 0,
           max: 60,
-        }
+        },
       },
       ...BaseModel(DataTypes),
     },
