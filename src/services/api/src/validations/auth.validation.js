@@ -68,7 +68,7 @@ const updateProfile = {
       password: Joi.string().custom(password),
       name: Joi.string(),
       lastName: Joi.string(),
-      photo: Joi.string(),
+      photo: Joi.string().allow(null),
     })
     .min(1),
 };

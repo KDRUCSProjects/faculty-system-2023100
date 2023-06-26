@@ -13,9 +13,12 @@ const semesterRoutes = require('./semester.routes');
 const subjectRoutes = require('./subject.routes');
 const shokaListRoutes = require('./shoka.list.routes');
 const testRoute = require('./test.route');
-const attendanceRoutes = require('./attendance.list.routes');
+const attendanceListRoutes = require('./attendance.list.routes');
+const attendanceRoutes = require('./attendance.routes');
 const studentListRoutes = require('./student.list.routes');
 const teacherRoutes = require('./teachers.routes');
+const tabdiliRoutes = require('./tabdili.routes');
+const shokaRoutes = require('./shoka.routes');
 
 const router = express.Router();
 
@@ -75,6 +78,18 @@ const defaultRoutes = [
   {
     path: '/teachers',
     route: teacherRoutes,
+  },
+  {
+    path: '/attendanceList',
+    route: attendanceListRoutes,
+  },
+  {
+    path: '/tabdili',
+    route: tabdiliRoutes,
+  },
+  {
+    path: '/shoka',
+    route: shokaRoutes,
   },
 ];
 

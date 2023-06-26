@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-contents>
-      <!-- Students Entry Router Point -->
+      <!-- All student Entry Router Point -->
       <router-view></router-view>
     </base-contents>
   </div>

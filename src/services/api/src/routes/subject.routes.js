@@ -1,7 +1,7 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const subjectValidations = require('../validations/subject.validation');
-const subjectController = require('../controllers/subject.controller');
+const { subjectValidation } = require('../validations');
+const { subjectController } = require('../controllers');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();
@@ -9,29 +9,29 @@ const router = express.Router();
 router
   .route('/')
   .get(auth(), subjectController.getSubjects)
-  .post(auth(), validate(subjectValidations.createSubject), subjectController.createSubject);
+  .post(auth(), validate(subjectValidation.createSubject), subjectController.createSubject);
 
 router
   .route('/:subjectId')
-  .get(auth(), validate(subjectValidations.getSubject), subjectController.getSubject)
-  .patch(auth(), validate(subjectValidations.updatedSubject), subjectController.updatedSubject)
-  .delete(auth(), validate(subjectValidations.getSubject), subjectController.deleteSubject);
+  .get(auth(), validate(subjectValidation.getSubject), subjectController.getSubject)
+  .patch(auth(), validate(subjectValidation.updatedSubject), subjectController.updatedSubject)
+  .delete(auth(), validate(subjectValidation.getSubject), subjectController.deleteSubject);
 
 router
   .route('/teachers/:teacherId')
-  .get(validate(subjectValidations.getTeacherSubjects), subjectController.getTeacherSubjects);
+  .get(auth(), validate(subjectValidation.getTeacherSubjects), subjectController.getTeacherSubjects);
 
 router
   .route('/students/:subjectId')
-  .get(validate(subjectValidations.getSemesterStudents), subjectController.getSemesterStudents);
+  .get(auth(), validate(subjectValidation.getSemesterStudents), subjectController.getSemesterStudents);
 
 router
   .route('/assign')
-  .post(auth(), validate(subjectValidations.assignSubjectToTeacher), subjectController.assignSubjectToTeacher);
+  .post(auth(), validate(subjectValidation.assignSubjectToTeacher), subjectController.assignSubjectToTeacher);
 
 router
   .route('/take')
-  .post(auth(), validate(subjectValidations.assignSubjectToTeacher), subjectController.takeBackSubjectFromTeacher);
+  .post(auth(), validate(subjectValidation.assignSubjectToTeacher), subjectController.takeBackSubjectFromTeacher);
 module.exports = router;
 
 /**
@@ -201,7 +201,7 @@ module.exports = router;
  *           type: number
  *         description: subject id
  *     responses:
- *       "200":
+ *       "204":
  *         description: No content
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'

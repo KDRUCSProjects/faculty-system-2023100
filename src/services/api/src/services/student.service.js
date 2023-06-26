@@ -1,5 +1,5 @@
 // Sequelize Models
-const { Student, EducationalYear } = require('../models');
+const { Student, EducationalYear, sequelize } = require('../models');
 
 /**
  * Create a student
@@ -17,7 +17,7 @@ const registerStudent = (studentBody) => {
  */
 const getStudents = (offset) => {
   return Student.findAndCountAll({
-    order: [['createdAt', 'ASC']],
+    order: [['createdAt', 'DESC']],
     limit: 10,
     offset,
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
@@ -79,6 +79,43 @@ const deleteStudentById = (studentId) => {
   return Student.destroy({ where: { id: studentId } });
 };
 
+/**
+ * get unregistered Students
+ * @returns {Promise<Student>}
+ */
+const getUnRegisteredStudents = () => {
+  return sequelize.query(`
+  select
+  student.id as id,
+  student.kankorId as kankorId,
+  student.fullName as fullName,
+  student.nickName as nickName,
+  student.fatherName as fatherName,
+  student.grandFatherName as grandFatherName,
+  student.photo as photo,
+  student.province as province,
+  student.division as division,
+  student.district as district,
+  student.engName as engName,
+  student.engLastName as engLastName,
+  student.engFatherName as engFatherName,
+  student.engGrandFatherName as engGrandFatherName,
+  student.dob as dob,
+  student.educationalYearId as educationalYearId,
+  student.admissionYear as admissionYear,
+  student.createdAt as createdAt,
+  student.updatedAt as updatedAt,
+  student.deletedAt as deletedAt,
+  student.isDeleted as isDeleted,
+  student.createdBy as createdBy,
+  student.updatedBy as updatedBy,
+  student.deletedBy as deletedBy
+  from students as student
+  where not exists (select 1 from studentslists where student.id = studentslists.studentId)
+  order by student.createdAt DESC;
+  `);
+};
+
 module.exports = {
   getStudent,
   getStudents,
@@ -87,4 +124,5 @@ module.exports = {
   registerStudent,
   deleteStudentById,
   getStudentOnKankorId,
+  getUnRegisteredStudents,
 };

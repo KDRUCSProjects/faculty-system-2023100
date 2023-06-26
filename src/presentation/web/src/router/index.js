@@ -49,14 +49,51 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    component: () => import('@/views/students/Students.vue'),
+
     children: [
       {
         path: '',
+        name: 'students-list',
+        component: () => import('@/views/students/StudentsTable.vue'),
+      },
+      {
+        path: 'new',
+        name: 'register-student',
+        component: () => import('@/views/students/StudentRegistration.vue'),
+      },
+      {
+        path: 'view/:id',
         name: 'view-student',
-        component: () => import('@/components/students/ViewProfile.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+        component: () => import('@/views/students/StudentViewProfile.vue'),
         props: true,
       },
     ],
+  },
+  // {
+  //   path: '/student/:id',
+  //   component: () => import('@/views/students/Student.vue'),
+  //   meta: {
+  //     requiresAuth: true,
+  //   },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'view-student',
+  //       component: () => import('@/components/students/ViewProfile.vue'),
+  //       props: true,
+  //     },
+  //   ],
+  // },
+  {
+    path: '/subjects',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/subjects/SubjectsList.vue'),
   },
   {
     path: '/:pathMatch(.*)*',

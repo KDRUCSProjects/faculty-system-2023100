@@ -197,21 +197,53 @@ components:
         assignmentOrProjectMarks: 11
         finalMarks: 45
 
-    Attendance:
+    AttendanceList:
       type: object
       properties:
-        subjectFK: 
+        subjectId: 
           type: number
-        studentFK: 
+        studentId: 
           type: number
         isPresent: 
           type: boolean
-        date: 
-          type: date
       example:
-        subjectFK: 1
-        studentFK: 5
+        subjectId: 1
+        studentId: 5
         isPresent: true
+
+    Attendance:
+      type: object
+      properties:
+        id:
+          type: number
+        subjectId: 
+          type: number
+      example:
+        id: 1
+        subjectId: 1
+
+    Tabdili:
+      type: object
+      properties:
+        id:
+          type: number
+        studentId: 
+          type: number
+        educationalYearId: 
+          type: number
+        regNumber: 
+          type: number
+        attachment: 
+          type: string
+        notes: 
+          type: string
+      example:
+        id: 1
+        studentId: 1
+        educationalYearId: 12
+        regNumber: 20
+        attachment: file
+        notes: 'Some Economics Problems'
 
     StudentList:
       type: object
@@ -223,6 +255,17 @@ components:
       example:
         subjectFK: 1
         studentFK: 5
+
+    Shoka:
+      type: object
+      properties:
+        id: 
+          type: number
+        subjectId: 
+          type: number
+      example:
+        id: 1
+        subjectId: 5
 
     CustomSubject:
       type: object

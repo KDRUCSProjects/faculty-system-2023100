@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <file-pond
+      :style="{ 'max-width': `${maxWidth}px` }"
       class="filepond"
       ref="pond"
       label-idle="Select profile image"
@@ -41,7 +42,15 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 const FilePond = vueFilePond(FilePondPluginFileValidateType, FilePondPluginImagePreview);
 
 export default {
-  props: ['defaultPhoto'],
+  props: {
+    defaultPhoto: {
+      type: String,
+    },
+    maxWidth: {
+      type: Number,
+      default: 230,
+    },
+  },
   name: 'app',
   data: function () {
     return {
@@ -73,6 +82,5 @@ export default {
 .filepond {
   margin-left: auto;
   margin-right: auto;
-  max-width: 200px;
 }
 </style>

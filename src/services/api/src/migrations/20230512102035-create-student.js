@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.STRING,
         required: true,
       },
-      imageUrl: {
+      photo: {
         type: Sequelize.STRING,
       },
       province: {
@@ -44,15 +44,27 @@ module.exports = {
       engName: {
         type: Sequelize.STRING,
       },
+      engLastName: {
+        type: Sequelize.STRING,
+      },
       engFatherName: {
         type: Sequelize.STRING,
       },
       engGrandFatherName: {
         type: Sequelize.STRING,
       },
+      dob: {
+        type: Sequelize.DATE,
+      },
       educationalYearId: {
         type: Sequelize.INTEGER,
         required: true,
+        references: {
+          model: 'EducationalYears',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
       admissionYear: {
         type: Sequelize.DATE,

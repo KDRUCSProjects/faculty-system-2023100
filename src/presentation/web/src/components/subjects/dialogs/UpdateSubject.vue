@@ -1,0 +1,117 @@
+<template>
+  <div>
+    <!-- Default Btn/Slot -->
+    <v-btn :color="activatorColor" :variant="activatorVariant" :prepend-icon="activatorIcon">
+      Edit
+
+      <v-dialog max-width="550" activator="parent" v-model="dialog">
+        <v-card class="pa-1" :loading="isLoading">
+          <v-card-text>
+            <v-form @submit.prevent="submitForm" ref="updateSubjectForm">
+              <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Subject Name"></v-text-field>
+              <v-text-field :rules="rules.credit" v-model="credit" type="number" variant="outlined" label="Subject Credit"></v-text-field>
+            </v-form>
+
+            <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
+          </v-card-text>
+          <v-card-actions class="mx-4">
+            <v-btn @click="submitForm" variant="flat" :loading="isLoading">Update Subject</v-btn>
+            <v-btn @click="closeDialog" color="error">Cancel</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-btn>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    subjectId: {
+      type: Number,
+    },
+    activatorIcon: {
+      type: String,
+      default: 'mdi-pencil',
+    },
+    activatorVariant: {
+      type: String,
+      default: 'text',
+    },
+    activatorColor: {
+      type: String,
+      default: 'primary',
+    },
+  },
+  data: () => ({
+    alert: false,
+    dialog: false,
+    name: null,
+    credit: null,
+    show: true,
+    isLoading: false,
+    errorMessage: null,
+  }),
+  computed: {
+    rules() {
+      return {
+        name: [(v) => !!v || 'Please enter Subject name'],
+        credit: [(v) => !!v || 'Please enter Credit Number'],  
+      };
+    },
+  },
+  methods: {
+    async setSubject() {
+      const response = await this.$store.dispatch('subjects/loadSubjectById', this.subjectId);
+
+      if (!response.data) return false;
+
+      this.name = response.data.name;
+      this.credit = response.data.credit;
+    },
+    async submitForm() {
+      // Validate the form first
+      let { valid } = await this.$refs.updateSubjectForm.validate();
+
+      if (!valid) {
+        return false;
+      }
+
+      //   Start loader
+      this.isLoading = true;
+
+      try {
+        const data = {
+          subjectId: this.subjectId,
+          // Data starts here...
+          name: this.name,
+          credit: this.credit,
+        };
+
+        console.log(data);
+        await this.$store.dispatch('subjects/updateSubject', data);
+
+        this.closeDialog();
+      } catch (e) {
+        // Show error message if happened
+        this.errorMessage = e;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    closeDialog() {
+      this.dialog = false;
+      //   Also reset the form
+      this.$refs.updateSubjectForm.reset();
+      // tell parent that the windows is closed
+      this.$emit('dialog-close');
+    },
+  },
+  emits: ['dialog-close'],
+  async created() {
+    await this.setSubject();
+  },
+};
+</script>
+
+<style lang="scss" scoped></style>

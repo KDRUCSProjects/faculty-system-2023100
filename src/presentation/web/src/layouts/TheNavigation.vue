@@ -69,6 +69,11 @@ export default {
           icon: 'mdi-cog-outline',
           to: '/settings',
         },
+        {
+          title: 'Subjects',
+          icon: 'mdi-human-male-board',
+          to: '/subjects',
+        },
       ],
       drawer: true,
     };

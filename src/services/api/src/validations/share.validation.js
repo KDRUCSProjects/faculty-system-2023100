@@ -8,6 +8,11 @@ const paginate = {
   }),
 };
 
+const deleteBunch = {
+  body: Joi.array().items(Joi.number().min(1)).min(1),
+};
+
 module.exports = {
   paginate,
+  deleteBunch,
 };
