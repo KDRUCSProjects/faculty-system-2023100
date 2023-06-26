@@ -42,7 +42,16 @@ const deleteShoka = (shoka) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
 };
 
+/**
+ * get shokas
+ * @returns {Promise<Shoka>}
+ */
+const getShokas = () => {
+  return Shoka.findAll({ order: [['id', 'ASC']] });
+};
+
 module.exports = {
+  getShokas,
   createShoka,
   deleteShoka,
   findShokaById,
