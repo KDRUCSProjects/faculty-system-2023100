@@ -40,7 +40,7 @@ const routes = [
     component: () => import('@/views/students/Students.vue'),
     children: [
       {
-        path: '',
+        path: 'all',
         name: 'students-list',
         component: () => import('@/views/students/StudentsTable.vue'),
       },
