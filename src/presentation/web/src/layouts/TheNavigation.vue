@@ -89,14 +89,19 @@ export default {
           ],
         },
         {
-          title: 'Settings',
-          icon: 'mdi-cog-outline',
-          to: '/settings',
+          title: 'Semesters',
+          icon: 'mdi-google-classroom',
+          to: '/semesters',
         },
         {
           title: 'Subjects',
-          icon: 'mdi-human-male-board',
+          icon: 'mdi-book-open-blank-variant',
           to: '/subjects',
+        },
+        {
+          title: 'Settings',
+          icon: 'mdi-cog-outline',
+          to: '/settings',
         },
       ],
       drawer: true,

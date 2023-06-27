@@ -83,6 +83,13 @@ const routes = [
     component: () => import('@/views/subjects/SubjectsList.vue'),
   },
   {
+    path: '/semesters',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/semesters/SemestersList.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/auth',
   },
