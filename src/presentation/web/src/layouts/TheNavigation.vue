@@ -14,15 +14,32 @@
     <!-- Menu Items -->
     <v-list nav dense class="menu-items">
       <div v-for="item in items" :key="item.title">
-        <v-list-item link :to="item.to">
-          <v-list-item-icon>
-            <v-icon color="light">{{ item.icon }}</v-icon>
-          </v-list-item-icon>
+        <div v-if="!item.children">
+          <v-list-item link :to="item.to">
+            <v-list-item-icon>
+              <v-icon color="light">{{ item.icon }}</v-icon>
+            </v-list-item-icon>
 
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+        <div v-else>
+          <v-list-group :value="item.title">
+            <template v-slot:activator="{ props }">
+              <v-list-item v-bind="props">
+                <v-icon>{{ item.icon }}</v-icon>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </template>
+
+            <div v-for="(child, index) in item.children" :key="index">
+              <v-list-item v-if="!child.divider" density="compact" :title="child.title" :to="child.to"> </v-list-item>
+              <v-divider v-else></v-divider>
+            </div>
+          </v-list-group>
+        </div>
       </div>
     </v-list>
 
@@ -57,7 +74,19 @@ export default {
         {
           title: 'Students',
           icon: 'mdi-account-school',
-          to: '/students',
+          children: [
+            {
+              title: 'All Students',
+              icon: 'mdi-account-school',
+              to: '/students/all',
+            },
+            {
+              title: 'New Student',
+              icon: 'mdi-account-school',
+              to: '/students/new',
+            },
+            // { divider: true },
+          ],
         },
         {
           title: 'Settings',
@@ -66,6 +95,7 @@ export default {
         },
       ],
       drawer: true,
+      open: ['Users'],
     };
   },
   methods: {
@@ -77,23 +107,23 @@ export default {
 };
 </script>
 
-<style scoped>
-.v-list-item--active {
+<style>
+/* .v-list-item--active {
   background: var(--v-primary-base);
   color: white;
 }
 
 .v-list-item--active i {
   color: white !important;
-}
-
+} */
+/* 
 .v-list-group .v-list-item--active i {
   color: var(--v-primary-base) !important;
 }
 
 .v-list-group__items .v-list-item--active i {
   color: #fff !important;
-}
+} */
 
 .menu-items .v-list-item-title {
   display: inline;
