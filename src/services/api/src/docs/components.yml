@@ -256,6 +256,17 @@ components:
         subjectFK: 1
         studentFK: 5
 
+    Shoka:
+      type: object
+      properties:
+        id: 
+          type: number
+        subjectId: 
+          type: number
+      example:
+        id: 1
+        subjectId: 5
+
     CustomSubject:
       type: object
       properties:

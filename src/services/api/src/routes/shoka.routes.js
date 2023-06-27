@@ -1,37 +1,35 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
 const auth = require('../middlewares/auth');
-const { attendanceValidation } = require('../validations');
-const { attendanceController } = require('../controllers');
+const { shokaValidation } = require('../validations');
+const { shokaController } = require('../controllers');
 
 const router = express.Router();
 
-router.route('/').get(auth(), attendanceController.getAttendances);
+router.route('/').get(auth(), shokaController.getShokas);
 
-router
-  .route('/:attendanceId')
-  .get(auth(), validate(attendanceValidation.getAttendanceById), attendanceController.getAttendanceById);
+router.route('/:shokaId').get(auth(), validate(shokaValidation.getShoka), shokaController.getShoka);
 
 router
   .route('/subject/:subjectId')
-  .get(auth(), validate(attendanceValidation.getAttendance), attendanceController.getAttendance);
+  .get(auth(), validate(shokaValidation.getShokaBySubjectId), shokaController.getShokaBySubjectId);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Attendance
- *   description: Attendance management and retrieval
+ *   name: Shoka
+ *   description: Shoka management and retrieval
  */
 
 /**
  * @swagger
- * /attendance:
+ * /shoka:
  *   get:
- *     summary: get attendances of every subject.
- *     description: get all attendances of every subject
- *     tags: [Attendance]
+ *     summary: get all shokas of every subject.
+ *     description: get all shokas of every subject
+ *     tags: [Shoka]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -42,7 +40,7 @@ module.exports = router;
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Attendance'
+ *                 $ref: '#/components/schemas/Shoka'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -53,27 +51,27 @@ module.exports = router;
 
 /**
  * @swagger
- * /attendance/{attendanceId}:
+ * /shoka/{shokaId}:
  *   get:
- *     summary: Get Attendance by id
- *     description: get a Attendance by id.
- *     tags: [Attendance]
+ *     summary: Get shoka by id
+ *     description: get a shoka by id.
+ *     tags: [Shoka]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: attendanceId
+ *         name: shokaId
  *         required: true
  *         schema:
- *           type: string
- *         description: Attendance id
+ *           type: number
+ *         description: shoka id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Attendance'
+ *                $ref: '#/components/schemas/Shoka'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -84,11 +82,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /attendance/subject/{subjectId}:
+ * /shoka/subject/{subjectId}:
  *   get:
- *     summary: Get Attendance by subject id
- *     description: get a Attendance by subject id.
- *     tags: [Attendance]
+ *     summary: Get shoka by subject id
+ *     description: get a shoka by subject id.
+ *     tags: [Shoka]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -96,7 +94,7 @@ module.exports = router;
  *         name: subjectId
  *         required: true
  *         schema:
- *           type: string
+ *           type: number
  *         description: subject id
  *     responses:
  *       "200":
@@ -104,7 +102,7 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Attendance'
+ *                $ref: '#/components/schemas/Shoka'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

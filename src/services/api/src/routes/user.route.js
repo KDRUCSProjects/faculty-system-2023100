@@ -36,7 +36,8 @@ module.exports = router;
  *   description: User management and retrieval
  */
 
-/* @swagger
+/**
+ * @swagger
  *   get:
  *     summary: Get all users
  *     description: Only admins can retrieve all users.
@@ -326,6 +327,35 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /storage/images/{imageName}:
+ *   get:
+ *     summary: get images
+ *     description: images
+ *     tags: [Images]
+ *     parameters:
+ *      - name: imageName
+ *        in: path
+ *        required: true
+ *        description: The image name
+ *        schema:
+ *          type: string
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content: 
+ *           images/*:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *         example:
+ *           value: 
+ *             image: http://localhost:4000/storage/images/Do.Not.Delete.This.jpg
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
