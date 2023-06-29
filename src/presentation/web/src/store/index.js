@@ -5,6 +5,7 @@ import authModule from './modules/auth';
 import teachersModule from './modules/teachers';
 import studentsModule from './modules/students';
 import subjectsModule from './modules/subjects';
+import departmentModule from './modules/departments'
 
 export default createStore({
   modules: {
@@ -12,6 +13,7 @@ export default createStore({
     teachers: teachersModule,
     students: studentsModule,
     subjects: subjectsModule,
+    departments: departmentModule
   },
   state: {},
   getters: {},

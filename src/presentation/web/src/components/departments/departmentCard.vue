@@ -1,18 +1,15 @@
 <template>
-    <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
+    <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded" style="height: '200px'">
       <!-- <span class="pro">  </span> -->
-      <v-avatar class="my-3" size="120" color="secondary" variant="tonal">
-        <v-img v-if="photo" :src="`${imagesResource}/${photo}`" alt="user" />
-        <div v-else>
-          <span class="text-h5">{{ abbreviation }}</span>
-        </div>
-      </v-avatar>
-      <v-card-title class="pb-0">{{ fullName }}</v-card-title>
+      <!-- <v-avatar class="my-3" size="120" color="secondary" variant="tonal">
+        
+      </v-avatar> -->
+      <!-- <v-card-title class="pb-0">{{ fullName }}</v-card-title> -->
       <v-card-subtitle class="py-0 my-0" style="font-family: monospace">
-        {{ lastName || 'Teacher' }}
+        {{ name || 'Course' }}
       </v-card-subtitle>
       <v-divider></v-divider>
-      <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle>
+      <!-- <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle> -->
   
       <v-card-actions class="mt-3">
         <v-btn color="primary" variant="elevated">Profile</v-btn>
@@ -40,9 +37,6 @@
               <v-btn prepend-icon="mdi-delete" variant="text" color="dark">Disable Account</v-btn>
             </v-list-item> -->
             <v-list-item>
-              <v-btn prepend-icon="mdi-delete" variant="text" color="error" @click="deleteTeacher(teacherId)">
-                Delete Account
-              </v-btn>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -56,65 +50,29 @@
   </template>
   
   <script>
-  import UpdateTeacher from './dialogs/UpdateTeacher.vue';
+//   import UpdateTeacher from './dialogs/UpdateTeacher.vue';
   export default {
-    components: {
-      UpdateTeacher,
-    },
+    // components: {
+    //   UpdateTeacher,
+    // },
     data: () => ({
       menu: false,
     }),
     props: {
-      teacherId: {
+      id: {
         type: Number,
       },
-      photo: {
+      name: {
         type: String,
-        default: '@/assets/images/1.jpg',
-      },
-      fullName: {
-        type: String,
-        default: 'Mohammad Nabi',
-      },
-      lastName: {
-        type: String,
-      },
-      email: {
-        type: String,
-        default: 'm@example.com',
+        default: 'Java Script',
       },
     },
     computed: {
-      abbreviation() {
-        if (this.photo) return null;
-  
-        return this.buildAbbreviation(this.fullName);
-      },
     },
     methods: {
       closeMenu() {
         // For some reasons, the dialog won't close when the item is clicked in the menu in Vuetify 3 when using a dialog. Let's use this hack for now.
         this.menu = false;
-      },
-      updateTeacher(teacherId) {
-        this.$emit('update-teacher', teacherId);
-      },
-      async deleteTeacher(teacherId) {
-        // Show confirm dialog by access it with $ref
-  
-        let res = await this.$refs.baseConfirmDialog.show({
-          warningTitle: 'Warning',
-          title: 'Are you sure you want to delete this teacher?',
-          okButton: 'Yes',
-        });
-  
-        // If closed, return the function
-        if (!res) {
-          return false;
-        }
-  
-        // Otherwise, continue deleting the teacher from the database
-        await this.$store.dispatch('teachers/deleteTeacher', teacherId);
       },
     },
     emits: ['update-teacher'],
