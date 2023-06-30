@@ -8,7 +8,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(auth(), validate(shareValidation.paginate), studentListController.getStudentLists)
+  .get(auth(), validate(studentListValidation.getStudentLists), studentListController.getStudentLists)
   .post(auth(), validate(studentListValidation.createStudentList), studentListController.createStudentList)
   .delete(auth(), validate(shareValidation.deleteBunch), studentListController.deleteBunch);
 
@@ -34,6 +34,36 @@ module.exports = router;
  *     tags: [StudentList]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: year
+ *         schema:
+ *           type: integer
+ *         description: year
+ *       - in: query
+ *         name: class
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 4
+ *         description: class number
+ *       - in: query
+ *         name: semester
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 8
+ *         description: semester number
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: limit
  *     responses:
  *       "200":
  *         description: OK

@@ -26,21 +26,21 @@ const deleteSemester = catchAsync(async (req, res) => {
 });
 
 const getSemesters = catchAsync(async (req, res) => {
+  if (req.query?.year) {
+    const year = await educationalYearService.getEducationalYearByValue(req.query.year);
+    if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
+    const semesters = await semesterService.getYearSemesters(year.id);
+    return res.status(httpStatus.OK).send(semesters);
+  }
   const semesters = await semesterService.getAllSemesters();
   res.status(httpStatus.OK).send(semesters);
 });
 
-const getYearSemesters = catchAsync(async (req, res) => {
-  const year = await educationalYearService.getEducationalYearByValue(req.params.year);
-  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
-  const semesters = await semesterService.getYearSemesters(year.id);
-  return res.status(httpStatus.OK).send(semesters);
-});
+
 
 module.exports = {
   getSemester,
   getSemesters,
   deleteSemester,
   createSemester,
-  getYearSemesters,
 };
