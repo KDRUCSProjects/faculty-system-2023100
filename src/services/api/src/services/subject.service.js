@@ -1,7 +1,7 @@
 // Sequelize Models
 const httpStatus = require('http-status');
 const { QueryTypes } = require('sequelize');
-const { Subject, StudentsList, Student, User, Semester, sequelize } = require('../models');
+const { Subject, StudentsList, Student, sequelize } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -18,7 +18,8 @@ const createSubject = (subjectBody) => {
  * @returns {Promise<Subject>}
  */
 const getSubjects = () => {
-  return sequelize.query(`
+  return sequelize.query(
+    `
     select subject.id as id,
     subject.name as name,
     subject.credit as credit,
@@ -34,7 +35,9 @@ const getSubjects = () => {
     left join semesters as semester on semester.id = subject.semesterId
     left join educationalYears as educationalYear on educationalYear.id = semester.educationalYearId
     where subject.deletedAt IS NULL
-  `);
+  `,
+    { type: QueryTypes.SELECT }
+  );
 };
 
 /**

@@ -348,13 +348,13 @@ module.exports = router;
  *     responses:
  *       "200":
  *         description: OK
- *         content: 
+ *         content:
  *           images/*:
  *             schema:
  *               type: string
  *               format: binary
  *         example:
- *           value: 
+ *           value:
  *             image: http://localhost:4000/storage/images/Do.Not.Delete.This.jpg
  *       "404":
  *         $ref: '#/components/responses/NotFound'

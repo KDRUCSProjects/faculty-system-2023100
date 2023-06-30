@@ -1,4 +1,5 @@
 // Sequelize Models
+const { QueryTypes } = require('sequelize');
 const { Student, EducationalYear, sequelize } = require('../models');
 
 /**
@@ -12,7 +13,7 @@ const registerStudent = (studentBody) => {
 
 /**
  * Create a Student
- * @param {ObjectId} StudentId
+ * @param {Number} offset
  * @returns {Promise<Student>}
  */
 const getStudents = (offset) => {
@@ -81,10 +82,13 @@ const deleteStudentById = (studentId) => {
 
 /**
  * get unregistered Students
+ * @param {ObjectId} limit
+ * @param {ObjectId} offset
  * @returns {Promise<Student>}
  */
-const getUnRegisteredStudents = () => {
-  return sequelize.query(`
+const getUnRegisteredStudents = (limit, offset) => {
+  return sequelize.query(
+    `
   select
   student.id as id,
   student.kankorId as kankorId,
@@ -112,8 +116,32 @@ const getUnRegisteredStudents = () => {
   student.deletedBy as deletedBy
   from students as student
   where not exists (select 1 from studentslists where student.id = studentslists.studentId)
+  AND student.deletedAt IS NULL
+  ORDER BY student.createdAt DESC
+  limit ${offset}, ${limit};
+  `,
+    { type: QueryTypes.SELECT }
+  );
+};
+
+/**
+ * count unregistered Students
+ * @returns {Promise<Student>}
+ */
+const countUnregisteredStudent = () => {
+  return sequelize.query(
+    `
+  select
+  student.id as id,
+  student.deletedAt as deletedAt,
+  count(student.id) as count
+  from students as student
+  where not exists (select 1 from studentslists where student.id = studentslists.studentId)
+  AND student.deletedAt IS NULL
   order by student.createdAt DESC;
-  `);
+  `,
+    { type: QueryTypes.SELECT }
+  );
 };
 
 module.exports = {
@@ -125,4 +153,5 @@ module.exports = {
   deleteStudentById,
   getStudentOnKankorId,
   getUnRegisteredStudents,
+  countUnregisteredStudent,
 };

@@ -1,14 +1,14 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const semesterValidation = require('../validations/semester.validation');
-const semesterController = require('../controllers/semester.controller');
+const { semesterValidation } = require('../validations');
+const { semesterController } = require('../controllers');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(auth(), semesterController.getSemesters)
+  .get(auth(), validate(semesterValidation.getSemesters), semesterController.getSemesters)
   .post(auth(), validate(semesterValidation.createSemester), semesterController.createSemester);
 
 router
@@ -16,7 +16,6 @@ router
   .get(auth(), validate(semesterValidation.getSemester), semesterController.getSemester)
   .delete(auth(), validate(semesterValidation.getSemester), semesterController.deleteSemester);
 
-router.route('/value/:year').get(auth(), validate(semesterValidation.getYearSemesters), semesterController.getYearSemesters);
 module.exports = router;
 
 /**
@@ -35,6 +34,12 @@ module.exports = router;
  *     tags: [Semester]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: year
+ *         schema:
+ *           type: integer
+ *         description: Year to get all semesters
  *     responses:
  *       "200":
  *         description: OK
@@ -138,39 +143,6 @@ module.exports = router;
  *     responses:
  *       "200":
  *         description: No content
- *       "401":
- *         $ref: '#/components/responses/Unauthorized'
- *       "403":
- *         $ref: '#/components/responses/Forbidden'
- *       "404":
- *         $ref: '#/components/responses/NotFound'
- */
-
-/**
- * @swagger
- * /semesters/value/{year}:
- *   get:
- *     summary: Get all semesters of the year
- *     description: get all semesters of the year.
- *     tags: [Semester]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: year
- *         required: true
- *         schema:
- *           type: number
- *         description: year
- *     responses:
- *       "200":
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Semester'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
