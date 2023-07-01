@@ -17,8 +17,14 @@ const createSubject = catchAsync(async (req, res) => {
 });
 
 const getSubjects = catchAsync(async (req, res) => {
+  if (req.query?.semesterId) {
+    const semester = await semesterService.findSemesterById(req.query.semesterId);
+    if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+    const semSubjects = await subjectService.getSemesterSubjects(semester.id);
+    return res.status(httpStatus.OK).send(semSubjects);
+  }
   const results = await subjectService.getSubjects();
-  res.status(httpStatus.OK).send(results[0]);
+  res.status(httpStatus.OK).send(results);
 });
 
 const deleteSubject = catchAsync(async (req, res) => {
