@@ -48,9 +48,16 @@ const assignSubjectToTeacher = {
   }),
 };
 
+const getSubjects = {
+  query: Joi.object().keys({
+    semesterId: Joi.number(),
+  }),
+};
+
 module.exports = {
   createSubject,
   getSubject,
+  getSubjects,
   getSemesterStudents,
   getTeacherSubjects,
   updatedSubject,
