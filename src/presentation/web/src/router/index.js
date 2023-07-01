@@ -53,7 +53,7 @@ const routes = [
 
     children: [
       {
-        path: '',
+        path: 'all',
         name: 'students-list',
         component: () => import('@/views/students/StudentsTable.vue'),
       },
@@ -94,6 +94,13 @@ const routes = [
       requiresAuth: true,
     },
     component: () => import('@/views/subjects/SubjectsList.vue'),
+  },
+  {
+    path: '/semesters',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/semesters/SemestersList.vue'),
   },
   {
     path: '/:pathMatch(.*)*',

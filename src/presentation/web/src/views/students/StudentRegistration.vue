@@ -199,7 +199,7 @@ export default {
 
         // Show a success toast and redirect if addNewStudentAgain was false
         if (!this.newStudentRegAgain) {
-          this.$router.replace('/students');
+          this.$router.replace('/students/all');
         }
       } catch (e) {
         this.errorMessage = e;

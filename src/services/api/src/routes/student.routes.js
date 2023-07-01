@@ -60,6 +60,18 @@ module.exports = router;
  *        description: The page number for pagination
  *        schema:
  *          type: integer
+ *      - name: status
+ *        in: query
+ *        description: student status 'taajils', 'reentry', 'tabdili'
+ *        schema:
+ *          type: string
+ *          example: taajils
+ *      - name: limit
+ *        in: query
+ *        description: limit
+ *        schema:
+ *          type: number
+ *          example: 10
  *     responses:
  *       "200":
  *         description: OK

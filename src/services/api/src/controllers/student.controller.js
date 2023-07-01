@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { studentService, educationalYearService } = require('../services');
+const { studentService, educationalYearService, taajilService, reentryService, tabdiliService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const registerStudent = catchAsync(async (req, res) => {
@@ -42,11 +42,39 @@ const deleteStudent = catchAsync(async (req, res) => {
 
 const getStudents = catchAsync(async (req, res) => {
   const page = req.query?.page ? req.query?.page : 1;
-  const offset = parseInt(((page - 1) * 10), 10);
-  const { rows, count } = await studentService.getStudents(offset);
+  const limit = req.query?.limit ? req.query?.limit : 10;
+  const offset = parseInt(((page - 1) * limit), 10);
+
+  let result = null;
+
+  if (req.query?.status) {
+    switch (req.query.status) {
+      case 'taajils':
+        result = await taajilService.taajilStudents(limit, offset);
+        break;
+      case 'reentry':
+        result = await reentryService.reentryStudents(limit, offset)
+        break;
+      case 'tabdili':
+        result = await tabdiliService.getTabdilis(limit, offset);
+        break;
+      default:
+        throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameters');
+    }
+  } else {
+    const count = (await studentService.countUnregisteredStudent())[0]?.count;
+    const result = await studentService.getUnRegisteredStudents(limit, offset);
+    return res.status(httpStatus.OK).send({
+      page: parseInt(page, 10),
+      totalPages: Math.ceil(count / limit),
+      total: count,
+      results: result
+    });
+  }
+  const { rows, count } = result;
   res.status(httpStatus.OK).send({
     page: parseInt(page, 10),
-    totalPages: Math.ceil(count / 10),
+    totalPages: Math.ceil(count / limit),
     total: count,
     results: rows
   });
