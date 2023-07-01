@@ -16,15 +16,26 @@
       <div class="mx-1"></div>
       <add-teacher></add-teacher>
     </template> -->
+    <v-toolbar color="dark">
+      <v-toolbar-title> Semesters </v-toolbar-title>
+      <v-divider class="mx-4" inset vertical></v-divider>
+      <v-spacer></v-spacer>
+
+      <!-- Status Filter menu -->
+
+      <v-btn color="cyan" class="ml-1" variant="flat" link> Year </v-btn>
+      <v-btn color="primary" class="ml-1" variant="flat" link> New Educational Year </v-btn>
+    </v-toolbar>
     <v-row no-gutters>
       <v-col v-for="(semester, index) in semesters" :key="index" cols="3">
         <v-sheet class="ma-2 pa-2">
-          <semester-card :title="semester.title" :year="currentYear" :semesterId="semester.id"> </semester-card>
+          <semester-card :title="semester?.title" :year="currentYear" :semesterId="semester.id"> </semester-card>
         </v-sheet>
       </v-col>
     </v-row>
 
     <!-- Dialogs -->
+    <base-select-year-dialog></base-select-year-dialog>
   </base-contents>
 </template>
 
@@ -41,6 +52,9 @@ export default {
     },
     currentYear() {
       return this.$store.getters['semesters/currentYear'];
+    },
+    years() {
+      return [1399, 1400, 1401, 1402];
     },
   },
   methods: {},
