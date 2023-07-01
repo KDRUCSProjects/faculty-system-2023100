@@ -13,14 +13,13 @@ const getSemester = {
   }),
 };
 
-const getYearSemesters = {
-  params: Joi.object().keys({
-    year: Joi.number().required(),
+const getSemesters = {
+  query: Joi.object().keys({
+    year: Joi.number(),
   }),
 };
-
 module.exports = {
   getSemester,
+  getSemesters,
   createSemester,
-  getYearSemesters,
 };

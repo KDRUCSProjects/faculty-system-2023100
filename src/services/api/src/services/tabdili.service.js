@@ -1,6 +1,6 @@
 // Sequelize Models
 const httpStatus = require('http-status');
-const { Tabdili } = require('../models');
+const { Tabdili, Student } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -14,10 +14,17 @@ const createTabdili = (tabdiliBody) => {
 
 /**
  * Get all tabdili
+ * @param {Number} limit
+ * @param {Number} offset
  * @returns {Promise<Tabdili>}
  */
-const getTabdilis = () => {
-  return Tabdili.findAll({ order: [['createdAt', 'ASC']] });
+const getTabdilis = (limit, offset) => {
+  return Tabdili.findAndCountAll({
+    order: [['createdAt', 'DESC']],
+    limit,
+    offset,
+    include: [{ model: Student, as: 'Student' }],
+  });
 };
 
 /**
