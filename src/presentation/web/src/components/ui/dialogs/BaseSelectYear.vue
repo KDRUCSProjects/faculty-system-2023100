@@ -1,10 +1,16 @@
 <template>
   <v-overlay v-model="dialog" scrim="#000"></v-overlay>
 
-  <v-btn variant="flat" color="primary">
-    Select Year
+  <v-btn variant="flat" color="cyan">
+    <slot> Select Year </slot>
 
-    <v-dialog v-model="dialog" :max-width="modalWidth" :persistent="persistent" activator="parent">
+    <v-dialog
+      v-model="dialog"
+      :max-width="modalWidth"
+      :persistent="persistent"
+      activator="parent"
+      transition="slide-y-transition"
+    >
       <v-card class="mx-auto" width="250" max-width="400">
         <v-card-title class="bg-dark"> Select Educational Year </v-card-title>
 
@@ -41,6 +47,9 @@ export default {
       type: Boolean,
       default: false,
     },
+    defaultYear: {
+      type: Number,
+    },
   },
   data: () => initialState(),
   computed: {
@@ -65,9 +74,16 @@ export default {
       Object.assign(this.$data, initialState());
       this.errorMessage = null;
     },
-    genRandomIndex(length) {
-      return Math.ceil(Math.random() * (length - 1));
+  },
+  watch: {
+    defaultYear(newValue) {
+      this.selectedYear = newValue;
     },
+  },
+  created() {
+    if (this.defaultYear) {
+      this.selectedYear = this.defaultYear;
+    }
   },
   emits: ['select-year'],
 };

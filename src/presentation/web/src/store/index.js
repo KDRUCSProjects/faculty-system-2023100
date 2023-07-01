@@ -26,10 +26,16 @@ export default createStore({
         return year.year;
       });
     },
+    selectedYear(state) {
+      return state.selectedYear;
+    },
   },
   mutations: {
     setYears(state, years) {
       state.years = years;
+    },
+    setSelectedYear(state, year) {
+      state.selectedYear = year;
     },
   },
   actions: {

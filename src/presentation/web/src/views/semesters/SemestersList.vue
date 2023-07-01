@@ -21,10 +21,9 @@
       <v-divider class="mx-4" inset vertical></v-divider>
       <v-spacer></v-spacer>
 
-      <!-- Status Filter menu -->
-
-      <v-btn color="cyan" class="ml-1" variant="flat" link> Year </v-btn>
-      <v-btn color="primary" class="ml-1" variant="flat" link> New Educational Year </v-btn>
+      <base-select-year-dialog @select-year="setYear" :defaultYear="selectedYear">
+        {{ selectedYear ? `Year: ${selectedYear}` : 'Select Year' }}
+      </base-select-year-dialog>
     </v-toolbar>
     <v-row no-gutters>
       <v-col v-for="(semester, index) in semesters" :key="index" cols="3">
@@ -35,14 +34,15 @@
     </v-row>
 
     <!-- Dialogs -->
-    <base-select-year-dialog></base-select-year-dialog>
   </base-contents>
 </template>
 
 <script>
 import SemesterCard from '@/components/semesters/SemesterCard.vue';
 export default {
-  data: () => ({}),
+  data: () => ({
+    selectedYear: 1401,
+  }),
   components: {
     SemesterCard,
   },
@@ -53,11 +53,13 @@ export default {
     currentYear() {
       return this.$store.getters['semesters/currentYear'];
     },
-    years() {
-      return [1399, 1400, 1401, 1402];
+  },
+  methods: {
+    setYear(year) {
+      this.selectedYear = year;
+      // this.$store.commit('setCurrentYear', year);
     },
   },
-  methods: {},
   async mounted() {
     // Load teachers at app mount
     await this.$store.dispatch('semesters/loadSemestersByYear', 1401);
