@@ -10,8 +10,13 @@
   </v-app>
 </template>
 
-<script setup>
-//
+<script>
+export default {
+  async created() {
+    // Load all years
+    await this.$store.dispatch('loadAllYears');
+  },
+};
 </script>
 
 <style>

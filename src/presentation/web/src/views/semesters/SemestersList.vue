@@ -16,10 +16,19 @@
       <div class="mx-1"></div>
       <add-teacher></add-teacher>
     </template> -->
+    <v-toolbar color="dark">
+      <v-toolbar-title> Semesters </v-toolbar-title>
+      <v-divider class="mx-4" inset vertical></v-divider>
+      <v-spacer></v-spacer>
+
+      <base-select-year-dialog @select-year="setYear" :defaultYear="selectedYear">
+        {{ selectedYear ? `Year: ${selectedYear}` : 'Select Year' }}
+      </base-select-year-dialog>
+    </v-toolbar>
     <v-row no-gutters>
       <v-col v-for="(semester, index) in semesters" :key="index" cols="3">
         <v-sheet class="ma-2 pa-2">
-          <semester-card :title="semester.title" :year="currentYear" :semesterId="semester.id"> </semester-card>
+          <semester-card :title="semester?.title" :year="currentYear" :semesterId="semester.id"> </semester-card>
         </v-sheet>
       </v-col>
     </v-row>
@@ -31,7 +40,9 @@
 <script>
 import SemesterCard from '@/components/semesters/SemesterCard.vue';
 export default {
-  data: () => ({}),
+  data: () => ({
+    selectedYear: 1401,
+  }),
   components: {
     SemesterCard,
   },
@@ -43,7 +54,12 @@ export default {
       return this.$store.getters['semesters/currentYear'];
     },
   },
-  methods: {},
+  methods: {
+    setYear(year) {
+      this.selectedYear = year;
+      // this.$store.commit('setCurrentYear', year);
+    },
+  },
   async mounted() {
     // Load teachers at app mount
     await this.$store.dispatch('semesters/loadSemestersByYear', 1401);
