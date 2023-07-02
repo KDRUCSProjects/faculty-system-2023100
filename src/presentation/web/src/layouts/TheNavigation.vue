@@ -99,6 +99,11 @@ export default {
           to: '/subjects',
         },
         {
+          title: 'Departments',
+          icon: 'mdi-cog-outline',
+          to: '/departments',
+        },
+        {
           title: 'Settings',
           icon: 'mdi-cog-outline',
           to: '/settings',

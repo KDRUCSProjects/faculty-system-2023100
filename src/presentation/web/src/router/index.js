@@ -37,7 +37,20 @@ const routes = [
   },
   {
     path: '/students',
+    component: () => import('@/views/students/StudentsTable.vue'),
+  },
+  {
+    path: '/departments',
+    component: () => import('@/views/departments/departmentList.vue'),
+  },
+  {
+    path: '/student/:id',
+    component: () => import('@/views/students/Student.vue'),
+    meta: {
+      requiresAuth: true,
+    },
     component: () => import('@/views/students/Students.vue'),
+
     children: [
       {
         path: 'all',
