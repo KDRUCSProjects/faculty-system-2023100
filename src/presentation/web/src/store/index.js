@@ -16,7 +16,7 @@ export default createStore({
     students: studentsModule,
     subjects: subjectsModule,
     departments: departmentModule
-    semesters: semestersModule,
+    // semesters: semestersModule,
   },
   state: {
     years: [],

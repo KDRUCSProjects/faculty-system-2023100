@@ -17,11 +17,7 @@
       <add-teacher></add-teacher>
       
     </template>
-    <v-row no-gutters>
-      <v-col cols="10">
-        <v-sheet class="ma-2 pa-2">
-        </v-sheet>
-      </v-col>
+    <v-row no-gutters style="padding: 0.3%;">
       <department-card v-for="(department, index) in departments" :key="index"
       :name = "department.name"
       :id = "department.id"

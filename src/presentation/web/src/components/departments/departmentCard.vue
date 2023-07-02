@@ -1,45 +1,28 @@
 <template>
-    <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded" style="height: '200px'">
+    <v-card class="d-flex justify-center align-center flex-column pa-2 py-5 theShadow rounded" style="height: '200px'; margin-left: 1%; display: flex; flex: 1;" >
       <!-- <span class="pro">  </span> -->
       <!-- <v-avatar class="my-3" size="120" color="secondary" variant="tonal">
         
       </v-avatar> -->
       <!-- <v-card-title class="pb-0">{{ fullName }}</v-card-title> -->
-      <v-card-subtitle class="py-0 my-0" style="font-family: monospace">
+      <v-card-subtitle class="py-0 my-0" style="font-family: monospace; font-size: larger;">
         {{ name || 'Course' }}
       </v-card-subtitle>
       <v-divider></v-divider>
       <!-- <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle> -->
   
-      <v-card-actions class="mt-3">
-        <v-btn color="primary" variant="elevated">Profile</v-btn>
-        <v-btn color="secondary" variant="tonal"> Subjects</v-btn>
+      <v-card-actions class="mt-3" >
+        <v-btn color="secondary" variant="tonal"> Edit </v-btn>
+        <v-btn color="error" variant="elevated" @click="deleteDepartment()">Delete</v-btn>
   
-        <v-menu transition="slide-y-transition" elevation="0" v-model="menu">
+        <!-- <v-menu transition="slide-y-transition" elevation="0" v-model="menu">
           <template v-slot:activator="{ props }">
             <v-btn color="primary" v-bind="props" icon>
               <v-icon icon="mdi-dots-vertical"></v-icon>
             </v-btn>
           </template>
-  
-          <v-list density="compact">
-            <v-list-item>
-              <!-- Update Account -->
-              <update-teacher :teacherId="teacherId" @dialog-close="closeMenu" activator-color="text"> </update-teacher>
-            </v-list-item>
-            <v-list-item>
-              <v-btn prepend-icon="mdi-key" variant="text" color="dark">Change Password</v-btn>
-            </v-list-item>
-            <v-list-item>
-              <v-btn prepend-icon="mdi-book-open-variant" variant="text" color="dark">Assign subject </v-btn>
-            </v-list-item>
-            <!-- <v-list-item>
-              <v-btn prepend-icon="mdi-delete" variant="text" color="dark">Disable Account</v-btn>
-            </v-list-item> -->
-            <v-list-item>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+
+        </v-menu> -->
       </v-card-actions>
   
       <!-- All Dialogs -->
@@ -74,6 +57,21 @@
         // For some reasons, the dialog won't close when the item is clicked in the menu in Vuetify 3 when using a dialog. Let's use this hack for now.
         this.menu = false;
       },
+      async deleteDepartment() {
+        let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: 'Warning',
+        title: 'Are you sure you want to delete this Subject?',
+        // subtitle: subjectId,
+        okButton: 'Yes',
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return false;
+      }
+      console.log('clicked')
+      await this.$store.dispatch('subjects/deleteSubject', subjectId);
+      }
     },
     emits: ['update-teacher'],
   };
