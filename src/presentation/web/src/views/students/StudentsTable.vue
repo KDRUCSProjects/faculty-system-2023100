@@ -12,25 +12,58 @@
       hide-default-footer
     >
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn @click="viewStudent(item)" variant="text" color="primary" size="small" text prepend-icon="mdi-eye">
-          View
-        </v-btn>
+        <v-btn @click="viewStudent(item)" variant="text" color="primary" text icon="mdi-location-enter"> </v-btn>
       </template>
 
       <template v-slot:top>
-        <v-toolbar>
+        <v-toolbar color="dark">
           <v-toolbar-title> Students Table </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
-          <v-btn color="primary" variant="flat" link to="/students/new"> New Student </v-btn>
+          <!-- Status Filter menu -->
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn color="cyan" variant="flat" v-bind="props"> Status </v-btn>
+            </template>
+            <v-list>
+              <v-list-item v-for="(item, index) in studentStatus" :key="index" :value="index">
+                <v-list-item-title>{{ item }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+
+          <v-btn color="primary" class="ml-1" variant="flat" link to="/students/new"> New Student </v-btn>
         </v-toolbar>
       </template>
+
+      <!-- <template v-slot:headers></template> -->
 
       <template v-slot:bottom>
         <div class="text-center pt-2">
           <v-pagination v-model="page" :length="pageCount"></v-pagination>
         </div>
+      </template>
+
+      <template v-slot:item.kankorId="{ item }">
+        <v-chip class="" variant="flat">
+          {{ item.columns.kankorId }}
+        </v-chip>
+      </template>
+
+      <template v-slot:item.status="{ item }">
+        <v-chip color="red">
+          {{ item.columns.status }}
+        </v-chip>
+      </template>
+
+      <template v-slot:item.photo="{ item }">
+        <v-avatar class="my-2" color="primary" variant="tonal">
+          <v-img v-if="item.columns?.photo" :src="`${imagesResource}/${item.columns?.photo}`" alt="user" />
+          <div v-else>
+            <span>{{ buildAbbreviation(item.columns?.fullName) }}</span>
+          </div>
+        </v-avatar>
       </template>
     </v-data-table>
   </div>
@@ -45,6 +78,7 @@ export default {
   },
   data() {
     return {
+      menu: false,
       page: 1,
       // Default from server/api
       itemsPerPage: 10,
@@ -58,9 +92,13 @@ export default {
           key: 'no',
         },
         {
+          title: 'Photo',
+          key: 'photo',
+          sortable: false,
+        },
+        {
           title: 'Kankor ID',
           align: 'start',
-          sortable: true,
           key: 'kankorId',
         },
         {
@@ -87,8 +125,14 @@ export default {
           sortable: true,
           key: 'createdAt',
         },
-        { title: 'actions', key: 'actions', sortable: false },
+        {
+          title: 'Status',
+          sortable: false,
+          key: 'status',
+        },
+        { title: 'Actions', key: 'actions', sortable: false },
       ],
+      studentStatus: ['reserve', 'present', 'taajil', 'tabdili', 'graduate'],
     };
   },
   computed: {

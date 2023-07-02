@@ -1,24 +1,41 @@
 import axios from 'axios';
 
 export default {
-  async loadDepartments(context) {
+
+  async getDepartments(context) {
     try {
       const token = context.rootGetters.token;
 
-      const response = await axios({
-        url: '/departments',
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      context.commit('setDepartments', response.data);
+      console.log(token)
+      // const response = await axios({
+      //   url: '/departments',
+      //   method: 'get',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // });
+      axios.get('http://localhost:4000/departments', {
+        headers: {Authorization: `Bearer ${token}`}
+      })
+      .then((response)=>{
+        context.commit('setDepartment', response.data);
+      })
+     
     } catch (e) {
       throw e.response.data.message;
     }
   },
+   // axios.get('http://localhost:4000/departments', {
+      //   headers: {Authorization: `Bearer ${token}`}
+      // })
+      // .then((response)=>{
+      //   context.commit('setDepartment', response.data);
+      // })
+      // .catch(error=>{
+          
+      // })
+
 //   async addDepartment(context, payload) {
 //     try {
 //       const token = context.rootGetters.token;

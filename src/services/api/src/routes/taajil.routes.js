@@ -1,19 +1,38 @@
 const express = require('express');
 const auth = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
-const taajilValidation = require('../validations/taajil.validation');
-const taajilController = require('../controllers/taajil.controller');
+const { taajilValidation, shareValidation } = require('../validations');
+const { taajilController } = require('../controllers');
 const { taajilService } = require('../services');
+const upload = require('../middlewares/multer');
+const { attachAttachment } = require('../middlewares/attachFileToBody');
 
 const router = express.Router();
 
 // Create department, get, update and delete a department
 router
   .route('/')
-  .post(auth(), validate(taajilValidation.createTaajil), taajilController.createTaajil)
-  .get(auth(), validate(taajilValidation.studentsWithTaajil), taajilController.taajilStudents);
+  .get(auth(), validate(shareValidation.studentsWithTaajilReentryAndTabdili), taajilController.taajilStudents)
+  .post(
+    auth(),
+    upload.single('attachment'),
+    attachAttachment,
+    validate(taajilValidation.createTaajil),
+    taajilController.createTaajil
+  );
 
 router.delete('/:studentId', auth(), validate(taajilValidation.deleteTaajil), taajilController.deleteTaajil);
+
+router
+  .route('/:taajilId')
+  .get(auth(), validate(taajilValidation.getTaajil), taajilController.getTaajil)
+  .patch(
+    auth(),
+    upload.single('attachment'),
+    attachAttachment,
+    validate(taajilValidation.updateTaajil),
+    taajilController.updateTaajil
+  );
 
 module.exports = router;
 
@@ -39,6 +58,31 @@ module.exports = router;
  *         schema:
  *           type: number
  *         description: Education Year e.g 1402
+ *       - in: query
+ *         name: studentId
+ *         schema:
+ *           type: number
+ *         description: student id
+ *       - in: query
+ *         name: kankorId
+ *         schema:
+ *           type: string
+ *         description: kankor id
+ *       - in: query
+ *         name: taajilId
+ *         schema:
+ *           type: number
+ *         description: taajil id
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: number
+ *         description: page
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: number
+ *         description: limit
  *     responses:
  *       "200":
  *         description: OK
@@ -70,26 +114,28 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
- *             required:
- *               - studentId
- *               - educationalYear
- *               - regNumber
  *             properties:
  *               studentId:
  *                 type: number
- *               educationYearId:
+ *                 format: number
+ *                 required: true
+ *               educationalYear:
  *                 type: number
+ *                 format: number
+ *                 required: true
  *               regNumber:
  *                 type: number
- *             example:
- *               studentId: 1
- *               educationalYear: 2023
- *               regNumber: 459
- *               attachment: photo
- *               notes: Personal Problems
+ *                 format: number
+ *                 required: true
+ *               notes:
+ *                 type: string
+ *                 format: text
+ *               attachment:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       "201":
  *         description: Created
@@ -125,6 +171,85 @@ module.exports = router;
  *       "200":
  *         description: Deleted
  *         $ref: '#/components/schemas/Student'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /taajils/{taajilId}:
+ *   get:
+ *     summary: Get a tajil
+ *     description: get single tajil based on ID.
+ *     tags: [Taajils]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: taajilId
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: taajil id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Taajil'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *   patch:
+ *     summary: Update a Taajil
+ *     description: Update a Taajil
+ *     tags: [Taajils]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *      - in: path
+ *        name: taajilId
+ *        required: true
+ *        schema:
+ *          type: number
+ *        description: taajil id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               studentId:
+ *                 type: number
+ *                 format: number
+ *               educationalYear:
+ *                 type: number
+ *                 format: number
+ *               regNumber:
+ *                 type: number
+ *                 format: number
+ *               notes:
+ *                 type: string
+ *                 format: textArea
+ *               attachment:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       "202":
+ *         description: ACCEPTED
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Taajil'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

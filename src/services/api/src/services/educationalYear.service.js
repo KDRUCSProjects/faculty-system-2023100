@@ -1,24 +1,16 @@
 // Sequelize Models
-
-const semesterService = require('./Semester.service');
+const httpStatus = require('http-status');
 const { EducationalYear } = require('../models');
+const ApiError = require('../utils/ApiError');
+
 
 /**
  * Create a EducationalYear
  * @param {Object} year
  * @returns {Promise<EducationalYear>}
  */
-const createEducationalYear = async (year) => {
-  const newYear = await EducationalYear.create({ year });
-  await semesterService.createFirstSemester(newYear.id);
-  await semesterService.createSecondSemester(newYear.id);
-  await semesterService.createThirdSemester(newYear.id);
-  await semesterService.createFourthSemester(newYear.id);
-  await semesterService.createFifthSemester(newYear.id);
-  await semesterService.createSixthSemester(newYear.id);
-  await semesterService.createSeventhSemester(newYear.id);
-  await semesterService.createEighthSemester(newYear.id);
-  return newYear;
+const createEducationalYear = (year) => {
+  return EducationalYear.create({ year });
 };
 
 /**
@@ -34,8 +26,9 @@ const getEducationalYears = () => {
  * @param {Object} year
  * @returns {Promise<EducationalYear>}
  */
-const deleteEducationalYear = async (year) => {
-  if (year instanceof EducationalYear) return await year.destroy();
+const deleteEducationalYear = (year) => {
+  if (year instanceof EducationalYear) return year.destroy();
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
 };
 
 /**

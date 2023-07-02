@@ -1,5 +1,6 @@
 export default {
     departments(state) {
+      console.log('getter department')
       return state.departments;
     },
     departmentById: (state) => (departmentId) => {

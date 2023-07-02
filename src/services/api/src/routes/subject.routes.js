@@ -8,7 +8,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(auth(), subjectController.getSubjects)
+  .get(auth(), validate(subjectValidation.getSubjects), subjectController.getSubjects)
   .post(auth(), validate(subjectValidation.createSubject), subjectController.createSubject);
 
 router
@@ -50,6 +50,12 @@ module.exports = router;
  *     tags: [Subject]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: semesterId
+ *         schema: 
+ *           type: number
+ *         description: semester id to get all subject of the semester
  *     responses:
  *       "200":
  *         description: OK

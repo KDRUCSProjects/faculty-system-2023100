@@ -3,13 +3,10 @@
     <v-row>
       <v-col cols="4">
         <student-photo :student="student" @upload-photo="updatePhoto">
-          <div>
-            <v-card-title>Actions</v-card-title>
-            <v-divider></v-divider>
-            <v-card-actions>
-              <v-btn variant="flat" color="secondary">Assign to semester </v-btn>
-              <v-btn variant="flat" color="error" class="px-6" @click="deleteStudent(student.id)">Delete </v-btn>
-            </v-card-actions>
+          <div id="actions" class="ma-4">
+            <v-btn variant="flat" block color="dark"> Actions </v-btn>
+            <div class="my-1"></div>
+            <v-btn variant="flat" block color="red" @click="deleteStudent(student.id)"> Delete </v-btn>
           </div>
         </student-photo>
       </v-col>

@@ -1,6 +1,8 @@
 export default {
     setDepartment(state, payload) {
+      console.log(payload)
       state.departments = payload;
+      console.log(state)
     },
     saveDepartment(state, newDepartment) {
       state.departments.unshift(newDepartment);
