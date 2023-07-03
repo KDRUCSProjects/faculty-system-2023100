@@ -91,7 +91,7 @@ export default {
         {
           title: 'Semesters',
           icon: 'mdi-google-classroom',
-          to: '/semesters',
+          to: '/semesters/all',
         },
         {
           title: 'Subjects',

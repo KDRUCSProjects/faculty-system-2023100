@@ -10,6 +10,16 @@ export default {
       return student;
     });
   },
+
+  studentsList(state) {
+    return state.studentsList.filter((student) => {
+      student.createdAt = toDateFormat(student.createdAt);
+
+      // Static status
+      student.status = 'present';
+      return student;
+    });
+  },
   counts(state) {
     return state.counts;
   },
