@@ -24,13 +24,31 @@ const getStudentLists = catchAsync(async (req, res) => {
   const limit = req.query?.limit ? req.query?.limit : 10;
   const offset = parseInt(((page - 1) * limit), 10);
 
-  if (!req.query?.year) {
-    const { rows, count } = await studentListService.getStudentLists(limit, offset);
+  // check if semester id exists
+  if (req.query?.semesterId) {
+    const { semesterId } = req.query;
+    const semester = await semesterService.findSemesterById(semesterId);
+    if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+    const queryArray = [`student.deletedAt IS NULL`, `semester.id = ${semesterId}`];
+    const count = (await studentListService.countStudentList(queryArray))[0]?.count;
+    const results = await studentListService.getYearAndClassStudentList(queryArray, limit, offset);
     return res.status(httpStatus.OK).send({
       page: parseInt(page, 10),
       totalPages: Math.ceil(count / limit),
       total: count,
-      results: rows
+      results: results
+    });
+  }
+
+  if (!req.query?.year) {
+    const queryArray = [`student.deletedAt IS NULL`];
+    const count = (await studentListService.countStudentList(queryArray))[0]?.count;
+    const results = await studentListService.getYearAndClassStudentList(queryArray, limit, offset);
+    return res.status(httpStatus.OK).send({
+      page: parseInt(page, 10),
+      totalPages: Math.ceil(count / limit),
+      total: count,
+      results: results
     });
   }
 
@@ -75,7 +93,6 @@ const getStudentLists = catchAsync(async (req, res) => {
     }
   }
   const count = (await studentListService.countStudentList(queryArray))[0]?.count;
-  console.log({ count, limit, offset })
   const results = await studentListService.getYearAndClassStudentList(queryArray, limit, offset);
   return res.status(httpStatus.OK).send({
     page: parseInt(page, 10),

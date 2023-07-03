@@ -1,5 +1,3 @@
-'use strict';
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -35,5 +33,5 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
     await queryInterface.sequelize.query('DROP TRIGGER semester_creation');
-  }
+  },
 };

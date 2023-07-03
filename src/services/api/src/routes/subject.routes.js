@@ -53,7 +53,7 @@ module.exports = router;
  *     parameters:
  *       - in: query
  *         name: semesterId
- *         schema: 
+ *         schema:
  *           type: number
  *         description: semester id to get all subject of the semester
  *     responses:

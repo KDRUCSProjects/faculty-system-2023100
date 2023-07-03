@@ -15,11 +15,11 @@ const createStudentList = (listedStudentBody) => {
 
 /**
  * find student in list
- * @param {ObjectId} listedStudentId
+ * @param {ObjectId} studentId
  * @returns {Promise<StudentsList>}
  */
-const findListedStudentByStudentId = (listedStudentId) => {
-  return StudentsList.findOne({ where: { studentId: listedStudentId } });
+const findListedStudentByStudentId = (studentId) => {
+  return StudentsList.findOne({ where: { studentId } });
 };
 
 /**
@@ -34,6 +34,7 @@ const getStudentLists = (limit, offset) => {
     limit,
     offset,
     include: [{ model: Student, as: 'Student' }],
+    raw: true,
   });
 };
 
@@ -73,28 +74,26 @@ const getYearAndClassStudentList = (queryArray, limit, offset) => {
   semester.educationalYearId as semEducationalYearId, 
   studentList.studentId as studentId, 
   student.id as studentId,
-  student.fullName as studentFullName,
-  student.kankorId as studentKankorId,
-  student.NickName as studentNickName,
-  student.fatherName as studentFatherName,
-  student.grandFatherName as studentGrandFatherName,
-  student.photo as studentPhoto,
-  student.province as studentProvince,
-  student.division as studentDivision,
-  student.district as studentDistrict,
-  student.engName as studentEngName,
-  student.engLastName as studentEngLastName,
-  student.engFatherName as studentEngFatherName,
-  student.engGrandFatherName as studentEngGrandFatherName,
-  student.dob as studentDOB,
-  student.admissionYear as studentAdmissionYear,
-  student.createdAt as studentCreatedAt,
-  student.updatedAt as studentUpdatedAt,
-  student.deletedAt as studentDeletedAt,
-  student.isDeleted as studentIsDeleted,
-  student.createdBy as studentCreatedBy,
-  student.updatedBy as studentUpdatedBy,
-  student.deletedBy as studentDeletedBy
+  student.fullName as fullName,
+  student.kankorId as kankorId,
+  student.nickName as nickName,
+  student.fatherName as fatherName,
+  student.grandFatherName as grandFatherName,
+  student.photo as photo,
+  student.province as province,
+  student.division as division,
+  student.district as district,
+  student.engName as engName,
+  student.engLastName as engLastName,
+  student.engFatherName as engFatherName,
+  student.engGrandFatherName as engGrandFatherName,
+  student.dob as dob,
+  student.admissionYear as admissionYear,
+  student.createdAt as createdAt,
+  student.updatedAt as updatedAt,
+  student.deletedAt as deletedAt,
+  student.isDeleted as isDeleted,
+  student.deletedBy as deletedBy
   from educationalYears as year 
   inner join semesters as semester on semester.educationalYearId = year.id 
   inner join studentsLists as studentList on studentList.semesterId = semester.id 
@@ -132,12 +131,42 @@ const countStudentList = (queryArray) => {
   );
 };
 
+/**
+ * find all student list of single student by student id
+ * @param {ObjectId} studentId
+ * @returns {Promise<StudentsList>}
+ */
+const findAllStudentListOfSingleStudent = (studentId) => {
+  return StudentsList.findAll({
+    where: { studentId },
+    order: [['createdAt', 'DESC']],
+  });
+};
+
+/**
+ * update student list
+ * @param {Object} oldStudentList
+ * @param {Object} newStudentList
+ * @returns {Promise<StudentsList>}
+ */
+const updatedStudentList = (oldStudentList, newStudentList) => {
+  if (oldStudentList instanceof StudentsList) {
+    oldStudentList.set({
+      ...newStudentList,
+    });
+    return oldStudentList.save();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
+};
+
 module.exports = {
   getStudentLists,
   countStudentList,
   createStudentList,
   deleteStudentList,
+  updatedStudentList,
   findStudentListById,
   getYearAndClassStudentList,
   findListedStudentByStudentId,
+  findAllStudentListOfSingleStudent,
 };

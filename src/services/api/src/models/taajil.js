@@ -44,6 +44,10 @@ module.exports = (sequelize, DataTypes) => {
       regNumber: DataTypes.INTEGER,
       attachment: DataTypes.STRING,
       notes: DataTypes.STRING,
+      onGoing: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
       ...BaseModel(DataTypes),
     },
     {

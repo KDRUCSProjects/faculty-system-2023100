@@ -29,7 +29,7 @@ const updateDepartment = catchAsync(async (req, res) => {
 const deleteDepartment = catchAsync(async (req, res) => {
   const department = await departmentService.findById(req.params.departmentId);
   if (!department) throw new ApiError(httpStatus.NOT_FOUND, 'Department Not Found');
-  await departmentService.deleteDepartment(req.params.departmentId);
+  await departmentService.deleteDepartment(department);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
