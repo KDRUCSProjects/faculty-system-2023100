@@ -17,7 +17,7 @@ const createEducationalYear = (year) => {
  * @returns {Promise<EducationalYear>}
  */
 const getEducationalYears = () => {
-  return EducationalYear.findAll({ order: [['createdAt', 'DESC']] });
+  return EducationalYear.findAll({ order: [['year', 'DESC']] });
 };
 
 /**

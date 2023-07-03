@@ -20,8 +20,8 @@ module.exports = (sequelize) => {
       type: sequelize.BOOLEAN,
       defaultValue: false,
     },
-    createdBy: sequelize.INTEGER,
-    updatedBy: sequelize.INTEGER,
+    // createdBy: sequelize.INTEGER,
+    // updatedBy: sequelize.INTEGER,
     deletedBy: sequelize.INTEGER,
   };
   return BaseModel;
