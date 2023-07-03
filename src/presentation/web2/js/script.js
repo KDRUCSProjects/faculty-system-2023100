@@ -23,11 +23,16 @@ const grandFatherName = document.querySelector('.grand-father-name');
 const eYear = document.querySelector('.e-year');
 const admDate = document.querySelector('.adm-date');
 const updateDate = document.querySelector('.update-date');
+const errorClose = document.querySelector('.error-close');
+const errorDiv = document.querySelector('.error-message-div');
+
+console.log(errorDiv);
 
 // console.log(profile);
 
 //////////////////////////////////////////////
 
+/////////////////////////////////////////////
 iconClose.addEventListener('click', function () {
   profileCard.classList.add('hidden');
   overlay.classList.add('hidden');
@@ -37,6 +42,16 @@ profile.addEventListener('click', function () {
   profileCard.classList.remove('hidden');
   overlay.classList.remove('hidden');
 });
+
+errorClose.addEventListener('click', function () {
+  errorDiv.style.display = 'none';
+  console.log('hey');
+});
+
+// profile.addEventListener('click', function () {
+//   profileCard.classList.remove('hidden');
+//   overlay.classList.remove('hidden');
+// });
 
 /////////////////////////////////////////////
 // const mohammad = {
@@ -96,7 +111,6 @@ const getApiFun = id => {
     })
     .then(data => {
       if (data.kankorId) {
-        console.log(data.id);
         idID.textContent = data.id;
         kankorId.textContent = kankorInputvalue.textContent = data.kankorId;
         nameValue.textContent = fullName.textContent = data.fullName;
@@ -107,8 +121,9 @@ const getApiFun = id => {
         admDate.textContent = data.createdAt;
         updateDate.textContent = data.updatedAt;
       } else {
-        console.log('bay');
       }
     })
-    .catch(err => alert(`${err} Name Not Found`));
+    .catch(err => {
+      errorDiv.style.display = 'flex';
+    });
 };
