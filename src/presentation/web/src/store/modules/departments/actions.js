@@ -4,119 +4,112 @@ export default {
 
   async getDepartments(context) {
     try {
-      const token = context.rootGetters.token;
-
+      const token = context.rootGetters.token
       console.log(token)
-      // const response = await axios({
-      //   url: '/departments',
-      //   method: 'get',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // });
-      axios.get('http://localhost:4000/departments', {
+      const response = await axios.get('/api/departments', {
         headers: {Authorization: `Bearer ${token}`}
       })
-      .then((response)=>{
-        context.commit('setDepartment', response.data);
-      })
-     
+      
+      context.commit('setDepartment', response.data);
+
     } catch (e) {
       throw e.response.data.message;
     }
   },
-   // axios.get('http://localhost:4000/departments', {
-      //   headers: {Authorization: `Bearer ${token}`}
-      // })
-      // .then((response)=>{
-      //   context.commit('setDepartment', response.data);
-      // })
-      // .catch(error=>{
-          
-      // })
+  async deleteDepartment(context, departmentId) {
+    console.log(departmentId)
+    try {
+      const token = context.rootGetters.token;
 
-//   async addDepartment(context, payload) {
-//     try {
-//       const token = context.rootGetters.token;
+      const response = await axios({
+        url: `/api/departments/${departmentId}`,
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-//       const formData = new FormData();
+      context.commit('removeDepartment', departmentId);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
 
-//       for (let key in payload) {
-//         formData.append(key, payload[key]);
-//       }
+  async addDepartment(context, data) {
+    console.log(data)
+    try {
+      const token = context.rootGetters.token;
 
-//       const response = await axios.post('/api/users', formData, {
-//         headers: {
-//           'Content-Type': 'multipart/form-data',
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
+      const response = await axios({
+        url: '/api/departments',
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data
+      });
 
-//       context.commit('saveTeacher', response.data);
-//     } catch (e) {
-//       throw e.response.data.message;
-//     }
-//   },
-//   async deleteTeacher(context, teacherId) {
-//     try {
-//       const token = context.rootGetters.token;
+      context.commit('saveDepartment', response.data);
+    } catch (e) {
+      console.log(e)
+      throw e.response.data.message;
+    }
+  },
 
-//       const response = await axios({
-//         url: `/api/users/${teacherId}`,
-//         method: 'delete',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
+  async loadDepartmentById(context, departmentId) {
+    try {
+      const token = context.rootGetters.token;
 
-//       context.commit('removeTeacher', teacherId);
-//     } catch (e) {
-//       throw e.response.data.message;
-//     }
-//   },
-//   async updateTeacher(context, payload) {
-//     try {
-//       const token = context.rootGetters.token;
+      const response = await axios.get(`/api/departments/${departmentId}`, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-//       const formData = new FormData();
+      // context.commit();
 
-//       for (let key in payload) {
-//         // Skip teacherId
-//         if (key === 'teacherId') continue;
+      return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
 
-//         formData.append(key, payload[key]);
-//       }
+  async updateDepartment(context, payload) {
+    console.log(payload)
+    try {
+      const token = context.rootGetters.token;
 
-//       const response = await axios.patch(`/api/users/${payload.teacherId}`, formData, {
-//         headers: {
-//           'Content-Type': 'multipart/form-data',
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
+      // const formData = new FormData();
 
-//       context.commit('updateTeacher', response.data);
-//     } catch (e) {
-//       throw e.response.data.message;
-//     }
-//   },
-//   async loadTeacherById(context, teacherId) {
-//     try {
-//       const token = context.rootGetters.token;
+      // for (let key in payload) {
+      //   // Skip departmentId
+      //   if (key === 'departmentId') continue;
 
-//       const response = await axios.get(`/api/users/${teacherId}`, {
-//         headers: {
-//           'Content-Type': 'multipart/form-data',
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
+      //   // formData.append(key, payload[key]);
+      //   formData.set(key, payload[key])
+      //   console.log(formData)
+      // }
 
-//       // context.commit();
+      const data = {
+        name: payload.name
+      }
 
-//       return response;
-//     } catch (e) {
-//       throw e.response.data.message;
-//     }
-//   },
+
+      const response = await axios.patch(`/departments/${payload.departmentId}`, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+        data
+      });
+
+      context.commit('editDepartment', response.data);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+
 };

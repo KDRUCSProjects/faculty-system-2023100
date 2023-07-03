@@ -14,7 +14,7 @@
         @click:append-inner="onClick"
       ></v-text-field>
       <div class="mx-1"></div>
-      <add-teacher></add-teacher>
+      <add-department></add-department>
       
     </template>
     <v-row no-gutters style="padding: 0.3%;">
@@ -33,8 +33,10 @@
   
   <script>
   import departmentCard from '../../components/departments/departmentCard.vue';
+  import AddSubject from '@/components/departments/modals/AddDepartment.vue';
+import AddDepartment from '../../components/departments/Modals/AddDepartment.vue';
   export default {
-  components: { departmentCard },
+  components: { departmentCard, AddDepartment },
   computed: {
     departments() {
       return this.$store.getters['departments/departments'];

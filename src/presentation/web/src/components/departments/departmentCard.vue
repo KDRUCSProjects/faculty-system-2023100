@@ -1,28 +1,16 @@
 <template>
     <v-card class="d-flex justify-center align-center flex-column pa-2 py-5 theShadow rounded" style="height: '200px'; margin-left: 1%; display: flex; flex: 1;" >
-      <!-- <span class="pro">  </span> -->
-      <!-- <v-avatar class="my-3" size="120" color="secondary" variant="tonal">
-        
-      </v-avatar> -->
-      <!-- <v-card-title class="pb-0">{{ fullName }}</v-card-title> -->
       <v-card-subtitle class="py-0 my-0" style="font-family: monospace; font-size: larger;">
         {{ name || 'Course' }}
       </v-card-subtitle>
       <v-divider></v-divider>
-      <!-- <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle> -->
+    
   
       <v-card-actions class="mt-3" >
-        <v-btn color="secondary" variant="tonal"> Edit </v-btn>
-        <v-btn color="error" variant="elevated" @click="deleteDepartment()">Delete</v-btn>
-  
-        <!-- <v-menu transition="slide-y-transition" elevation="0" v-model="menu">
-          <template v-slot:activator="{ props }">
-            <v-btn color="primary" v-bind="props" icon>
-              <v-icon icon="mdi-dots-vertical"></v-icon>
-            </v-btn>
-          </template>
+        <!-- <v-btn color="secondary" variant="tonal"> Edit </v-btn> -->
+        <update-department :departmentId="id"  activator-color="primary"> </update-department> 
+        <v-btn color="error" variant="elevated" @click="deleteDepartment(id)">Delete</v-btn>
 
-        </v-menu> -->
       </v-card-actions>
   
       <!-- All Dialogs -->
@@ -33,11 +21,11 @@
   </template>
   
   <script>
-//   import UpdateTeacher from './dialogs/UpdateTeacher.vue';
+import updateDepartment from './updateDepartment.vue';
+  // import UpdateDepartment from './updateDepartment.vue';
   export default {
-    // components: {
-    //   UpdateTeacher,
-    // },
+  components: { updateDepartment },
+    
     data: () => ({
       menu: false,
     }),
@@ -57,11 +45,11 @@
         // For some reasons, the dialog won't close when the item is clicked in the menu in Vuetify 3 when using a dialog. Let's use this hack for now.
         this.menu = false;
       },
-      async deleteDepartment() {
+      async deleteDepartment(id) {
         let res = await this.$refs.baseConfirmDialog.show({
         warningTitle: 'Warning',
         title: 'Are you sure you want to delete this Subject?',
-        // subtitle: subjectId,
+        subtitle: id,
         okButton: 'Yes',
       });
 
@@ -69,11 +57,11 @@
       if (!res) {
         return false;
       }
-      console.log('clicked')
-      await this.$store.dispatch('subjects/deleteSubject', subjectId);
+    
+      await this.$store.dispatch('departments/deleteDepartment', id);
       }
     },
-    emits: ['update-teacher'],
+    emits: ['update-department'],
   };
   </script>
   
