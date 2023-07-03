@@ -91,7 +91,23 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
-    component: () => import('@/views/semesters/SemestersList.vue'),
+    component: () => import('@/views/semesters/Semesters.vue'),
+    children: [
+      {
+        path: 'all',
+        name: 'semesters-list',
+        component: () => import('@/views/semesters/SemestersList.vue'),
+      },
+      {
+        path: 'view/:id',
+        name: 'view-semester',
+        meta: {
+          requiresAuth: true,
+        },
+        component: () => import('@/views/semesters/SemesterView.vue'),
+        props: true,
+      },
+    ],
   },
   {
     path: '/:pathMatch(.*)*',

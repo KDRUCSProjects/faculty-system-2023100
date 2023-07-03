@@ -9,7 +9,7 @@
 
     <v-card-actions class="mt-3 px-2">
       <!-- <v-btn color="primary" variant="elevated">Profile</v-btn> -->
-      <v-btn color="primary" block variant="tonal"> View Subjects</v-btn>
+      <v-btn color="primary" block variant="tonal" to="/semesters/view/1" link> View Semester</v-btn>
     </v-card-actions>
 
     <!-- All Dialogs -->
