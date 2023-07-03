@@ -28,14 +28,14 @@ const reentryStudents = (limit, offset) => {
 };
 
 /**
- * find Taajils by educationalYearId
+ * find Reentries by educationalYearId
  * @param {Number} limit
  * @param {Number} offset
  * @param {ObjectId} yearId
- * @returns {Promise<Taajil>}
+ * @returns {Promise<Reentry>}
  */
 const findReentriesByYearId = (limit, offset, yearId) => {
-  return Taajil.findAndCountAll({
+  return Reentry.findAndCountAll({
     where: { educationalYearId: yearId },
     order: [['createdAt', 'DESC']],
     limit,
@@ -103,9 +103,27 @@ const deleteReentry = (oldReentry) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
 };
 
+/**
+ * update reentry
+ * @param {Object} oldReentry
+ * @param {Object} newReentry
+ * @returns {Promise<Student>}
+ */
+const updateReentry = (oldReentry, newReentry) => {
+  if (oldReentry instanceof Reentry) {
+    oldReentry.set({
+      ...oldReentry,
+      ...newReentry,
+    });
+    return oldReentry.save();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
+};
+
 module.exports = {
   createReentry,
   deleteReentry,
+  updateReentry,
   reentryStudents,
   findReentryById,
   findReentriesByYearId,
