@@ -79,3 +79,41 @@
 .hidden {
   display: none;
 }
+
+/* ////////////////////////////////////////////////// */
+
+.error-message-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: rgba(red, green, blue, alpha); */
+  background-color: white;
+  flex-direction: row;
+  width: 25rem;
+  padding: 20px;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  font-family: LatoRegular;
+  font-size: 15px;
+  transition: 0.5;
+}
+
+/* #03A9F4  */
+.icon-exc-div {
+  margin-right: 20px;
+}
+
+.icon-exc {
+  font-size: 20px;
+  background-color: red;
+  border-radius: 50%;
+  border: none;
+  color: white;
+}
+
+.error-close {
+  font-size: 25px;
+}

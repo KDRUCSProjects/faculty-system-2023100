@@ -19,7 +19,8 @@
       </v-card-item>
       <v-card-text>
         <v-form @submit.prevent="update">
-          <v-text-field ref="theField" variant="outlined" :label="fieldLabel" v-model="field"></v-text-field>
+          <v-text-field v-if="!photo" ref="theField" variant="outlined" :label="fieldLabel" v-model="field"></v-text-field>
+          <base-photo-uploader :modalWidth="modalWidth" @photo="setPhoto" v-else></base-photo-uploader>
         </v-form>
         <v-alert v-if="errorMessage" type="error" variant="outlined" :text="errorMessage"></v-alert>
       </v-card-text>
@@ -69,14 +70,24 @@ export default {
       type: String,
       required: true,
     },
+    photo: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => initialState(),
   methods: {
+    setPhoto(photo) {
+      this.field = photo;
+    },
     update() {
       this.$emit('update', {
         field: this.fieldName,
         fieldValue: this.field,
       });
+
+      // Now close the dialog
+      this.cancel();
     },
     cancel() {
       this.dialog = false;
