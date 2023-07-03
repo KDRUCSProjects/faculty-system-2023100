@@ -28,7 +28,7 @@
     <v-row no-gutters>
       <v-col v-for="(semester, index) in semesters" :key="index" cols="3">
         <v-sheet class="ma-2 pa-2">
-          <semester-card :title="semester?.title" :year="currentYear" :semesterId="semester.id"> </semester-card>
+          <semester-card :title="semester?.title" :year="selectedYear" :semesterId="semester.id"> </semester-card>
         </v-sheet>
       </v-col>
     </v-row>
@@ -41,6 +41,7 @@
 import SemesterCard from '@/components/semesters/SemesterCard.vue';
 export default {
   data: () => ({
+    // Default year. This will be later on changed to latest onGoing year form API.
     selectedYear: 1401,
   }),
   components: {
@@ -50,19 +51,24 @@ export default {
     semesters() {
       return this.$store.getters['semesters/currentYearSemesters'];
     },
-    currentYear() {
-      return this.$store.getters['semesters/currentYear'];
-    },
   },
   methods: {
-    setYear(year) {
+    async setYear(year) {
       this.selectedYear = year;
       // this.$store.commit('setCurrentYear', year);
+
+      // Also, load it's semesters
+      await this.loadSemesters(year);
+    },
+    async loadSemesters(year) {
+      await this.$store.dispatch('semesters/loadSemestersByYear', year);
     },
   },
   async mounted() {
     // Load teachers at app mount
-    await this.$store.dispatch('semesters/loadSemestersByYear', 1401);
+
+    // Probably the onGoing year
+    await this.loadSemesters(this.selectedYear);
   },
 };
 </script>
