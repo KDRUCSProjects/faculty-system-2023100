@@ -26,8 +26,6 @@ const updateDate = document.querySelector('.update-date');
 const errorClose = document.querySelector('.error-close');
 const errorDiv = document.querySelector('.error-message-div');
 
-console.log(errorDiv);
-
 // console.log(profile);
 
 //////////////////////////////////////////////
@@ -45,48 +43,7 @@ profile.addEventListener('click', function () {
 
 errorClose.addEventListener('click', function () {
   errorDiv.style.display = 'none';
-  console.log('hey');
 });
-
-// profile.addEventListener('click', function () {
-//   profileCard.classList.remove('hidden');
-//   overlay.classList.remove('hidden');
-// });
-
-/////////////////////////////////////////////
-// const mohammad = {
-//   name: 'Mohammad Agha',
-//   father: 'Ibrahim Shah Agha',
-//   grandFatherName: 'Sultan Shah Agha',
-//   id: 'CF000345',
-//   score: 195,
-// };
-
-// const ahmad = {
-//   name: 'Ahmad Rohani',
-//   father: 'Baaz Mohammad',
-//   grandFatherName: 'Toor jan',
-//   id: 'CF000346',
-//   score: 198,
-// };
-
-// const malik = {
-//   name: 'Abdul Malik',
-//   father: 'Asadullah',
-//   grandFatherName: 'Abdullah',
-//   id: 'CF000347',
-//   score: 190,
-// };
-
-// const qasim = {
-//   name: 'Mohammad Qasim',
-//   father: 'Ibrahim Jan',
-//   grandFatherName: 'Ahmad Jan',
-//   id: 'CF000348',
-//   score: 199,
-// };
-
-// const students = [mohammad, ahmad, malik, qasim];
 
 input.addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
@@ -110,6 +67,7 @@ const getApiFun = id => {
       return response.json();
     })
     .then(data => {
+      // console.log(data);
       if (data.kankorId) {
         idID.textContent = data.id;
         kankorId.textContent = kankorInputvalue.textContent = data.kankorId;
@@ -119,7 +77,6 @@ const getApiFun = id => {
           data.grandFatherName;
         eYear.textContent = data.educationalYearId;
         admDate.textContent = data.createdAt;
-        updateDate.textContent = data.updatedAt;
       } else {
       }
     })
