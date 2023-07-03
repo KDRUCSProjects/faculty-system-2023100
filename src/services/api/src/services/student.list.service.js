@@ -15,11 +15,11 @@ const createStudentList = (listedStudentBody) => {
 
 /**
  * find student in list
- * @param {ObjectId} listedStudentId
+ * @param {ObjectId} studentId
  * @returns {Promise<StudentsList>}
  */
-const findListedStudentByStudentId = (listedStudentId) => {
-  return StudentsList.findOne({ where: { studentId: listedStudentId } });
+const findListedStudentByStudentId = (studentId) => {
+  return StudentsList.findOne({ where: { studentId } });
 };
 
 /**
@@ -132,12 +132,42 @@ const countStudentList = (queryArray) => {
   );
 };
 
+/**
+ * find all student list of single student by student id
+ * @param {ObjectId} studentId
+ * @returns {Promise<StudentsList>}
+ */
+const findAllStudentListOfSingleStudent = (studentId) => {
+  return StudentsList.findAll({
+    where: { studentId },
+    order: [['createdAt', 'DESC']],
+  });
+};
+
+/**
+ * update student list
+ * @param {Object} oldStudentList
+ * @param {Object} newStudentList
+ * @returns {Promise<StudentsList>}
+ */
+const updatedStudentList = (oldStudentList, newStudentList) => {
+  if (oldStudentList instanceof StudentsList) {
+    oldStudentList.set({
+      ...newStudentList,
+    });
+    return oldStudentList.save();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
+};
+
 module.exports = {
   getStudentLists,
   countStudentList,
   createStudentList,
   deleteStudentList,
+  updatedStudentList,
   findStudentListById,
   getYearAndClassStudentList,
   findListedStudentByStudentId,
+  findAllStudentListOfSingleStudent,
 };

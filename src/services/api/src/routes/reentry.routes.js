@@ -11,16 +11,23 @@ const router = express.Router();
 // Create department, get, update and delete a department
 router
   .route('/')
-  .get(auth(), validate(shareValidation.studentsWithTaajilReentryAndTabdili), reentryController.reentryStudents)
+  .get(validate(shareValidation.studentsWithTaajilReentryAndTabdili), reentryController.reentryStudents)
   .post(
-    auth(),
     upload.single('attachment'),
     attachAttachment,
     validate(reentryValidation.createReentry),
     reentryController.createReentry
   );
 
-router.delete('/:id', validate(reentryValidation.deleteReentry), reentryController.deleteReentry);
+router
+  .route('/:id')
+  .delete(validate(reentryValidation.deleteReentry), reentryController.deleteReentry)
+  .patch(
+    upload.single('attachment'),
+    attachAttachment,
+    validate(reentryValidation.updateReentry),
+    reentryController.updateReentry
+  );
 
 module.exports = router;
 
@@ -77,13 +84,9 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 results:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Taajil'
- *
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Reentry'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -164,6 +167,54 @@ module.exports = router;
  *       "200":
  *         description: Deleted
  *         $ref: '#/components/schemas/Student'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *   patch:
+ *     summary: Update a Reentry
+ *     description: Update a Reentry
+ *     tags: [Reentries]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        schema:
+ *          type: number
+ *        description: Reentry id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               studentId:
+ *                 type: number
+ *                 format: number
+ *               educationalYear:
+ *                 type: number
+ *                 format: number
+ *               regNumber:
+ *                 type: number
+ *                 format: number
+ *               notes:
+ *                 type: string
+ *                 format: textArea
+ *               attachment:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       "202":
+ *         description: ACCEPTED
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Reentry'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

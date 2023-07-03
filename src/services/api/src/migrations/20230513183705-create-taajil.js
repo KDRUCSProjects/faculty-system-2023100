@@ -33,6 +33,10 @@ module.exports = {
       regNumber: Sequelize.INTEGER,
       attachment: Sequelize.STRING,
       notes: Sequelize.STRING,
+      onGoing: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
