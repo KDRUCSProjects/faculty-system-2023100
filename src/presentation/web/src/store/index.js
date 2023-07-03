@@ -6,7 +6,7 @@ import authModule from './modules/auth';
 import teachersModule from './modules/teachers';
 import studentsModule from './modules/students';
 import subjectsModule from './modules/subjects';
-import departmentModule from './modules/departments'
+import departmentModule from './modules/departments';
 import semestersModule from './modules/semesters';
 
 export default createStore({
@@ -15,8 +15,9 @@ export default createStore({
     teachers: teachersModule,
     students: studentsModule,
     subjects: subjectsModule,
-    departments: departmentModule
-    // semesters: semestersModule,
+
+    departments: departmentModule,
+    semesters: semestersModule,
   },
   state: {
     years: [],
