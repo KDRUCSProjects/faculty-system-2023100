@@ -121,4 +121,24 @@ export default {
       throw e.response.data.message;
     }
   },
+  async loadStudentsListBySemesterId(context, semesterId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/studentList?semesterId=${semesterId}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(response.data);
+
+      context.commit('setStudentsList', response.data.results);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
 };

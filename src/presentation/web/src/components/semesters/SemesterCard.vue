@@ -9,7 +9,7 @@
 
     <v-card-actions class="mt-3 px-2">
       <!-- <v-btn color="primary" variant="elevated">Profile</v-btn> -->
-      <v-btn color="primary" block variant="tonal" to="/semesters/view/1" link> View Semester</v-btn>
+      <v-btn color="primary" block variant="tonal" @click="viewSemester(semesterId)"> View Semester</v-btn>
     </v-card-actions>
 
     <!-- All Dialogs -->
@@ -28,7 +28,7 @@ export default {
       type: Number,
     },
     title: {
-      type: Text,
+      type: String,
     },
     studentsCount: {
       type: Number,
@@ -36,6 +36,20 @@ export default {
     },
     year: {
       type: Number,
+    },
+  },
+  methods: {
+    viewSemester(semesterId) {
+      this.$router.push({
+        name: 'view-semester',
+        params: {
+          id: semesterId,
+        },
+        query: {
+          year: this.year,
+          semester: this.title,
+        },
+      });
     },
   },
 };

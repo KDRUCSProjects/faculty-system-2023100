@@ -9,6 +9,7 @@ export default {
       students: [],
       currentStudent: null,
       counts: null,
+      studentsList: [],
     };
   },
   getters,
