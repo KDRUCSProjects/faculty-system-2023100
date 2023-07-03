@@ -1,101 +1,7 @@
 // Sequelize Models
-const { Semester, EducationalYear } = require('../models');
-
-/**
- * Create first Semester
- * @param {ObjectId} educationalYearId
- * @returns {Promise<Semester>}
- */
-const createFirstSemester = (educationalYearId) => {
-  return Semester.create({
-    title: 1,
-    educationalYearId,
-  });
-};
-
-/**
- * Create Second Semester
- * @param {ObjectId} educationalYearId
- * @returns {Promise<Semester>}
- */
-const createSecondSemester = (educationalYearId) => {
-  return Semester.create({
-    title: 2,
-    educationalYearId,
-  });
-};
-
-/**
- * Create Third Semester
- * @param {ObjectId} educationalYearId
- * @returns {Promise<Semester>}
- */
-const createThirdSemester = (educationalYearId) => {
-  return Semester.create({
-    title: 3,
-    educationalYearId,
-  });
-};
-
-/**
- * Create Fourth Semester
- * @param {ObjectId} educationalYearId
- * @returns {Promise<Semester>}
- */
-const createFourthSemester = (educationalYearId) => {
-  return Semester.create({
-    title: 4,
-    educationalYearId,
-  });
-};
-
-/**
- * Create Fifth Semester
- * @param {ObjectId} educationalYearId
- * @returns {Promise<Semester>}
- */
-const createFifthSemester = (educationalYearId) => {
-  return Semester.create({
-    title: 5,
-    educationalYearId,
-  });
-};
-
-/**
- * Create sixth Semester
- * @param {ObjectId} educationalYearId
- * @returns {Promise<Semester>}
- */
-const createSixthSemester = (educationalYearId) => {
-  return Semester.create({
-    title: 6,
-    educationalYearId,
-  });
-};
-
-/**
- * Create Seventh Semester
- * @param {ObjectId} educationalYearId
- * @returns {Promise<Semester>}
- */
-const createSeventhSemester = (educationalYearId) => {
-  return Semester.create({
-    title: 7,
-    educationalYearId,
-  });
-};
-
-/**
- * Create Eighth Semester
- * @param {ObjectId} educationalYearId
- * @returns {Promise<Semester>}
- */
-const createEighthSemester = (educationalYearId) => {
-  return Semester.create({
-    title: 8,
-    educationalYearId,
-  });
-};
+const httpStatus = require('http-status');
+const { Semester, EducationalYear, Subject } = require('../models');
+const ApiError = require('../utils/ApiError');
 
 /**
  * Get All Semesters with education year
@@ -103,28 +9,22 @@ const createEighthSemester = (educationalYearId) => {
  */
 const getAllSemesters = () => {
   return Semester.findAll({
-    include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
+    include: [
+      { model: EducationalYear, as: 'EducationalYear', attributes: ['year'] },
+      { model: Subject },
+    ],
   });
 };
 
 /**
  * find Semesters with education year
- * @returns {Promise<Semester>}
  * @param {Object} semesterBody
+ * @returns {Promise<Semester>}
  */
 const findSemester = (semesterBody) => {
   return Semester.findOne({
     where: { ...semesterBody },
   });
-};
-
-/**
- * create new Semester
- * @returns {Promise<Semester>}
- * @param {Object} semesterBody
- */
-const createNewSemester = (semesterBody) => {
-  return Semester.findOne(semesterBody);
 };
 
 /**
@@ -146,6 +46,7 @@ const findSemesterById = (semesterId) => {
  */
 const deleteSemester = (semester) => {
   if (semester instanceof Semester) return semester.destroy();
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
 };
 
 /**
@@ -154,21 +55,17 @@ const deleteSemester = (semester) => {
  * @returns {Promise<Semester>}
  */
 const getYearSemesters = (educationalYearId) => {
-  return Semester.findAll({ where: { educationalYearId }, order: [['title', 'ASC']] });
+  return Semester.findAll({
+    where: { educationalYearId }, order: [['title', 'ASC']],
+    include: [
+      { model: Subject },
+    ],
+  });
 };
 
 module.exports = {
-  createFirstSemester,
-  createSecondSemester,
-  createThirdSemester,
-  createFourthSemester,
-  createFifthSemester,
-  createSixthSemester,
-  createSeventhSemester,
-  createEighthSemester,
   getAllSemesters,
   findSemester,
-  createNewSemester,
   findSemesterById,
   deleteSemester,
   getYearSemesters,

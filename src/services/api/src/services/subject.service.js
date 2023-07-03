@@ -63,7 +63,6 @@ const getSubject = (subjectId) => {
   return Subject.findOne({ where: { id: subjectId } });
 };
 
-
 /**
  * get subject of semester
  * @param {ObjectId} semesterId
@@ -72,7 +71,6 @@ const getSubject = (subjectId) => {
 const getSemesterSubjects = (semesterId) => {
   return Subject.findAll({ where: { semesterId }, order: [['createdAt', 'DESC']] });
 };
-
 
 /**
  * get teacher subjects

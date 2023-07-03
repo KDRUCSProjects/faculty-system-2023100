@@ -96,6 +96,18 @@ const findTaajilByStdKankorId = (studentKankorId) => {
 };
 
 /**
+ * find student all taajils by student id
+ * @param {ObjectId} studentId
+ * @returns {Promise<Taajil>}
+ */
+const findStudentAllTajils = (studentId) => {
+  return Taajil.findAll({
+    where: { studentId },
+    order: [['createdAt', 'DESC']],
+  });
+};
+
+/**
  * update taajil
  * @param {Object} oldTaajil
  * @param {Object} newTaajil
@@ -130,6 +142,7 @@ module.exports = {
   findTaajilById,
   deleteTaajil,
   findTaajilsByYearId,
+  findStudentAllTajils,
   findTaajilByStudentId,
   findTaajilByStdKankorId,
   deleteTaajilByStudentId,

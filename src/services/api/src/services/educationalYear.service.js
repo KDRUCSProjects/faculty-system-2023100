@@ -3,7 +3,6 @@ const httpStatus = require('http-status');
 const { EducationalYear } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-
 /**
  * Create a EducationalYear
  * @param {Object} year
@@ -18,7 +17,7 @@ const createEducationalYear = (year) => {
  * @returns {Promise<EducationalYear>}
  */
 const getEducationalYears = () => {
-  return EducationalYear.findAll();
+  return EducationalYear.findAll({ order: [['createdAt', 'DESC']] });
 };
 
 /**
@@ -61,6 +60,14 @@ const getEducationalYearByValue = (year) => {
   return EducationalYear.findOne({ where: { year } });
 };
 
+/**
+ * get current educational year
+ * @returns {Promise<EducationalYear>}
+ */
+const getCurrentEducationalYear = () => {
+  return EducationalYear.findOne({ where: { onGoing: true } });
+};
+
 module.exports = {
   createEducationalYear,
   getEducationalYears,
@@ -68,4 +75,5 @@ module.exports = {
   getEducationalYear,
   findEducationalYearByValue,
   getEducationalYearByValue,
+  getCurrentEducationalYear,
 };
