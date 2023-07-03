@@ -111,8 +111,6 @@ const getUnRegisteredStudents = (limit, offset) => {
   student.updatedAt as updatedAt,
   student.deletedAt as deletedAt,
   student.isDeleted as isDeleted,
-  student.createdBy as createdBy,
-  student.updatedBy as updatedBy,
   student.deletedBy as deletedBy
   from students as student
   where not exists (select 1 from studentslists where student.id = studentslists.studentId)

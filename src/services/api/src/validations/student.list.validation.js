@@ -15,6 +15,7 @@ const getStudentList = {
 
 const getStudentLists = {
   query: Joi.object().keys({
+    semesterId: Joi.number(),
     year: Joi.number(),
     semester: Joi.number().min(1).max(8),
     class: Joi.number().min(1).max(4),

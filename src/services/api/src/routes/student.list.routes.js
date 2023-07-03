@@ -36,6 +36,11 @@ module.exports = router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
+ *         name: semesterId
+ *         schema:
+ *           type: integer
+ *         description: semester id
+ *       - in: query
  *         name: year
  *         schema:
  *           type: integer
