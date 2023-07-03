@@ -1,7 +1,7 @@
 const allRoles = {
   user: [],
   teacher: ['takeAttendance'],
-  admin: ['getUsers', 'manageUsers'],
+  admin: ['getUsers', 'manageUsers', 'manageDepartments'],
   execManager: ['manageDepartments'],
   teachingManager: [],
 };
