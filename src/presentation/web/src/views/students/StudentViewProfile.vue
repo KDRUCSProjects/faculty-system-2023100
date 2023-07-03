@@ -61,7 +61,7 @@ export default {
 
       await this.$store.dispatch('students/deleteStudentById', studentId);
       // Let's redirect(replace) the user to /students
-      this.$router.replace('/students');
+      this.$router.replace('/students/all');
     },
   },
   computed: {
