@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-list>
-      <v-list-subheader>Subjects</v-list-subheader>
+      <!-- <v-list-subheader>Subjects</v-list-subheader> -->
       <v-list-item v-for="(subject, i) in subjects" :key="i" class="my-1 border" variant="outline">
         <v-list-item-title>{{ subject.name }}</v-list-item-title>
         <v-list-item-subtitle>Credits: {{ subject.credits }}</v-list-item-subtitle>

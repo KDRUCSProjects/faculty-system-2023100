@@ -12,29 +12,49 @@
       hide-default-footer
     >
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn @click="deleteStudent(item)" variant="text" color="red" text icon="mdi-delete-outline"> </v-btn>
-        <v-btn @click="viewStudent(item)" variant="text" color="primary" text icon="mdi-location-enter"> </v-btn>
+        <v-btn v-if="enrollmentMode" @click="selectStudent(item)" variant="text" color="primary" text icon="mdi-plus-thick">
+        </v-btn>
+        <v-btn v-if="!enrollmentMode" @click="deleteStudent(item)" variant="text" color="red" text icon="mdi-delete-outline">
+        </v-btn>
+        <v-btn
+          v-if="!enrollmentMode"
+          @click="viewStudent(item)"
+          variant="text"
+          color="secondary"
+          text
+          icon="mdi-location-enter"
+        >
+        </v-btn>
       </template>
 
       <template v-slot:top>
-        <v-toolbar color="primary">
-          <v-toolbar-title> Semester Students </v-toolbar-title>
+        <v-toolbar :color="enrollmentMode ? 'dark' : 'primary'">
+          <v-toolbar-title>
+            {{ enrollmentMode ? 'Reserved  Students' : 'Semester Students' }}
+          </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
-          <v-menu>
+          <!-- <v-menu>
             <template v-slot:activator="{ props }">
               <v-btn color="cyan" variant="flat" v-bind="props"> Filter </v-btn>
             </template>
-            <!-- <v-list>
+            <v-list>
               <v-list-item v-for="(item, index) in studentStatus" :key="index" :value="index">
                 <v-list-item-title>{{ item }}</v-list-item-title>
               </v-list-item>
-            </v-list> -->
-          </v-menu>
+            </v-list>
+          </v-menu> -->
 
-          <v-btn color="light" class="ml-1" variant="flat" link to="/students/new" prepend-icon="mdi-plus-outline">
-            Student Enrollment
+          <v-btn
+            :color="enrollmentMode ? 'primary' : 'light'"
+            class="ml-1"
+            variant="flat"
+            link
+            @click="switchMode"
+            :prepend-icon="enrollmentMode ? 'mdi-account-group' : 'mdi-plus-outline'"
+          >
+            {{ enrollmentMode ? 'Semester Students' : 'Student Enrollment' }}
           </v-btn>
         </v-toolbar>
       </template>
@@ -59,6 +79,12 @@
           </div>
         </v-avatar>
       </template>
+
+      <template v-if="enrollmentMode" v-slot:bottom>
+        <div class="text-center pt-2">
+          <v-pagination v-model="page" :length="pageCount"></v-pagination>
+        </div>
+      </template>
     </v-data-table>
   </div>
 </template>
@@ -80,14 +106,30 @@ export default {
       loading: false,
       errorMessage: null,
       search: '',
+      enrollmentMode: false,
     };
   },
   computed: {
     theStudents() {
       return this.attachTableNumber(this.students, this.page, this.itemsPerPage);
     },
+    pageCount() {
+      return this.$store.getters['students/counts']?.totalPages;
+    },
   },
   methods: {
+    selectStudent(item) {
+      const { raw } = item;
+      this.$emit('selected-student-id', raw.id);
+    },
+    switchMode() {
+      this.enrollmentMode = !this.enrollmentMode;
+      if (this.enrollmentMode) {
+        this.$emit('mode', 'enrollment');
+      } else {
+        this.$emit('mode', 'semester-students');
+      }
+    },
     deleteStudent() {},
     editStudent() {},
     viewStudent(item) {
@@ -100,7 +142,15 @@ export default {
       });
     },
   },
-  watch: {},
+  watch: {
+    page(newValue) {
+      this.$emit('pagination-number', newValue);
+    },
+    itemsPerPage(newValue) {
+      this.$emit('items-per-page', newValue);
+    },
+  },
+  emits: ['mode', 'selected-student-id'],
   async created() {},
 };
 </script>
