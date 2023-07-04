@@ -1,5 +1,5 @@
 // Sequelize Models
-const { QueryTypes } = require('sequelize');
+const { QueryTypes, Op } = require('sequelize');
 const { Student, EducationalYear, sequelize } = require('../models');
 
 /**
@@ -24,6 +24,26 @@ const getStudents = (offset) => {
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
   });
 };
+
+/**
+ * get students like search by student kankor id
+ * @param {String} queryKankorId
+ * @returns {Promise<Student>}
+ */
+const getStudentByKankorId = (queryKankorId) => {
+  return Student.findAll({
+    where: {
+      kankorId: {
+        [Op.like]: `${queryKankorId || ''}%`
+      }
+    },
+    limit: 2000,
+    offset: 0,
+    order: [['createdAt', 'DESC']],
+    include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
+  });
+};
+
 
 /**
  * Create a Student
@@ -149,6 +169,7 @@ module.exports = {
   updateStudent,
   registerStudent,
   deleteStudentById,
+  getStudentByKankorId,
   getStudentOnKankorId,
   getUnRegisteredStudents,
   countUnregisteredStudent,

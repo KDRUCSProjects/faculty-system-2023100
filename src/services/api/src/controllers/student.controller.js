@@ -45,6 +45,11 @@ const getStudents = catchAsync(async (req, res) => {
   const limit = req.query?.limit ? req.query?.limit : 2000;
   const offset = parseInt(((page - 1) * limit), 10);
 
+  if (req.query.kankorId) {
+    const results = await studentService.getStudentByKankorId(req.query.kankorId);
+    return res.status(httpStatus.OK).send(results);
+  }
+
   let result = null;
 
   if (req.query?.status) {
