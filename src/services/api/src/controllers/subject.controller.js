@@ -17,6 +17,10 @@ const createSubject = catchAsync(async (req, res) => {
 });
 
 const getSubjects = catchAsync(async (req, res) => {
+  if (req.query?.status) {
+    const unsignedSubjects = await subjectService.getUnassignedSubjects();
+    return res.status(httpStatus.OK).send(unsignedSubjects);
+  }
   if (req.query?.semesterId) {
     const semester = await semesterService.findSemesterById(req.query.semesterId);
     if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');

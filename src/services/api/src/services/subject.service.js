@@ -1,7 +1,7 @@
 // Sequelize Models
 const httpStatus = require('http-status');
 const { QueryTypes } = require('sequelize');
-const { Subject, StudentsList, Student, sequelize } = require('../models');
+const { Subject, StudentsList, Student, sequelize, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -103,7 +103,7 @@ const getSemesterStudents = (semesterId) => {
  * update subject
  * @param {Object} oldSubjectBody
  * @param {Object} newSubjectBody
- * @returns {Promise<Student>}
+ * @returns {Promise<Subject>}
  */
 const updatedSubject = (oldSubjectBody, newSubjectBody) => {
   if (oldSubjectBody instanceof Subject) {
@@ -115,8 +115,16 @@ const updatedSubject = (oldSubjectBody, newSubjectBody) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
 
+
+/**
+ * get unassigned subjects
+ * @returns {Promise<Subject>}
+ */
+const getUnassignedSubjects = () => {
+  return Subject.findAll({ where: { teacherId: null } });
+};
+
 module.exports = {
-  getSemesterStudents,
   getSubject,
   createSubject,
   getSubjects,
@@ -124,4 +132,6 @@ module.exports = {
   updatedSubject,
   getTeacherSubjects,
   getSemesterSubjects,
+  getSemesterStudents,
+  getUnassignedSubjects,
 };
