@@ -31,14 +31,12 @@
             <update-teacher :teacherId="teacherId" @dialog-close="closeMenu" activator-color="text"> </update-teacher>
           </v-list-item>
           <v-list-item>
-            <v-btn prepend-icon="mdi-key" variant="text" color="dark">Change Password</v-btn>
+            <!-- Reset Teacher Password -->
+            <reset-teacher-password :teacherId="teacherId" @dialog-close="closeMenu" activator-color="text"> </reset-teacher-password>
           </v-list-item>
           <v-list-item>
             <v-btn prepend-icon="mdi-book-open-variant" variant="text" color="dark">Assign subject </v-btn>
           </v-list-item>
-          <!-- <v-list-item>
-            <v-btn prepend-icon="mdi-delete" variant="text" color="dark">Disable Account</v-btn>
-          </v-list-item> -->
           <v-list-item>
             <v-btn prepend-icon="mdi-delete" variant="text" color="error" @click="deleteTeacher(teacherId)">
               Delete Account
@@ -57,9 +55,11 @@
 
 <script>
 import UpdateTeacher from './dialogs/UpdateTeacher.vue';
+import ResetTeacherPassword from './dialogs/ResetTeacherPassword.vue';
 export default {
   components: {
     UpdateTeacher,
+    ResetTeacherPassword,
   },
   data: () => ({
     menu: false,
