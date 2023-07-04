@@ -20,7 +20,6 @@ router
     studentController.registerStudent
   );
 
-router.route('/unRegistered').get(auth(), validate(shareValidation.paginate), studentController.getUnRegisteredStudents);
 
 router
   .route('/:studentId')
@@ -62,7 +61,7 @@ module.exports = router;
  *          type: integer
  *      - name: status
  *        in: query
- *        description: student status 'taajils', 'reentry', 'tabdili'
+ *        description: student status 'taajils', 'reentry', 'tabdili', 'reserve'
  *        schema:
  *          type: string
  *          example: taajils
@@ -340,35 +339,4 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- */
-
-/**
- * @swagger
- * /students/unRegistered:
- *   get:
- *     summary: get all student who are not registered in any semester
- *     description: get all student who are not registered in any semester
- *     tags: [Students]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *      - name: page
- *        in: query
- *        description: The page number for pagination
- *        schema:
- *          type: integer
- *     responses:
- *       "200":
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Student'
- *
- *       "401":
- *         $ref: '#/components/responses/Unauthorized'
- *       "403":
- *         $ref: '#/components/responses/Forbidden'
  */

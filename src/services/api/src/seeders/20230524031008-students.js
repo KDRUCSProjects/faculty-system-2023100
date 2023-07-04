@@ -10,7 +10,6 @@ const students = [...Array(100)].map((student) => {
     nickName: faker.name.firstName(),
     province: faker.address.city(),
     district: faker.address.state(),
-    photo: faker.internet.avatar(),
     engName: `${faker.name.firstName()} ${faker.name.lastName()}`,
     engFatherName: faker.name.firstName(),
     engGrandFatherName: faker.name.firstName(),

@@ -51,6 +51,7 @@ const assignSubjectToTeacher = {
 const getSubjects = {
   query: Joi.object().keys({
     semesterId: Joi.number(),
+    status: Joi.string().valid('unassigned'),
   }),
 };
 
