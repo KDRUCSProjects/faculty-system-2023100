@@ -67,10 +67,10 @@ module.exports = router;
  *          example: taajils
  *      - name: limit
  *        in: query
- *        description: limit
  *        schema:
  *          type: number
  *          example: 10
+ *        description: limit and default limit is 2000
  *     responses:
  *       "200":
  *         description: OK

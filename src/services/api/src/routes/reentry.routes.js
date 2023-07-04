@@ -77,7 +77,7 @@ module.exports = router;
  *         name: limit
  *         schema:
  *           type: number
- *         description: limit
+ *         description: limit and default limit is 2000
  *     responses:
  *       "200":
  *         description: OK
