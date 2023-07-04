@@ -52,6 +52,12 @@ module.exports = router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           example: unassigned
+ *         description: get unsigned subjects which are not assigned to any teacher
+ *       - in: query
  *         name: semesterId
  *         schema:
  *           type: number

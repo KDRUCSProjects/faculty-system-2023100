@@ -36,6 +36,7 @@ const findSemesterById = (semesterId) => {
   return Semester.findOne({
     where: { id: semesterId },
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
+    include: [{ model: Subject }],
   });
 };
 

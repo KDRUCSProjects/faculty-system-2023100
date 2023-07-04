@@ -82,8 +82,8 @@ const deleteStudentById = (studentId) => {
 
 /**
  * get unregistered Students
- * @param {ObjectId} limit
- * @param {ObjectId} offset
+ * @param {Number} limit
+ * @param {Number} offset
  * @returns {Promise<Student>}
  */
 const getUnRegisteredStudents = (limit, offset) => {
