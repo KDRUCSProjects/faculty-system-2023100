@@ -29,4 +29,7 @@ export default {
       return student;
     });
   },
+  setSearchedStudent(state, theStudent) {
+    state.searchedStudent = theStudent;
+  },
 };

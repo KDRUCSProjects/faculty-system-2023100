@@ -141,4 +141,24 @@ export default {
       throw e.response.data.message;
     }
   },
+  async loadStudentByKankorId(context, kankorId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/students/kankor/${kankorId}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setSearchedStudent', response.data);
+
+      return response.data;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
 };

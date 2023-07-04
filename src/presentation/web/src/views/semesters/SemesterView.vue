@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="4">
+      <v-col cols="5">
         <v-card class="h-100 theShadow">
           <v-card-item class="text-center my-4">
             <v-card-title class="text-h5 font-weight-bold">
@@ -14,12 +14,22 @@
             <v-chip label color="primary" size="large" class="mr-1">Semester Title: {{ title }}</v-chip>
             <v-chip label color="secondary" size="large">Semester Year: {{ year }}</v-chip>
           </v-card-item>
+          <v-divider class="mt-3"></v-divider>
           <v-card-text>
-            <subjects-list :subjects="subjects"></subjects-list>
+            <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="active-tab">
+              <v-tab :value="1"> Subjects </v-tab>
+              <v-tab :value="2"> Statistics </v-tab>
+            </v-tabs>
+            <v-window v-model="tab">
+              <v-window-item :value="1">
+                <subjects-list :subjects="subjects"></subjects-list>
+              </v-window-item>
+              <v-window-item :value="2"> later on </v-window-item>
+            </v-window>
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="8">
+      <v-col cols="7">
         <router-view>
           <students-table :students="students" :headers="headers"></students-table>
         </router-view>
@@ -32,6 +42,7 @@
 import StudentsTable from '@/components/students/tables/StudentsTable.vue';
 import SubjectsList from '@/components/subjects/SubjectsList.vue';
 import { rankSemester } from '@/utils/global';
+import AddStudentSemester from '@/components/students/dialogs/AddStudentSemester.vue';
 export default {
   props: {
     id: {
@@ -42,8 +53,10 @@ export default {
   components: {
     StudentsTable,
     SubjectsList,
+    AddStudentSemester,
   },
   data: () => ({
+    tab: 1,
     headers: [
       {
         title: 'No',
@@ -114,3 +127,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.active-tab {
+  background-color: rgb(var(--v-theme-primary));
+  border-radius: 0px;
+  color: white;
+}
+</style>

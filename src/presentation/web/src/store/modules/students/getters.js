@@ -26,4 +26,7 @@ export default {
   currentStudent(state) {
     return state.currentStudent;
   },
+  searchedStudent(state) {
+    return state.searchedStudent;
+  },
 };
