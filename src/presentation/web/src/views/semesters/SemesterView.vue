@@ -31,10 +31,19 @@
       </v-col>
       <v-col cols="7">
         <router-view>
-          <students-table :students="students" :headers="headers"></students-table>
+          <students-table
+            :students="students"
+            :headers="headers"
+            @mode="setMode"
+            @pagination-number="getPageNumber"
+            @selected-student-id="getSelectedStudentId"
+          ></students-table>
         </router-view>
       </v-col>
     </v-row>
+
+    <!-- Dialogs -->
+    <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
   </div>
 </template>
 
@@ -42,7 +51,6 @@
 import StudentsTable from '@/components/students/tables/StudentsTable.vue';
 import SubjectsList from '@/components/subjects/SubjectsList.vue';
 import { rankSemester } from '@/utils/global';
-import AddStudentSemester from '@/components/students/dialogs/AddStudentSemester.vue';
 export default {
   props: {
     id: {
@@ -53,10 +61,13 @@ export default {
   components: {
     StudentsTable,
     SubjectsList,
-    AddStudentSemester,
   },
   data: () => ({
     tab: 1,
+    page: 1,
+    itemsPerPage: 8,
+    selectedStudentId: null,
+    mode: 'semester-students',
     headers: [
       {
         title: 'No',
@@ -98,8 +109,12 @@ export default {
   }),
   computed: {
     students() {
+      if (this.mode === 'enrollment') {
+        return this.$store.getters['students/students'];
+      }
       return this.$store.getters['students/studentsList'];
     },
+
     title() {
       return rankSemester(this.$route.query.semester);
     },
@@ -108,8 +123,60 @@ export default {
     },
   },
   methods: {
-    async loadStudents() {
-      await this.$store.dispatch('students/loadStudentsListBySemesterId', this.id);
+    getPageNumber(number) {
+      this.page = number;
+      // Also, now let's students
+      this.loadStudents();
+    },
+    setMode(mode) {
+      this.mode = mode;
+    },
+    async getSelectedStudentId(id) {
+      this.selectedStudentId = id;
+
+      await this.addStudentToSemester(this.id, this.selectedStudentId);
+    },
+    async addStudentToSemester(semesterId, studentId) {
+      let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: 'Warning',
+        title: 'Are you sure you want to add this student to this semester?',
+        subtitle: studentId,
+        okButton: 'Yes, continue',
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return false;
+      }
+
+      try {
+        await this.$store.dispatch('students/addStudentToSemester', {
+          studentId,
+          semesterId,
+        });
+      } catch (e) {
+        alert(e);
+        // this.errorMessage = e;
+      }
+    },
+    async loadStudents(forceStudentsLoad = false) {
+      if (this.mode !== 'enrollment' && forceStudentsLoad) {
+        return await this.$store.dispatch('students/loadStudentsListBySemesterId', this.id);
+      }
+      // Else, the user is trying to load unregistered/reserved students
+      try {
+        this.loading = true;
+
+        await this.$store.dispatch('students/loadStudents', {
+          page: this.page,
+          limit: this.itemsPerPage,
+          like: '',
+        });
+      } catch (e) {
+        this.errorMessage = e;
+      } finally {
+        this.loading = false;
+      }
     },
     async loadSemesterData() {
       // Load students
@@ -121,9 +188,8 @@ export default {
     viewTeacher() {},
   },
   async created() {
+    await this.loadStudents(true);
     await this.loadSemesterData();
-
-    console.log(this.$route.query, this.$route.params);
   },
 };
 </script>

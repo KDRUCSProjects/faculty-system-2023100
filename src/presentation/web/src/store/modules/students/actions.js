@@ -5,8 +5,13 @@ export default {
     try {
       const token = context.rootGetters.token;
 
+      let url = `/api/students?page=${options.page}`;
+      if (options.limit) {
+        url = url + `&limit=${options.limit}`;
+      }
+
       const response = await axios({
-        url: `/api/students?page=${options.page}`,
+        url,
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +131,8 @@ export default {
       const token = context.rootGetters.token;
 
       const response = await axios({
-        url: `/api/studentList?semesterId=${semesterId}`,
+        // The limit will be soon removed
+        url: `/api/studentList?semesterId=${semesterId}&limit=2000`,
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
@@ -141,12 +147,12 @@ export default {
       throw e.response.data.message;
     }
   },
-  async loadStudentByKankorId(context, kankorId) {
+  async loadStudentByKankorId(context, { search }) {
     try {
       const token = context.rootGetters.token;
 
       const response = await axios({
-        url: `/api/students/kankor/${kankorId}`,
+        url: `/api/students/kankor/${search}`,
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
@@ -156,7 +162,31 @@ export default {
 
       context.commit('setSearchedStudent', response.data);
 
+      context.commit('setStudents', [response.data]);
+
       return response.data;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async addStudentToSemester(context, { semesterId, studentId }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/studentList`,
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          studentId: parseInt(studentId),
+          semesterId: parseInt(semesterId),
+        },
+      });
+
+      console.log(response.data);
     } catch (e) {
       throw e.response.data.message;
     }

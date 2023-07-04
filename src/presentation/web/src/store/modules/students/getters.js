@@ -10,7 +10,9 @@ export default {
       return student;
     });
   },
-
+  reservedStudents(state) {
+    return state.reservedStudents;
+  },
   studentsList(state) {
     return state.studentsList.filter((student) => {
       student.createdAt = toDateFormat(student.createdAt);

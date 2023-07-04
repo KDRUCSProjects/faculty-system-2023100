@@ -21,6 +21,18 @@
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
+          <v-text-field
+            style="position: relative; top: 10px; right: 10px"
+            density="compact"
+            color="light"
+            variant="outlined"
+            v-model="search"
+            label="Kankor ID"
+            append-inner-icon="mdi-magnify"
+            @click:append-inner="findStudent"
+            :loading="loading"
+          ></v-text-field>
+
           <!-- Status Filter menu -->
           <v-menu>
             <template v-slot:activator="{ props }">
@@ -155,9 +167,10 @@ export default {
         },
       });
     },
-    async loadStudents(options = { page: this.page, like: '' }) {
+    async loadStudents(options = { page: this.page, limit: this.itemsPerPage, like: '' }) {
       try {
         this.loading = true;
+
         await this.$store.dispatch('students/loadStudents', options);
       } catch (e) {
         this.errorMessage = e;
