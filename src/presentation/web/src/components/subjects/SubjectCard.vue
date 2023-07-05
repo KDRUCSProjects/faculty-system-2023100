@@ -1,18 +1,21 @@
 <template>
   <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
     <!-- <span class="pro">  </span> -->
-    
-    <v-card-title class="pb-0">{{ subjectName }}</v-card-title>
+    <v-card-item>
+      <v-card-title class="pb-0">{{ subjectName }}</v-card-title>
+    </v-card-item>
     <v-card-subtitle class="py-1 text-h6 " style="font-family: monospace">
       {{ teacherName }}
     </v-card-subtitle>
-    <v-card-subtitle class="text-primary ">{{ semesterTitle }}</v-card-subtitle>
+    <v-card-text>
+
+    <v-card-subtitle class="text-primary ">{{ semesterTitle }} th Semester</v-card-subtitle>
     <v-card-subtitle class="text-primary ">{{ subjectCredit }} Credit</v-card-subtitle>
+    </v-card-text>
 
     
       <v-card-actions class="mt-2 ">
       <update-subject :subjectId="subjectId"  activator-color="primary"> </update-subject> 
-      <!-- <v-btn color="primary" prepend-icon="mdi-pencil" variant="text">Edit</v-btn> -->
       <v-btn prepend-icon="mdi-delete" variant="text" color="error" @click="deleteSubject(subjectId)">
               Delete
             </v-btn>
