@@ -14,6 +14,12 @@
   </head>
   <body>
     <main>
+      <div class="main-heading-div">
+        <h1>
+          Welcome To Kandahar University Website <br />
+          Enter Your Kankor ID To See The Result
+        </h1>
+      </div>
       <div class="main-div">
         <!-- /////////////////////////////////////////// -->
 
@@ -26,10 +32,12 @@
               name="Search"
               placeholder="Enter Your ID"
             />
+            <i class="icofont-bubble-right bubble-icon"></i>
+            <i class="icofont-spinner-alt-2 spinner hidden"></i>
           </div>
           <!-- /////////////////////////////////////////// -->
 
-          <div class="result-container">
+          <div class="result-container hidden">
             <div id="top-box" calss="result-top-box">
               <div class="information-box">
                 <h4 class="first-heading name">Name</h4>
@@ -145,12 +153,14 @@
       <div class="overlay hidden"></div>
       <!-- //////////////////////////////// -->
 
-      <div class="hidden error-message-div">
+      <div class="error-message-div">
         <div class="icon-exc-div">
           <i class="icofont-exclamation icon-exc"></i>
         </div>
         <div>
-          <p>We Could not Find The Required Name Please Enter A Valid Name.</p>
+          <p class="error-p">
+            This ID is not in our Database Please Enter a Valid ID.
+          </p>
         </div>
         <div>
           <i class="icofont-close-line error-close"></i>

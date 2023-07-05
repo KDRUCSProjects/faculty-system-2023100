@@ -25,6 +25,9 @@ const admDate = document.querySelector('.adm-date');
 const updateDate = document.querySelector('.update-date');
 const errorClose = document.querySelector('.error-close');
 const errorDiv = document.querySelector('.error-message-div');
+const loader = document.querySelector('.spinner');
+const resultContainer = document.querySelector('.result-container');
+const bubbleIcon = document.querySelector('.bubble-icon');
 
 // console.log(profile);
 
@@ -43,20 +46,34 @@ profile.addEventListener('click', function () {
 
 errorClose.addEventListener('click', function () {
   errorDiv.style.display = 'none';
+  errorDiv.classList.remove('hidden');
 });
 
-input.addEventListener('keydown', function (e) {
-  if (e.key === 'Enter') {
-    let inputValue = input.value;
-    input.value = '';
-
-    setTimeout(() => {
-      getApiFun(inputValue);
-    }, 3000);
-  }
-});
+// input.addEventListener('keydown', submitFun);
+bubbleIcon.addEventListener('click', submitFun);
 
 ///////////////////////////////////////////////////////
+
+function submitFun(e) {
+  let inputValue = input.value;
+  input.value = '';
+  loader.classList.remove('hidden');
+  resultContainer.classList.add('hidden');
+  bubbleIcon.classList.add('hidden');
+
+  setTimeout(() => {
+    getApiFun(inputValue);
+    loader.classList.add('hidden');
+    bubbleIcon.classList.remove('hidden');
+    // resultContainer.classList.remove('hidden');
+
+    setTimeout(() => {
+      errorDiv.style.display = 'none';
+      errorDiv.classList.remove('hidden');
+    }, 3000);
+  }, 3000);
+}
+
 ///////////////////////////////////////////////////////
 
 const getApiFun = id => {
@@ -69,6 +86,7 @@ const getApiFun = id => {
     .then(data => {
       // console.log(data);
       if (data.kankorId) {
+        const date = new Date(data.createdAt);
         idID.textContent = data.id;
         kankorId.textContent = kankorInputvalue.textContent = data.kankorId;
         nameValue.textContent = fullName.textContent = data.fullName;
@@ -76,11 +94,13 @@ const getApiFun = id => {
         grandFNameValue.textContent = grandFatherName.textContent =
           data.grandFatherName;
         eYear.textContent = data.educationalYearId;
-        admDate.textContent = data.createdAt;
+        admDate.textContent = date.getFullYear();
+        resultContainer.classList.remove('hidden');
       } else {
       }
     })
     .catch(err => {
+      resultContainer.classList.add('hidden');
       errorDiv.style.display = 'flex';
     });
 };
