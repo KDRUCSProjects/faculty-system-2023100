@@ -31,6 +31,21 @@
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: row;
+  animation-name: goDown;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+}
+
+@keyframes goDown {
+  from {
+    top: 0%;
+    left: 50%;
+  }
+
+  to {
+    top: 50%;
+    left: 50%;
+  }
 }
 
 .profile-left {
@@ -111,6 +126,7 @@
   top: 15px;
   left: 15px;
   font-size: 25px;
+  cursor: pointer;
 }
 
 .biography-heading-div {
@@ -204,7 +220,7 @@
 }
 
 /* //////////////////////////////////////////////////// */
-/* .overlay {
+.overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -213,7 +229,7 @@
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(3px);
   z-index: 5;
-} */
+}
 
 .hidden {
   display: none;
@@ -222,12 +238,14 @@
 .error-message-div {
   justify-content: center;
   align-items: center;
-  background-color: white;
+  /* background-color: white; */
+  /* background-color: #edbcbd; */
+  background-color: rgba(237, 216, 216, 1);
   flex-direction: row;
   width: 25rem;
   padding: 20px;
   position: absolute;
-  top: 10%;
+  top: 8%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 5px;
@@ -235,6 +253,8 @@
   font-size: 15px;
   transition: 0.5;
   display: none;
+  animation-name: popUp;
+  animation-duration: 0.9s;
 }
 
 /* #03A9F4  */
@@ -250,6 +270,24 @@
   color: white;
 }
 
+.error-p {
+  font-family: LatoRegular;
+  text-align: center;
+}
+
 .error-close {
   font-size: 25px;
+  cursor: pointer;
+}
+
+@keyframes popUp {
+  from {
+    top: 0%;
+    left: 50%;
+  }
+
+  to {
+    top: 8%;
+    left: 50%;
+  }
 }
