@@ -8,6 +8,7 @@ export default {
     return {
       currentYear: null,
       currentYearSemesters: [],
+      semester: null,
     };
   },
   getters,

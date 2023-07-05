@@ -140,9 +140,10 @@ export default {
         },
       });
 
-      console.log(response.data);
-
       context.commit('setStudentsList', response.data.results);
+
+      // Plus, also load current semester data
+      context.dispatch('semesters/loadSemesterById', semesterId, { root: true });
     } catch (e) {
       throw e.response.data.message;
     }
@@ -186,7 +187,8 @@ export default {
         },
       });
 
-      console.log(response.data);
+      // Let's reload the students
+      context.dispatch('loadStudentsListBySemesterId', semesterId);
     } catch (e) {
       throw e.response.data.message;
     }

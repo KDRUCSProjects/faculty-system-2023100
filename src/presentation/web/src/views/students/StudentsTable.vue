@@ -181,11 +181,11 @@ export default {
   },
   watch: {
     async page(newValue) {
-      await this.loadStudents({ page: newValue });
+      await this.loadStudents({ page: newValue, limit: this.itemsPerPage, like: this.search });
     },
   },
   async created() {
-    await this.loadStudents({ page: 1 });
+    await this.loadStudents({ page: 1, limit: this.itemsPerPage });
   },
 };
 </script>

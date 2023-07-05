@@ -4,7 +4,11 @@
       <!-- <v-list-subheader>Subjects</v-list-subheader> -->
       <v-list-item v-for="(subject, i) in subjects" :key="i" class="my-1 border" variant="outline">
         <v-list-item-title>{{ subject.name }}</v-list-item-title>
-        <v-list-item-subtitle>Credits: {{ subject.credits }}</v-list-item-subtitle>
+        <v-list-item-subtitle>Credits: {{ subject.credit }}</v-list-item-subtitle>
+
+        <template v-slot:prepend>
+          <v-chip variant="flat" class="mr-4" color="dark">{{ i + 1 }}</v-chip>
+        </template>
 
         <template v-slot:append>
           <v-menu transition="slide-y-transition" elevation="0">
