@@ -99,14 +99,6 @@ export default {
       },
       { title: 'Actions', key: 'actions', sortable: false },
     ],
-    subjects: [
-      { name: 'Big Data', credits: 4, teacherId: 1 },
-      { name: 'Software Engineeing', credits: 4, teacherId: 1 },
-      { name: 'Network Engineeing', credits: 4, teacherId: 1 },
-      { name: 'Big Data', credits: 4, teacherId: 1 },
-      { name: 'Software Engineeing', credits: 4, teacherId: 1 },
-      { name: 'Network Engineeing', credits: 4, teacherId: 1 },
-    ],
   }),
   computed: {
     students() {
@@ -115,7 +107,9 @@ export default {
       }
       return this.$store.getters['students/studentsList'];
     },
-
+    subjects() {
+      return this.$store.getters['semesters/semesterSubjects'];
+    },
     title() {
       return rankSemester(this.$route.query.semester);
     },

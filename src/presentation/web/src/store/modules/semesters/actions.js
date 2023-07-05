@@ -20,4 +20,23 @@ export default {
       throw e.response.data.message;
     }
   },
+
+  async loadSemesterById(context, semesterId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/semesters/${semesterId}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setSemester', response.data);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
 };
