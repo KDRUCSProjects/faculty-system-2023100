@@ -90,7 +90,7 @@ export default login = (props) => {
   };
   const onLogin = async () => {
     const emailRegEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    const paswordRegEx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,}$/;
+    const paswordRegEx = /^(?=.*\d).{8,15}$/;
     if (email == "") {
       setemailError("email is Required");
       return;
@@ -118,7 +118,7 @@ export default login = (props) => {
     } catch (err) {
       setisLoading(false);
       seterror(err.message);
-      props.navigation.navigate("teacherScreen");
+      //props.navigation.navigate("teacherScreen");
       return;
     }
 

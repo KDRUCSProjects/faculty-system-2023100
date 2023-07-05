@@ -82,7 +82,7 @@ const AttendenceItem = (props, ref) => {
             shadowColor: "yellow",
           }}
         >
-          <View style={{ height: "15%", width: "100%" }}>
+          <View style={{ height: "15%", width: "97%" }}>
             <ImageBackground
               style={{ height: "100%", width: "100%", flex: 1 }}
               source={require("../assets/images/line.png")}
