@@ -6,6 +6,12 @@
   
         <v-dialog max-width="550" activator="parent" v-model="dialog" >
           <v-card class="pa-1" :loading="isLoading">
+            <v-card-item>
+              <v-card-title>Add Department</v-card-title>
+              <v-card-subtitle>
+                Fill in the blanks to add department
+              </v-card-subtitle>
+            </v-card-item>
             <v-card-text> 
               <v-form  @submit.prevent="submitForm" ref="addDepartmentForm">
                 <v-text-field :rules="rules.name" v-model="name" type="text" variant="outlined" label="Department Name"></v-text-field>                

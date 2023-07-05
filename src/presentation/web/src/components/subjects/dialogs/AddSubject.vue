@@ -6,10 +6,26 @@
 
       <v-dialog max-width="550" activator="parent" v-model="dialog">
         <v-card class="pa-1" :loading="isLoading">
+          <v-card-item>
+            <v-card-title>Add Subject</v-card-title>
+            <v-card-subtitle>
+              Fill in the blanks to add subject
+            </v-card-subtitle>
+          </v-card-item>
           <v-card-text>
+
             <v-form  @submit.prevent="submitForm" ref="addSubjectForm">
               <v-text-field :rules="rules.name" v-model="name" type="text" variant="outlined" label="Subject Name"></v-text-field>
               <v-text-field :rules="rules.credit" v-model="credit" type="number" variant="outlined" label="Subject Credit"></v-text-field>
+              <v-autocomplete
+                v-model="teacherId"
+                clearable
+                label="Select Teacher"
+                :items="teachers"
+                variant="outlined"
+                item-title="name"
+                item-value="id"
+              ></v-autocomplete>
               
             </v-form>
             <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
@@ -29,6 +45,7 @@ export default {
   data: () => ({
     alert: false,
     dialog: false,
+    teacherId:null,
     name: null,
     credit: null,
     show: true,
@@ -36,6 +53,9 @@ export default {
     errorMessage: null,
   }),
   computed: {
+    teachers(){
+      return this.$store.getters['teachers/teachers']
+    },
     rules() {
       return {
         name: [(v) => !!v || 'Please enter Subject  Name'],
@@ -59,7 +79,7 @@ export default {
         const data = {
           name: this.name,
           credit: this.credit,
-          teacherId: 1,
+          teacherId: this.teacherId,
           semesterId: 1
         };
 
