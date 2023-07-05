@@ -40,6 +40,27 @@ const getEducationalYear = (yearId) => {
 };
 
 /**
+ * find next year
+ * @param {Number} year
+ * @returns {Promise<EducationalYear>}
+ */
+const findNextYear = (year) => {
+  const nextYear = ++year;
+  return EducationalYear.findOne({ where: { year: nextYear } });
+};
+
+/**
+ * create next educational year
+ * @param {Number} year
+ * @returns {Promise<EducationalYear>}
+ */
+const createNextEducationalYear = (year) => {
+  const nextYear = ++year;
+  return EducationalYear.create({ year: nextYear });
+};
+
+
+/**
  * find Educational year by value
  * @param {ObjectId} year
  * @returns {Promise<EducationalYear>}
@@ -69,11 +90,13 @@ const getCurrentEducationalYear = () => {
 };
 
 module.exports = {
+  findNextYear,
   createEducationalYear,
   getEducationalYears,
   deleteEducationalYear,
   getEducationalYear,
-  findEducationalYearByValue,
+  createNextEducationalYear,
   getEducationalYearByValue,
   getCurrentEducationalYear,
+  findEducationalYearByValue,
 };
