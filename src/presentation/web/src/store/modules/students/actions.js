@@ -186,7 +186,8 @@ export default {
         },
       });
 
-      console.log(response.data);
+      // Let's reload the students
+      context.dispatch('loadStudentsListBySemesterId', semesterId);
     } catch (e) {
       throw e.response.data.message;
     }

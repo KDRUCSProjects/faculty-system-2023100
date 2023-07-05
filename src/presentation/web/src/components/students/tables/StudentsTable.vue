@@ -65,6 +65,13 @@
         </v-chip>
       </template>
 
+      <!-- Number Slot -->
+      <!-- <template v-slot:item.no="{ index }">
+        <v-chip class="" variant="flat">
+          {{ index + 1 + (this.page - 1) * this.itemsPerPage }}
+        </v-chip>
+      </template> -->
+
       <!-- <template v-slot:item.status="{ item }">
         <v-chip color="red">
           {{ item.columns.status }}
@@ -111,7 +118,7 @@ export default {
   },
   computed: {
     theStudents() {
-      return this.attachTableNumber(this.students, this.page, this.itemsPerPage);
+      return this.students;
     },
     pageCount() {
       return this.$store.getters['students/counts']?.totalPages;

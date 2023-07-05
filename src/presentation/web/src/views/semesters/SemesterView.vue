@@ -37,6 +37,7 @@
             @mode="setMode"
             @pagination-number="getPageNumber"
             @selected-student-id="getSelectedStudentId"
+            ref="studentsTable"
           ></students-table>
         </router-view>
       </v-col>
@@ -69,11 +70,11 @@ export default {
     selectedStudentId: null,
     mode: 'semester-students',
     headers: [
-      {
-        title: 'No',
-        sortable: false,
-        key: 'no',
-      },
+      // {
+      //   title: 'No',
+      //   sortable: false,
+      //   key: 'no',
+      // },
       {
         title: 'Photo',
         key: 'photo',
@@ -123,13 +124,20 @@ export default {
     },
   },
   methods: {
-    getPageNumber(number) {
+    async getPageNumber(number) {
       this.page = number;
-      // Also, now let's students
-      this.loadStudents();
+      // Also, now let's load students
+      await this.loadStudents();
     },
-    setMode(mode) {
+    async setMode(mode) {
       this.mode = mode;
+
+      // Now load relevant mode data
+      if (this.mode === 'enrollment') {
+        await this.loadStudents(true);
+      } else {
+        await this.loadStudents();
+      }
     },
     async getSelectedStudentId(id) {
       this.selectedStudentId = id;
@@ -154,6 +162,13 @@ export default {
           studentId,
           semesterId,
         });
+
+        // Now, lets toggle back the view and reset the page to number 1
+        this.page = 1;
+        // Now lets reload the students
+        await this.loadStudents(true);
+        // And switch back to semester students
+        this.$refs.studentsTable.switchMode();
       } catch (e) {
         alert(e);
         // this.errorMessage = e;
