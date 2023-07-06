@@ -1,38 +1,29 @@
 <template>
-  <base-contents>
-    <!-- Appbar Slot -->
-    <template v-slot:bar>
-      <v-text-field
-        clearable=""
-        :loading="loading"
-        density="compact"
-        variant="outlined"
-        label="Find teacher by name"
-        prepend-inner-icon="mdi-magnify"
-        single-line
-        hide-details
-        @click:append-inner="onClick"
-      ></v-text-field>
-      <div class="mx-1"></div>
-      <add-teacher></add-teacher>
-    </template>
-    <v-row no-gutters>
-      <v-col v-for="(teacher, index) in teachers" :key="index" cols="3">
-        <v-sheet class="ma-2 pa-2">
-          <teacher-card
-            :fullName="teacher.name"
-            :email="teacher.email"
-            :lastName="teacher.lastName"
-            :teacherId="teacher.id"
-            :photo="teacher.photo"
-          >
-          </teacher-card>
-        </v-sheet>
-      </v-col>
-    </v-row>
+  <v-toolbar :color="'dark'">
+    <v-toolbar-title> All Teachers </v-toolbar-title>
+    <v-divider inset vertical></v-divider>
+    <v-spacer></v-spacer>
 
-    <!-- Dialogs -->
-  </base-contents>
+    <div class="mx-4">
+      <add-teacher></add-teacher>
+    </div>
+  </v-toolbar>
+  <v-row no-gutters>
+    <v-col v-for="(teacher, index) in teachers" :key="index" cols="3">
+      <v-sheet class="ma-2 pa-2">
+        <teacher-card
+          :fullName="teacher.name"
+          :email="teacher.email"
+          :lastName="teacher.lastName"
+          :teacherId="teacher.id"
+          :photo="teacher.photo"
+        >
+        </teacher-card>
+      </v-sheet>
+    </v-col>
+  </v-row>
+
+  <!-- Dialogs -->
 </template>
 
 <script>

@@ -84,6 +84,24 @@ export default {
       throw e.response.data.message;
     }
   },
+  async loadTeachersAssignedSubjects(context, teacherId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/subjects/teachers/${teacherId}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setCurrentTeacherAssignedSubjects', response.data);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
   async loadTeacherById(context, teacherId) {
     try {
       const token = context.rootGetters.token;
@@ -95,7 +113,10 @@ export default {
         },
       });
 
-      // context.commit();
+      context.commit('setCurrentTeacher', response.data);
+
+      // Plus, also load this teacher assigned subjects
+      await context.dispatch('loadTeachersAssignedSubjects', teacherId);
 
       return response;
     } catch (e) {

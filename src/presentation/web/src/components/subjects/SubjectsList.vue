@@ -22,7 +22,7 @@
                   :prepend-icon="action.icon"
                   variant="text"
                   color="dark"
-                  @click="emitAction({ action: action.onClick, subjectId: subject.id })"
+                  @click="takeAction({ action: action.onClick, subject: subject })"
                 >
                   {{ action.title }}
                 </v-btn>
@@ -37,38 +37,42 @@
 
 <script>
 export default {
-  props: ['subjects'],
-  data: () => ({
-    actions: [
-      {
-        icon: 'mdi-account',
-        title: 'View Teacher',
-        onClick: 'viewTeacher',
-      },
-      {
-        icon: 'mdi-passport-biometric',
-        title: 'Download Attendance',
-        onClick: 'downloadAttendance ',
-      },
-      {
-        icon: 'mdi-note-text-outline',
-        title: 'Download Shoka',
-        onClick: 'downloadAttendance ',
-      },
-      {
-        icon: 'mdi-cash',
-        title: 'Download BadlAsha',
-        onClick: 'downloadAttendance ',
-      },
-    ],
-  }),
-  computed: {},
+  props: ['subjects', 'noTeacherView'],
+  data: () => ({}),
+  computed: {
+    actions() {
+      let actions = [
+        {
+          icon: 'mdi-passport-biometric',
+          title: 'Download Attendance',
+          onClick: 'downloadAttendance ',
+        },
+        {
+          icon: 'mdi-note-text-outline',
+          title: 'Download Shoka',
+          onClick: 'downloadAttendance ',
+        },
+      ];
+
+      if (!this.noTeacherView) {
+        actions.unshift({
+          icon: 'mdi-account',
+          title: 'View Teacher',
+          onClick: 'viewTeacher',
+        });
+      }
+
+      return actions;
+    },
+  },
   methods: {
-    emitAction({ action, subjectId }) {
-      this.$emit('action', {
-        action,
-        subjectId,
-      });
+    takeAction({ action, subject }) {
+      if (action === 'viewTeacher') {
+        this.viewTeacher(subject.teacherId);
+      }
+    },
+    viewTeacher(teacherId) {
+      this.$router.push(`/teachers/view/${teacherId}`);
     },
   },
   emits: ['action'],
