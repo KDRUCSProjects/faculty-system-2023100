@@ -193,4 +193,25 @@ export default {
       throw e.response.data.message;
     }
   },
+  async deleteStudentFromSemester(context, { semesterId, studentId }) {
+    // try {
+    //   const token = context.rootGetters.token;
+    //   const response = await axios({
+    //     url: `/api/studentList`,
+    //     method: 'post',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //     data: {
+    //       studentId: parseInt(studentId),
+    //       semesterId: parseInt(semesterId),
+    //     },
+    //   });
+    //   // Let's reload the students
+    //   context.dispatch('loadStudentsListBySemesterId', semesterId);
+    // } catch (e) {
+    //   throw e.response.data.message;
+    // }
+  },
 };

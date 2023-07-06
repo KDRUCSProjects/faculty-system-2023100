@@ -22,7 +22,10 @@
             </v-tabs>
             <v-window v-model="tab">
               <v-window-item :value="1">
-                <subjects-list :subjects="subjects"></subjects-list>
+                <subjects-list :subjects="subjects" @subject-delete="loadSubjects"></subjects-list>
+                <add-subject :semester-id="id">
+                  <v-btn variant="tonal" color="primary" block :prepend-icon="'mdi-plus'">New Subject</v-btn>
+                </add-subject>
               </v-window-item>
               <v-window-item :value="2"> later on </v-window-item>
             </v-window>
@@ -52,6 +55,7 @@
 import StudentsTable from '@/components/students/tables/StudentsTable.vue';
 import SubjectsList from '@/components/subjects/SubjectsList.vue';
 import { rankSemester } from '@/utils/global';
+import AddSubject from '@/components/subjects/dialogs/AddSubject.vue';
 export default {
   props: {
     id: {
@@ -62,6 +66,7 @@ export default {
   components: {
     StudentsTable,
     SubjectsList,
+    AddSubject,
   },
   data: () => ({
     tab: 1,
@@ -122,6 +127,9 @@ export default {
       this.page = number;
       // Also, now let's load students
       await this.loadStudents();
+    },
+    async loadSubjects() {
+      await this.$store.dispatch('semesters/loadSemesterById', this.id);
     },
     async setMode(mode) {
       this.mode = mode;

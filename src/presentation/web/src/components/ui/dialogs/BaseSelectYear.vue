@@ -54,7 +54,7 @@ export default {
   data: () => initialState(),
   computed: {
     items() {
-      return this.$store.getters['years'];
+      return this.$store.getters['years']?.map((year) => year.year);
     },
   },
   methods: {

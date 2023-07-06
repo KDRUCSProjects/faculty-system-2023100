@@ -32,6 +32,10 @@
         </template>
       </v-list-item>
     </v-list>
+
+    <!-- All Dialogs -->
+    <!-- Delete Dialog -->
+    <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
   </div>
 </template>
 
@@ -52,6 +56,11 @@ export default {
           title: 'Download Shoka',
           onClick: 'downloadAttendance ',
         },
+        {
+          icon: 'mdi-note-text-outline',
+          title: 'Delete ',
+          onClick: 'delete',
+        },
       ];
 
       if (!this.noTeacherView) {
@@ -66,16 +75,42 @@ export default {
     },
   },
   methods: {
-    takeAction({ action, subject }) {
+    async takeAction({ action, subject }) {
       if (action === 'viewTeacher') {
         this.viewTeacher(subject.teacherId);
+      } else if (action === 'delete') {
+        await this.deleteSubject(subject);
       }
     },
     viewTeacher(teacherId) {
       this.$router.push(`/teachers/view/${teacherId}`);
     },
+    async deleteSubject(subject) {
+      // Show confirm dialog by access it with $ref
+
+      let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: 'Warning',
+        title: 'Are you sure you want to delete this subject?',
+        subtitle: `${subject.name}`,
+        okButton: 'Yes',
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return false;
+      }
+
+      // Otherwise, continue deleting the teacher from the database
+      try {
+        await this.$store.dispatch('subjects/deleteSubject', subject.id);
+        this.$emit('subjectDelete', true);
+      } catch (e) {
+        console.log(e);
+        // Show toast maybe?
+      }
+    },
   },
-  emits: ['action'],
+  emits: ['action', 'subjectDelete'],
 };
 </script>
 

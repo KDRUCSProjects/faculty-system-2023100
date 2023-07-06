@@ -30,7 +30,7 @@ export default {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        data
+        data,
       });
 
       context.commit('saveSubject', response.data);
@@ -51,8 +51,6 @@ export default {
         },
       });
 
-      console.log(response)
-
       context.commit('removeSubject', subjectId);
     } catch (e) {
       throw e.response.data.message;
@@ -72,7 +70,7 @@ export default {
         data: {
           name: payload.name,
           credit: payload.credit,
-        }
+        },
       });
 
       context.commit('updateSubject', response.data);
