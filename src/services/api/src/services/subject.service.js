@@ -1,7 +1,7 @@
 // Sequelize Models
 const httpStatus = require('http-status');
 const { QueryTypes } = require('sequelize');
-const { Subject, StudentsList, Student, sequelize, User } = require('../models');
+const { Subject, StudentsList, Student, sequelize, Semester } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -121,7 +121,12 @@ const updatedSubject = (oldSubjectBody, newSubjectBody) => {
  * @returns {Promise<Subject>}
  */
 const getUnassignedSubjects = () => {
-  return Subject.findAll({ where: { teacherId: null } });
+  return Subject.findAll({
+    where: { teacherId: null },
+    include: [
+      { model: Semester },
+    ],
+  });
 };
 
 module.exports = {
