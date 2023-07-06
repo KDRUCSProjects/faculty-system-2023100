@@ -95,13 +95,13 @@ const routes = [
   //     },
   //   ],
   // },
-  {
-    path: '/subjects',
-    meta: {
-      requiresAuth: true,
-    },
-    component: () => import('@/views/subjects/SubjectsList.vue'),
-  },
+  // {
+  //   path: '/subjects',
+  //   meta: {
+  //     requiresAuth: true,
+  //   },
+  //   component: () => import('@/views/subjects/SubjectsList.vue'),
+  // },
   {
     path: '/semesters',
     meta: {
