@@ -1,41 +1,37 @@
 <template>
-    <div>
-      <base-contents>
+  <div>
+    <base-contents>
       <template v-slot:bar>
-      <v-text-field
-        clearable=""
-        :loading="loading"
-        density="compact"
-        variant="outlined"
-        label="Find Course by name"
-        prepend-inner-icon="mdi-magnify"
-        single-line
-        hide-details
-        @click:append-inner="onClick"
-      ></v-text-field>
-      <div class="mx-1"></div>
-      <add-department></add-department>
-      
-    </template>
-    <v-row no-gutters style="padding: 0.3%;">
-      <department-card v-for="(department, index) in departments" :key="index"
-      :name = "department.name"
-      :id = "department.id"
-      >
-      
-      </department-card>
-   
-    </v-row>
-    
-      </base-contents>
-    </div>
+        <v-text-field
+          clearable=""
+          :loading="loading"
+          density="compact"
+          variant="outlined"
+          label="Find Course by name"
+          prepend-inner-icon="mdi-magnify"
+          single-line
+          hide-details
+          @click:append-inner="onClick"
+        ></v-text-field>
+        <div class="mx-1"></div>
+        <add-department></add-department>
+      </template>
+      <v-row no-gutters>
+        <v-col v-for="(department, index) in departments" :key="index" cols="3">
+          <v-sheet class="ma-2 pa-2">
+            <department-card :name="department.name" :id="department.id"> </department-card>
+          </v-sheet>
+        </v-col>
+      </v-row>
+    </base-contents>
+  </div>
 </template>
-  
-  <script>
-  import departmentCard from '../../components/departments/departmentCard.vue';
-  import AddSubject from '@/components/departments/modals/AddDepartment.vue';
+
+<script>
+import departmentCard from '../../components/departments/departmentCard.vue';
+import AddSubject from '@/components/departments/modals/AddDepartment.vue';
 import AddDepartment from '../../components/departments/Modals/AddDepartment.vue';
-  export default {
+export default {
   components: { departmentCard, AddDepartment },
   computed: {
     departments() {
@@ -46,8 +42,7 @@ import AddDepartment from '../../components/departments/Modals/AddDepartment.vue
     // Load courses at app mount
     await this.$store.dispatch('departments/getDepartments');
   },
-  }
-  </script>
-  
-  <style lang="scss" scoped></style>
-  
+};
+</script>
+
+<style lang="scss" scoped></style>

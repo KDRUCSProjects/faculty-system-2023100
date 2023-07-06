@@ -1,15 +1,16 @@
 <template>
     <v-card class="d-flex justify-center align-center flex-column pa-2 py-5 theShadow rounded" style="height: '200px'; margin-left: 1%; display: flex; flex: 1;" >
-      <v-card-subtitle class="py-0 my-0" style="font-family: monospace; font-size: larger;">
+      <v-card-item>
+        <v-card-title class="py-0 my-0" style="font-family: monospace; font-size: larger;">
         {{ name || 'Course' }}
-      </v-card-subtitle>
-      <v-divider></v-divider>
+      </v-card-title>
+      </v-card-item>
     
   
       <v-card-actions class="mt-3" >
         <!-- <v-btn color="secondary" variant="tonal"> Edit </v-btn> -->
         <update-department :departmentId="id"  activator-color="primary"> </update-department> 
-        <v-btn color="error" variant="elevated" @click="deleteDepartment(id)">Delete</v-btn>
+        <v-btn prepend-icon="mdi-delete" color="error" variant="text" @click="deleteDepartment(id)">Delete</v-btn>
 
       </v-card-actions>
   
