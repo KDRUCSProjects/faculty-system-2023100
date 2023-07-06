@@ -8,6 +8,7 @@ import studentsModule from './modules/students';
 import subjectsModule from './modules/subjects';
 import departmentModule from './modules/departments';
 import semestersModule from './modules/semesters';
+import yearsModule from './modules/years';
 
 export default createStore({
   modules: {
@@ -18,6 +19,7 @@ export default createStore({
 
     departments: departmentModule,
     semesters: semestersModule,
+    years:yearsModule,
   },
   state: {
     years: [],
@@ -26,7 +28,7 @@ export default createStore({
   getters: {
     years(state) {
       return state.years.map((year) => {
-        return year.year;
+        return year;
       });
     },
     selectedYear(state) {

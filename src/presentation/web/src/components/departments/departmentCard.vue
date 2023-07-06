@@ -39,8 +39,6 @@ import updateDepartment from './updateDepartment.vue';
         default: 'Java Script',
       },
     },
-    computed: {
-    },
     methods: {
       closeMenu() {
         // For some reasons, the dialog won't close when the item is clicked in the menu in Vuetify 3 when using a dialog. Let's use this hack for now.
