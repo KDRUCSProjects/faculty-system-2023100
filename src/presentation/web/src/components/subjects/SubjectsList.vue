@@ -22,7 +22,7 @@
                   :prepend-icon="action.icon"
                   variant="text"
                   color="dark"
-                  @click="emitAction({ action: action.onClick, subjectId: subject.id })"
+                  @click="takeAction({ action: action.onClick, subject: subject })"
                 >
                   {{ action.title }}
                 </v-btn>
@@ -32,46 +32,85 @@
         </template>
       </v-list-item>
     </v-list>
+
+    <!-- All Dialogs -->
+    <!-- Delete Dialog -->
+    <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['subjects'],
-  data: () => ({
-    actions: [
-      {
-        icon: 'mdi-account',
-        title: 'View Teacher',
-        onClick: 'viewTeacher',
-      },
-      {
-        icon: 'mdi-passport-biometric',
-        title: 'Download Attendance',
-        onClick: 'downloadAttendance ',
-      },
-      {
-        icon: 'mdi-note-text-outline',
-        title: 'Download Shoka',
-        onClick: 'downloadAttendance ',
-      },
-      {
-        icon: 'mdi-cash',
-        title: 'Download BadlAsha',
-        onClick: 'downloadAttendance ',
-      },
-    ],
-  }),
-  computed: {},
-  methods: {
-    emitAction({ action, subjectId }) {
-      this.$emit('action', {
-        action,
-        subjectId,
-      });
+  props: ['subjects', 'noTeacherView'],
+  data: () => ({}),
+  computed: {
+    actions() {
+      let actions = [
+        {
+          icon: 'mdi-passport-biometric',
+          title: 'Download Attendance',
+          onClick: 'downloadAttendance ',
+        },
+        {
+          icon: 'mdi-note-text-outline',
+          title: 'Download Shoka',
+          onClick: 'downloadAttendance ',
+        },
+        {
+          icon: 'mdi-note-text-outline',
+          title: 'Delete ',
+          onClick: 'delete',
+        },
+      ];
+
+      if (!this.noTeacherView) {
+        actions.unshift({
+          icon: 'mdi-account',
+          title: 'View Teacher',
+          onClick: 'viewTeacher',
+        });
+      }
+
+      return actions;
     },
   },
-  emits: ['action'],
+  methods: {
+    async takeAction({ action, subject }) {
+      if (action === 'viewTeacher') {
+        this.viewTeacher(subject.teacherId);
+      } else if (action === 'delete') {
+        await this.deleteSubject(subject);
+      }
+    },
+    viewTeacher(teacherId) {
+      this.$router.push(`/teachers/view/${teacherId}`);
+    },
+    async deleteSubject(subject) {
+      // Show confirm dialog by access it with $ref
+
+      let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: 'Warning',
+        title: 'Are you sure you want to delete this subject?',
+        subtitle: `${subject.name}`,
+        okButton: 'Yes',
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return false;
+      }
+
+      // Otherwise, continue deleting the teacher from the database
+      try {
+        await this.$store.dispatch('subjects/deleteSubject', subject.id);
+        this.$emit('subjectDelete', true);
+      } catch (e) {
+        console.log(e);
+        // Show toast maybe?
+      }
+    },
+  },
+  emits: ['action', 'subjectDelete'],
 };
 </script>
 
