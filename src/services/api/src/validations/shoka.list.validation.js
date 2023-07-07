@@ -16,7 +16,18 @@ const getShokaList = {
   }),
 };
 
+const getStudentMarks = {
+  params: Joi.object().keys({
+    studentId: Joi.number().required(),
+  }),
+  query: Joi.object().keys({
+    semester: Joi.number().min(1).max(8),
+    class: Joi.number().min(1).max(4),
+  }),
+};
+
 module.exports = {
-  createShokaList,
   getShokaList,
+  createShokaList,
+  getStudentMarks,
 };

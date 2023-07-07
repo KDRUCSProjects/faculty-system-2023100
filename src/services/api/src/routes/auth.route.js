@@ -323,7 +323,6 @@ module.exports = router;
  *
  */
 
-
 /**
  * @swagger
  * /auth/token:

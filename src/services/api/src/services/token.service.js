@@ -1,16 +1,16 @@
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
+const httpStatus = require('http-status');
 const config = require('../config/config');
 const { Token, TempToken } = require('../models');
 const { tokenTypes } = require('../config/tokens');
 const ApiError = require('../utils/ApiError');
-const httpStatus = require('http-status');
 
 /**
  * find temp token by value
  * @param {Number} token
  * @returns {Promise<Object>}
-*/
+ */
 const findTempTokenByValue = (token) => {
   return TempToken.findOne({ where: { token } });
 };
@@ -18,20 +18,19 @@ const findTempTokenByValue = (token) => {
 /**
  * generate six digits pin
  * @returns {Promise<Number>}
-*/
+ */
 const generatePin = () => {
   const pin = Math.ceil(Math.random() * 1000000);
   if (pin.toString().length < 6 || pin.toString().length > 6) {
     return generatePin();
   }
-  return pin
+  return pin;
 };
-
 
 /**
  * create temporary token
  * @returns {Promise<Object>}
-*/
+ */
 const createTemporaryToken = async () => {
   const pin = generatePin();
   const date = moment().add(3, 'hours');
@@ -52,7 +51,6 @@ const deleteTemporaryToken = (token) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong try again');
 };
 
-
 /**
  * get Temp Token
  * @param {Number} userToken
@@ -62,13 +60,11 @@ const getTempToken = async (userToken) => {
   const token = await findTempTokenByValue(userToken);
   if (!token) throw new ApiError(httpStatus.NOT_FOUND, 'Token Not Found');
   if (moment() >= token.expiresIn) {
-    await deleteTemporaryToken(token)
+    await deleteTemporaryToken(token);
     throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Token is Expired');
   }
   return token;
 };
-
-
 
 /**
  * Generate token

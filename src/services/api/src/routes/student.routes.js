@@ -20,7 +20,6 @@ router
     studentController.registerStudent
   );
 
-router.route('/students/token').get(auth(), validate({}),)
 router
   .route('/students/:token')
   .post(
@@ -354,7 +353,6 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-
 
 /**
  * @swagger

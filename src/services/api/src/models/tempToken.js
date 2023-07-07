@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class TempToken extends Model {
     /**
@@ -13,18 +11,21 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  TempToken.init({
-    token: {
-      type: DataTypes.INTEGER,
-      required: true,
+  TempToken.init(
+    {
+      token: {
+        type: DataTypes.INTEGER,
+        required: true,
+      },
+      expiresIn: {
+        type: DataTypes.DATE,
+        required: true,
+      },
     },
-    expiresIn: {
-      type: DataTypes.DATE,
-      required: true,
+    {
+      sequelize,
+      modelName: 'TempToken',
     }
-  }, {
-    sequelize,
-    modelName: 'TempToken',
-  });
+  );
   return TempToken;
 };
