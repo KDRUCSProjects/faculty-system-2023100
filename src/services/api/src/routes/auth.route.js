@@ -22,6 +22,7 @@ router.patch(
   authController.updateProfile
 );
 router.post('/checkPassword', auth(), validate(authValidation.checkPassword), authController.checkPassword);
+router.get('/token', auth('manageUsers'), validate({}), authController.createTemporaryToken);
 
 module.exports = router;
 
@@ -319,5 +320,29 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ *
+ */
+
+
+/**
+ * @swagger
+ * /auth/token:
+ *   get:
+ *     summary: create a temporary token
+ *     description: create a temporary token
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/TempToken'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
  *
  */
