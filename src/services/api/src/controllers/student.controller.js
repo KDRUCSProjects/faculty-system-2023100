@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { studentService, educationalYearService, taajilService, reentryService, tabdiliService } = require('../services');
+const { studentService, educationalYearService, taajilService, reentryService, tabdiliService, tokenService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const registerStudent = catchAsync(async (req, res) => {
@@ -17,7 +17,10 @@ const registerStudent = catchAsync(async (req, res) => {
     ...req.body,
     educationalYearId,
   });
-  res.status(httpStatus.CREATED).send(results);
+  if (req.tempToken) {
+    await tokenService.deleteTemporaryToken(req.tempToken);
+  }
+  return res.status(httpStatus.CREATED).send(results);
 });
 
 const updateStudent = catchAsync(async (req, res) => {
@@ -100,6 +103,14 @@ const deleteStudents = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(results);
 });
 
+const registerYourSelf = catchAsync(async (req, res, next) => {
+  const { token } = req.params;
+  const userToken = await tokenService.getTempToken(token);
+  if (!userToken) throw new ApiError(httpStatus.BAD_REQUEST, 'Token Not Found');
+  req.tempToken = userToken;
+  return registerStudent(req, res, next);
+});
+
 
 
 module.exports = {
@@ -109,5 +120,6 @@ module.exports = {
   deleteStudent,
   deleteStudents,
   registerStudent,
+  registerYourSelf,
   getStudentOnKankorId,
 };

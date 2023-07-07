@@ -115,7 +115,6 @@ const updatedSubject = (oldSubjectBody, newSubjectBody) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
 
-
 /**
  * get unassigned subjects
  * @returns {Promise<Subject>}
@@ -123,9 +122,7 @@ const updatedSubject = (oldSubjectBody, newSubjectBody) => {
 const getUnassignedSubjects = () => {
   return Subject.findAll({
     where: { teacherId: null },
-    include: [
-      { model: Semester },
-    ],
+    include: [{ model: Semester }],
   });
 };
 

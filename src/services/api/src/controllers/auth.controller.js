@@ -51,6 +51,12 @@ const checkPassword = catchAsync(async (req, res) => {
   throw new ApiError(httpStatus.UNAUTHORIZED, 'unauthorized');
 });
 
+const createTemporaryToken = catchAsync(async (req, res) => {
+  const token = await tokenService.createTemporaryToken();
+  return res.status(httpStatus.CREATED).send(token);
+});
+
+
 module.exports = {
   register,
   login,
@@ -60,4 +66,5 @@ module.exports = {
   changePassword,
   updateProfile,
   checkPassword,
+  createTemporaryToken,
 };

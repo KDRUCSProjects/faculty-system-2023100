@@ -20,6 +20,15 @@ router
     studentController.registerStudent
   );
 
+router.route('/students/token').get(auth(), validate({}),)
+router
+  .route('/students/:token')
+  .post(
+    upload.single('photo'),
+    attachImageToBody,
+    validate(studentValidation.tempToken),
+    studentController.registerYourSelf
+  );
 
 router
   .route('/:studentId')
@@ -75,7 +84,7 @@ module.exports = router;
  *        in: query
  *        schema:
  *          type: string
- *        description: search by kankor id 
+ *        description: search by kankor id
  *     responses:
  *       "200":
  *         description: OK
@@ -344,4 +353,94 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ */
+
+
+/**
+ * @swagger
+ * /students/students/{token}:
+ *   post:
+ *     summary: Register Student By His Self
+ *     description: Register Student By His Self.
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: temporary token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - kankorId
+ *               - fullName
+ *               - fatherName
+ *               - grandFatherName
+ *               - educationalYear
+ *             properties:
+ *               kankorId:
+ *                 type: string
+ *                 format: text
+ *               fullName:
+ *                 type: string
+ *                 format: text
+ *               fatherName:
+ *                 type: string
+ *                 format: text
+ *               grandFatherName:
+ *                 type: string
+ *                 format: text
+ *               province:
+ *                 type: string
+ *                 format: number
+ *               division:
+ *                 type: string
+ *                 format: number
+ *               district:
+ *                 type: string
+ *                 format: number
+ *               engName:
+ *                 type: string
+ *                 format: text
+ *               engLastName:
+ *                 type: string
+ *                 format: text
+ *               engFatherName:
+ *                 type: string
+ *                 format: text
+ *               engGrandFatherName:
+ *                 type: string
+ *                 format: text
+ *               dob:
+ *                 type: string
+ *                 format: date
+ *                 example: "2023-06-25"
+ *                 description: 'please select date using date picker'
+ *               educationalYear:
+ *                 type: string
+ *                 format: number
+ *               admissionYear:
+ *                 type: string
+ *                 format: number
+ *               photo:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Student'
+ *       "404":
+ *         $ref: '#/components/responses/TokenNotFound'
+ *       "406":
+ *         $ref: '#/components/responses/TokenExpired'
  */

@@ -140,7 +140,7 @@ const promoteStudents = catchAsync(async (req, res) => {
     if (studentAllLists.length >= 1 && studentAllLists.length < 10) {
       lastSemester = await semesterService.findSemesterById(studentAllLists[0].semesterId);
       if (lastSemester.title === 8) {
-        if (lastSemester.onGoing) {
+        if (!lastSemester.onGoing) {
           result = await studentListService.updatedStudentList(studentAllLists[0], { 'onGoing': false, 'completed': true });
         }
         results.push({ message: 'Student is Graduated', result });

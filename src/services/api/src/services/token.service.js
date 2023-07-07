@@ -1,8 +1,74 @@
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const config = require('../config/config');
-const { Token } = require('../models');
+const { Token, TempToken } = require('../models');
 const { tokenTypes } = require('../config/tokens');
+const ApiError = require('../utils/ApiError');
+const httpStatus = require('http-status');
+
+/**
+ * find temp token by value
+ * @param {Number} token
+ * @returns {Promise<Object>}
+*/
+const findTempTokenByValue = (token) => {
+  return TempToken.findOne({ where: { token } });
+};
+
+/**
+ * generate six digits pin
+ * @returns {Promise<Number>}
+*/
+const generatePin = () => {
+  const pin = Math.ceil(Math.random() * 1000000);
+  if (pin.toString().length < 6 || pin.toString().length > 6) {
+    return generatePin();
+  }
+  return pin
+};
+
+
+/**
+ * create temporary token
+ * @returns {Promise<Object>}
+*/
+const createTemporaryToken = async () => {
+  const pin = generatePin();
+  const date = moment().add(3, 'hours');
+  const databaseToken = await findTempTokenByValue(pin);
+  if (databaseToken) {
+    return createTemporaryToken();
+  }
+  return TempToken.create({ token: pin, expiresIn: date });
+};
+
+/**
+ * delete temporary token by value
+ * @param {Object} token
+ * @returns {Promise<Object>}
+ */
+const deleteTemporaryToken = (token) => {
+  if (token instanceof TempToken) return token.destroy();
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong try again');
+};
+
+
+/**
+ * get Temp Token
+ * @param {Number} userToken
+ * @returns {Promise<Object>}
+ */
+const getTempToken = async (userToken) => {
+  const token = await findTempTokenByValue(userToken);
+  if (!token) throw new ApiError(httpStatus.NOT_FOUND, 'Token Not Found');
+  if (moment() >= token.expiresIn) {
+    await deleteTemporaryToken(token)
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Token is Expired');
+  }
+  return token;
+};
+
+
 
 /**
  * Generate token
@@ -84,8 +150,11 @@ const generateAuthTokens = async (user) => {
 };
 
 module.exports = {
-  generateToken,
   saveToken,
   verifyToken,
+  getTempToken,
+  generateToken,
   generateAuthTokens,
+  createTemporaryToken,
+  deleteTemporaryToken,
 };
