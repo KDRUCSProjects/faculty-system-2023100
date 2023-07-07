@@ -64,9 +64,12 @@ const getSubject = (subjectId) => {
     where: { id: subjectId },
     include: [
       {
-        model: Semester, as: 'Semester', attributes: ['id', 'title'],
-        include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['id', 'year'] }]
-      }],
+        model: Semester,
+        as: 'Semester',
+        attributes: ['id', 'title'],
+        include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['id', 'year'] }],
+      },
+    ],
     raw: true,
   });
 };
@@ -91,9 +94,12 @@ const getTeacherSubjects = (teacherId) => {
     order: [['createdAt', 'DESC']],
     include: [
       {
-        model: Semester, as: 'Semester', attributes: ['id', 'title'],
-        include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['id', 'year'] }]
-      }],
+        model: Semester,
+        as: 'Semester',
+        attributes: ['id', 'title'],
+        include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['id', 'year'] }],
+      },
+    ],
     raw: true,
   });
 };

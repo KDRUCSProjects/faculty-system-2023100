@@ -56,7 +56,6 @@ const createTemporaryToken = catchAsync(async (req, res) => {
   return res.status(httpStatus.CREATED).send(token);
 });
 
-
 module.exports = {
   register,
   login,
