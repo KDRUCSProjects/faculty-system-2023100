@@ -18,7 +18,18 @@
 
             <v-list density="compact">
               <v-list-item v-for="(action, i) in actions" :key="i">
+                <update-subject v-if="action.onClick === 'rename'" :subject-id="subject.id" @dialog-close="menu = false">
+                  <v-btn
+                    :prepend-icon="action.icon"
+                    variant="text"
+                    color="dark"
+                    @click="takeAction({ action: action.onClick, subject: subject })"
+                  >
+                    {{ action.title }}
+                  </v-btn>
+                </update-subject>
                 <v-btn
+                  v-else
                   :prepend-icon="action.icon"
                   variant="text"
                   color="dark"
@@ -40,8 +51,11 @@
 </template>
 
 <script>
+import UpdateSubject from './dialogs/UpdateSubject.vue';
+
 export default {
-  props: ['subjects', 'noTeacherView'],
+  components: { UpdateSubject },
+  props: ['subjects', 'noTeacherView', 'noSubjectUpdate'],
   data: () => ({}),
   computed: {
     actions() {
@@ -57,12 +71,11 @@ export default {
           onClick: 'downloadAttendance ',
         },
         {
-          icon: 'mdi-note-text-outline',
+          icon: 'mdi-delete',
           title: 'Delete ',
           onClick: 'delete',
         },
       ];
-
       if (!this.noTeacherView) {
         actions.unshift({
           icon: 'mdi-account',
@@ -71,6 +84,13 @@ export default {
         });
       }
 
+      if (!this.noSubjectUpdate) {
+        actions.unshift({
+          icon: 'mdi-form-textbox ',
+          title: 'Update Subject ',
+          onClick: 'rename',
+        });
+      }
       return actions;
     },
   },
@@ -87,19 +107,16 @@ export default {
     },
     async deleteSubject(subject) {
       // Show confirm dialog by access it with $ref
-
       let res = await this.$refs.baseConfirmDialog.show({
         warningTitle: 'Warning',
         title: 'Are you sure you want to delete this subject?',
         subtitle: `${subject.name}`,
         okButton: 'Yes',
       });
-
       // If closed, return the function
       if (!res) {
         return false;
       }
-
       // Otherwise, continue deleting the teacher from the database
       try {
         await this.$store.dispatch('subjects/deleteSubject', subject.id);

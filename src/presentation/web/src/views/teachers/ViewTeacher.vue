@@ -10,7 +10,12 @@
           </v-card-item>
           <v-divider></v-divider>
           <v-card-text>
-            <subjects-list :subjects="subjects" :noTeacherView="true" @action="getAction"></subjects-list>
+            <subjects-list
+              :subjects="subjects"
+              :no-teacher-view="true"
+              :no-subject-update="true"
+              @action="getAction"
+            ></subjects-list>
           </v-card-text>
         </v-card>
       </v-col>
