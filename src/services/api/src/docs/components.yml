@@ -321,6 +321,15 @@ components:
       example:
         name: Database
 
+    StudentListDeleted:
+      type: array
+      items:
+        type: object
+        properties: 
+          message: string
+      example:
+        message: student id 1 and semester id 89 is deleted 
+
   responses:
     # Taajils related responses
     DuplicateTaajil:

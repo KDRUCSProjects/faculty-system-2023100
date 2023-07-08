@@ -119,15 +119,19 @@ const deleteStudentList = catchAsync(async (req, res) => {
 });
 
 const deleteBunch = catchAsync(async (req, res) => {
+  // return res.status(httpStatus.OK).send(req.body);
   const results = [];
-  for await (const studentListId of req.body) {
-    const studentList = await studentListService.findStudentListById(studentListId);
+  for await (const { studentId, semesterId } of req.body) {
+    const studentList = await studentListService.getStudentListByStdIdAndSemesterId(studentId, semesterId);
     if (studentList) {
-      const result = await studentListService.deleteStudentList(studentList);
-      results.push(result);
+      await studentListService.deleteStudentList(studentList);
+      results.push({ message: `student id ${studentId} and semester id ${semesterId} is deleted` });
+    } else {
+      results.push({ message: `student id ${studentId} and semester id ${semesterId} is not Found` });
     }
   }
-  return res.status(httpStatus.NO_CONTENT).send();
+  console.log(results);
+  return res.status(httpStatus.OK).send(results);
 });
 
 const promoteStudents = catchAsync(async (req, res) => {
