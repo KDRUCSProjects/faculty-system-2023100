@@ -57,6 +57,11 @@ import SubjectsList from '@/components/subjects/SubjectsList.vue';
 import { rankSemester } from '@/utils/global';
 import AddSubject from '@/components/subjects/dialogs/AddSubject.vue';
 export default {
+  provide() {
+    return {
+      semesterId: this.id,
+    };
+  },
   props: {
     id: {
       type: Number,

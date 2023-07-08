@@ -8,10 +8,29 @@
       <v-card-text>
         <v-list lines="two">
           <!-- <v-list-subheader>Personal</v-list-subheader> -->
-          <v-chip prepend-icon="mdi-account" label color="primary" class="px-5 my-1">Personal</v-chip>
+          <v-chip
+            prepend-icon="mdi-account"
+            label
+            color="primary"
+            class="px-5 my-1"
+            :variant="showSecondaryLanguage ? 'outlined' : 'tonal'"
+            @click="toggleView('personal')"
+          >
+            Personal
+          </v-chip>
+          <v-chip
+            prepend-icon="mdi-account"
+            label
+            color="indigo"
+            :variant="showSecondaryLanguage ? 'tonal' : 'outlined'"
+            class="px-5 my-1 mx-1"
+            @click="toggleView('secondaryPersonal')"
+          >
+            Secondary Language
+          </v-chip>
 
           <v-divider></v-divider>
-          <v-list-item v-for="rec in personal" :key="rec.title">
+          <v-list-item v-for="rec in currentPersonalData" :key="rec.title">
             <v-list-item-title :class="{ 'text-error': !rec.title }" class="font-weight-bold" style="font-family: monospace">
               {{ rec.title || 'N/A' }}
             </v-list-item-title>
@@ -35,7 +54,6 @@
               </base-update-dialog>
             </template>
           </v-list-item>
-
           <v-divider></v-divider>
 
           <v-chip prepend-icon="mdi-map-marker" label color="secondary" class="px-5 my-1">Location</v-chip>
@@ -92,6 +110,7 @@ export default {
     province: null,
     division: null,
     district: null,
+    showSecondaryLanguage: false,
   }),
   computed: {
     personal() {
@@ -122,8 +141,8 @@ export default {
       return [
         {
           subtitle: 'Fullname',
-          title: this.student?.engFullName,
-          fieldName: 'engFullName',
+          title: this.student?.engName,
+          fieldName: 'engName',
         },
         {
           subtitle: 'Last Name',
@@ -170,8 +189,14 @@ export default {
     student() {
       return this.$store.getters['students/currentStudent'];
     },
+    currentPersonalData() {
+      return !this.showSecondaryLanguage ? this.personal : this.personalSecondary;
+    },
   },
   methods: {
+    toggleView(view) {
+      view === 'personal' ? (this.showSecondaryLanguage = false) : (this.showSecondaryLanguage = true);
+    },
     async loadStudent(studentId) {
       // This is duplicate, and will be removed in the future.
       await this.$store.dispatch('students/loadStudentById', studentId);
