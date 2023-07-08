@@ -1,6 +1,6 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const { studentListValidation, shareValidation } = require('../validations');
+const { studentListValidation } = require('../validations');
 const { studentListController } = require('../controllers');
 const auth = require('../middlewares/auth');
 
@@ -10,9 +10,9 @@ router
   .route('/')
   .get(auth(), validate(studentListValidation.getStudentLists), studentListController.getStudentLists)
   .post(auth(), validate(studentListValidation.createStudentList), studentListController.createStudentList)
-  .delete(auth(), validate(shareValidation.deleteBunch), studentListController.deleteBunch);
+  .delete(auth(), validate(studentListValidation.deleteBunch), studentListController.deleteBunch);
 
-router.route('/promote').post(auth(), validate(shareValidation.deleteBunch), studentListController.promoteStudents);
+router.route('/promote').post(auth(), validate(studentListValidation.deleteBunch), studentListController.promoteStudents);
 
 router
   .route('/:studentListId')
