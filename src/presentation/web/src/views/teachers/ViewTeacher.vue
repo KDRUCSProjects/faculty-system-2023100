@@ -46,23 +46,34 @@
                 Update Biography
               </v-btn>
             </update-teacher>
-            <v-btn variant="tonal" color="dark" class="px-6 mb-1" prepend-icon="mdi-account" block> Change Password</v-btn>
-            <v-btn variant="tonal" color="error" class="px-6 mb-1" prepend-icon="mdi-account" block> Delete Account</v-btn>
+            <!-- Reset Teacher Password -->
+            <reset-teacher-password v-if="id" :teacherId="id" activator-color="text">
+              <v-btn variant="tonal" color="dark" class="px-6 mb-1" prepend-icon="mdi-account" block>
+                 Change Password
+                </v-btn>
+            </reset-teacher-password>
+            
+            <v-btn variant="tonal" color="error" class="px-6 mb-1" prepend-icon="mdi-account" block  @click="deleteTeacher(id)"> Delete Account</v-btn>
           </div>
+          <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
         </v-card>
       </v-col>
     </v-row>
+
   </div>
+
 </template>
 
 <script>
 import SubjectsList from '@/components/subjects/SubjectsList.vue';
 import UpdateTeacher from '@/components/teachers/dialogs/UpdateTeacher.vue';
+import ResetTeacherPassword from '@/components/teachers/dialogs/ResetTeacherPassword.vue';
 export default {
   props: ['id'],
   components: {
     SubjectsList,
     UpdateTeacher,
+    ResetTeacherPassword,
   },
   data: () => ({}),
   computed: {
@@ -77,10 +88,30 @@ export default {
     async loadTeacherById(id) {
       await this.$store.dispatch('teachers/loadTeacherById', id);
     },
+    async deleteTeacher(id) {
+      // Show confirm dialog by access it with $ref
+
+      let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: 'Warning',
+        title: 'Are you sure you want to delete this teacher?',
+        okButton: 'Yes',
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return false;
+      }
+
+      // Otherwise, continue deleting the teacher from the database
+      await this.$store.dispatch('teachers/deleteTeacher', id);
+      this.$router.replace('/teachers')
+    },
   },
   async created() {
     await this.loadTeacherById(this.id);
   },
+
+
 };
 </script>
 
