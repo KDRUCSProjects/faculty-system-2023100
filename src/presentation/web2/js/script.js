@@ -56,22 +56,24 @@ bubbleIcon.addEventListener('click', submitFun);
 
 function submitFun(e) {
   let inputValue = input.value;
-  input.value = '';
-  loader.classList.remove('hidden');
-  resultContainer.classList.add('hidden');
-  bubbleIcon.classList.add('hidden');
-
-  setTimeout(() => {
-    getApiFun(inputValue);
-    loader.classList.add('hidden');
-    bubbleIcon.classList.remove('hidden');
-    // resultContainer.classList.remove('hidden');
+  if (inputValue) {
+    input.value = '';
+    loader.classList.remove('hidden');
+    resultContainer.classList.add('hidden');
+    bubbleIcon.classList.add('hidden');
 
     setTimeout(() => {
-      errorDiv.style.display = 'none';
-      errorDiv.classList.remove('hidden');
+      getApiFun(inputValue);
+      loader.classList.add('hidden');
+      bubbleIcon.classList.remove('hidden');
+      // resultContainer.classList.remove('hidden');
+
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+        errorDiv.classList.remove('hidden');
+      }, 3000);
     }, 3000);
-  }, 3000);
+  }
 }
 
 ///////////////////////////////////////////////////////
