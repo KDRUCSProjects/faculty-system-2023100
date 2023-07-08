@@ -28,6 +28,9 @@ const errorDiv = document.querySelector('.error-message-div');
 const loader = document.querySelector('.spinner');
 const resultContainer = document.querySelector('.result-container');
 const bubbleIcon = document.querySelector('.bubble-icon');
+const iconTheme = document.querySelector('.icon__theme');
+const iconSwap = document.querySelector('.swap-icon');
+const theme = document.querySelector('link');
 
 // console.log(profile);
 
@@ -106,3 +109,26 @@ const getApiFun = id => {
       errorDiv.style.display = 'flex';
     });
 };
+
+// //////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///   Dark Theme functionalty
+////////////////////////////////
+
+const iconSun = 'image/icon-moon.svg';
+const iconMoon = 'image/icon-sun.svg';
+const lightTheme = 'css/style.css';
+const darkTheme = 'css/styleDark.css';
+
+iconSwap.addEventListener('click', function (e) {
+  //////////////////////////////////////////////////////////
+  //////////  Theme Toggler ////////////////////////////////
+
+  if (iconSwap.getAttribute('src') === iconMoon) {
+    iconSwap.src = iconSun;
+    // theme.href = darkTheme;
+  } else if (iconSwap.getAttribute('src') === iconSun) {
+    iconSwap.src = iconMoon;
+    // theme.href = lightTheme;
+  }
+});
