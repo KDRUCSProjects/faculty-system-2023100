@@ -134,23 +134,27 @@ module.exports = router;
  *           schema:
  *             type: array
  *             items:
- *               type: integer
- *               enum: [1,2,3,4,5]
+ *               type: object
+ *               properties:
+ *                 studentId:
+ *                   type: integer
+ *                 semesterId:
+ *                   type: integer
  *             example:
- *               [1,2,4,5]
+ *               [{studentId: 1, semesterId: 89 }]
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/StudentList'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/StudentListDeleted'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
- *       "404":
- *         $ref: '#/components/responses/NotFound'
  */
 
 /**
