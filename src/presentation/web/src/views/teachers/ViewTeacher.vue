@@ -36,9 +36,13 @@
             <v-card-subtitle class="text-primary mt-3">{{ teacher?.email }}</v-card-subtitle>
           </v-card-text>
           <div class="d-flex w-100 flex-column justify-items-center align-items-center px-2">
-            <v-btn variant="flat" class="px-6 mb-1" prepend-icon="mdi-account" block> Edit Profile</v-btn>
-            <v-btn variant="flat" color="dark" class="px-6 mb-1" prepend-icon="mdi-account" block> Change Password</v-btn>
-            <v-btn variant="flat" color="error" class="px-6 mb-1" prepend-icon="mdi-account" block> Delete Account</v-btn>
+            <update-teacher v-if="id" :teacherId="id" activator-color="text">
+              <v-btn variant="tonal" color="primary" class="px-6 mb-1" prepend-icon="mdi-account" block>
+                Update Biography
+              </v-btn>
+            </update-teacher>
+            <v-btn variant="tonal" color="dark" class="px-6 mb-1" prepend-icon="mdi-account" block> Change Password</v-btn>
+            <v-btn variant="tonal" color="error" class="px-6 mb-1" prepend-icon="mdi-account" block> Delete Account</v-btn>
           </div>
         </v-card>
       </v-col>
@@ -48,10 +52,12 @@
 
 <script>
 import SubjectsList from '@/components/subjects/SubjectsList.vue';
+import UpdateTeacher from '@/components/teachers/dialogs/UpdateTeacher.vue';
 export default {
   props: ['id'],
   components: {
     SubjectsList,
+    UpdateTeacher,
   },
   data: () => ({}),
   computed: {
