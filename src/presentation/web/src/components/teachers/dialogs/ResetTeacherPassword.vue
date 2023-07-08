@@ -1,11 +1,24 @@
 <template>
     <div>
       <!-- Default Btn/Slot -->
-      <v-btn :color="activatorColor" :variant="activatorVariant" :prepend-icon="activatorIcon">
-        Change Password
+      
   
         <v-dialog max-width="550" activator="parent" v-model="dialog">
+          <template v-slot:activator="{ props }">
+            <div v-bind="props">
+              <slot>
+                <v-btn color="primary"> Change Password </v-btn>
+              </slot>
+            </div>
+          </template>
+          
           <v-card class="pa-1" :loading="isLoading">
+            <v-card-item>
+              <v-card-title>Change Teacher Password</v-card-title>
+              <v-card-subtitle>
+                Fill in the blank to change teacher password
+              </v-card-subtitle>
+            </v-card-item>
             <v-card-text>
               <v-form @submit.prevent="submitForm" ref="resetTeacherPasswordForm">
                 <v-text-field
@@ -27,7 +40,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-      </v-btn>
+     
     </div>
   </template>
   
