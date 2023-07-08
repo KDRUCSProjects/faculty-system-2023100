@@ -27,7 +27,7 @@
         <v-list density="compact">
           <v-list-item>
             <!-- Update Account -->
-            <update-teacher :teacherId="teacherId" @dialog-close="closeMenu" activator-color="text"> </update-teacher>
+            <!-- <update-teacher :teacherId="teacherId" @dialog-close="closeMenu" activator-color="text"> </update-teacher> -->
           </v-list-item>
           <v-list-item>
             <!-- Reset Teacher Password -->
