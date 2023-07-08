@@ -1,6 +1,6 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const { studentListValidation, shareValidation } = require('../validations');
+const { studentListValidation } = require('../validations');
 const { studentListController } = require('../controllers');
 const auth = require('../middlewares/auth');
 
@@ -10,11 +10,9 @@ router
   .route('/')
   .get(auth(), validate(studentListValidation.getStudentLists), studentListController.getStudentLists)
   .post(auth(), validate(studentListValidation.createStudentList), studentListController.createStudentList)
-  .delete(auth(), validate(shareValidation.deleteBunch), studentListController.deleteBunch);
+  .delete(auth(), validate(studentListValidation.deleteBunch), studentListController.deleteBunch);
 
-router
-  .route('/promote')
-  .post(auth(), validate(shareValidation.deleteBunch), studentListController.promoteStudents)
+router.route('/promote').post(auth(), validate(studentListValidation.deleteBunch), studentListController.promoteStudents);
 
 router
   .route('/:studentListId')
@@ -136,23 +134,27 @@ module.exports = router;
  *           schema:
  *             type: array
  *             items:
- *               type: integer
- *               enum: [1,2,3,4,5]
+ *               type: object
+ *               properties:
+ *                 studentId:
+ *                   type: integer
+ *                 semesterId:
+ *                   type: integer
  *             example:
- *               [1,2,4,5]
+ *               [{studentId: 1, semesterId: 89 }]
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/StudentList'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/StudentListDeleted'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
- *       "404":
- *         $ref: '#/components/responses/NotFound'
  */
 
 /**

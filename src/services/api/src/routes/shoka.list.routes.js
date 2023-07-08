@@ -8,6 +8,9 @@ const auth = require('../middlewares/auth');
 const router = express.Router();
 
 router.route('/').post(auth(), validate(shokaListValidation.createShokaList), shokaListController.createShokaList);
+router
+  .route('/students/:studentId')
+  .get(auth(), validate(shokaListValidation.getStudentMarks), shokaListController.getStudentMarks);
 
 router
   .route('/:shokaId')
@@ -92,6 +95,51 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: shoka id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/ShokaList'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /shokaList/students/{studentId}:
+ *   get:
+ *     summary: get student marks
+ *     description: get student marks.
+ *     tags: [ShokaList]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: student id
+ *       - in: query
+ *         name: semester
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 8
+ *         description: semester number
+ *       - in: query
+ *         name: class
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 4
+ *         description: class number
  *     responses:
  *       "200":
  *         description: OK

@@ -45,7 +45,7 @@ const getEducationalYear = (yearId) => {
  * @returns {Promise<EducationalYear>}
  */
 const findNextYear = (year) => {
-  const nextYear = ++year;
+  const nextYear = year + 1;
   return EducationalYear.findOne({ where: { year: nextYear } });
 };
 
@@ -55,10 +55,9 @@ const findNextYear = (year) => {
  * @returns {Promise<EducationalYear>}
  */
 const createNextEducationalYear = (year) => {
-  const nextYear = ++year;
+  const nextYear = year + 1;
   return EducationalYear.create({ year: nextYear });
 };
-
 
 /**
  * find Educational year by value

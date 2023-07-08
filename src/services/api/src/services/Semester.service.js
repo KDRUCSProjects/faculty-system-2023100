@@ -9,10 +9,7 @@ const ApiError = require('../utils/ApiError');
  */
 const getAllSemesters = () => {
   return Semester.findAll({
-    include: [
-      { model: EducationalYear, as: 'EducationalYear', attributes: ['year'] },
-      { model: Subject },
-    ],
+    include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }, { model: Subject }],
   });
 };
 
@@ -37,12 +34,10 @@ const findSemesterById = (semesterId) => {
     where: { id: semesterId },
     include: [
       { model: EducationalYear, as: 'EducationalYear', attributes: ['year'] },
-      { model: Subject, include: [{ model: User }] }
+      { model: Subject, include: [{ model: User }] },
     ],
-
   });
 };
-
 
 /**
  * find next Semester of year
@@ -51,12 +46,11 @@ const findSemesterById = (semesterId) => {
  * @returns {Promise<Semester>}
  */
 const findNextSemester = (yearId, semesterTitle) => {
-  const nextTitle = ++semesterTitle;
+  const nextTitle = semesterTitle + 1;
   return Semester.findOne({
-    where: { educationalYearId: yearId, title: nextTitle }
+    where: { educationalYearId: yearId, title: nextTitle },
   });
 };
-
 
 /**
  * delete  Semester
@@ -75,10 +69,9 @@ const deleteSemester = (semester) => {
  */
 const getYearSemesters = (educationalYearId) => {
   return Semester.findAll({
-    where: { educationalYearId }, order: [['title', 'ASC']],
-    include: [
-      { model: Subject },
-    ],
+    where: { educationalYearId },
+    order: [['title', 'ASC']],
+    include: [{ model: Subject }],
   });
 };
 

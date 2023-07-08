@@ -34,8 +34,8 @@ const getStudentByKankorId = (queryKankorId) => {
   return Student.findAll({
     where: {
       kankorId: {
-        [Op.like]: `${queryKankorId || ''}%`
-      }
+        [Op.like]: `${queryKankorId || ''}%`,
+      },
     },
     limit: 2000,
     offset: 0,
@@ -43,7 +43,6 @@ const getStudentByKankorId = (queryKankorId) => {
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
   });
 };
-
 
 /**
  * Create a Student
