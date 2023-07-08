@@ -23,7 +23,16 @@ const getStudentLists = {
     limit: Joi.number(),
   }),
 };
+
+const deleteBunch = {
+  body: Joi.array()
+    .items(Joi.number().integer().min(1),
+    )
+    .min(1),
+};
+
 module.exports = {
+  deleteBunch,
   getStudentList,
   getStudentLists,
   createStudentList,
