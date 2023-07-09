@@ -1,0 +1,31 @@
+:root {
+  --background-color: rgba(255, 255, 255, 0.8);
+  --secondry-background-: rgba(255, 255, 255, 0.8);
+  --background-color-alt: rgba(255, 255, 255, 0.2);
+  --primary-background-color: #8ac185;
+  --primary-variant: #2e8cff52;
+  --secondry-background-color: #fed47e;
+  --primary-color: black;
+  --secondry-color: gray;
+  --secondry-color-alt: rgb(40, 40, 40);
+  --color-alt: white;
+  --same-background: #8ac185;
+  --same-background-alt: #fed47e;
+  --erorr-color: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme='dark'] {
+  --background-color: #22242c;
+  --secondry-background: #22242c;
+  --background-color-alt: #1e1f26;
+  --primary-background-color: #fed47e;
+  --primary-variant: #ffabc8;
+  --secondry-background-color: #8ac185;
+  --primary-color: hsl(236, 33%, 92%);
+  --secondry-color: hsl(236, 9%, 61%);
+  --secondry-color-alt: hsl(236, 9%, 61%);
+  --color-alt: white;
+  --same-background: #8ac185;
+  --same-background-alt: #fed47e;
+  --erorr-color: rgba(30, 31, 38, 0.8);
+}

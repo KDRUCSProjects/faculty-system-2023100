@@ -32,7 +32,7 @@ const iconTheme = document.querySelector('.icon__theme');
 const iconSwap = document.querySelector('.swap-icon');
 const theme = document.querySelector('link');
 
-// console.log(profile);
+console.log(document.documentElement);
 
 //////////////////////////////////////////////
 
@@ -118,17 +118,18 @@ const getApiFun = id => {
 const iconSun = 'image/icon-moon.svg';
 const iconMoon = 'image/icon-sun.svg';
 const lightTheme = 'css/style.css';
+const lightProfile = 'css/profileCard.css';
 const darkTheme = 'css/styleDark.css';
+const darkProfile = 'css/darkProfileCard.css';
 
+//////////////////////////////////////////////////////////
+//////////  Theme Toggler ////////////////////////////////
 iconSwap.addEventListener('click', function (e) {
-  //////////////////////////////////////////////////////////
-  //////////  Theme Toggler ////////////////////////////////
-
-  if (iconSwap.getAttribute('src') === iconMoon) {
-    iconSwap.src = iconSun;
-    // theme.href = darkTheme;
-  } else if (iconSwap.getAttribute('src') === iconSun) {
+  if (iconSwap.getAttribute('src') === iconSun) {
     iconSwap.src = iconMoon;
-    // theme.href = lightTheme;
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else if (iconSwap.getAttribute('src') === iconMoon) {
+    iconSwap.src = iconSun;
+    document.documentElement.setAttribute('data-theme', 'light');
   }
 });
