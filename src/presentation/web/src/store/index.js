@@ -16,6 +16,7 @@ export default createStore({
     teachers: teachersModule,
     students: studentsModule,
     subjects: subjectsModule,
+
     departments: departmentModule,
     semesters: semestersModule,
     years:yearsModule,

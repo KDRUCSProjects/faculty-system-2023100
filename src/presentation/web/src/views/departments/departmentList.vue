@@ -25,12 +25,13 @@
       </v-row>
     </base-contents>
   </div>
+
 </template>
 
 <script>
 import departmentCard from '../../components/departments/departmentCard.vue';
-import AddSubject from '@/components/departments/modals/AddDepartment.vue';
-import AddDepartment from '../../components/departments/Modals/AddDepartment.vue';
+
+import AddDepartment from '@/components/departments/modals/AddDepartment.vue';
 export default {
   components: { departmentCard, AddDepartment },
   computed: {
