@@ -31,8 +31,7 @@ const bubbleIcon = document.querySelector('.bubble-icon');
 const iconTheme = document.querySelector('.icon__theme');
 const iconSwap = document.querySelector('.swap-icon');
 const theme = document.querySelector('link');
-
-console.log(document.documentElement);
+const body = document.querySelector('body');
 
 //////////////////////////////////////////////
 
@@ -127,9 +126,20 @@ const darkProfile = 'css/darkProfileCard.css';
 iconSwap.addEventListener('click', function (e) {
   if (iconSwap.getAttribute('src') === iconSun) {
     iconSwap.src = iconMoon;
+    localStorage.setItem('theme', 'dark');
     document.documentElement.setAttribute('data-theme', 'dark');
   } else if (iconSwap.getAttribute('src') === iconMoon) {
     iconSwap.src = iconSun;
+    localStorage.setItem('theme', 'light');
     document.documentElement.setAttribute('data-theme', 'light');
   }
 });
+
+const currentTheme = localStorage.getItem('theme');
+
+if (currentTheme) {
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  if (currentTheme === 'dark') {
+    iconSwap.src = iconMoon;
+  }
+}
