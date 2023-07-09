@@ -5,6 +5,7 @@
         <v-card-title class="py-0 my-0" style="font-family: monospace; font-size: larger;">
 
         {{ name || 'Course' }}
+  
       </v-card-title>
       </v-card-item>
     
@@ -47,9 +48,10 @@
       },
 
       async deleteDepartment(id) {
+        console.log(id)
         let res = await this.$refs.baseConfirmDialog.show({
         warningTitle: 'Warning',
-        title: 'Are you sure you want to delete this Subject?',
+        title: 'Are you sure you want to delete this Department?',
         subtitle: id,
         okButton: 'Yes',
       });

@@ -1,9 +1,8 @@
 <template>
     <div>
       <!-- Default Btn/Slot -->
-      <v-btn :color="activatorColor" :variant="activatorVariant" :prepend-icon="activatorIcon">
+      <v-btn :color="activatorColor" @click="getDepartment" :variant="activatorVariant" :prepend-icon="activatorIcon">
         Edit
-  
         <v-dialog max-width="550" activator="parent" v-model="dialog">
           <v-card class="pa-1" :loading="isLoading">
             <v-card-text>
@@ -59,15 +58,18 @@ import { resolveComponent } from 'vue';
       },
     },
     methods: {
-      async setDepartment() {
+      async getDepartment() {
+        console.log(this.departmentId)
         const response = await this.$store.dispatch('departments/loadDepartmentById', this.departmentId);
   
-        console.log(response)
+        console.log('responses coming from update Department load department by ID',response)
         if (!response.data) return false;
   
+        console.log(response.data.name)
         this.name = response.data.name;
       },
       async submitForm() {
+      
         // Validate the form first
         let { valid } = await this.$refs.updateDepartmentForm.validate();
   
@@ -77,7 +79,6 @@ import { resolveComponent } from 'vue';
   
         //   Start loader
         this.isLoading = true;
-  
         try {
           const data = {
             departmentId: this.departmentId,
@@ -85,7 +86,7 @@ import { resolveComponent } from 'vue';
             name: this.name,
           };
   
-          console.log(data);
+       
           await this.$store.dispatch('departments/updateDepartment', data);
   
           this.closeDialog();
@@ -106,7 +107,7 @@ import { resolveComponent } from 'vue';
     },
     emits: ['dialog-close'],
     async created() {
-      await this.setDepartment();
+      await this.getDepartment();
     },
   };
   </script>
