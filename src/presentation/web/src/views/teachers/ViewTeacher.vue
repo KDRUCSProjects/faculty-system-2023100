@@ -10,7 +10,12 @@
           </v-card-item>
           <v-divider></v-divider>
           <v-card-text>
-            <subjects-list :subjects="subjects" :noTeacherView="true" @action="getAction"></subjects-list>
+            <subjects-list
+              :subjects="subjects"
+              :no-teacher-view="true"
+              :no-subject-update="true"
+              @action="getAction"
+            ></subjects-list>
           </v-card-text>
         </v-card>
       </v-col>
@@ -36,22 +41,39 @@
             <v-card-subtitle class="text-primary mt-3">{{ teacher?.email }}</v-card-subtitle>
           </v-card-text>
           <div class="d-flex w-100 flex-column justify-items-center align-items-center px-2">
-            <v-btn variant="flat" class="px-6 mb-1" prepend-icon="mdi-account" block> Edit Profile</v-btn>
-            <v-btn variant="flat" color="dark" class="px-6 mb-1" prepend-icon="mdi-account" block> Change Password</v-btn>
-            <v-btn variant="flat" color="error" class="px-6 mb-1" prepend-icon="mdi-account" block> Delete Account</v-btn>
+            <update-teacher v-if="id" :teacherId="id" activator-color="text">
+              <v-btn variant="tonal" color="primary" class="px-6 mb-1" prepend-icon="mdi-account" block>
+                Update Biography
+              </v-btn>
+            </update-teacher>
+            <!-- Reset Teacher Password -->
+            <reset-teacher-password v-if="id" :teacherId="id" activator-color="text">
+              <v-btn variant="tonal" color="dark" class="px-6 mb-1" prepend-icon="mdi-account" block>
+                 Change Password
+                </v-btn>
+            </reset-teacher-password>
+            
+            <v-btn variant="tonal" color="error" class="px-6 mb-1" prepend-icon="mdi-account" block  @click="deleteTeacher(id)"> Delete Account</v-btn>
           </div>
+          <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
         </v-card>
       </v-col>
     </v-row>
+
   </div>
+
 </template>
 
 <script>
 import SubjectsList from '@/components/subjects/SubjectsList.vue';
+import UpdateTeacher from '@/components/teachers/dialogs/UpdateTeacher.vue';
+import ResetTeacherPassword from '@/components/teachers/dialogs/ResetTeacherPassword.vue';
 export default {
   props: ['id'],
   components: {
     SubjectsList,
+    UpdateTeacher,
+    ResetTeacherPassword,
   },
   data: () => ({}),
   computed: {
@@ -66,10 +88,30 @@ export default {
     async loadTeacherById(id) {
       await this.$store.dispatch('teachers/loadTeacherById', id);
     },
+    async deleteTeacher(id) {
+      // Show confirm dialog by access it with $ref
+
+      let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: 'Warning',
+        title: 'Are you sure you want to delete this teacher?',
+        okButton: 'Yes',
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return false;
+      }
+
+      // Otherwise, continue deleting the teacher from the database
+      await this.$store.dispatch('teachers/deleteTeacher', id);
+      this.$router.replace('/teachers')
+    },
   },
   async created() {
     await this.loadTeacherById(this.id);
   },
+
+
 };
 </script>
 

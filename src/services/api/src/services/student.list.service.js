@@ -58,6 +58,16 @@ const deleteStudentList = (studentListBody) => {
 };
 
 /**
+ * get student list by student id and semester id
+ * @param {ObjectId} studentId
+ * @param {ObjectId} semesterId
+ * @returns {Promise<StudentsList>}
+ */
+const getStudentListByStdIdAndSemesterId = (studentId, semesterId) => {
+  return StudentsList.findOne({ where: { studentId, semesterId } });
+};
+
+/**
  * delete student list
  * @param {Array} queryObject
  * @param {Number} limit
@@ -169,4 +179,5 @@ module.exports = {
   getYearAndClassStudentList,
   findListedStudentByStudentId,
   findAllStudentListOfSingleStudent,
+  getStudentListByStdIdAndSemesterId,
 };

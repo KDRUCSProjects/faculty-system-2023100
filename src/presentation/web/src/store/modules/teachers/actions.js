@@ -80,6 +80,8 @@ export default {
       });
 
       context.commit('updateTeacher', response.data);
+      // Plus, also update existing teacher data
+      // await context.dispatch('loadTeacherById', payload.teacherId);
     } catch (e) {
       throw e.response.data.message;
     }
