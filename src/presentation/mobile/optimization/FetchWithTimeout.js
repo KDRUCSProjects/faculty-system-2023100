@@ -19,7 +19,7 @@ async function FetchWithTimeout(url, opts = {}, timeout = 5000) {
     return result;
   } catch (e) {
     clearTimeout(timer);
-    throw e;
+    throw new Error();
   }
 }
 export default FetchWithTimeout;

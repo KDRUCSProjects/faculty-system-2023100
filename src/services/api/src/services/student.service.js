@@ -1,5 +1,5 @@
 // Sequelize Models
-const { QueryTypes } = require('sequelize');
+const { QueryTypes, Op } = require('sequelize');
 const { Student, EducationalYear, sequelize } = require('../models');
 
 /**
@@ -19,8 +19,27 @@ const registerStudent = (studentBody) => {
 const getStudents = (offset) => {
   return Student.findAndCountAll({
     order: [['createdAt', 'DESC']],
-    limit: 10,
+    limit: 2000,
     offset,
+    include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
+  });
+};
+
+/**
+ * get students like search by student kankor id
+ * @param {String} queryKankorId
+ * @returns {Promise<Student>}
+ */
+const getStudentByKankorId = (queryKankorId) => {
+  return Student.findAll({
+    where: {
+      kankorId: {
+        [Op.like]: `${queryKankorId || ''}%`,
+      },
+    },
+    limit: 2000,
+    offset: 0,
+    order: [['createdAt', 'DESC']],
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
   });
 };
@@ -82,8 +101,8 @@ const deleteStudentById = (studentId) => {
 
 /**
  * get unregistered Students
- * @param {ObjectId} limit
- * @param {ObjectId} offset
+ * @param {Number} limit
+ * @param {Number} offset
  * @returns {Promise<Student>}
  */
 const getUnRegisteredStudents = (limit, offset) => {
@@ -149,6 +168,7 @@ module.exports = {
   updateStudent,
   registerStudent,
   deleteStudentById,
+  getStudentByKankorId,
   getStudentOnKankorId,
   getUnRegisteredStudents,
   countUnregisteredStudent,

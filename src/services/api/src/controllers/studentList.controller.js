@@ -5,23 +5,32 @@ const ApiError = require('../utils/ApiError');
 
 const createStudentList = catchAsync(async (req, res) => {
   const { studentId, semesterId } = req.body;
+  /** check if the student id is correct */
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
-  const semester = await semesterService.findSemesterById(semesterId);
-  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
-  const studentList = await studentListService.findListedStudentByStudentId(studentId);
-  if (studentList) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student already exists in a semester');
-  const studentTajil = await taajilService.findTaajilByStudentId(studentId);
-  if (studentTajil) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has tajil');
+
+  /** check if tabdily has been given to the student */
   const studentTabdili = await tabdiliService.findTabdiliByStudentId(studentId);
   if (studentTabdili) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has got tabdili');
+
+  /** find student all student lists */
+  const studentList = await studentListService.findAllStudentListOfSingleStudent(studentId);
+  /** if student has not registered to any semester we will give reentry */
+  if (studentList.length >= 1) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student is Already Enrolled in a semester');
+  /** check semester id if it is correct */
+  const semester = await semesterService.findSemesterById(semesterId);
+  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+
+  /** check if the semester title is one */
+  if (semester.title !== 1) throw new ApiError(httpStatus.ACCEPTED, `${semesterId} is not first semester's id`);
+
   const result = await studentListService.createStudentList(req.body);
-  return res.send(result);
+  return res.status(httpStatus.CREATED).send(result);
 });
 
 const getStudentLists = catchAsync(async (req, res) => {
   const page = req.query?.page ? req.query?.page : 1;
-  const limit = req.query?.limit ? req.query?.limit : 10;
+  const limit = req.query?.limit ? req.query?.limit : 2000;
   const offset = parseInt(((page - 1) * limit), 10);
 
   // check if semester id exists
@@ -121,9 +130,50 @@ const deleteBunch = catchAsync(async (req, res) => {
   return res.status(httpStatus.NO_CONTENT).send();
 });
 
+const promoteStudents = catchAsync(async (req, res) => {
+  const results = [];
+
+  for await (const studentId of req.body) {
+    let semesterYear = nextSemester = lastSemester = nextYear = result = null;
+
+    const studentAllLists = await studentListService.findAllStudentListOfSingleStudent(studentId);
+    if (studentAllLists.length >= 1 && studentAllLists.length < 10) {
+      lastSemester = await semesterService.findSemesterById(studentAllLists[0].semesterId);
+      if (lastSemester.title === 8) {
+        if (!lastSemester.onGoing) {
+          result = await studentListService.updatedStudentList(studentAllLists[0], { 'onGoing': false, 'completed': true });
+        }
+        results.push({ message: 'Student is Graduated', result });
+        continue;
+      }
+      semesterYear = await educationalYearService.getEducationalYear(lastSemester.educationalYearId);
+      if (lastSemester.title % 2 === 0) {
+        nextYear = await educationalYearService.findNextYear(semesterYear.year);
+        if (!nextYear) {
+          nextYear = await educationalYearService.createNextEducationalYear(semesterYear.year);
+        }
+        nextSemester = await semesterService.findNextSemester(nextYear.id, lastSemester.title);
+        await studentListService.updatedStudentList(studentAllLists[0], { 'onGoing': false, 'completed': true });
+        result = await studentListService.createStudentList({ studentId, semesterId: nextSemester.id });
+        results.push(result);
+      } else {
+        nextSemester = await semesterService.findNextSemester(semesterYear.id, lastSemester.title);
+        await studentListService.updatedStudentList(studentAllLists[0], { 'onGoing': false, 'completed': true });
+        result = await studentListService.createStudentList({ studentId, semesterId: nextSemester.id });
+        results.push(result);
+      }
+    } else {
+      results.push({ studentId, message: 'student does not have enrollment in first semester' });
+    }
+  }
+  return res.status(httpStatus.OK).send(results);
+});
+
+
 module.exports = {
   deleteBunch,
   getStudentLists,
   deleteStudentList,
   createStudentList,
+  promoteStudents,
 };

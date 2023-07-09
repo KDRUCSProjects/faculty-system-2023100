@@ -13,7 +13,7 @@
         @click:append-inner="onClick"
       ></v-text-field>
       <div class="mx-1"></div>
-      <add-subject  ></add-subject >
+      <add-subject ></add-subject >
     </template>
     <v-row no-gutters>
       <v-col  v-for="(subject, index) in subjects" :key="index" cols="3">

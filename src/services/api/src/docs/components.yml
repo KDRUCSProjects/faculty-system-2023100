@@ -102,6 +102,20 @@ components:
       example:
         year: 2019
 
+    TempToken:
+      type: object
+      properties:
+        id:
+          type: number
+        token:
+          type: number
+        expiresIn:
+          type: date
+      example:
+        id: 1,
+        token: 728693,
+        expiresIn: "2023-07-06T22:26:46.048Z"
+
     Subject:
       type: object
       properties:
@@ -356,6 +370,17 @@ components:
           example:
             code: 406
             message: Year is already
+
+    TokenExpired:
+      description: Token is Expired
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 406
+            message: Token is Expired
+
     DuplicateReentry:
       description: duplicate Reentry 
       content:
@@ -412,7 +437,16 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             code: 404
-            message: Not found
+            message: Not 
+    TokenNotFound:
+      description: Token Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Token Not Found
     NoContent:
       description: No Content
       content:

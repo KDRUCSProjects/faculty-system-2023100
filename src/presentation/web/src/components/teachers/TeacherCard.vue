@@ -1,7 +1,7 @@
 <template>
   <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
     <!-- <span class="pro">  </span> -->
-    <v-avatar class="my-3" size="120" color="secondary" variant="tonal">
+    <v-avatar class="my-3" size="150" color="secondary" variant="tonal">
       <v-img v-if="photo" :src="`${imagesResource}/${photo}`" alt="user" />
       <div v-else>
         <span class="text-h5">{{ abbreviation }}</span>
@@ -14,14 +14,13 @@
     <v-divider></v-divider>
     <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle>
 
-    <v-card-actions class="mt-3">
-      <v-btn color="primary" variant="elevated">Profile</v-btn>
-      <v-btn color="secondary" variant="tonal"> Subjects</v-btn>
+    <v-card-actions class="mt-1 px-1">
+      <v-btn color="primary" variant="elevated" class="mr-1" :to="`/teachers/view/${teacherId}`" block> View Profile </v-btn>
 
       <v-menu transition="slide-y-transition" elevation="0" v-model="menu">
         <template v-slot:activator="{ props }">
-          <v-btn color="primary" v-bind="props" icon>
-            <v-icon icon="mdi-dots-vertical"></v-icon>
+          <v-btn color="primary" v-bind="props" icon class="pa-0 ma-0">
+            <v-icon icon="mdi-dots-vertical" class=""></v-icon>
           </v-btn>
         </template>
 
@@ -31,14 +30,13 @@
             <update-teacher :teacherId="teacherId" @dialog-close="closeMenu" activator-color="text"> </update-teacher>
           </v-list-item>
           <v-list-item>
-            <v-btn prepend-icon="mdi-key" variant="text" color="dark">Change Password</v-btn>
+            <!-- Reset Teacher Password -->
+            <reset-teacher-password :teacherId="teacherId" @dialog-close="closeMenu" activator-color="text">
+            </reset-teacher-password>
           </v-list-item>
           <v-list-item>
             <v-btn prepend-icon="mdi-book-open-variant" variant="text" color="dark">Assign subject </v-btn>
           </v-list-item>
-          <!-- <v-list-item>
-            <v-btn prepend-icon="mdi-delete" variant="text" color="dark">Disable Account</v-btn>
-          </v-list-item> -->
           <v-list-item>
             <v-btn prepend-icon="mdi-delete" variant="text" color="error" @click="deleteTeacher(teacherId)">
               Delete Account
@@ -57,9 +55,11 @@
 
 <script>
 import UpdateTeacher from './dialogs/UpdateTeacher.vue';
+import ResetTeacherPassword from './dialogs/ResetTeacherPassword.vue';
 export default {
   components: {
     UpdateTeacher,
+    ResetTeacherPassword,
   },
   data: () => ({
     menu: false,

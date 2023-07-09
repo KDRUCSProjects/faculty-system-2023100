@@ -2,6 +2,9 @@ export default {
   setStudents(state, payload) {
     state.students = payload;
   },
+  setStudentsList(state, payload) {
+    state.studentsList = payload;
+  },
   setCounts(state, options) {
     state.counts = options;
   },
@@ -25,5 +28,8 @@ export default {
 
       return student;
     });
+  },
+  setSearchedStudent(state, theStudent) {
+    state.searchedStudent = theStudent;
   },
 };

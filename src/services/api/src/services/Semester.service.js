@@ -1,6 +1,6 @@
 // Sequelize Models
 const httpStatus = require('http-status');
-const { Semester, EducationalYear, Subject } = require('../models');
+const { Semester, EducationalYear, Subject, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -9,10 +9,7 @@ const ApiError = require('../utils/ApiError');
  */
 const getAllSemesters = () => {
   return Semester.findAll({
-    include: [
-      { model: EducationalYear, as: 'EducationalYear', attributes: ['year'] },
-      { model: Subject },
-    ],
+    include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }, { model: Subject }],
   });
 };
 
@@ -29,13 +26,29 @@ const findSemester = (semesterBody) => {
 
 /**
  * get Semester
- * @returns {Promise<Semester>}
  * @param {ObjectId} semesterId
+ * @returns {Promise<Semester>}
  */
 const findSemesterById = (semesterId) => {
   return Semester.findOne({
     where: { id: semesterId },
-    include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
+    include: [
+      { model: EducationalYear, as: 'EducationalYear', attributes: ['year'] },
+      { model: Subject, include: [{ model: User }] },
+    ],
+  });
+};
+
+/**
+ * find next Semester of year
+ * @param {ObjectId} yearId
+ * @param {ObjectId} semesterTitle
+ * @returns {Promise<Semester>}
+ */
+const findNextSemester = (yearId, semesterTitle) => {
+  const nextTitle = semesterTitle + 1;
+  return Semester.findOne({
+    where: { educationalYearId: yearId, title: nextTitle },
   });
 };
 
@@ -56,16 +69,16 @@ const deleteSemester = (semester) => {
  */
 const getYearSemesters = (educationalYearId) => {
   return Semester.findAll({
-    where: { educationalYearId }, order: [['title', 'ASC']],
-    include: [
-      { model: Subject },
-    ],
+    where: { educationalYearId },
+    order: [['title', 'ASC']],
+    include: [{ model: Subject }],
   });
 };
 
 module.exports = {
   getAllSemesters,
   findSemester,
+  findNextSemester,
   findSemesterById,
   deleteSemester,
   getYearSemesters,

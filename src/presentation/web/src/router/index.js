@@ -19,7 +19,23 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
-    component: () => import('@/views/teachers/TeachersList.vue'),
+    component: () => import('@/views/teachers/Teachers.vue'),
+    children: [
+      {
+        path: '',
+        name: 'all-teachers',
+        component: () => import('@/views/teachers/TeachersList.vue'),
+      },
+      {
+        path: 'view/:id',
+        name: 'view-teacher',
+        meta: {
+          requiresAuth: true,
+        },
+        component: () => import('@/views/teachers/ViewTeacher.vue'),
+        props: true,
+      },
+    ],
   },
   {
     path: '/departments',
@@ -79,19 +95,35 @@ const routes = [
   //     },
   //   ],
   // },
-  {
-    path: '/subjects',
-    meta: {
-      requiresAuth: true,
-    },
-    component: () => import('@/views/subjects/SubjectsList.vue'),
-  },
+  // {
+  //   path: '/subjects',
+  //   meta: {
+  //     requiresAuth: true,
+  //   },
+  //   component: () => import('@/views/subjects/SubjectsList.vue'),
+  // },
   {
     path: '/semesters',
     meta: {
       requiresAuth: true,
     },
-    component: () => import('@/views/semesters/SemestersList.vue'),
+    component: () => import('@/views/semesters/Semesters.vue'),
+    children: [
+      {
+        path: 'all',
+        name: 'semesters-list',
+        component: () => import('@/views/semesters/SemestersList.vue'),
+      },
+      {
+        path: 'view/:id',
+        name: 'view-semester',
+        meta: {
+          requiresAuth: true,
+        },
+        component: () => import('@/views/semesters/SemesterView.vue'),
+        props: true,
+      },
+    ],
   },
   {
     path: '/:pathMatch(.*)*',

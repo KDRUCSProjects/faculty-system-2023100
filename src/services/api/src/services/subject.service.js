@@ -1,7 +1,7 @@
 // Sequelize Models
 const httpStatus = require('http-status');
 const { QueryTypes } = require('sequelize');
-const { Subject, StudentsList, Student, sequelize } = require('../models');
+const { Subject, StudentsList, Student, sequelize, Semester, EducationalYear } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -60,7 +60,18 @@ const deleteSubject = (user, subject) => {
  * @returns {Promise<Student>}
  */
 const getSubject = (subjectId) => {
-  return Subject.findOne({ where: { id: subjectId } });
+  return Subject.findOne({
+    where: { id: subjectId },
+    include: [
+      {
+        model: Semester,
+        as: 'Semester',
+        attributes: ['id', 'title'],
+        include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['id', 'year'] }],
+      },
+    ],
+    raw: true,
+  });
 };
 
 /**
@@ -78,7 +89,19 @@ const getSemesterSubjects = (semesterId) => {
  * @returns {Promise<Student>}
  */
 const getTeacherSubjects = (teacherId) => {
-  return Subject.findAll({ where: { teacherId }, order: [['createdAt', 'ASC']] });
+  return Subject.findAll({
+    where: { teacherId },
+    order: [['createdAt', 'DESC']],
+    include: [
+      {
+        model: Semester,
+        as: 'Semester',
+        attributes: ['id', 'title'],
+        include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['id', 'year'] }],
+      },
+    ],
+    raw: true,
+  });
 };
 
 /**
@@ -103,7 +126,7 @@ const getSemesterStudents = (semesterId) => {
  * update subject
  * @param {Object} oldSubjectBody
  * @param {Object} newSubjectBody
- * @returns {Promise<Student>}
+ * @returns {Promise<Subject>}
  */
 const updatedSubject = (oldSubjectBody, newSubjectBody) => {
   if (oldSubjectBody instanceof Subject) {
@@ -115,8 +138,18 @@ const updatedSubject = (oldSubjectBody, newSubjectBody) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
 
+/**
+ * get unassigned subjects
+ * @returns {Promise<Subject>}
+ */
+const getUnassignedSubjects = () => {
+  return Subject.findAll({
+    where: { teacherId: null },
+    include: [{ model: Semester }],
+  });
+};
+
 module.exports = {
-  getSemesterStudents,
   getSubject,
   createSubject,
   getSubjects,
@@ -124,4 +157,6 @@ module.exports = {
   updatedSubject,
   getTeacherSubjects,
   getSemesterSubjects,
+  getSemesterStudents,
+  getUnassignedSubjects,
 };

@@ -5,8 +5,13 @@ export default {
     try {
       const token = context.rootGetters.token;
 
+      let url = `/api/students?page=${options.page}`;
+      if (options.limit) {
+        url = url + `&limit=${options.limit}`;
+      }
+
       const response = await axios({
-        url: `/api/students?page=${options.page}`,
+        url,
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
@@ -120,5 +125,93 @@ export default {
     } catch (e) {
       throw e.response.data.message;
     }
+  },
+  async loadStudentsListBySemesterId(context, semesterId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        // The limit will be soon removed
+        url: `/api/studentList?semesterId=${semesterId}&limit=2000`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setStudentsList', response.data.results);
+
+      // Plus, also load current semester data
+      context.dispatch('semesters/loadSemesterById', semesterId, { root: true });
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async loadStudentByKankorId(context, { search }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/students/kankor/${search}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setSearchedStudent', response.data);
+
+      context.commit('setStudents', [response.data]);
+
+      return response.data;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async addStudentToSemester(context, { semesterId, studentId }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/studentList`,
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          studentId: parseInt(studentId),
+          semesterId: parseInt(semesterId),
+        },
+      });
+
+      // Let's reload the students
+      context.dispatch('loadStudentsListBySemesterId', semesterId);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async deleteStudentFromSemester(context, { semesterId, studentId }) {
+    // try {
+    //   const token = context.rootGetters.token;
+    //   const response = await axios({
+    //     url: `/api/studentList`,
+    //     method: 'post',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //     data: {
+    //       studentId: parseInt(studentId),
+    //       semesterId: parseInt(semesterId),
+    //     },
+    //   });
+    //   // Let's reload the students
+    //   context.dispatch('loadStudentsListBySemesterId', semesterId);
+    // } catch (e) {
+    //   throw e.response.data.message;
+    // }
   },
 };

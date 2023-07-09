@@ -44,6 +44,26 @@ body {
   padding: 10px;
 }
 
+/* /////////////////////////////////// */
+
+.main-heading-div {
+  /* background-color: aliceblue; */
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.main-heading-div h1 {
+  text-align: center;
+  line-height: 50px;
+  font-family: LatoBold;
+  font-size: 35px;
+  color: white;
+}
+
+/* /////////////////////////////////// */
+
 /* ////////////////////////// */
 /* Search Input */
 /* /////////////////// */
@@ -51,21 +71,65 @@ body {
 input {
   width: 40rem;
   height: 60px;
-  padding: 0px 60px 0px 40px;
-  font-size: 16px;
+  padding: 0px 60px 0px 60px;
+  font-size: 18px;
   border: none;
   border-radius: 5px;
   font-family: LatoRegular;
-  /* outline: ; */
+  color: rgb(70, 70, 70);
+  /* outline-color: #8ac185; */
+  outline: none;
+}
+
+.bubble-icon {
+  font-size: 40px;
+  position: absolute;
+  top: 21px;
+  right: 20px;
+  color: rgb(70, 70, 70);
+  background-color: #8ac185;
+  border-radius: 5px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+/* .bubble-icon:hover {
+  box-shadow: 0px 0px 10px 5px lightgray;
+} */
+
+.bubble-icon:active {
+  /* box-shadow: 0px 0px 10px 5px lightgray; */
+  transform: scale(0.8);
 }
 
 .icon {
   position: absolute;
-  right: 25px;
-  top: 25px;
-  font-size: 35px;
+  left: 25px;
+  top: 27px;
+  font-size: 30px;
   /* color: rgb(19, 129, 255); */
   color: #3a7bd5;
+}
+
+.spinner {
+  position: absolute;
+  right: 25px;
+  top: 27px;
+  font-size: 30px;
+  animation-name: loader;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes loader {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ////////////////////////// */
@@ -132,4 +196,5 @@ input {
   font-weight: bolder;
   color: rgb(71, 71, 71);
   background-color: white;
+  cursor: pointer;
 }

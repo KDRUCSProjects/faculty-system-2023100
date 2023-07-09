@@ -20,7 +20,14 @@ router
     studentController.registerStudent
   );
 
-router.route('/unRegistered').get(auth(), validate(shareValidation.paginate), studentController.getUnRegisteredStudents);
+router
+  .route('/students/:token')
+  .post(
+    upload.single('photo'),
+    attachImageToBody,
+    validate(studentValidation.tempToken),
+    studentController.registerYourSelf
+  );
 
 router
   .route('/:studentId')
@@ -62,16 +69,21 @@ module.exports = router;
  *          type: integer
  *      - name: status
  *        in: query
- *        description: student status 'taajils', 'reentry', 'tabdili'
+ *        description: student status 'taajils', 'reentry', 'tabdili', 'reserve'
  *        schema:
  *          type: string
  *          example: taajils
  *      - name: limit
  *        in: query
- *        description: limit
  *        schema:
  *          type: number
  *          example: 10
+ *        description: limit and default limit is 2000
+ *      - name: kankorId
+ *        in: query
+ *        schema:
+ *          type: string
+ *        description: search by kankor id
  *     responses:
  *       "200":
  *         description: OK
@@ -344,31 +356,89 @@ module.exports = router;
 
 /**
  * @swagger
- * /students/unRegistered:
- *   get:
- *     summary: get all student who are not registered in any semester
- *     description: get all student who are not registered in any semester
+ * /students/students/{token}:
+ *   post:
+ *     summary: Register Student By His Self
+ *     description: Register Student By His Self.
  *     tags: [Students]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *      - name: page
- *        in: query
- *        description: The page number for pagination
- *        schema:
- *          type: integer
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: temporary token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - kankorId
+ *               - fullName
+ *               - fatherName
+ *               - grandFatherName
+ *               - educationalYear
+ *             properties:
+ *               kankorId:
+ *                 type: string
+ *                 format: text
+ *               fullName:
+ *                 type: string
+ *                 format: text
+ *               fatherName:
+ *                 type: string
+ *                 format: text
+ *               grandFatherName:
+ *                 type: string
+ *                 format: text
+ *               province:
+ *                 type: string
+ *                 format: number
+ *               division:
+ *                 type: string
+ *                 format: number
+ *               district:
+ *                 type: string
+ *                 format: number
+ *               engName:
+ *                 type: string
+ *                 format: text
+ *               engLastName:
+ *                 type: string
+ *                 format: text
+ *               engFatherName:
+ *                 type: string
+ *                 format: text
+ *               engGrandFatherName:
+ *                 type: string
+ *                 format: text
+ *               dob:
+ *                 type: string
+ *                 format: date
+ *                 example: "2023-06-25"
+ *                 description: 'please select date using date picker'
+ *               educationalYear:
+ *                 type: string
+ *                 format: number
+ *               admissionYear:
+ *                 type: string
+ *                 format: number
+ *               photo:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Student'
- *
- *       "401":
- *         $ref: '#/components/responses/Unauthorized'
- *       "403":
- *         $ref: '#/components/responses/Forbidden'
+ *                $ref: '#/components/schemas/Student'
+ *       "404":
+ *         $ref: '#/components/responses/TokenNotFound'
+ *       "406":
+ *         $ref: '#/components/responses/TokenExpired'
  */

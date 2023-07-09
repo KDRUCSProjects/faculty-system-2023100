@@ -7,20 +7,20 @@ export default {
     saveDepartment(state, newDepartment) {
       state.departments.unshift(newDepartment);
     },
-    updateDepartment(state, updatedDepartment) {
+
+    editDepartment(state, updatedDepartment) {
+      console.log('mutation deparmtn')
       state.departments = state.departments.filter((department) => {
         if (department.id === updatedDepartment.id) {
-          // Update account
+          // Update Dapartment
           department.name = this.updateDepartment.name;
-          department.lastName = this.updateDepartment.lastName;
-          department.email = this.updateDepartment.email;
-          department.photo = this.updateDepartment.photo;
         }
   
         return department;
       });
     },
-    removeTeacher(state, departmentId) {
+    removeDepartment(state, departmentId) {
+      console.log(state, departmentId)
       state.departments = state.departments.filter((department) => department.id !== departmentId);
     },
   };

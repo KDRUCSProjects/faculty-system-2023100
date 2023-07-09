@@ -12,6 +12,8 @@ router
   .post(auth(), validate(studentListValidation.createStudentList), studentListController.createStudentList)
   .delete(auth(), validate(shareValidation.deleteBunch), studentListController.deleteBunch);
 
+router.route('/promote').post(auth(), validate(shareValidation.deleteBunch), studentListController.promoteStudents);
+
 router
   .route('/:studentListId')
   .delete(auth(), validate(studentListValidation.getStudentList), studentListController.deleteStudentList);
@@ -68,7 +70,7 @@ module.exports = router;
  *         name: limit
  *         schema:
  *           type: integer
- *         description: limit
+ *         description: limit and default limit is 2000
  *     responses:
  *       "200":
  *         description: OK
@@ -143,6 +145,37 @@ module.exports = router;
  *           application/json:
  *             schema:
  *                $ref: '#/components/schemas/StudentList'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /studentList/promote:
+ *   post:
+ *     summary: promote students to next semester
+ *     description: promote students to next semester
+ *     tags: [StudentList]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: integer
+ *               enum: [1,2,3,4,5]
+ *             example:
+ *               [1,2,4,5]
+ *     responses:
+ *       "204":
+ *         description: NO_CONTENT
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

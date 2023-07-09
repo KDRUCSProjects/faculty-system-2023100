@@ -30,7 +30,7 @@ export default {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        data
+        data,
       });
 
       context.commit('saveSubject', response.data);
@@ -51,8 +51,6 @@ export default {
         },
       });
 
-      console.log(response)
-
       context.commit('removeSubject', subjectId);
     } catch (e) {
       throw e.response.data.message;
@@ -62,19 +60,16 @@ export default {
     try {
       const token = context.rootGetters.token;
 
-      const formData = new FormData();
-
-      for (let key in payload) {
-        // Skip subjectId
-        if (key === 'subjectId') continue;
-
-        formData.append(key, payload[key]);
-      }
-
-      const response = await axios.patch(`/api/subjects/${payload.subjectId}`, formData, {
+      const response = await axios({
+        url: `/api/subjects/${payload.subjectId}`,
+        method: 'patch',
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
+        },
+        data: {
+          name: payload.name,
+          credit: payload.credit,
         },
       });
 

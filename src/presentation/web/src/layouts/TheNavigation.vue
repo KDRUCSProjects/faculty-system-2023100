@@ -91,13 +91,13 @@ export default {
         {
           title: 'Semesters',
           icon: 'mdi-google-classroom',
-          to: '/semesters',
+          to: '/semesters/all',
         },
-        {
-          title: 'Subjects',
-          icon: 'mdi-book-open-blank-variant',
-          to: '/subjects',
-        },
+        // {
+        //   title: 'Subjects',
+        //   icon: 'mdi-book-open-blank-variant',
+        //   to: '/subjects',
+        // },
         {
           title: 'Departments',
           icon: 'mdi-cog-outline',

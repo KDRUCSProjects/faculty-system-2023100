@@ -66,7 +66,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: Maximum number of users and default limit is 2000
  *       - in: query
  *         name: page
  *         schema:
@@ -186,7 +186,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: limit number and default limit is 2000
  *       - in: query
  *         name: page
  *         schema:

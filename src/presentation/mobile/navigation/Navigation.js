@@ -22,6 +22,9 @@ import {
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { timing } from "react-native-reanimated";
 import Setting from "../screens/Setting";
+import Subject from "../screens/Subjects";
+import AccountInfo from "../screens/AccountInfo";
+import ChangePassword from "../screens/ChangePassword";
 
 const studentScreen = () => {
   const stdScreen = createStackNavigator();
@@ -44,6 +47,22 @@ const authNavigation = (props) => {
         component={auth}
       ></authNavigationNavigator.Screen>
     </authNavigationNavigator.Navigator>
+  );
+};
+
+const editProfile = () => {
+  const editProfileNavigator = createStackNavigator();
+  return (
+    <editProfileNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <editProfileNavigator.Screen
+        name="Change account info"
+        component={AccountInfo}
+      ></editProfileNavigator.Screen>
+      <editProfileNavigator.Screen
+        name="Change password"
+        component={ChangePassword}
+      ></editProfileNavigator.Screen>
+    </editProfileNavigator.Navigator>
   );
 };
 
@@ -72,6 +91,10 @@ const Navigation = (props) => {
       <mainNavigation.Screen
         name="auth"
         component={authNavigation}
+      ></mainNavigation.Screen>
+      <mainNavigation.Screen
+        name="EditProfile"
+        component={editProfile}
       ></mainNavigation.Screen>
       <mainNavigation.Screen
         name="studentScreen"
@@ -135,6 +158,7 @@ const DrawerNavigator = (props) => {
       <drawer.Screen name="Home" component={Navigation} />
       <drawer.Screen name="Login" component={login}></drawer.Screen>
       <drawer.Screen name="Settings" component={Setting}></drawer.Screen>
+      <drawer.Screen name="Subjects" component={Subject}></drawer.Screen>
     </drawer.Navigator>
   );
 };
