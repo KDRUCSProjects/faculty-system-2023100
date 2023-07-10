@@ -17,6 +17,7 @@ export default {
       context.commit('setCurrentYearSemesters', response.data);
       context.commit('setCurrentYear', payload);
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'All semesters load failed'], { root: true });
       throw e.response.data.message;
     }
   },

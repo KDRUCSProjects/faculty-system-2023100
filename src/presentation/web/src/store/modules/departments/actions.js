@@ -13,11 +13,11 @@ export default {
       context.commit('setDepartment', response.data);
 
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'All Department load failed'], { root: true });
       throw e.response.data.message;
     }
   },
   async deleteDepartment(context, departmentId) {
-    console.log(departmentId)
     try {
       const token = context.rootGetters.token;
 
@@ -31,7 +31,10 @@ export default {
       });
 
       context.commit('removeDepartment', departmentId);
+      context.commit('setToast', 'Department successfully deleted', { root: true });
+
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed deleting Department'], { root: true });
       throw e.response.data.message;
     }
   },
@@ -52,8 +55,10 @@ export default {
       });
 
       context.commit('saveDepartment', response.data);
+      context.commit('setToast', 'Department successfully added', { root: true });
+
     } catch (e) {
-      console.log(e)
+      context.commit('setToast', [0, e.response.data.message || 'Failed adding Department'], { root: true });
       throw e.response.data.message;
     }
   },
@@ -96,9 +101,12 @@ export default {
         },
       });
   
-      console.log(response)
+
       context.commit('editDepartment', response.data);
+      context.commit('setToast', 'Department successfully updated', { root: true });
+
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed updating Department'], { root: true });
       throw e.response.data.message;
     }
   }

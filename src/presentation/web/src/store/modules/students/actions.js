@@ -30,6 +30,7 @@ export default {
         page: response.data.page,
       });
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'All Teacher load failed'], { root: true });
       throw e.response.data.message;
     }
   },
@@ -64,9 +65,10 @@ export default {
 
       // Instead of committing, let's reload all students
       context.dispatch('loadStudents');
-
+      context.commit('setToast', 'Student successfully deleted', { root: true });
       return response;
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed deleting Student'], { root: true });
       throw e.response.data.message;
     }
   },
@@ -96,7 +98,9 @@ export default {
       });
 
       context.commit('setStudent', response.data);
+      context.commit('setToast', 'Student data successfully updated', { root: true });
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed updating Student data'], { root: true });
       throw e.response.data.message;
     }
   },
@@ -124,7 +128,9 @@ export default {
 
       // Instead of adding the student, let's reload. This will be changed later as this is not good for performance.
       context.dispatch('loadStudents');
+      context.commit('setToast', 'Student account has been added successfully', { root: true });
     } catch (e) {
+      context.commit('setToast', [0, 'Failed adding Student account'], { root: true });
       throw e.response.data.message;
     }
   },
