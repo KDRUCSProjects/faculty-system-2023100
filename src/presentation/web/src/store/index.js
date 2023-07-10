@@ -19,9 +19,10 @@ export default createStore({
 
     departments: departmentModule,
     semesters: semestersModule,
-    years:yearsModule,
+    years: yearsModule,
   },
   state: {
+    toastMessages: [],
     years: [],
     selectedYear: null,
   },
@@ -34,6 +35,9 @@ export default createStore({
     selectedYear(state) {
       return state.selectedYear;
     },
+    toastMessages(state) {
+      return state.toastMessages;
+    },
   },
   mutations: {
     setYears(state, years) {
@@ -41,6 +45,12 @@ export default createStore({
     },
     setSelectedYear(state, year) {
       state.selectedYear = year;
+    },
+    setToast(state, options) {
+      state.toastMessages.push({
+        type: options[0] === 0 ? 'error' : 'success',
+        text: options[1] && typeof options === 'object' ? options[1] : options,
+      });
     },
   },
   actions: {
@@ -59,7 +69,7 @@ export default createStore({
 
         context.commit('setYears', response.data);
       } catch (e) {
-        throw e.response.data.message;
+        throw e.response?.data?.message;
       }
     },
   },

@@ -18,7 +18,7 @@
           <v-card-text>
             <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="active-tab">
               <v-tab :value="1"> Subjects </v-tab>
-              <v-tab :value="2"> Statistics </v-tab>
+              <v-tab :value="2"> Actions </v-tab>
             </v-tabs>
             <v-window v-model="tab">
               <v-window-item :value="1">
@@ -27,7 +27,17 @@
                   <v-btn variant="tonal" color="primary" block :prepend-icon="'mdi-plus'">New Subject</v-btn>
                 </add-subject>
               </v-window-item>
-              <v-window-item :value="2"> later on </v-window-item>
+              <v-window-item :value="2">
+                <v-card>
+                  <v-card-item>
+                    <v-card-title>Students Promotion</v-card-title>
+                    <v-card-subtitle>Migrate students from this semester to next semester</v-card-subtitle>
+                  </v-card-item>
+                  <v-card-actions>
+                    <v-btn variant="flat" color="success" block @click="promoteSemesterStudents"> Promote Students </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-window-item>
             </v-window>
           </v-card-text>
         </v-card>
@@ -40,6 +50,7 @@
             @mode="setMode"
             @pagination-number="getPageNumber"
             @selected-student-id="getSelectedStudentId"
+            @delete-student="deleteStudentFromSemester"
             ref="studentsTable"
           ></students-table>
         </router-view>
@@ -128,6 +139,29 @@ export default {
     },
   },
   methods: {
+    async promoteSemesterStudents() {
+      // if (this.mode !== 'enrollment') {
+      //   return alert('Switch back to semester students');
+      // }\
+
+      const students = this.students?.map((student) => student.studentId);
+
+      let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: 'Warning',
+        title: 'Are you sure you want to promote these students to next semester?',
+        subtitle: `Students Count: ${students?.length}`,
+        okButton: 'Yes, I am sure',
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return false;
+      }
+
+      console.log(students);
+
+      await this.$store.dispatch('students/promoteStudents', students);
+    },
     async getPageNumber(number) {
       this.page = number;
       // Also, now let's load students
@@ -150,6 +184,32 @@ export default {
       this.selectedStudentId = id;
 
       await this.addStudentToSemester(this.id, this.selectedStudentId);
+    },
+    async deleteStudentFromSemester(studentId) {
+      let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: 'Warning',
+        title: 'Are you sure you want to delete this student from this semester?',
+        subtitle: studentId,
+        okButton: 'Yes, continue',
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return false;
+      }
+
+      try {
+        await this.$store.dispatch('students/deleteStudentFromSemester', {
+          studentId,
+          semesterId: this.id,
+        });
+
+        // Now lets reload the students
+        await this.loadStudents(true);
+      } catch (e) {
+        this.$store.commit('setToast', e || 'Failed deleting student from semester');
+        // this.errorMessage = e;
+      }
     },
     async addStudentToSemester(semesterId, studentId) {
       let res = await this.$refs.baseConfirmDialog.show({

@@ -2,7 +2,7 @@
   <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
     <!-- <span class="pro"> 120 Students </span> -->
 
-    <v-card-title class="pb-0">{{ title }} Semester</v-card-title>
+    <v-card-title class="pb-0">{{ rankSemester(title) }} Semester</v-card-title>
     <v-card-subtitle class="py-0 my-0" style="font-family: monospace"> {{ studentsCount }} students </v-card-subtitle>
     <v-divider></v-divider>
     <v-card-subtitle class="text-primary">{{ year }} year</v-card-subtitle>
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { rankSemester } from '@/utils/global';
+
 export default {
   data: () => ({
     menu: false,
@@ -50,6 +52,9 @@ export default {
           semester: this.title,
         },
       });
+    },
+    rankSemester(title) {
+      return rankSemester(title);
     },
   },
 };

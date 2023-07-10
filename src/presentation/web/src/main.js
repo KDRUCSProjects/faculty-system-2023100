@@ -22,6 +22,7 @@ import BasePhotoUploader from '@/components/ui/BasePhotoUploader.vue';
 import BaseConfirmPassword from '@/components/ui/BaseConfirmPassword.vue';
 import BaseUpdateDialog from '@/components/ui/BaseUpdateDialog';
 import BaseSelectYearDialog from '@/components/ui/dialogs/BaseSelectYear.vue';
+import BaseToast from '@/components/ui/BaseToast.vue';
 
 // Register global components
 app.component('base-contents', BaseContents);
@@ -30,6 +31,7 @@ app.component('base-photo-uploader', BasePhotoUploader);
 app.component('base-confirm-password', BaseConfirmPassword);
 app.component('base-update-dialog', BaseUpdateDialog);
 app.component('base-select-year-dialog', BaseSelectYearDialog);
+app.component('base-toast', BaseToast);
 
 registerPlugins(app);
 

@@ -1,16 +1,14 @@
 import axios from 'axios';
 
 export default {
-
   async loadEducationalYears(context) {
     try {
-      const token = context.rootGetters.token
+      const token = context.rootGetters.token;
       const response = await axios.get('/api/years', {
-        headers: {Authorization: `Bearer ${token}`}
-      })
-      
-      context.commit('setYears', response.data);
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
+      context.commit('setYears', response.data);
     } catch (e) {
       throw e.response.data.message;
     }
@@ -44,7 +42,7 @@ export default {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        data
+        data,
       });
 
       context.commit('saveYear', response.data);
@@ -52,5 +50,4 @@ export default {
       throw e.response.data.message;
     }
   },
-
-}
+};

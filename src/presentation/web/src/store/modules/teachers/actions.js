@@ -37,7 +37,10 @@ export default {
       });
 
       context.commit('saveTeacher', response.data);
+
+      context.commit('setToast', 'Teacher account has been added successfully', { root: true });
     } catch (e) {
+      context.commit('setToast', [0, 'Failed adding teacher account'], { root: true });
       throw e.response.data.message;
     }
   },

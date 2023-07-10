@@ -167,7 +167,7 @@ export default {
         },
       });
     },
-    async loadStudents(options = { page: this.page, limit: this.itemsPerPage, like: '' }) {
+    async loadStudents(options = { page: this.page, limit: this.itemsPerPage, like: this.search }) {
       try {
         this.loading = true;
 
@@ -182,6 +182,9 @@ export default {
   watch: {
     async page(newValue) {
       await this.loadStudents({ page: newValue, limit: this.itemsPerPage, like: this.search });
+    },
+    async search(newValue) {
+      await this.loadStudents({ page: 1, limit: this.itemsPerPage, like: newValue });
     },
   },
   async created() {

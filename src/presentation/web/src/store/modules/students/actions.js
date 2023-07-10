@@ -1,13 +1,17 @@
 import axios from 'axios';
 
 export default {
-  async loadStudents(context, options = { page: 1 }) {
+  async loadStudents(context, options = { page: 1, itemsPerPage: 8 }) {
     try {
       const token = context.rootGetters.token;
 
       let url = `/api/students?page=${options.page}`;
       if (options.limit) {
         url = url + `&limit=${options.limit}`;
+      }
+
+      if (options.like) {
+        url = url + `&kankorId=${options.like}`;
       }
 
       const response = await axios({
@@ -18,8 +22,6 @@ export default {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log(response.data);
 
       context.commit('setStudents', response.data.results);
       context.commit('setCounts', {
@@ -194,24 +196,48 @@ export default {
     }
   },
   async deleteStudentFromSemester(context, { semesterId, studentId }) {
-    // try {
-    //   const token = context.rootGetters.token;
-    //   const response = await axios({
-    //     url: `/api/studentList`,
-    //     method: 'post',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //     data: {
-    //       studentId: parseInt(studentId),
-    //       semesterId: parseInt(semesterId),
-    //     },
-    //   });
-    //   // Let's reload the students
-    //   context.dispatch('loadStudentsListBySemesterId', semesterId);
-    // } catch (e) {
-    //   throw e.response.data.message;
-    // }
+    try {
+      const token = context.rootGetters.token;
+
+      const data = [
+        {
+          studentId: parseInt(studentId),
+          semesterId: parseInt(semesterId),
+        },
+      ];
+
+      const response = await axios({
+        url: `/api/studentList`,
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data,
+      });
+      // Let's reload the students
+      context.dispatch('loadStudentsListBySemesterId', semesterId);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async promoteStudents(context, students) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/studentList/promote`,
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data: students,
+      });
+
+      // Let's reload all semester data
+    } catch (e) {
+      throw e.response.data.message;
+    }
   },
 };
