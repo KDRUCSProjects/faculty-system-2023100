@@ -98,8 +98,6 @@ import { resolveComponent } from 'vue';
       },
       closeDialog() {
         this.dialog = false;
-        //   Also reset the form
-        this.$refs.updateDepartmentForm.reset();
         // tell parent that the windows is closed
         this.$emit('dialog-close');
       },

@@ -1,6 +1,6 @@
 <template>
       <base-contents>
-      <!-- Appbar Slot -->
+      <!-- AppBar Slot -->
     <template v-slot:bar>
       <v-text-field
         clearable=""
