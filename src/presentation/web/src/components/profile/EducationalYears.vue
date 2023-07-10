@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto pa-1" max-width="500"  >
+  <v-card class="mx-auto pa-1" max-width="500">
     <v-list>
       <v-list-item>
         <v-list-item-title>
@@ -14,8 +14,8 @@
     </v-list>
     <add-educational-year></add-educational-year>
     <!-- All Dialogs -->
-      <!-- Delete Dialog -->
-      <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
+    <!-- Delete Dialog -->
+    <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
   </v-card>
 </template>
 
@@ -26,16 +26,15 @@ export default {
     AddEducationalYear,
   },
   data: () => ({
-      menu: false,
-    }),
-  methods:{
+    menu: false,
+  }),
+  methods: {
     closeMenu() {
-        // For some reasons, the dialog won't close when the item is clicked in the menu in Vuetify 3 when using a dialog. Let's use this hack for now.
-        this.menu = false;
-      },
+      // For some reasons, the dialog won't close when the item is clicked in the menu in Vuetify 3 when using a dialog. Let's use this hack for now.
+      this.menu = false;
+    },
     async deleteYear(yearId) {
-      console.log(yearId)
-        let res = await this.$refs.baseConfirmDialog.show({
+      let res = await this.$refs.baseConfirmDialog.show({
         warningTitle: 'Warning',
         title: 'Are you sure you want to delete this Year?',
         subtitle: yearId,
@@ -46,9 +45,9 @@ export default {
       if (!res) {
         return false;
       }
-    
+
       await this.$store.dispatch('years/deleteEducationalYearById', yearId);
-      }
+    },
   },
   computed: {
     items() {

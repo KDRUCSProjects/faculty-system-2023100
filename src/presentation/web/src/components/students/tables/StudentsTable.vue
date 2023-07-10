@@ -137,10 +137,16 @@ export default {
         this.$emit('mode', 'semester-students');
       }
     },
-    deleteStudent() {},
+    deleteStudent(item) {
+      const { raw } = item;
+      this.$emit('delete-student', raw.studentId);
+    },
     editStudent() {},
     viewStudent(item) {
       const { raw } = item;
+
+      // first, let's emit what the component is doing.
+      this.$emit('view-student', raw.studentId);
       this.$router.push({
         name: 'view-student',
         params: {
@@ -157,7 +163,7 @@ export default {
       this.$emit('items-per-page', newValue);
     },
   },
-  emits: ['mode', 'selected-student-id'],
+  emits: ['mode', 'selected-student-id', 'view-student', 'delete-student'],
   async created() {},
 };
 </script>
