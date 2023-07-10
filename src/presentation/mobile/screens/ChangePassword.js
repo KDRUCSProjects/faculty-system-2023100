@@ -185,6 +185,7 @@ export default function ChangePassword(props) {
                       setpasswordError(false);
                       setcurrentPassword(text);
                     }}
+                    
                     right={
                       <TextInput.Icon
                         icon={showPass ? "eye" : "eye-off"}

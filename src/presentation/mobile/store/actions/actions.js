@@ -11,6 +11,7 @@ export const ISABSENT = "ISABSENT";
 export const UPDATEACCOUNT = "UPDATEACCOUNT";
 export const CHECKPASSWORD = "CHECKPASSWORD";
 export const CHANGEPASSWORD = "CHANGEPASSWORD";
+export const GETSTUDENTINFO="GETSTUDENTINFO";
 
 export const authenticate = (userName, password) => {
   return async (dispatch) => {
@@ -300,6 +301,103 @@ export const changePassword = (
     }
   };
 };
+
+
+export const getStudentInfo = (id) => {
+  return async (dispatch) => {
+     console.log(id);
+
+ 
+  const promise=new Promise((resolve,reject)=>{
+
+ 
+
+    FetchWithTimeout("http://192.168.43.153:4000/students/kankor/" +id,{},5000)
+    .then(response => {
+      if (!response.ok)
+      {
+        if(response.status=="404")
+        {
+        throw new Error("Student not found");
+        
+        }
+        throw new Error(response.status);
+     
+      
+      }
+
+
+      return response.json();
+    })
+    .then(data => {
+      
+      if (data.kankorId) {
+       resolve(data);
+      } else {
+      }
+    })
+    .catch(err => {
+      reject(err);
+      });
+
+    }); 
+  
+    return promise;
+      // const response =  FetchWithTimeout("http://192.168.1.104:4000/students/kankor/"+id, {
+      //   method: "GET",
+      //   headers: { "Content-Type": "application/json" },
+       
+      // },5000);
+
+      // console.log(response.status);
+
+      // if (response.status === 400) {
+      //   throw new Error("400");
+      // }
+      // if (response.status === 401) {
+      //   throw new Error("401");
+      // }
+      // if (!response.ok) {
+      //   console.log(response.status);
+      //   new Error("something went wrong")
+       
+      // }
+
+
+
+
+
+      // const data =  response.json();
+      //  return data;
+      // console.log(data);
+    
+ 
+  
+
+    //   const studentId = data.id;
+    //    const kankorId = data.kankorId;
+    //   const fullName = data.fullName;
+    //   const fatherName = data.fatherName;
+    //   const grandFatherName =
+    //     data.grandFatherName;
+    //  const educationalYearId = data.educationalYearId;
+    //   const admitDate = data.admissionYear;
+
+
+    // dispatch({
+    //   type: GETSTUDENTINFO,
+
+    //   studentId,
+    //   kankorId,fullName,
+    //   fatherName,
+    //   grandFatherName,
+    //   educationalYearId,
+    //   admitDate
+    // });
+  };
+};
+
+
 
 // export const authenticate = (userName, password) => {
 
