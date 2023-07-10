@@ -9,7 +9,7 @@
             <v-card-item>
               <v-card-title>Add Department</v-card-title>
               <v-card-subtitle>
-                Fill in the blanks to add department
+                Fill in the blank to add department
               </v-card-subtitle>
             </v-card-item>
             <v-card-text> 

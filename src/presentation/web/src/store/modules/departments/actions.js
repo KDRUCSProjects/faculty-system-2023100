@@ -76,40 +76,31 @@ export default {
       throw e.response.data.message;
     }
   },
-
   async updateDepartment(context, payload) {
-    console.log(payload)
     try {
       const token = context.rootGetters.token;
-
-      // const formData = new FormData();
-
-      // for (let key in payload) {
-      //   // Skip departmentId
-      //   if (key === 'departmentId') continue;
-
-      //   // formData.append(key, payload[key]);
-      //   formData.set(key, payload[key])
-      //   console.log(formData)
-      // }
-
       const data = {
         name: payload.name
       }
+  
 
-
-      const response = await axios.patch(`/departments/${payload.departmentId}`, {
+      const response = await axios({
+        url: `/api/departments/${payload.departmentId}`,
+        method: 'patch',
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        data
+        data: {
+          name: payload.name,
+        },
       });
-
+  
+      console.log(response)
       context.commit('editDepartment', response.data);
     } catch (e) {
       throw e.response.data.message;
     }
-  },
+  }
 
 };

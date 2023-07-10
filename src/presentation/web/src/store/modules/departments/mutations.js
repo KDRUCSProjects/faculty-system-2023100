@@ -1,3 +1,6 @@
+import updateDepartmentVue from "@/components/departments/updateDepartment.vue";
+import departments from ".";
+
 export default {
     setDepartment(state, payload) {
       console.log(payload)
@@ -9,15 +12,17 @@ export default {
     },
 
     editDepartment(state, updatedDepartment) {
-      console.log('mutation deparmtn')
+      console.log(updatedDepartment)
       state.departments = state.departments.filter((department) => {
         if (department.id === updatedDepartment.id) {
           // Update Dapartment
-          department.name = this.updateDepartment.name;
+          console.log(department, updatedDepartment)
+          department.name = updatedDepartment.name;
+
         }
-  
         return department;
       });
+      
     },
     removeDepartment(state, departmentId) {
       console.log(state, departmentId)
