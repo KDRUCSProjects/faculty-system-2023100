@@ -21,6 +21,15 @@
               variant="outlined"
               label="Subject Credit"
             ></v-text-field>
+            <v-autocomplete
+              v-model="teacherId"
+              clearable
+              label="Select Teacher"
+              :items="teachers"
+              variant="outlined"
+              item-title="name"
+              item-value="id"
+            ></v-autocomplete>
           </v-form>
 
           <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
@@ -59,11 +68,15 @@ export default {
     dialog: false,
     name: null,
     credit: null,
+    teacherId: null,
     show: true,
     isLoading: false,
     errorMessage: null,
   }),
   computed: {
+    teachers() {
+      return this.$store.getters['teachers/teachers'];
+    },
     rules() {
       return {
         name: [(v) => !!v || 'Please enter Subject name'],
@@ -79,6 +92,8 @@ export default {
 
       this.name = response.data.name;
       this.credit = response.data.credit;
+      this.teacherId= response.data.teacherId;
+
     },
     async submitForm() {
       // Validate the form first
@@ -97,6 +112,7 @@ export default {
           // Data starts here...
           name: this.name,
           credit: this.credit,
+          teacherId: this.teacherId,
         };
 
         await this.$store.dispatch('subjects/updateSubject', data);
@@ -113,8 +129,6 @@ export default {
     },
     closeDialog() {
       this.dialog = false;
-      //   Also reset the form
-      this.$refs.updateSubjectForm.reset();
       // tell parent that the windows is closed
       this.$emit('dialog-close');
     },
@@ -122,6 +136,7 @@ export default {
   emits: ['dialog-close'],
   async created() {
     await this.setSubject();
+
   },
 };
 </script>
