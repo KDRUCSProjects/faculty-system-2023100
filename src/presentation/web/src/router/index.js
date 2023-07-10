@@ -70,6 +70,11 @@ const routes = [
         component: () => import('@/views/students/StudentRegistration.vue'),
       },
       {
+        path: 'status-change',
+        name: 'status-change',
+        component: () => import('@/views/students/StudentStatusChange.vue'),
+      },
+      {
         path: 'view/:id',
         name: 'view-student',
         meta: {

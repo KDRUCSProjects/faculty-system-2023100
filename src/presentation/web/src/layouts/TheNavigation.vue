@@ -85,6 +85,11 @@ export default {
               icon: 'mdi-account-school',
               to: '/students/new',
             },
+            {
+              title: 'Student Conversion',
+              icon: 'mdi-swap-horizontal',
+              to: '/students/status-change',
+            },
             // { divider: true },
           ],
         },
