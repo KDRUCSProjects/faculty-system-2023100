@@ -14,9 +14,11 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { default as theme } from "./ui/colors.json";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import GetInfo from "./store/reducers/getInfo";
+
 export default function App() {
   const store = createStore(
-    combineReducers({ MainReducer, studentReducer }),
+    combineReducers({ MainReducer, studentReducer,GetInfo }),
     applyMiddleware(thunk)
   );
 
