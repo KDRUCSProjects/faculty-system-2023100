@@ -64,15 +64,19 @@ export default {
     handleFilePondInit: function () {
       // FilePond instance methods are available on `this.$refs.pond`
     },
+    removeMassage: function () {
+      console.log('clicked')
+    },
     handleFile() {
       let theFile = this.$refs.pond._pond.getFile();
 
       if(theFile.fileSize > 1024 * 1024){
   
         this.photoSize = true
-        this.myFiles.pop();
+        // this.myFiles.pop();
       }
       else{
+        this.photoSize = false
         this.$emit('photo', theFile.file || null, this.photoSize);
       }
 
