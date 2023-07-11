@@ -30,10 +30,26 @@ const resultContainer = document.querySelector('.result-container');
 const bubbleIcon = document.querySelector('.bubble-icon');
 const iconTheme = document.querySelector('.icon__theme');
 const iconSwap = document.querySelector('.swap-icon');
-const theme = document.querySelector('link');
 const body = document.querySelector('body');
+const codes = document.querySelectorAll('.code');
+const personalDiv = document.querySelector('.personal-hidden-div');
+const location = document.querySelector('.location-hidden-div');
+const kankor = document.querySelector('.kankor-hidden-div');
 
 //////////////////////////////////////////////
+
+codes[0].focus();
+
+codes.forEach((code, idx) => {
+  code.addEventListener('keydown', e => {
+    if (e.key >= 0 && e.key <= 9) {
+      codes[idx].value = '';
+      setTimeout(() => codes[idx + 1].focus(), 10);
+    } else if (e.key === 'Backspace') {
+      setTimeout(() => codes[idx - 1].focus(), 10);
+    }
+  });
+});
 
 /////////////////////////////////////////////
 iconClose.addEventListener('click', function () {
@@ -143,3 +159,6 @@ if (currentTheme) {
     iconSwap.src = iconMoon;
   }
 }
+
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
