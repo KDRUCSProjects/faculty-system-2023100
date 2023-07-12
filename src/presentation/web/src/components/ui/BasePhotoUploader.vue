@@ -18,7 +18,9 @@
       @addfile="handleFile"
       @removefile="$emit('photo', null)"
     />
+    <p v-if="photoSize" class="error">Can't upload the photo with size more than 2 mb</p>
   </div>
+
 </template>
 
 <script>
@@ -55,16 +57,30 @@ export default {
   data: function () {
     return {
       myFiles: [],
+      photoSize: false,
     };
   },
   methods: {
     handleFilePondInit: function () {
       // FilePond instance methods are available on `this.$refs.pond`
     },
+    removeMassage: function () {
+      console.log('clicked')
+    },
     handleFile() {
       let theFile = this.$refs.pond._pond.getFile();
 
-      this.$emit('photo', theFile.file || null);
+      if(theFile.fileSize > 1024 * 1024){
+  
+        this.photoSize = true
+        // this.myFiles.pop();
+      }
+      else{
+        this.photoSize = false
+        this.$emit('photo', theFile.file || null, this.photoSize);
+      }
+
+      
     },
   },
   components: {
@@ -82,5 +98,9 @@ export default {
 .filepond {
   margin-left: auto;
   margin-right: auto;
+}
+
+.error{
+  color: red
 }
 </style>
