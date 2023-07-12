@@ -12,7 +12,9 @@ router
   .post(auth(), validate(studentListValidation.createStudentList), studentListController.createStudentList)
   .delete(auth(), validate(studentListValidation.deleteBunch), studentListController.deleteBunch);
 
-router.route('/promote').post(auth(), validate(studentListValidation.deleteBunch), studentListController.promoteStudents);
+router
+  .route('/promote')
+  .post(auth(), validate(studentListValidation.promoteStudents), studentListController.promoteStudents);
 
 router
   .route('/:studentListId')

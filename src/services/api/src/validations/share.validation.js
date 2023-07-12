@@ -22,17 +22,7 @@ const studentsWithTaajilReentryAndTabdili = {
   }),
 };
 
-const deleteBunch = {
-  body: Joi.array()
-    .items({
-      studentId: Joi.number().integer().min(1).required(),
-      semesterId: Joi.number().integer().min(1).required(),
-    })
-    .min(1),
-};
-
 module.exports = {
   paginate,
-  deleteBunch,
   studentsWithTaajilReentryAndTabdili,
 };

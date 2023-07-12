@@ -26,14 +26,21 @@ const getStudentLists = {
 
 const deleteBunch = {
   body: Joi.array()
-    .items(Joi.number().integer().min(1),
-    )
+    .items({
+      studentId: Joi.number().integer().min(1).required(),
+      semesterId: Joi.number().integer().min(1).required(),
+    })
     .min(1),
+};
+
+const promoteStudents = {
+  body: Joi.array().items(Joi.number().integer()).min(1),
 };
 
 module.exports = {
   deleteBunch,
   getStudentList,
+  promoteStudents,
   getStudentLists,
   createStudentList,
 };

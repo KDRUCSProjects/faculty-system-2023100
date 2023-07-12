@@ -30,15 +30,15 @@ const getStudents = (offset) => {
  * @param {String} queryKankorId
  * @returns {Promise<Student>}
  */
-const getStudentByKankorId = (queryKankorId) => {
-  return Student.findAll({
+const getStudentByKankorId = (queryKankorId, limit, offset) => {
+  return Student.findAndCountAll({
     where: {
       kankorId: {
         [Op.like]: `${queryKankorId || ''}%`,
       },
     },
-    limit: 2000,
-    offset: 0,
+    limit,
+    offset,
     order: [['createdAt', 'DESC']],
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
   });

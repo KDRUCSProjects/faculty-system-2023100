@@ -130,7 +130,6 @@ const deleteBunch = catchAsync(async (req, res) => {
       results.push({ message: `student id ${studentId} and semester id ${semesterId} is not Found` });
     }
   }
-  console.log(results);
   return res.status(httpStatus.OK).send(results);
 });
 

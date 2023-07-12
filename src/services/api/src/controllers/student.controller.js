@@ -49,8 +49,13 @@ const getStudents = catchAsync(async (req, res) => {
   const offset = parseInt(((page - 1) * limit), 10);
 
   if (req.query.kankorId) {
-    const results = await studentService.getStudentByKankorId(req.query.kankorId);
-    return res.status(httpStatus.OK).send(results);
+    const { count, rows } = await studentService.getStudentByKankorId(req.query.kankorId, limit, offset);
+    return res.status(httpStatus.OK).send({
+      page: parseInt(page, 10),
+      totalPages: Math.ceil(count / limit),
+      total: count,
+      results: rows
+    });
   }
 
   let result = null;

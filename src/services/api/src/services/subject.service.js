@@ -84,6 +84,15 @@ const getSemesterSubjects = (semesterId) => {
 };
 
 /**
+ * get subject by id
+ * @param {ObjectId} semesterId
+ * @returns {Promise<Student>}
+ */
+const getSubjectById = (id) => {
+  return Subject.findOne({ where: { id } });
+};
+
+/**
  * get teacher subjects
  * @param {ObjectId} teacherId
  * @returns {Promise<Student>}
@@ -151,10 +160,11 @@ const getUnassignedSubjects = () => {
 
 module.exports = {
   getSubject,
-  createSubject,
   getSubjects,
+  createSubject,
   deleteSubject,
   updatedSubject,
+  getSubjectById,
   getTeacherSubjects,
   getSemesterSubjects,
   getSemesterStudents,
