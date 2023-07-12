@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       midtermMarks: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
         validate: {
           min: 0,
           max: 20,
@@ -49,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       assignmentOrProjectMarks: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
         validate: {
           min: 0,
           max: 20,
@@ -57,6 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       finalMarks: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
         validate: {
           min: 0,
           max: 60,

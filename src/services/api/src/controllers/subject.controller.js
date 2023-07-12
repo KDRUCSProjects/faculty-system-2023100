@@ -32,7 +32,7 @@ const getSubjects = catchAsync(async (req, res) => {
 });
 
 const deleteSubject = catchAsync(async (req, res) => {
-  const subject = await subjectService.getSubject(req.params.subjectId);
+  const subject = await subjectService.getSubjectById(req.params.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
   const attendance = await attendanceService.findAttendanceBySubjectId(subject.id);
   if (attendance) await attendanceService.deleteAttendance(attendance);
@@ -69,14 +69,14 @@ const updatedSubject = catchAsync(async (req, res) => {
     const teacher = await userService.getTeacher(req.body.teacherId);
     if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'Teacher not found');
   }
-  const subject = await subjectService.getSubject(req.params.subjectId);
+  const subject = await subjectService.getSubjectById(req.params.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
   const results = await subjectService.updatedSubject(subject, req.body);
   res.status(httpStatus.ACCEPTED).send(results);
 });
 
 const assignSubjectToTeacher = catchAsync(async (req, res) => {
-  const subject = await subjectService.getSubject(req.body.subjectId);
+  const subject = await subjectService.getSubjectById(req.body.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
   const teacher = await userService.getTeacher(req.body.teacherId);
   if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'Teacher Not Found');
@@ -85,7 +85,7 @@ const assignSubjectToTeacher = catchAsync(async (req, res) => {
 });
 
 const takeBackSubjectFromTeacher = catchAsync(async (req, res) => {
-  const subject = await subjectService.getSubject(req.body.subjectId);
+  const subject = await subjectService.getSubjectById(req.body.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
   if (subject.teacherId !== req.body.teacherId)
     throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'this subject is not related to this teacher');

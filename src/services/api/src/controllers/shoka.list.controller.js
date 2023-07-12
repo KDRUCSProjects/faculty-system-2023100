@@ -9,6 +9,7 @@ const {
   studentListService,
 } = require('../services');
 const ApiError = require('../utils/ApiError');
+const { marksFormatter } = require('../utils/marks.formatter');
 
 const createShokaList = catchAsync(async (req, res) => {
   const { shokaId, studentId } = req.body;
@@ -22,7 +23,7 @@ const createShokaList = catchAsync(async (req, res) => {
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
   const semester = await semesterService.findSemesterById(subject.semesterId);
   const isStudentListed = await studentListService.findListedStudentByStudentId(studentId);
-  if (isStudentListed && (semester.id === isStudentListed?.semesterId)) {
+  if (isStudentListed.length >= 1 && (semester.id === isStudentListed[0]?.semesterId)) {
     const shokaList = await shokaListService.createShokaList(req.body);
     return res.status(httpStatus.CREATED).send(shokaList);
   }
@@ -43,7 +44,8 @@ const getStudentMarks = catchAsync(async (req, res) => {
     const { semester } = req.query;
     conditions.push(`semester.title = ${semester}`);
     const results = await shokaListService.getStudentMarks(conditions);
-    return res.status(httpStatus.OK).send(results);
+    const formatMarks = marksFormatter(results);
+    return res.status(httpStatus.OK).send(formatMarks);
   }
 
   if (req.query?.class) {
@@ -65,11 +67,13 @@ const getStudentMarks = catchAsync(async (req, res) => {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Query Parameters');
     }
     const results = await shokaListService.getStudentMarks(conditions);
-    return res.status(httpStatus.OK).send(results);
+    const formatMarks = marksFormatter(results);
+    return res.status(httpStatus.OK).send(formatMarks);
   }
 
   const results = await shokaListService.getStudentMarks(conditions);
-  return res.status(httpStatus.OK).send(results);
+  const formatMarks = marksFormatter(results);
+  return res.status(httpStatus.OK).send(formatMarks);
 
 });
 
