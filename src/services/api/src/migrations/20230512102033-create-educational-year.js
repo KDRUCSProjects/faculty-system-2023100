@@ -19,6 +19,16 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
+      firstHalf: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      secondHalf: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       ...BaseModel(Sequelize),
     });
   },

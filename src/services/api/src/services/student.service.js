@@ -1,6 +1,8 @@
 // Sequelize Models
 const { QueryTypes, Op } = require('sequelize');
 const { Student, EducationalYear, sequelize } = require('../models');
+const ApiError = require('../utils/ApiError');
+const httpStatus = require('http-status');
 
 /**
  * Create a student
@@ -58,6 +60,7 @@ const updateStudent = (oldStudent, newStudent) => {
     });
     return oldStudent.save();
   }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
 
 /**

@@ -11,6 +11,10 @@ const createEducationalYear = catchAsync(async (req, res) => {
 });
 
 const getEducationalYears = catchAsync(async (req, res) => {
+  if (req.query?.currentYear) {
+    const currentYear = await educationalYearService.getCurrentEducationalYear();
+    return res.status(httpStatus.OK).send(currentYear);
+  }
   const results = await educationalYearService.getEducationalYears();
   res.status(httpStatus.OK).send(results);
 });
@@ -34,7 +38,27 @@ const getEducationalYearByValue = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(year);
 });
 
+const setCurrentYear = catchAsync(async (req, res) => {
+  const year = await educationalYearService.getEducationalYearByValue(req.body.year);
+  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
+  const currentYear = await educationalYearService.getCurrentEducationalYear();
+  if (currentYear && (currentYear?.year !== year.year)) {
+    await educationalYearService.updateYear(currentYear, { onGoing: false });
+  }
+  if (req.body.firstHalf) {
+    const results = await educationalYearService.updateYear(year, { onGoing: true, firstHalf: true, secondHalf: false });
+    return res.status(httpStatus.ACCEPTED).send(results);
+  }
+
+  if (req.body.secondHalf) {
+    const results = await educationalYearService.updateYear(year, { onGoing: true, secondHalf: true, firstHalf: false });
+    return res.status(httpStatus.ACCEPTED).send(results);
+  }
+});
+
+
 module.exports = {
+  setCurrentYear,
   getEducationalYears,
   getEducationalYear,
   deleteEducationalYear,
