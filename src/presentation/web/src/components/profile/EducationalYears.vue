@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     items() {
-      return this.$store.getters['years'];
+      return this.$store.getters['years/years'];
     },
   },
 };

@@ -30,7 +30,6 @@ export default {
 
       context.commit('removeYear', yearId);
       context.commit('setToast', 'Educational year successfully deleted', { root: true });
-
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message || 'Failed deleting of Educational year'], { root: true });
       throw e.response.data.message;
@@ -52,7 +51,6 @@ export default {
 
       context.commit('saveYear', response.data);
       context.commit('setToast', 'Educational year successfully added', { root: true });
-
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message || 'Failed adding of Educational year'], { root: true });
 
