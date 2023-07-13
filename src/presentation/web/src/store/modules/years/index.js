@@ -8,6 +8,8 @@ export default {
     return {
       years: [],
       selectedYear: null,
+      onGoingYear: null,
+      firstHalf: false,
     };
   },
   getters,

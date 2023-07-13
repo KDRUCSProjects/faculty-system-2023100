@@ -11,4 +11,10 @@ export default {
   toastMessages(state) {
     return state.toastMessages;
   },
+  onGoingYear(state) {
+    return {
+      year: state.onGoingYear,
+      firstHalf: state.firstHalf,
+    };
+  },
 };
