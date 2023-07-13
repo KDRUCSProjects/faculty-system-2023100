@@ -24,6 +24,11 @@ export default createStore({
   state: {
     toastMessages: [],
   },
+  getters: {
+    toastMessages(state) {
+      return state.toastMessages;
+    },
+  },
   mutations: {
     setToast(state, options) {
       state.toastMessages.push({
