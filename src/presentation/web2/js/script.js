@@ -28,8 +28,9 @@ const errorDiv = document.querySelector('.error-message-div');
 const loader = document.querySelector('.spinner');
 const resultContainer = document.querySelector('.result-container');
 const bubbleIcon = document.querySelector('.bubble-icon');
-
-// console.log(profile);
+const iconTheme = document.querySelector('.icon__theme');
+const iconSwap = document.querySelector('.swap-icon');
+const body = document.querySelector('body');
 
 //////////////////////////////////////////////
 
@@ -56,22 +57,24 @@ bubbleIcon.addEventListener('click', submitFun);
 
 function submitFun(e) {
   let inputValue = input.value;
-  input.value = '';
-  loader.classList.remove('hidden');
-  resultContainer.classList.add('hidden');
-  bubbleIcon.classList.add('hidden');
-
-  setTimeout(() => {
-    getApiFun(inputValue);
-    loader.classList.add('hidden');
-    bubbleIcon.classList.remove('hidden');
-    // resultContainer.classList.remove('hidden');
+  if (inputValue) {
+    input.value = '';
+    loader.classList.remove('hidden');
+    resultContainer.classList.add('hidden');
+    bubbleIcon.classList.add('hidden');
 
     setTimeout(() => {
-      errorDiv.style.display = 'none';
-      errorDiv.classList.remove('hidden');
-    }, 3000);
-  }, 3000);
+      getApiFun(inputValue);
+      loader.classList.add('hidden');
+      bubbleIcon.classList.remove('hidden');
+      // resultContainer.classList.remove('hidden');
+
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+        errorDiv.classList.remove('hidden');
+      }, 5000);
+    }, 1500);
+  }
 }
 
 ///////////////////////////////////////////////////////
@@ -104,3 +107,41 @@ const getApiFun = id => {
       errorDiv.style.display = 'flex';
     });
 };
+
+// //////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///   Dark Theme functionalty
+////////////////////////////////
+
+const iconSun = 'image/icon-moon.svg';
+const iconMoon = 'image/icon-sun.svg';
+const lightTheme = 'css/style.css';
+const lightProfile = 'css/profileCard.css';
+const darkTheme = 'css/styleDark.css';
+const darkProfile = 'css/darkProfileCard.css';
+
+//////////////////////////////////////////////////////////
+//////////  Theme Toggler ////////////////////////////////
+iconSwap.addEventListener('click', function (e) {
+  if (iconSwap.getAttribute('src') === iconSun) {
+    iconSwap.src = iconMoon;
+    localStorage.setItem('theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else if (iconSwap.getAttribute('src') === iconMoon) {
+    iconSwap.src = iconSun;
+    localStorage.setItem('theme', 'light');
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+});
+
+const currentTheme = localStorage.getItem('theme');
+
+if (currentTheme) {
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  if (currentTheme === 'dark') {
+    iconSwap.src = iconMoon;
+  }
+}
+
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
