@@ -60,9 +60,10 @@
 }
 
 body {
-  width: 100%;
-  background-image: url(../image/light-library.jpg);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../image/light-library.jpg);
   background-size: cover;
+  height: 100vh;
 }
 
 .main-div {

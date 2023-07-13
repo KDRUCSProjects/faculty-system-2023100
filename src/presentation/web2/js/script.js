@@ -72,8 +72,8 @@ function submitFun(e) {
       setTimeout(() => {
         errorDiv.style.display = 'none';
         errorDiv.classList.remove('hidden');
-      }, 3000);
-    }, 3000);
+      }, 5000);
+    }, 1500);
   }
 }
 
