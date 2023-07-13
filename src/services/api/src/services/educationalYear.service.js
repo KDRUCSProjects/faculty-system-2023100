@@ -88,8 +88,6 @@ const getCurrentEducationalYear = () => {
   return EducationalYear.findOne({ where: { onGoing: true } });
 };
 
-
-
 /**
  * Create a Student
  * @param {Object} oldYear
@@ -106,7 +104,6 @@ const updateYear = (oldYear, newYear) => {
   }
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
-
 
 module.exports = {
   updateYear,

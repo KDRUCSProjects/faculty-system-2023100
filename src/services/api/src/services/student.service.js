@@ -1,8 +1,8 @@
 // Sequelize Models
 const { QueryTypes, Op } = require('sequelize');
+const httpStatus = require('http-status');
 const { Student, EducationalYear, sequelize } = require('../models');
 const ApiError = require('../utils/ApiError');
-const httpStatus = require('http-status');
 
 /**
  * Create a student

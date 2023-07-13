@@ -41,6 +41,11 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
+      reason: {
+        type: DataTypes.ENUM('Taajil', 'Mahrom', 'Special Taajil', 'Repeat'),
+        defaultValue: 'Taajil',
+        required: true,
+      },
       regNumber: DataTypes.INTEGER,
       attachment: DataTypes.STRING,
       notes: DataTypes.STRING,

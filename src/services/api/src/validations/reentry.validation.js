@@ -7,6 +7,7 @@ const createReentry = {
     regNumber: Joi.number().required('Registration number of Reentry form is required'),
     attachment: Joi.string(),
     notes: Joi.string(),
+    reason: Joi.string().required().valid('Taajil', 'Mahrom', 'Special Taajil', 'Repeat'),
   }),
 };
 
@@ -33,6 +34,7 @@ const updateReentry = {
       regNumber: Joi.number(),
       attachment: Joi.string(),
       notes: Joi.string(),
+      reason: Joi.string().valid('Taajil', 'Mahrom', 'Special Taajil', 'Repeat'),
     })
     .min(1),
 };

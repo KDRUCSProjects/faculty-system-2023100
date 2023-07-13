@@ -1,6 +1,6 @@
 // Sequelize Models
 const { QueryTypes } = require('sequelize');
-const { ShokaList, sequelize } = require('../models');
+const { ShokaList, sequelize, Student, Subject, Shoka } = require('../models');
 
 /**
  * Create a shoka list
@@ -68,8 +68,28 @@ const getStudentMarks = (conditions) => {
   );
 };
 
+/**
+ * get subject marks
+ * @param {ObjectId} shokaId
+ * @returns {Promise<ShokaList>}
+ */
+const getShokaMarks = (shokaId) => {
+  return ShokaList.findAll({
+    where: { shokaId },
+    include: [
+      { model: Student, as: 'Student' },
+      {
+        model: Shoka,
+        as: 'Shoka',
+        include: [{ model: Subject }],
+      },
+    ],
+  });
+};
+
 module.exports = {
   getShokaList,
+  getShokaMarks,
   createShokaList,
   getStudentMarks,
   isStudentListedInShokaList,

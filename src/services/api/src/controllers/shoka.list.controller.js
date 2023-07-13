@@ -12,18 +12,20 @@ const ApiError = require('../utils/ApiError');
 const { marksFormatter } = require('../utils/marks.formatter');
 
 const createShokaList = catchAsync(async (req, res) => {
-  const { shokaId, studentId } = req.body;
-  const isStudentListedInShokaList = await shokaListService.isStudentListedInShokaList(shokaId, studentId);
-  if (isStudentListedInShokaList) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has gotten marks in this shoka');
+  const { studentId, subjectId } = req.body;
   const student = await studentService.getStudent(studentId);
-  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not Fount');
-  const shoka = await shokaService.findShokaById(shokaId);
-  if (!shoka) throw new ApiError(httpStatus.NOT_FOUND, 'Shoka Not Found');
-  const subject = await subjectService.getSubject(shoka.subjectId);
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  const subject = await subjectService.getSubjectById(subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  const shoka = await shokaService.findShokaBySubjectId(subjectId);
+  if (!shoka) throw new ApiError(httpStatus.NOT_FOUND, 'shoka not found');
+  const doesStdHasMarks = await shokaListService.isStudentListedInShokaList(shoka.id, studentId);
+  if (doesStdHasMarks) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has marks in this subject and shoka');
+
   const semester = await semesterService.findSemesterById(subject.semesterId);
   const isStudentListed = await studentListService.findListedStudentByStudentId(studentId);
   if (isStudentListed.length >= 1 && (semester.id === isStudentListed[0]?.semesterId)) {
+    req.body.shokaId = shoka.id;
     const shokaList = await shokaListService.createShokaList(req.body);
     return res.status(httpStatus.CREATED).send(shokaList);
   }
@@ -31,7 +33,12 @@ const createShokaList = catchAsync(async (req, res) => {
 });
 
 const getShokaList = catchAsync(async (req, res) => {
-  const results = await shokaListService.getShokaList(req.params.shokaId);
+  const { subjectId } = req.params;
+  const subject = await subjectService.getSubject(subjectId);
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  const shoka = await shokaService.findShokaBySubjectId(subjectId);
+  if (!shoka) throw new ApiError(httpStatus.NOT_FOUND, 'shoka not found');
+  const results = await shokaListService.getShokaMarks(shoka.id);
   res.status(httpStatus.OK).send(results);
 });
 

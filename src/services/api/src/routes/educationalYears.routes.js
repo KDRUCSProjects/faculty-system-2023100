@@ -186,7 +186,6 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  */
 
-
 /**
  * @swagger
  * /years/setCurrentYear:
