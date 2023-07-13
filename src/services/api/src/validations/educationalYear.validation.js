@@ -18,7 +18,6 @@ const getEducationalYears = {
   }),
 };
 
-
 const getYearByValue = {
   body: Joi.object().keys({
     year: Joi.number().integer().required(),
@@ -26,13 +25,15 @@ const getYearByValue = {
 };
 
 const setCurrentYear = {
-  body: Joi.object().keys({
-    year: Joi.number().integer().required(),
-    firstHalf: Joi.boolean().valid(true),
-    secondHalf: Joi.boolean().valid(true),
-  }).max(2).min(2),
+  body: Joi.object()
+    .keys({
+      year: Joi.number().integer().required(),
+      firstHalf: Joi.boolean().valid(true),
+      secondHalf: Joi.boolean().valid(true),
+    })
+    .max(2)
+    .min(2),
 };
-
 
 module.exports = {
   setCurrentYear,

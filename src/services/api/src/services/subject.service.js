@@ -85,7 +85,7 @@ const getSemesterSubjects = (semesterId) => {
 
 /**
  * get subject by id
- * @param {ObjectId} semesterId
+ * @param {ObjectId} id
  * @returns {Promise<Student>}
  */
 const getSubjectById = (id) => {

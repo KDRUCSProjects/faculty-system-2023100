@@ -130,6 +130,9 @@ module.exports = router;
  *               attachment:
  *                 type: string
  *                 format: binary
+ *               reason:
+ *                 type: string
+ *                 enum: [Taajil, Mahrom, Special Taajil, Repeat]
  *     responses:
  *       "201":
  *         description: Created
@@ -208,6 +211,9 @@ module.exports = router;
  *               attachment:
  *                 type: string
  *                 format: binary
+ *               reason:
+ *                 type: string
+ *                 enum: [Taajil, Mahrom, Special Taajil, Repeat]
  *     responses:
  *       "202":
  *         description: ACCEPTED
