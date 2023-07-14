@@ -28,6 +28,9 @@ export default {
     },
   },
   emits: ['selected-year'],
+  created() {
+    this.select = this.$store.getters['years/onGoingYear']?.year;
+  },
 };
 </script>
 
