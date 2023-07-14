@@ -18,14 +18,17 @@ import GetInfo from "./store/reducers/getInfo";
 
 export default function App() {
   const store = createStore(
-    combineReducers({ MainReducer, studentReducer,GetInfo }),
+    combineReducers({ MainReducer, studentReducer, GetInfo }),
     applyMiddleware(thunk)
   );
 
   return (
     <React.Fragment>
       <IconRegistry icons={EvaIconsPack}></IconRegistry>
-      <ApplicationProvider {...eva} theme={eva.light}>
+      <ApplicationProvider
+        {...eva}
+        theme={eva.light}
+      >
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Provider store={store}>
             <NavWrapper></NavWrapper>

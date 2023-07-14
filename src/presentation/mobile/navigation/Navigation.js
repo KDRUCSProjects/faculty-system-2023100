@@ -25,6 +25,7 @@ import Setting from "../screens/Setting";
 import Subject from "../screens/Subjects";
 import AccountInfo from "../screens/AccountInfo";
 import ChangePassword from "../screens/ChangePassword";
+import CreateShoka from "../screens/CreateShoka";
 
 const studentScreen = () => {
   const stdScreen = createStackNavigator();
@@ -155,10 +156,28 @@ const DrawerNavigator = (props) => {
       drawerContent={(props) => <MainDrawer {...props} />}
       screenOptions={{ swipeEnabled: false, gestureEnabled: false }}
     >
-      <drawer.Screen name="Home" component={Navigation} />
-      <drawer.Screen name="Login" component={login}></drawer.Screen>
-      <drawer.Screen name="Settings" component={Setting}></drawer.Screen>
-      <drawer.Screen name="Subjects" component={Subject}></drawer.Screen>
+      <drawer.Screen
+        name="Home"
+        component={Navigation}
+      />
+      <drawer.Screen
+        name="Login"
+        component={login}
+      ></drawer.Screen>
+      <drawer.Screen
+        name="Settings"
+        component={Setting}
+      ></drawer.Screen>
+      <drawer.Screen
+        name="Subjects"
+        component={Subject}
+      ></drawer.Screen>
+
+      <drawer.Screen
+        name="CreateShoka"
+        component={CreateShoka}
+        options={{}}
+      ></drawer.Screen>
     </drawer.Navigator>
   );
 };
