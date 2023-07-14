@@ -93,6 +93,10 @@ export default MainDrawer = (props) => {
           props.navigation.navigate("settingsScreen");
         }
         if (index.row === 3) {
+          setselectedItem(3);
+          props.navigation.navigate("CreateShoka");
+        }
+        if (index.row === 4) {
           AsyncStorage.clear().then().then();
           dispatch(logout());
           props.navigation.navigate("Login");
@@ -136,6 +140,15 @@ export default MainDrawer = (props) => {
         }
       />
 
+      <DrawerItem
+        title="Create Shoka"
+        accessoryLeft={
+          <ImageBackground
+            source={require("../../assets/images/shoka.png")}
+            style={{ height: 50, width: 25 }}
+          ></ImageBackground>
+        }
+      />
       <DrawerItem
         title={"Logout"}
         accessoryLeft={

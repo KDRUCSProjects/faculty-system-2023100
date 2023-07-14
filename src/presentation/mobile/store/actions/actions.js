@@ -11,13 +11,13 @@ export const ISABSENT = "ISABSENT";
 export const UPDATEACCOUNT = "UPDATEACCOUNT";
 export const CHECKPASSWORD = "CHECKPASSWORD";
 export const CHANGEPASSWORD = "CHANGEPASSWORD";
-export const GETSTUDENTINFO="GETSTUDENTINFO";
+export const GETSTUDENTINFO = "GETSTUDENTINFO";
 
 export const authenticate = (userName, password) => {
   return async (dispatch) => {
     try {
       const response = await FetchWithTimeout(
-        "http://192.168.1.102:4000/auth/login",
+        "http://192.168.1.104:4000/auth/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -60,7 +60,7 @@ export const authenticate = (userName, password) => {
       );
 
       const subjectsresp = await FetchWithTimeout(
-        "http://192.168.1.102:4000/subjects/teachers/" + userid,
+        "http://192.168.1.104:4000/subjects/teachers/" + userid,
         {
           method: "GET",
           headers: {
@@ -72,7 +72,7 @@ export const authenticate = (userName, password) => {
       );
       const subjects = await subjectsresp.json();
 
-      const photoUri = "http://192.168.1.102:4000/storage/images/" + userPhoto;
+      const photoUri = "http://192.168.1.104:4000/storage/images/" + userPhoto;
 
       saveToken(
         userid,
@@ -187,7 +187,7 @@ export const updateAccount = (userName, lastName, email, photo) => {
     form.append("photo", photo);
 
     const updateResp = await FetchWithTimeout(
-      "http://192.168.1.102:4000/auth/updateProfile",
+      "http://192.168.1.104:4000/auth/updateProfile",
       {
         method: "PATCH",
         headers: {
@@ -209,7 +209,7 @@ export const updateAccount = (userName, lastName, email, photo) => {
     }
     const updateRespData = await updateResp.json();
     const name = updateRespData.photo;
-    const photoUri = "http://192.168.1.102:4000/storage/images/" + name;
+    const photoUri = "http://192.168.1.104:4000/storage/images/" + name;
 
     saveToken(
       userId,
@@ -245,7 +245,7 @@ export const checkPassword = (password) => {
       transformedData;
 
     const updateResp = await FetchWithTimeout(
-      "http://192.168.1.102:4000/auth/checkPassword",
+      "http://192.168.1.104:4000/auth/checkPassword",
       {
         method: "POST",
         headers: {
@@ -279,7 +279,7 @@ export const changePassword = (
       transformedData;
 
     const updateResp = await FetchWithTimeout(
-      "http://192.168.1.102:4000/auth/change-password",
+      "http://192.168.1.104:4000/auth/change-password",
       {
         method: "PATCH",
         headers: {
@@ -302,77 +302,61 @@ export const changePassword = (
   };
 };
 
-
 export const getStudentInfo = (id) => {
   return async (dispatch) => {
-     console.log(id);
+    console.log(id);
 
- 
-  const promise=new Promise((resolve,reject)=>{
+    const promise = new Promise((resolve, reject) => {
+      FetchWithTimeout(
+        "http://192.168.1.104:4000/students/kankor/" + id,
+        {},
+        5000
+      )
+        .then((response) => {
+          if (!response.ok) {
+            if (response.status == "404") {
+              throw new Error("Student not found");
+            }
+            throw new Error(response.status);
+          }
 
- 
+          return response.json();
+        })
+        .then((data) => {
+          if (data.kankorId) {
+            resolve(data);
+          } else {
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
 
-    FetchWithTimeout("http://192.168.43.153:4000/students/kankor/" +id,{},5000)
-    .then(response => {
-      if (!response.ok)
-      {
-        if(response.status=="404")
-        {
-        throw new Error("Student not found");
-        
-        }
-        throw new Error(response.status);
-     
-      
-      }
-
-
-      return response.json();
-    })
-    .then(data => {
-      
-      if (data.kankorId) {
-       resolve(data);
-      } else {
-      }
-    })
-    .catch(err => {
-      reject(err);
-      });
-
-    }); 
-  
     return promise;
-      // const response =  FetchWithTimeout("http://192.168.1.104:4000/students/kankor/"+id, {
-      //   method: "GET",
-      //   headers: { "Content-Type": "application/json" },
-       
-      // },5000);
+    // const response =  FetchWithTimeout("http://192.168.1.104:4000/students/kankor/"+id, {
+    //   method: "GET",
+    //   headers: { "Content-Type": "application/json" },
 
-      // console.log(response.status);
+    // },5000);
 
-      // if (response.status === 400) {
-      //   throw new Error("400");
-      // }
-      // if (response.status === 401) {
-      //   throw new Error("401");
-      // }
-      // if (!response.ok) {
-      //   console.log(response.status);
-      //   new Error("something went wrong")
-       
-      // }
+    // console.log(response.status);
 
+    // if (response.status === 400) {
+    //   throw new Error("400");
+    // }
+    // if (response.status === 401) {
+    //   throw new Error("401");
+    // }
+    // if (!response.ok) {
+    //   console.log(response.status);
+    //   new Error("something went wrong")
 
+    // }
 
-
-
-      // const data =  response.json();
-      //  return data;
-      // console.log(data);
-    
- 
-  
+    // const data =  response.json();
+    //  return data;
+    // console.log(data);
 
     //   const studentId = data.id;
     //    const kankorId = data.kankorId;
@@ -382,7 +366,6 @@ export const getStudentInfo = (id) => {
     //     data.grandFatherName;
     //  const educationalYearId = data.educationalYearId;
     //   const admitDate = data.admissionYear;
-
 
     // dispatch({
     //   type: GETSTUDENTINFO,
@@ -397,7 +380,64 @@ export const getStudentInfo = (id) => {
   };
 };
 
+export const createShoka = (
+  subjectId,
+  studentId,
+  midtermMarks,
+  assignmentsMarks,
+  finalMarks
+) => {
+  return async (dispatch) => {
+    console.log(
+      subjectId,
+      studentId,
+      midtermMarks,
+      assignmentsMarks,
+      finalMarks
+    );
+    const userData = await AsyncStorage.getItem("userData");
 
+    const transformedData = JSON.parse(userData);
+    const { userPassword, subjects, token, userId, expirationDate } =
+      transformedData;
+
+    const updateResp = await FetchWithTimeout(
+      "http://192.168.1.104:4000/shokaList",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          subjectId: subjectId,
+          studentId: studentId,
+          midtermMarks: midtermMarks,
+          assignmentOrProjectMarks: assignmentsMarks,
+          finalMarks: finalMarks,
+        }),
+      },
+      5000
+    );
+    console.log(updateResp.status);
+    if (updateResp.status == 406) {
+      const error = new Error(
+        "Selected student does not exists in this semester"
+      );
+      error.code = 406;
+      throw error;
+    }
+
+    if (updateResp.status == 401) {
+      const error = new Error("Please relogin");
+      error.code = 401;
+      throw error;
+    }
+
+    if (updateResp.status != 200 || updateResp.status != 201) {
+    }
+  };
+};
 
 // export const authenticate = (userName, password) => {
 
