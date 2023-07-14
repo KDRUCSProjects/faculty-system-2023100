@@ -6,9 +6,9 @@ export default {
   namespaced: true,
   state() {
     return {
-      tabdilStudents: [],
+      tabdiliStudents: [],
       taajilStudents: [],
-      reentryStudents: [],
+      reentriesStudents: [],
     };
   },
   getters,

@@ -16,7 +16,7 @@
 
       <template v-slot:top>
         <v-toolbar color="dark" class="py-2">
-          <v-toolbar-title> Taajil Students Table </v-toolbar-title>
+          <v-toolbar-title> {{ statusTypes[type] }} students table </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
@@ -25,7 +25,15 @@
               <v-btn color="cyan" variant="flat" v-bind="props"> {{ studentsTypeText }} </v-btn>
             </template>
             <v-list>
-              <v-list-item v-for="(item, index) in statusTypes" :key="index" :value="index" @click="$emit('status', item)">
+              <v-list-item
+                v-for="(item, index) in statusTypes"
+                :key="index"
+                :value="index"
+                @click="
+                  $emit('status', item);
+                  type = index;
+                "
+              >
                 <v-list-item-title>{{ item }}</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -104,6 +112,7 @@ export default {
       errorMessage: null,
       search: '',
       statusTypes: ['taajil', 'reentry', 'tabdili'],
+      type: null,
     };
   },
   computed: {

@@ -120,7 +120,7 @@ export default {
   }),
   computed: {
     students() {
-      return this.$store.getters['conversion/taajilStudents'];
+      return this.$store.getters[`conversion/${this.formType}Students`];
     },
     rules() {
       return {
@@ -138,6 +138,15 @@ export default {
     title() {
       return `Student ${this.type} form`;
     },
+    formType() {
+      if (this.type === 'taajil') {
+        return 'taajils';
+      } else if (this.type === 'reentry') {
+        return 'reentries';
+      } else {
+        return 'tabdili';
+      }
+    },
   },
   methods: {
     async submitForm() {
@@ -152,7 +161,7 @@ export default {
       try {
         // Continue submitting the form
         await this.$store.dispatch('conversion/createConversion', {
-          type: 'taajils',
+          type: this.formType,
           data: {
             studentId: this.studentId,
             regNumber: this.regNumber,
@@ -184,7 +193,9 @@ export default {
   },
   async created() {
     // Load taajil, tabdil and re-entry students
-    await this.$store.dispatch('conversion/loadTaajilStudents');
+    await this.$store.dispatch('conversion/loadConversionStudents', 'taajils');
+    await this.$store.dispatch('conversion/loadConversionStudents', 'reentries');
+    await this.$store.dispatch('conversion/loadConversionStudents', 'tabdili');
   },
 };
 </script>

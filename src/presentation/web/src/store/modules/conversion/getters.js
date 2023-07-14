@@ -1,5 +1,11 @@
 export default {
-  taajilStudents(state) {
+  taajilsStudents(state) {
     return state.taajilStudents;
+  },
+  reentriesStudents(state) {
+    return state.reentriesStudents;
+  },
+  tabdiliStudents(state) {
+    return state.tabdiliStudents;
   },
 };
