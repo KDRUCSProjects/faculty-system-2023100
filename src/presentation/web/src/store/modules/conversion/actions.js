@@ -37,12 +37,11 @@ export default {
   //     throw e.response.data.message;
   //   }
   // },
-  async createTaajil(context, data) {
+  async createConversion(context, { data, type }) {
     try {
       const token = context.rootGetters.token;
-
       const response = await axios({
-        url: '/api/taajils',
+        url: `/api/${type}`,
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -54,8 +53,8 @@ export default {
       // context.commit('saveYear', response.data);
       context.dispatch('loadTaajilStudents');
     } catch (e) {
-      context.commit('setToast', [0, e.message || 'Failed adding taajil'], { root: true });
-      throw e.message;
+      context.commit('setToast', [0, e.response.data.message || 'Failed adding taajil'], { root: true });
+      throw e.response.data.message;
     }
   },
 };
