@@ -5,7 +5,6 @@
       @page-count="pageCount = $event"
       :loading="loading"
       loading-text="Loading students please wait"
-      class="elevation-0 border-bottom"
       :headers="headers"
       :items="theStudents"
       no-data-text="No students available"
@@ -16,32 +15,29 @@
       </template>
 
       <template v-slot:top>
-        <v-toolbar color="dark">
-          <v-toolbar-title> Taajil Students </v-toolbar-title>
+        <v-toolbar color="dark" class="py-2">
+          <v-toolbar-title> {{ statusTypes[type] }} students table </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
-          <!-- <v-menu>
-              <template v-slot:activator="{ props }">
-                <v-btn color="cyan" variant="flat" v-bind="props"> Filter </v-btn>
-              </template>
-              <v-list>
-                <v-list-item v-for="(item, index) in studentStatus" :key="index" :value="index">
-                  <v-list-item-title>{{ item }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu> -->
-
-          <!-- <v-btn
-            :color="enrollmentMode ? 'primary' : 'light'"
-            class="ml-1"
-            variant="flat"
-            link
-            @click="switchMode"
-            :prepend-icon="enrollmentMode ? 'mdi-account-group' : 'mdi-plus-outline'"
-          >
-            {{ enrollmentMode ? 'Semester Students' : 'Student Enrollment' }}
-          </v-btn> -->
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn color="cyan" variant="flat" v-bind="props"> {{ studentsTypeText }} </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in statusTypes"
+                :key="index"
+                :value="index"
+                @click="
+                  $emit('status', item);
+                  type = index;
+                "
+              >
+                <v-list-item-title>{{ item }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </v-toolbar>
       </template>
 
@@ -90,7 +86,19 @@
 import { VDataTable } from 'vuetify/labs/VDataTable';
 
 export default {
-  props: ['headers', 'students'],
+  props: {
+    headers: {
+      type: Array,
+      required: true,
+    },
+    students: {
+      type: Array,
+    },
+    studentsTypeText: {
+      type: String,
+      default: 'Type',
+    },
+  },
   components: {
     VDataTable,
   },
@@ -103,6 +111,8 @@ export default {
       loading: false,
       errorMessage: null,
       search: '',
+      statusTypes: ['taajil', 'reentry', 'tabdili'],
+      type: null,
     };
   },
   computed: {

@@ -7,6 +7,9 @@ export default {
   state() {
     return {
       years: [],
+      selectedYear: null,
+      onGoingYear: null,
+      firstHalf: false,
     };
   },
   getters,

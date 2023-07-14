@@ -22,7 +22,7 @@ import SemesterCard from '@/components/semesters/SemesterCard.vue';
 export default {
   data: () => ({
     // Default year. This will be later on changed to latest onGoing year form API.
-    selectedYear: 1401,
+    selectedYear: null,
   }),
   components: {
     SemesterCard,
@@ -46,6 +46,8 @@ export default {
   },
   async mounted() {
     // Load teachers at app mount
+    // Set Default current on-going year on load
+    this.selectedYear = this.$store.getters['years/onGoingYear']?.year;
 
     // Probably the onGoing year
     await this.loadSemesters(this.selectedYear);
