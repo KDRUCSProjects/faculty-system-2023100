@@ -11,7 +11,13 @@
   <v-row no-gutters>
     <v-col v-for="(semester, index) in semesters" :key="index" cols="3">
       <v-sheet class="ma-2 pa-2">
-        <semester-card :title="semester?.title" :year="selectedYear" :semesterId="semester.id"> </semester-card>
+        <semester-card
+          :title="semester?.title"
+          :year="selectedYear"
+          :semesterId="semester.id"
+          :subjects-count="semester.Subjects?.length"
+        >
+        </semester-card>
       </v-sheet>
     </v-col>
   </v-row>
