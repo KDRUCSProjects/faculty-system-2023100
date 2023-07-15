@@ -41,9 +41,17 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
+      semesterId: {
+        type: DataTypes.INTEGER,
+        required: true,
+        references: {
+          model: 'Semester',
+          key: 'id',
+        },
+      },
       reason: {
-        type: DataTypes.ENUM('Taajil', 'Mahrom', 'Special Taajil', 'Repeat'),
-        defaultValue: 'Taajil',
+        type: DataTypes.ENUM('taajil', 'mahrom', 'special_taajil', 'repeat'),
+        defaultValue: 'taajil',
         required: true,
       },
       regNumber: DataTypes.INTEGER,

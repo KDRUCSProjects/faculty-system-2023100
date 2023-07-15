@@ -28,8 +28,6 @@ const updateTaajil = {
   }),
   body: Joi.object()
     .keys({
-      studentId: Joi.number(),
-      educationalYear: Joi.number(),
       regNumber: Joi.number(),
       attachment: Joi.string(),
       notes: Joi.string(),

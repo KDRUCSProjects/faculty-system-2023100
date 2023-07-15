@@ -30,6 +30,15 @@ module.exports = {
           key: 'id',
         },
       },
+      semesterId: {
+        type: Sequelize.INTEGER,
+        trim: true,
+        required: true,
+        references: {
+          model: 'Semesters',
+          key: 'id',
+        },
+      },
       regNumber: Sequelize.INTEGER,
       attachment: Sequelize.STRING,
       notes: Sequelize.STRING,

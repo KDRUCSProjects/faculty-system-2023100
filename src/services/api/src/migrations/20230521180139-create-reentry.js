@@ -29,6 +29,15 @@ module.exports = {
           key: 'id',
         },
       },
+      semesterId: {
+        type: Sequelize.INTEGER,
+        trim: true,
+        required: true,
+        references: {
+          model: 'Semesters',
+          key: 'id',
+        },
+      },
       reason: {
         type: Sequelize.ENUM('Taajil', 'Mahrom', 'Special Taajil', 'Repeat'),
         defaultValue: 'Taajil',

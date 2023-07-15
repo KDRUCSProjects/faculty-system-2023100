@@ -41,6 +41,14 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
+      semesterId: {
+        type: DataTypes.INTEGER,
+        required: true,
+        references: {
+          model: 'Semester',
+          key: 'id',
+        },
+      },
       regNumber: DataTypes.INTEGER,
       attachment: DataTypes.STRING,
       notes: DataTypes.STRING,
