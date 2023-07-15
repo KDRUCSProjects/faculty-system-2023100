@@ -44,6 +44,7 @@ module.exports = {
         required: true,
       },
       regNumber: Sequelize.INTEGER,
+      taajilRegNumber: Sequelize.INTEGER,
       attachment: Sequelize.STRING,
       notes: Sequelize.STRING,
       ...BaseModel(Sequelize),

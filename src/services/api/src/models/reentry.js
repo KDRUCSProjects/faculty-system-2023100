@@ -55,6 +55,7 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
       },
       regNumber: DataTypes.INTEGER,
+      taajilRegNumber: DataTypes.INTEGER,
       attachment: DataTypes.STRING,
       notes: DataTypes.STRING,
       ...BaseModel(DataTypes),
