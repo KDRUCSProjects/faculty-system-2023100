@@ -19,7 +19,7 @@ const createStudentList = (listedStudentBody) => {
  * @returns {Promise<StudentsList>}
  */
 const findListedStudentByStudentId = (studentId) => {
-  return StudentsList.findOne({ where: { studentId } });
+  return StudentsList.findAll({ where: { studentId }, order: [['createdAt', 'DESC']] });
 };
 
 /**

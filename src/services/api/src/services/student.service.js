@@ -1,6 +1,8 @@
 // Sequelize Models
 const { QueryTypes, Op } = require('sequelize');
+const httpStatus = require('http-status');
 const { Student, EducationalYear, sequelize } = require('../models');
+const ApiError = require('../utils/ApiError');
 
 /**
  * Create a student
@@ -30,15 +32,15 @@ const getStudents = (offset) => {
  * @param {String} queryKankorId
  * @returns {Promise<Student>}
  */
-const getStudentByKankorId = (queryKankorId) => {
-  return Student.findAll({
+const getStudentByKankorId = (queryKankorId, limit, offset) => {
+  return Student.findAndCountAll({
     where: {
       kankorId: {
         [Op.like]: `${queryKankorId || ''}%`,
       },
     },
-    limit: 2000,
-    offset: 0,
+    limit,
+    offset,
     order: [['createdAt', 'DESC']],
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
   });
@@ -58,6 +60,7 @@ const updateStudent = (oldStudent, newStudent) => {
     });
     return oldStudent.save();
   }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
 
 /**

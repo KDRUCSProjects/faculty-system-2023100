@@ -12,9 +12,6 @@ export default {
       studentsList: [],
       searchedStudent: null,
       reservedStudents: [],
-      tabdilStudents: [],
-      taajilStudents: [],
-      reentryStudents: [],
     };
   },
   getters,

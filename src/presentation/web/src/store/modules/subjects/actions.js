@@ -34,7 +34,9 @@ export default {
       });
 
       context.commit('saveSubject', response.data);
+      context.commit('setToast', 'Subject has been added successfully', { root: true });
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed adding Subject'], { root: true });
       throw e.response.data.message;
     }
   },
@@ -52,7 +54,9 @@ export default {
       });
 
       context.commit('removeSubject', subjectId);
+      context.commit('setToast', 'Subject successfully deleted', { root: true });
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed deleting Subject'], { root: true });
       throw e.response.data.message;
     }
   },
@@ -74,7 +78,10 @@ export default {
       });
 
       context.commit('updateSubject', response.data);
+      context.commit('setToast', 'Subject data successfully updated', { root: true });
+
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed updating Subject data'], { root: true });
       throw e.response.data.message;
     }
   },

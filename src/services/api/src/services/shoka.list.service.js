@@ -1,6 +1,6 @@
 // Sequelize Models
 const { QueryTypes } = require('sequelize');
-const { ShokaList, sequelize } = require('../models');
+const { ShokaList, sequelize, Student, Subject, Shoka } = require('../models');
 
 /**
  * Create a shoka list
@@ -53,21 +53,43 @@ const getStudentMarks = (conditions) => {
     shoka.subjectId,
     subject.name as subjectName,
     subject.semesterId as semesterId,
+    subject.credit as subjectCredit,
     semester.title as semesterTitle,
     semester.educationalYearId as educationalYearId,
-    educationalYear.year as educationaYear
+    educationalYear.year as educationalYear
     from shokalists as shokalist
     inner join shokas as shoka on shoka.id = shokalist.shokaId
     inner join subjects as subject on subject.id = shoka.subjectId
     inner join semesters as semester on semester.id = subject.semesterId
     inner join educationalYears as educationalYear on educationalYear.id = semester.educationalYearId 
-    where ${conditions.join(` AND `)}`,
+    where ${conditions.join(` AND `)}
+    `,
     { type: QueryTypes.SELECT }
   );
 };
 
+/**
+ * get subject marks
+ * @param {ObjectId} shokaId
+ * @returns {Promise<ShokaList>}
+ */
+const getShokaMarks = (shokaId) => {
+  return ShokaList.findAll({
+    where: { shokaId },
+    include: [
+      { model: Student, as: 'Student' },
+      {
+        model: Shoka,
+        as: 'Shoka',
+        include: [{ model: Subject }],
+      },
+    ],
+  });
+};
+
 module.exports = {
   getShokaList,
+  getShokaMarks,
   createShokaList,
   getStudentMarks,
   isStudentListedInShokaList,

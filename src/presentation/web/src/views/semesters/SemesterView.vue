@@ -207,7 +207,7 @@ export default {
         // Now lets reload the students
         await this.loadStudents(true);
       } catch (e) {
-        this.$store.commit('setToast', e || 'Failed deleting student from semester');
+        this.$store.commit('setToast', [0, e || 'Failed deleting student from semester']);
         // this.errorMessage = e;
       }
     },

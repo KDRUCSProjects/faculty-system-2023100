@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { userService } = require('../services');
+const { userService, subjectService } = require('../services');
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -26,12 +26,16 @@ const updateUser = catchAsync(async (req, res) => {
   const user = await userService.getUserById(userId);
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'user not found');
   const results = await userService.updateUserById(user, req.body);
-  res.send(results);
+  return res.status(httpStatus.OK).send(results);
 });
 
 const deleteUser = catchAsync(async (req, res) => {
+  const teacher = await userService.getTeacher(req.params.userId);
+  if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'User Not Found');
+  const teacherSubjects = await subjectService.getTeacherSubjects(req.params.userId);
+  if (teacherSubjects.length >= 1) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Teacher Has Subjects');
   await userService.deleteUserById(req.params.userId);
-  res.status(httpStatus.NO_CONTENT).send();
+  return res.status(httpStatus.NO_CONTENT).send();
 });
 
 module.exports = {

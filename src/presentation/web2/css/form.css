@@ -1,0 +1,287 @@
+@font-face {
+  font-family: LatoBold;
+  src: url(../fonts/Lato-Bold.ttf);
+}
+
+@font-face {
+  font-family: LatoRegular;
+  src: url(../fonts/Lato-Regular.ttf);
+}
+
+@font-face {
+  font-family: LatoLight;
+  src: url(../fonts/Lato-Light.ttf);
+}
+
+@font-face {
+  font-family: LatoBlack;
+  src: url(../fonts/Lato-Black.ttf);
+}
+
+:root {
+  --background-color: rgba(255, 255, 255, 0.8);
+  --secondry-background: rgba(255, 255, 255, 0.8);
+  --background-color-alt: rgba(255, 255, 255, 0.2);
+  --primary-background-color: #8ac185;
+  --primary-variant: #2e8cff52;
+  --secondry-background-color: #fed47e;
+  --on-background: #278aff;
+  --primary-color: black;
+  --secondry-color: gray;
+  --secondry-color-alt: rgb(30, 30, 30);
+  --color-alt: white;
+  --same-background: #8ac185;
+  --same-background-alt: #fed47e;
+  --erorr-color: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme='dark'] {
+  --background-color: #22242c;
+  --secondry-background: #22242c;
+  --background-color-alt: #1e1f26;
+  --primary-background-color: #fed47e;
+  --primary-variant: #ffabc8;
+  --secondry-background-color: #8ac185;
+  --on-background: #278aff;
+  --primary-color: hsl(236, 33%, 92%);
+  --secondry-color: hsl(236, 9%, 61%);
+  --secondry-color-alt: hsl(236, 9%, 61%);
+  --color-alt: white;
+  --same-background: #8ac185;
+  --same-background-alt: #fed47e;
+  --erorr-color: rgba(30, 31, 38, 0.8);
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: LatoRegular;
+}
+
+body {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../image/light-library.jpg);
+  background-size: cover;
+  height: 100vh;
+}
+
+.main-div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: row;
+  border-radius: 10px;
+  background-color: white;
+  /* background-color: var(--background-color); */
+}
+
+.left {
+  padding: 20px;
+}
+
+.profile-image-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.profile-image-div img {
+  width: 200px;
+  border-radius: 100px;
+  margin-bottom: 15px;
+  margin: 50px 50px 15px 50px;
+}
+
+.profile-image-div h4 {
+  font-size: 20px;
+  color: var(--primary-color);
+}
+
+.photo-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  margin-top: 10px;
+  background-color: var(--primary-background-color);
+}
+
+.right {
+  padding: 20px;
+  /* background-color: salmon; */
+}
+
+.submit-btn-div button {
+  width: 25em;
+  height: 40px;
+  border-radius: 5px;
+  border: none;
+  margin-top: 225px;
+  font-weight: bold;
+  background-color: var(--primary-background-color);
+}
+
+.margin-left {
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+h1 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  margin-top: 30px;
+  color: var(--primary-color);
+}
+
+h6 {
+  font-size: 14px;
+  color: var(--secondry-color-alt);
+  font-weight: 600;
+}
+
+span {
+  color: var(--on-background);
+}
+
+.hidden {
+  display: none;
+}
+
+.tag-div {
+  padding: 8px;
+  background-color: #ffabc8;
+  display: inline-block;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.location-icon {
+  margin-right: 3px;
+  font-size: 15px;
+}
+
+.kankor-div {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+.inputs-divs {
+  margin: 0px 20px 0px 0px;
+}
+
+.inputs-divs input {
+  width: 18em;
+  border: none;
+  height: 40px;
+  padding-left: 30px;
+  border-radius: 5px;
+  margin-top: 8px;
+  background-color: rgb(245, 245, 245);
+  /* box-shadow: 0px 0px 3px 1px lightgray inset; */
+}
+
+.kankor-id-div input {
+  width: 28em;
+}
+
+.kankor-year-div input {
+  width: 8em;
+}
+
+.personal-information {
+  margin: 20px 0px 10px 0px;
+}
+
+.province-div input {
+  width: 12em;
+}
+
+.division-div input {
+  width: 11em;
+}
+
+.district-div input {
+  width: 11em;
+}
+
+.overlay {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(3px);
+  z-index: 1000;
+}
+
+/* ///////////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////// */
+
+.otp-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.otp-heading {
+  font-size: 22px;
+  font-family: LatoBold;
+  margin: 30px 0px 10px 0px;
+}
+
+.otp-p {
+  font-size: 14px;
+  font-family: LatoLight;
+  font-weight: 600;
+  margin-bottom: 40px;
+}
+
+.otp-inputs-div input {
+  width: 75px;
+  height: 80px;
+  font-size: 40px;
+  text-align: center;
+  margin: 10px;
+  border-radius: 10px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.6);
+  border: 1px solid #eee;
+}
+
+.otp-inputs-div input::-webkit-inner-spin-button,
+.otp-inputs-div input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.otp-inputs-div input:valid {
+  border-color: #9861c2;
+  box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.25);
+}
+
+.otp-inputs-div {
+  margin-bottom: 50px;
+}
+
+.otp-button {
+  width: 500px;
+  height: 50px;
+  border-radius: 5px;
+  font-family: LatoBold;
+  border: none;
+  margin-bottom: 30px;
+  background-color: #9861c2;
+  color: white;
+}

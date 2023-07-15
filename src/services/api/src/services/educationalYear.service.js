@@ -88,7 +88,25 @@ const getCurrentEducationalYear = () => {
   return EducationalYear.findOne({ where: { onGoing: true } });
 };
 
+/**
+ * Create a Student
+ * @param {Object} oldYear
+ * @param {Object} newYear
+ * @returns {Promise<EducationalYear>}
+ */
+const updateYear = (oldYear, newYear) => {
+  if (oldYear instanceof EducationalYear) {
+    oldYear.set({
+      ...oldYear,
+      ...newYear,
+    });
+    return oldYear.save();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
+};
+
 module.exports = {
+  updateYear,
   findNextYear,
   createEducationalYear,
   getEducationalYears,

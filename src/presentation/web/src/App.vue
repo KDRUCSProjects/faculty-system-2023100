@@ -25,7 +25,9 @@ export default {
   },
   async created() {
     // Load all years
-    await this.$store.dispatch('loadAllYears');
+    await this.$store.dispatch('years/loadEducationalYears');
+    // Load current on-going educational year
+    await this.$store.dispatch('years/loadCurrentOnGoingYear');
     // Load all teachers
     await this.$store.dispatch('teachers/loadTeachers');
   },

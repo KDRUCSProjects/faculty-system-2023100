@@ -1,14 +1,18 @@
 <template>
-  <v-overlay></v-overlay>
+  <v-overlay scrim="#000"></v-overlay>
   <v-dialog v-model="dialog" :max-width="modalWidth" transition="slide-y-transition">
     <div class="text-center">
-      <v-sheet :width="modalWidth" class="px-7 pt-7 pb-4 mx-auto text-center d-inline-block" color="light darken-5" dark>
+      <v-sheet
+        :width="modalWidth"
+        class="font-poppins px-7 pt-7 pb-4 mx-auto text-center d-inline-block"
+        color="dark darken-5"
+      >
         <h3 class="grey--text text--lighten-1 mb-4">
-          <span class="font-weight-bold text-error">
+          <span v-if="warningTitle" class="font-weight-bold text-error">
             {{ warningTitle }}
           </span>
-          <span class="ml-1">:</span>
-          <span>
+          <span>:</span>
+          <span v-if="warningTitle" class="ml-1">
             {{ title }}
           </span>
           <br />
