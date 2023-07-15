@@ -49,6 +49,13 @@
               </v-col>
             </v-row>
 
+            <v-autocomplete
+              label="Reentry Type"
+              variant="outlined"
+              v-model="reentrySelectedType"
+              :items="reentryTypes"
+            ></v-autocomplete>
+
             <v-file-input
               prepend-icon=""
               label="Form Attachment"
@@ -93,6 +100,8 @@ export default {
   },
   data: () => ({
     type: 'taajil',
+    reentrySelectedType: null,
+    reentryTypes: ['taajil', 'mahrom', 'special_taajil', 'repeat'],
     student: null,
     studentId: null,
     regNumber: null,
@@ -158,15 +167,24 @@ export default {
         return this.$store.commit('setToast', [0, 'Please select educational year first']);
       }
 
+      if (this.type === 'reentry' && !this.reentrySelectedType) {
+        return this.$store.commit('setToast', [0, 'Please select re-entry type']);
+      }
+
       try {
         // Continue submitting the form
+        const data = {
+          studentId: this.studentId,
+          regNumber: this.regNumber,
+          educationalYear: parseInt(this.educationalYear),
+        };
+
+        // Only, if type was reentry
+        if (this.type === 'reentry') data.reason = this.reentrySelectedType;
+
         await this.$store.dispatch('conversion/createConversion', {
           type: this.formType,
-          data: {
-            studentId: this.studentId,
-            regNumber: this.regNumber,
-            educationalYear: parseInt(this.educationalYear),
-          },
+          data,
         });
       } catch (e) {
         this.errorMessage = e;
