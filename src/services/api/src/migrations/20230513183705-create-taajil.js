@@ -39,6 +39,11 @@ module.exports = {
           key: 'id',
         },
       },
+      type: {
+        type: Sequelize.ENUM('taajil', 'special_taajil'),
+        defaultValue: 'taajil',
+        required: true,
+      },
       regNumber: Sequelize.INTEGER,
       attachment: Sequelize.STRING,
       notes: Sequelize.STRING,

@@ -39,8 +39,8 @@ module.exports = {
         },
       },
       reason: {
-        type: Sequelize.ENUM('Taajil', 'Mahrom', 'Special Taajil', 'Repeat'),
-        defaultValue: 'Taajil',
+        type: Sequelize.ENUM('taajil', 'mahrom', 'speical_taajil', 'repeat'),
+        defaultValue: 'taajil',
         required: true,
       },
       regNumber: Sequelize.INTEGER,
