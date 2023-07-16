@@ -70,7 +70,13 @@
 
             <v-textarea variant="outlined" label="Notes" v-model="notes"></v-textarea>
 
-            <v-checkbox v-model="specialTaajil" label="Speical Taajil" color="dark" :value="true"></v-checkbox>
+            <v-checkbox
+              v-if="type === 'taajil'"
+              v-model="specialTaajil"
+              label="Speccial Taajil"
+              color="dark"
+              :value="true"
+            ></v-checkbox>
 
             <!-- <v-text-field label="Educational Year" v-model="attachment"></v-text-field> -->
             <v-alert v-if="erorrMessage" type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
@@ -187,10 +193,8 @@ export default {
         if (this.type === 'reentry') data.reason = this.reentrySelectedType;
 
         // Only, if type was taajil
-        if (this.type === 'taajil' && !this.specialTaajil) {
-          data.type = 'taajil';
-        } else {
-          data.type = 'special_taajil';
+        if (this.type === 'taajil') {
+          data.type = this.specialTaajil ? 'special_taajil' : 'taajil';
         }
 
         await this.$store.dispatch('conversion/createConversion', {

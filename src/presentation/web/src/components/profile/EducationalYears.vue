@@ -91,7 +91,8 @@ export default {
     },
   },
   watch: {
-    async currentHalf(newValue) {
+    async currentHalf(newValue, oldValue) {
+      if (!oldValue) return false;
       await this.setOnGoingYear(newValue);
     },
   },
