@@ -39,7 +39,7 @@ module.exports = {
         },
       },
       reason: {
-        type: Sequelize.ENUM('taajil', 'mahrom', 'speical_taajil', 'repeat'),
+        type: Sequelize.ENUM('taajil', 'mahrom', 'special_taajil', 'repeat'),
         defaultValue: 'taajil',
         required: true,
       },
