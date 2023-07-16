@@ -50,6 +50,7 @@
             </v-row>
 
             <v-autocomplete
+              v-if="type === 'reentry'"
               label="Reentry Type"
               variant="outlined"
               v-model="reentrySelectedType"
@@ -68,6 +69,8 @@
             ></v-file-input>
 
             <v-textarea variant="outlined" label="Notes" v-model="notes"></v-textarea>
+
+            <v-checkbox v-model="specialTaajil" label="Speical Taajil" color="dark" :value="true"></v-checkbox>
 
             <!-- <v-text-field label="Educational Year" v-model="attachment"></v-text-field> -->
             <v-alert v-if="erorrMessage" type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
@@ -102,6 +105,7 @@ export default {
     type: 'taajil',
     reentrySelectedType: null,
     reentryTypes: ['taajil', 'mahrom', 'special_taajil', 'repeat'],
+    specialTaajil: false,
     student: null,
     studentId: null,
     regNumber: null,
@@ -181,6 +185,13 @@ export default {
 
         // Only, if type was reentry
         if (this.type === 'reentry') data.reason = this.reentrySelectedType;
+
+        // Only, if type was taajil
+        if (this.type === 'taajil' && !this.specialTaajil) {
+          data.type = 'taajil';
+        } else {
+          data.type = 'special_taajil';
+        }
 
         await this.$store.dispatch('conversion/createConversion', {
           type: this.formType,
