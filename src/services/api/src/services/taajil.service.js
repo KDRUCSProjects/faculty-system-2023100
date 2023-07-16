@@ -135,6 +135,17 @@ const deleteTaajil = (taajilBody) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
 };
 
+/**
+ * find tajil by student id and taajil type
+ * @param {ObjectId} studentKankorId
+ * @returns {Promise<Taajil>}
+ */
+const findTaajilByStudentIdAndType = async (studentId, type) => {
+  return await Taajil.findOne({
+    where: { studentId, type },
+  });
+};
+
 module.exports = {
   createTaajil,
   updateTaajil,
@@ -146,4 +157,5 @@ module.exports = {
   findTaajilByStudentId,
   findTaajilByStdKankorId,
   deleteTaajilByStudentId,
+  findTaajilByStudentIdAndType,
 };

@@ -1,33 +1,75 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { taajilService, educationalYearService, studentService, studentListService } = require('../services');
+const { taajilService, educationalYearService, studentService, studentListService, reentryService } = require('../services');
 
 const createTaajil = catchAsync(async (req, res) => {
-  const { studentId, educationalYear } = req.body;
+  const { studentId, educationalYear, type } = req.body;
   // check student if the id of student is correct
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
   // find all student list of single student by student id
   const studentList = await studentListService.findAllStudentListOfSingleStudent(studentId);
-  if (studentList.length <= 0) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'You Need To add the student to a semester');
-  // find all taajils of single student
-  const studentAllTajils = await taajilService.findStudentAllTajils(studentId);
+  if (studentList.length <= 0)
+    throw new ApiError(
+      httpStatus.NOT_ACCEPTABLE,
+      `Student is not registered in any semester. Student should be registered in 1st semester of ${student.admissionYear}} educational year`
+    );
 
-  // Here we start
+  // Prevent taking taajil for the second time
+  const generalTaajil = await taajilService.findTaajilByStudentIdAndType(studentId, 'taajil');
+  const specialTaajil = await taajilService.findTaajilByStudentIdAndType(studentId, 'special_taajil');
 
-  if (studentAllTajils.length >= 2)
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student has Two Taajils. And Can not get more than two Taajils');
-  // check if student previous semester was not on going OR student previous Taajil was on Going
-  if (!studentList[0].onGoing || studentAllTajils[0]?.onGoing)
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student has active Taajil. Student Needs Reentry first');
-  // check year. if year is correct. That is clear that we don't give taajils in the past or future years;
+  if (generalTaajil && type === 'taajil') {
+    // If student has taken general taajil, and tries taking it again.
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Cannot give general taajil for the second time!');
+  }
+
+  if (specialTaajil && type === 'special_taajil') {
+    // If student has taken special taajil, and tries taking it again.
+    throw new ApiError(
+      httpStatus.NOT_ACCEPTABLE,
+      'Student can no longer get taajil. Has gotten both general and special taajils'
+    );
+  }
+
+  // Now, if the user tries taking special taajil but has not taken reentry for the first one:
+  if (type === 'special_taajil' && !specialTaajil && generalTaajil) {
+    // Check if reentry exists for the reason = 'taajil' in reentry table of the elected student
+    const reentryExistForGeneralTaail = await reentryService.findReentryByStudentIdAndReason(studentId, 'taajil');
+    if (!reentryExistForGeneralTaail)
+      throw new ApiError(
+        httpStatus.NOT_ACCEPTABLE,
+        'Reentry for your old taajil is still missing. Please take that reentry first.'
+      );
+  }
+
+  // check distance b/w current year and req.body.educationalYear (year the user selected).
+  // if the distance is correct then it is clear that we don't give taajils in the past or future years;
+  // The distance is correct if both currentYear and recieved year are equal.
   const currentYear = await educationalYearService.getCurrentEducationalYear();
-  if (currentYear?.year !== educationalYear) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Year is Incorrect');
-  // stop student current semester
-  await studentListService.updatedStudentList(studentList[0], { onGoing: false });
+  if (currentYear?.year !== educationalYear)
+    throw new ApiError(
+      httpStatus.NOT_ACCEPTABLE,
+      `You cant give taajil to student in past years. Only ${currentYear?.year} is possible at the moment`
+    );
+
+  // If the user tried, taking special taajil for the first time before general taajil
+  if (!generalTaajil && type === 'special_taajil') {
+    throw new ApiError('Student can get common taajil without the special one');
+  }
+
+  // Validation Completed --- LET"S GO!
+
+  // Get student on-going semester id
+  const currentSemesterId = await studentListService.findStudentLatestSemesterId(studentId);
+
+  if (!currentSemesterId) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Student current semester cant be identified');
+  }
   // create new Taajil
   req.body.educationalYearId = currentYear.id;
+  req.body.semesterId = currentSemesterId;
   const taajil = await taajilService.createTaajil(req.body);
   return res.status(httpStatus.CREATED).send(taajil);
 });

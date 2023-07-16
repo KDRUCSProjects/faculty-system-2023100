@@ -1,6 +1,5 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
-
 // Sequelize Models
 const { Reentry, Student } = require('../models');
 /**
@@ -120,6 +119,17 @@ const updateReentry = (oldReentry, newReentry) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
 };
 
+/**
+ * find reentry by student id and reentry reason type
+ * @param {ObjectId} studentKankorId
+ * @returns {Promise<Taajil>}
+ */
+const findReentryByStudentIdAndReason = async (studentId, reason) => {
+  return await Reentry.findOne({
+    where: { studentId, reason },
+  });
+};
+
 module.exports = {
   createReentry,
   deleteReentry,
@@ -130,4 +140,5 @@ module.exports = {
   findReentryByStudentId,
   findReentryByStdKankorId,
   findReentryByStdIdAndYearId,
+  findReentryByStudentIdAndReason,
 };
