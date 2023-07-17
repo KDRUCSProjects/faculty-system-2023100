@@ -80,7 +80,7 @@ export default function teacherScreen(props) {
         <View style={[styles.attendenceContainer, styles.shadowProp]}>
           <View
             style={{
-              elevation: 3,
+              elevation: 2,
               shadowColor: "rgba(100, 100, 111, 0.4)",
 
               borderRadius: 15,
@@ -108,7 +108,7 @@ export default function teacherScreen(props) {
 
           <View
             style={{
-              elevation: 3,
+              elevation: 2,
               shadowColor: "rgba(100, 100, 111, 0.4)",
               borderRadius: 15,
               width: "80%",
