@@ -119,6 +119,12 @@ export default {
         sortable: true,
         key: 'fatherName',
       },
+      {
+        title: 'Kankor Year',
+        align: 'start',
+        sortable: true,
+        key: 'kankorYear',
+      },
       { title: 'Actions', key: 'actions', sortable: false },
     ],
   }),
@@ -234,7 +240,6 @@ export default {
         // And switch back to semester students
         this.$refs.studentsTable.switchMode();
       } catch (e) {
-        alert(e);
         // this.errorMessage = e;
       }
     },

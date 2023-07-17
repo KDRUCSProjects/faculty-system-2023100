@@ -197,7 +197,9 @@ export default {
 
       // Let's reload the students
       context.dispatch('loadStudentsListBySemesterId', semesterId);
+      context.commit('setToast', 'Student has been added successfully', { root: true });
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
     }
   },
@@ -242,6 +244,7 @@ export default {
 
       // Let's reload all semester data
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
     }
   },
