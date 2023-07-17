@@ -17,6 +17,13 @@ const createStudentList = catchAsync(async (req, res) => {
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
 
+  // First, check if student kankor year matches current on-going year
+  const { year: currentEduYear } = await educationalYearService.getCurrentEducationalYear();
+  const { year: studentKankorYear } = await educationalYearService.getEducationalYear(student.educationalYearId);
+
+  if (studentKankorYear !== currentEduYear)
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, `Student can be only enrolled at ${studentKankorYear}. `);
+
   /** check if tabdily has been given to the student */
   const studentTabdili = await tabdiliService.findTabdiliByStudentId(studentId);
   if (studentTabdili) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has got tabdili');
