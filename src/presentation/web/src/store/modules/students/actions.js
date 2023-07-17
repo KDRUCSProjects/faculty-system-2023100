@@ -227,18 +227,17 @@ export default {
       throw e.response.data.message;
     }
   },
-  async promoteStudents(context, students) {
+  async promoteStudents(context, semesterId) {
     try {
       const token = context.rootGetters.token;
 
       const response = await axios({
-        url: `/api/studentList/promote`,
+        url: `/api/studentList/promote/${semesterId}`,
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        data: students,
       });
 
       // Let's reload all semester data
