@@ -15,6 +15,7 @@ import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { default as theme } from "./ui/colors.json";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import GetInfo from "./store/reducers/getInfo";
+import * as fonts from "expo-font";
 
 export default function App() {
   const store = createStore(
@@ -25,6 +26,7 @@ export default function App() {
   return (
     <React.Fragment>
       <IconRegistry icons={EvaIconsPack}></IconRegistry>
+
       <ApplicationProvider
         {...eva}
         theme={eva.light}
