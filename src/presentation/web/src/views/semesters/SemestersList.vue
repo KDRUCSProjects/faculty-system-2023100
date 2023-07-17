@@ -35,7 +35,14 @@ export default {
   },
   computed: {
     semesters() {
-      return this.$store.getters['semesters/currentYearSemesters'];
+      const firstHalf = this.$store.getters['years/onGoingYear']?.firstHalf;
+      return this.$store.getters['semesters/currentYearSemesters'].filter((semester) => {
+        if (!firstHalf) {
+          return semester.title % 2 === 0;
+        } else if (firstHalf) {
+          return semester.title % 2 !== 0;
+        }
+      });
     },
   },
   methods: {

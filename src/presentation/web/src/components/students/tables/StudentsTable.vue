@@ -47,6 +47,7 @@
           </v-menu> -->
 
           <v-btn
+            v-if="enableStudentsAddition"
             :color="enrollmentMode ? 'primary' : 'light'"
             class="ml-1"
             variant="flat"
@@ -100,6 +101,7 @@
 import { VDataTable } from 'vuetify/labs/VDataTable';
 
 export default {
+  inject: ['enableStudentsAddition'],
   props: ['headers', 'students'],
   components: {
     VDataTable,

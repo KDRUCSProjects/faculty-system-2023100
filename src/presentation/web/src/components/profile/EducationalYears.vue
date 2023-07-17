@@ -25,7 +25,7 @@
 
             <!-- ----------- -->
 
-            <v-chip-group mandatory selected-class="text-light" v-model="currentHalf">
+            <v-chip-group mandatory selected-class="text-light" v-model="currentHalf" @update:model-value="updateYearHalf">
               <v-chip filter="" v-for="(half, i) in yearHalfs" :key="i">
                 {{ half }}
               </v-chip>
@@ -55,6 +55,9 @@ export default {
     loader: false,
   }),
   methods: {
+    async updateYearHalf(v) {
+      await this.setOnGoingYear(v);
+    },
     closeMenu() {
       // For some reasons, the dialog won't close when the item is clicked in the menu in Vuetify 3 when using a dialog. Let's use this hack for now.
       this.menu = false;
@@ -88,12 +91,6 @@ export default {
   computed: {
     items() {
       return this.$store.getters['years/years'];
-    },
-  },
-  watch: {
-    async currentHalf(newValue, oldValue) {
-      if (!oldValue) return false;
-      await this.setOnGoingYear(newValue);
     },
   },
   created() {

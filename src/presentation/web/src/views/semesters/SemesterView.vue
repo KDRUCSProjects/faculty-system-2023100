@@ -71,6 +71,7 @@ export default {
   provide() {
     return {
       semesterId: this.id,
+      enableStudentsAddition: this.$route.query.semester == 1 ? true : false,
     };
   },
   props: {
