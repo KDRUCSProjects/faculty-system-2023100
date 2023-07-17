@@ -69,8 +69,32 @@ const checkTaajilWithReentry = async (studentId, taajilType = 'taajil') => {
   return false;
 };
 
+/**
+ * find next semester for student
+ * @param {ObjectId} yearId
+ * @param {ObjectId} semesterTitle
+ * @returns {Promise<Semester>}
+ */
+const findEligibleNextSemester = async (currentSemester) => {
+  const { id, title, educationalYearId } = await semesterService.findById(currentSemester);
+
+  const semesterYear = await educationalYearService.getEducationalYear(educationalYearId);
+
+  console.log(semesterYear.year);
+
+  const theYear = title % 2 === 0 ? ++semesterYear.year : semesterYear.year;
+
+  const { id: findTheYearId } = await educationalYearService.getEducationalYearByValue(theYear);
+
+  return await semesterService.findSemester({
+    educationalYearId: findTheYearId,
+    title: title + 1,
+  });
+};
+
 module.exports = {
   findEligibleNextSemesterAfterConversion,
   checkStudentEligibilityForNextSemester,
   checkTaajilWithReentry,
+  findEligibleNextSemester,
 };

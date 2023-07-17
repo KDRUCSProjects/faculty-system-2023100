@@ -9,7 +9,7 @@ const {
   educationalYearService,
 } = require('../services');
 const ApiError = require('../utils/ApiError');
-const { checkStudentEligibilityForNextSemester } = require('../utils/global');
+const { checkStudentEligibilityForNextSemester, findEligibleNextSemester } = require('../utils/global');
 
 const createStudentList = catchAsync(async (req, res) => {
   const { studentId, semesterId } = req.body;
@@ -188,12 +188,27 @@ const promoteStudents = catchAsync(async (req, res) => {
         }
         nextSemester = await semesterService.findNextSemester(nextYear.id, lastSemester.title);
         // await studentListService.updatedStudentList(studentAllLists[0], { onGoing: false, completed: true });
+
+        const studentExists = await studentExistInNextSemester(studentId, req.params.semesterId);
+        if (studentExists) {
+          results.push({ message: 'Student is already in next semester', result });
+          continue;
+        }
+
         result = await studentListService.createStudentList({ studentId, semesterId: nextSemester.id });
         results.push(result);
       } else {
         // If semesters were odd (1, 3, 5)
         nextSemester = await semesterService.findNextSemester(semesterYear.id, lastSemester.title);
         // await studentListService.updatedStudentList(studentAllLists[0], { onGoing: false, completed: true });
+
+        const studentExists = await studentExistInNextSemester(studentId, req.params.semesterId);
+        if (studentExists) {
+          console.log('yeah bitch');
+          results.push({ message: 'Student is already in next semester', result });
+          continue;
+        }
+
         result = await studentListService.createStudentList({ studentId, semesterId: nextSemester.id });
         results.push(result);
       }
@@ -206,6 +221,18 @@ const promoteStudents = catchAsync(async (req, res) => {
 
   return res.status(httpStatus.OK).send(results);
 });
+
+// Util functions
+
+const studentExistInNextSemester = async (studentId, currentSemesterId) => {
+  const nextSemester = await findEligibleNextSemester(currentSemesterId);
+
+  // Prevent duplicate students to next semester
+  // Creating a trigger for this in the DB is really important, as this can help us boost the speed.
+  const exists = await studentListService.getStudentListByStdIdAndSemesterId(studentId, nextSemester.id);
+
+  return !!exists;
+};
 
 module.exports = {
   deleteBunch,
