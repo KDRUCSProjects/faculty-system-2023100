@@ -13,7 +13,7 @@ const createTaajil = catchAsync(async (req, res) => {
   if (studentList.length <= 0)
     throw new ApiError(
       httpStatus.NOT_ACCEPTABLE,
-      `Student is not registered in any semester. Student should be registered in 1st semester of ${student.admissionYear}} educational year`
+      `Student is not registered in any semester. Student should be registered in 1st semester of ${student.admissionYear} educational year`
     );
 
   // Prevent taking taajil for the second time
@@ -33,6 +33,10 @@ const createTaajil = catchAsync(async (req, res) => {
     );
   }
 
+  // Get current on-going year and first-half
+  const { year: currentEducationalYear, id: currentEducationalYearId } =
+    await educationalYearService.getCurrentEducationalYear();
+
   // Now, if the user tries taking special taajil but has not taken reentry for the first one:
   if (type === 'special_taajil' && !specialTaajil && generalTaajil) {
     // Check if reentry exists for the reason = 'taajil' in reentry table of the elected student
@@ -41,6 +45,14 @@ const createTaajil = catchAsync(async (req, res) => {
       throw new ApiError(
         httpStatus.NOT_ACCEPTABLE,
         'Reentry for your old taajil is still missing. Please take that reentry first.'
+      );
+
+    // Plus, prevent if special_taajil is taking place before general taajil
+    const { year } = await educationalYearService.getEducationalYear(generalTaajil.educationalYearId);
+    if (currentEducationalYear <= year)
+      throw new ApiError(
+        httpStatus.NOT_ACCEPTABLE,
+        `You have taken taajil at ${year}. Hence, you cannot get special taajil at this year`
       );
   }
 
