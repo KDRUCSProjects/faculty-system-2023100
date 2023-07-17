@@ -168,6 +168,21 @@ const findStudentLatestSemesterId = async (studentId) => {
 };
 
 /**
+ * find student latest semester
+ * @param {ObjectId} studentId
+ * @returns {Promise<StudentsList>}
+ */
+const getAllStudentsBySemesterId = async (semesterId) => {
+  const records = await StudentsList.findAll({
+    where: { semesterId },
+    order: [['createdAt', 'DESC']],
+    raw: true,
+  });
+
+  return records;
+};
+
+/**
  * update student list
  * @param {Object} oldStudentList
  * @param {Object} newStudentList
@@ -195,4 +210,5 @@ module.exports = {
   findAllStudentListOfSingleStudent,
   getStudentListByStdIdAndSemesterId,
   findStudentLatestSemesterId,
+  getAllStudentsBySemesterId,
 };

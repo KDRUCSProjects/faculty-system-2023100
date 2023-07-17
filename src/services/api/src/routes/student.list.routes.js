@@ -13,7 +13,7 @@ router
   .delete(auth(), validate(studentListValidation.deleteBunch), studentListController.deleteBunch);
 
 router
-  .route('/promote')
+  .route(`/promote/:semesterId`)
   .post(auth(), validate(studentListValidation.promoteStudents), studentListController.promoteStudents);
 
 router
@@ -161,24 +161,20 @@ module.exports = router;
 
 /**
  * @swagger
- * /studentList/promote:
+ * /studentList/promote/{semesterId}:
  *   post:
- *     summary: promote students to next semester
+ *     summary: promote students to next semester of current semester
  *     description: promote students to next semester
  *     tags: [StudentList]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: array
- *             items:
- *               type: integer
- *               enum: [1,2,3,4,5]
- *             example:
- *               [1,2,4,5]
+ *     parameters:
+ *       - in: path
+ *         name: semesterId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: semester id
  *     responses:
  *       "204":
  *         description: NO_CONTENT
