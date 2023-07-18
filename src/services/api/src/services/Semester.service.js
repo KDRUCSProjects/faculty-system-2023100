@@ -105,6 +105,21 @@ const getYearSemesters = (educationalYearId) => {
   });
 };
 
+/**
+ * find semester by year and title
+ * @param {ObjectId} semesterId
+ * @returns {Promise<Semester>}
+ */
+const findSemesterByYearIdAndTitle = async (educationalYearId, title) => {
+  return await Semester.findOne({
+    where: {
+      educationalYearId,
+      title,
+    },
+    raw: true,
+  });
+};
+
 module.exports = {
   findById,
   findSemester,
@@ -113,5 +128,6 @@ module.exports = {
   findNextSemester,
   findSemesterById,
   getYearSemesters,
+  findSemesterByYearIdAndTitle,
   isSemesterOnGoing,
 };

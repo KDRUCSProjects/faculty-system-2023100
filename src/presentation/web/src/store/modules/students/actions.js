@@ -197,7 +197,9 @@ export default {
 
       // Let's reload the students
       context.dispatch('loadStudentsListBySemesterId', semesterId);
+      context.commit('setToast', 'Student has been added successfully', { root: true });
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
     }
   },
@@ -227,22 +229,22 @@ export default {
       throw e.response.data.message;
     }
   },
-  async promoteStudents(context, students) {
+  async promoteStudents(context, semesterId) {
     try {
       const token = context.rootGetters.token;
 
       const response = await axios({
-        url: `/api/studentList/promote`,
+        url: `/api/studentList/promote/${semesterId}`,
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        data: students,
       });
 
       // Let's reload all semester data
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
     }
   },

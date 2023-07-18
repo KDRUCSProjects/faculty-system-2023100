@@ -71,6 +71,7 @@ export default {
   provide() {
     return {
       semesterId: this.id,
+      enableStudentsAddition: this.$route.query.semester == 1 ? true : false,
     };
   },
   props: {
@@ -118,6 +119,12 @@ export default {
         sortable: true,
         key: 'fatherName',
       },
+      {
+        title: 'Kankor Year',
+        align: 'start',
+        sortable: true,
+        key: 'kankorYear',
+      },
       { title: 'Actions', key: 'actions', sortable: false },
     ],
   }),
@@ -144,12 +151,10 @@ export default {
       //   return alert('Switch back to semester students');
       // }\
 
-      const students = this.students?.map((student) => student.studentId);
-
       let res = await this.$refs.baseConfirmDialog.show({
         warningTitle: 'Warning',
         title: 'Are you sure you want to promote these students to next semester?',
-        subtitle: `Students Count: ${students?.length}`,
+        subtitle: `Students Count: ${this.students?.length}`,
         okButton: 'Yes, I am sure',
       });
 
@@ -158,9 +163,7 @@ export default {
         return false;
       }
 
-      console.log(students);
-
-      await this.$store.dispatch('students/promoteStudents', students);
+      await this.$store.dispatch('students/promoteStudents', this.id);
     },
     async getPageNumber(number) {
       this.page = number;
@@ -237,7 +240,6 @@ export default {
         // And switch back to semester students
         this.$refs.studentsTable.switchMode();
       } catch (e) {
-        alert(e);
         // this.errorMessage = e;
       }
     },

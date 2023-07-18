@@ -32,6 +32,15 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
+      semesterId: {
+        type: Sequelize.INTEGER,
+        trim: true,
+        required: true,
+        references: {
+          model: 'Semesters',
+          key: 'id',
+        },
+      },
       regNumber: {
         type: Sequelize.INTEGER,
       },

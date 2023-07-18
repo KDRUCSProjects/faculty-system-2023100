@@ -3,16 +3,15 @@ const faker = require('faker');
 let stdId = 0;
 const studentLists = [];
 
-for (let i = 89; i <= 96; i++) {
-  for (let j = 0; j < 10; j++) {
-    ++stdId;
-    studentLists.push({
-      studentId: stdId,
-      semesterId: i,
-      createdAt: faker.date.past(),
-      updatedAt: faker.date.recent(),
-    });
-  }
+// Create students for 1401 educational year and its 1st semester
+for (let j = 0; j < 10; j++) {
+  ++stdId;
+  studentLists.push({
+    studentId: stdId,
+    semesterId: 89,
+    createdAt: faker.date.past(),
+    updatedAt: faker.date.recent(),
+  });
 }
 module.exports = {
   async up(queryInterface, Sequelize) {

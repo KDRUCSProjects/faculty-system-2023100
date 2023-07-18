@@ -30,6 +30,20 @@ module.exports = {
           key: 'id',
         },
       },
+      semesterId: {
+        type: Sequelize.INTEGER,
+        trim: true,
+        required: true,
+        references: {
+          model: 'Semesters',
+          key: 'id',
+        },
+      },
+      type: {
+        type: Sequelize.ENUM('taajil', 'special_taajil'),
+        defaultValue: 'taajil',
+        required: true,
+      },
       regNumber: Sequelize.INTEGER,
       attachment: Sequelize.STRING,
       notes: Sequelize.STRING,
