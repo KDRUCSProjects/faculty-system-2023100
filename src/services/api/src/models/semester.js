@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.EducationalYear, { foreignKey: 'educationalYearId', as: 'EducationalYear' });
       this.hasMany(models.Subject);
+      this.hasMany(models.StudentsList);
     }
   }
   Semester.init(

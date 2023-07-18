@@ -1,7 +1,7 @@
 // Sequelize Models
 const httpStatus = require('http-status');
 const { QueryTypes } = require('sequelize');
-const { StudentsList, sequelize, Student } = require('../models');
+const { StudentsList, sequelize, Student, Semester, EducationalYear } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -169,6 +169,40 @@ const updatedStudentList = (oldStudentList, newStudentList) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
 };
 
+/**
+ * find all students of the semester
+ * @param {ObjectId} semesterId
+ * @returns {Promise<StudentsList>}
+ */
+const findSemesterStudents = (semesterId) => {
+  return StudentsList.findAll({ where: { semesterId } });
+};
+
+/**
+ * find student current semester
+ * @param {ObjectId} studentId
+ * @returns {Promise<StudentsList>}
+ */
+const findStudentCurrentSemester = (studentId) => {
+  return StudentsList.findOne({
+    where: { studentId, onGoing: true, completed: false },
+    include: [
+      {
+        model: Semester,
+        required: true,
+        include: [
+          {
+            model: EducationalYear,
+            as: 'EducationalYear',
+            where: { onGoing: true },
+            required: true,
+          },
+        ],
+      },
+    ],
+  });
+};
+
 module.exports = {
   getStudentLists,
   countStudentList,
@@ -176,7 +210,9 @@ module.exports = {
   deleteStudentList,
   updatedStudentList,
   findStudentListById,
+  findSemesterStudents,
   getYearAndClassStudentList,
+  findStudentCurrentSemester,
   findListedStudentByStudentId,
   findAllStudentListOfSingleStudent,
   getStudentListByStdIdAndSemesterId,

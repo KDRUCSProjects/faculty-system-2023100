@@ -67,6 +67,55 @@ const marksFormatter = (arr) => {
   return newArr;
 };
 
+const subjectsFormatter = (arr) => {
+  // semesters array
+  const semesters = {
+    1: { semesterSubject: [] },
+    2: { semesterSubject: [] },
+    3: { semesterSubject: [] },
+    4: { semesterSubject: [] },
+    5: { semesterSubject: [] },
+    6: { semesterSubject: [] },
+    7: { semesterSubject: [] },
+    8: { semesterSubject: [] },
+  };
+
+
+  const newArr = [];
+
+  arr.forEach((element) => {
+    semesters[element.Semester.title].semesterSubject.push(element);
+  });
+
+  for (const key in semesters) {
+    if (semesters[key].semesterSubject.length > 0) {
+
+      const semesterId = semesters[key].semesterSubject[0].Semester.id;
+      const title = semesters[key].semesterSubject[0].Semester.title;
+      const year = semesters[key].semesterSubject[0].Semester.EducationalYear.year;
+      const subjects = [];
+
+      semesters[key].semesterSubject.forEach((element) => {
+        subjects.push({
+          subjectId: element.id,
+          subjectName: element.name,
+          subjectTitle: element.credit,
+        });
+      });
+      newArr.push({
+        semesterId,
+        title,
+        year,
+        subjects
+      });
+    }
+  }
+
+  return newArr;
+};
+
+
 module.exports = {
   marksFormatter,
+  subjectsFormatter,
 };
