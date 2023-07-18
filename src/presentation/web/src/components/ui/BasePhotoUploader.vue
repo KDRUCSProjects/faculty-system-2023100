@@ -81,7 +81,6 @@ export default {
       
       this.$emit('photo', theFile.file || null)
       this.$emit('photo-size-change', this.photoSize)
-      
     },
   },
   components: {

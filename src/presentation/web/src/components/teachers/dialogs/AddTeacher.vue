@@ -13,7 +13,7 @@
 
           <v-card-text>
             <v-form @submit.prevent="submitForm" ref="addTeacherForm">
-              <base-photo-uploader @photo="getPhoto"></base-photo-uploader>
+              <base-photo-uploader @photo="getPhoto" @photo-size-change="handlePhotoSize"></base-photo-uploader>
 
               <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Full Name"></v-text-field>
               <v-text-field v-model="lastName" variant="outlined" label="Nick Name"></v-text-field>
@@ -60,6 +60,8 @@ export default {
     show: true,
     isLoading: false,
     errorMessage: null,
+    pSize: null,
+    dynamicPhotoSize: null
   }),
   computed: {
     rules() {
@@ -83,9 +85,13 @@ export default {
       };
     },
   },
+  
   methods: {
     getPhoto(photo) {
       this.photo = photo;
+    },
+    handlePhotoSize: function (photoSize) {
+      this.pSize = photoSize
     },
     async submitForm() {
       // Validate the form first
@@ -110,9 +116,14 @@ export default {
         if (this.photo) {
           data['photo'] = this.photo;
         }
-        await this.$store.dispatch('teachers/addTeacher', data);
 
-        this.closeDialog();
+        if(!this.pSize) {
+          await this.$store.dispatch('teachers/addTeacher', data);
+          this.closeDialog();
+        }else{
+          alert('photo size should be less than 2 mb')
+        }
+
       } catch (e) {
         // Show error message if happened
         this.errorMessage = e;
