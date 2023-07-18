@@ -12,9 +12,12 @@ export const UPDATEACCOUNT = "UPDATEACCOUNT";
 export const CHECKPASSWORD = "CHECKPASSWORD";
 export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const GETSTUDENTINFO = "GETSTUDENTINFO";
+import { base_ip } from "@env";
 
 export const authenticate = (userName, password) => {
   return async (dispatch) => {
+    const ip = base_ip;
+    console.log(ip);
     try {
       const response = await FetchWithTimeout(
         "http://192.168.1.104:4000/auth/login",

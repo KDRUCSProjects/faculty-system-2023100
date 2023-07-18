@@ -25,6 +25,25 @@ const findById = (semesterId) => {
 };
 
 /**
+ * find semester by id
+ * @param {Number} semesterId
+ * @returns {Promise<Semester>}
+ */
+const isSemesterOnGoing = (semesterId) => {
+  return Semester.findOne({
+    where: { id: semesterId },
+    include: [
+      {
+        model: EducationalYear,
+        as: 'EducationalYear',
+        where: { onGoing: true },
+        required: true,
+      },
+    ],
+  });
+};
+
+/**
  * find Semesters with education year
  * @param {Object} semesterBody
  * @returns {Promise<Semester>}
@@ -89,9 +108,10 @@ const getYearSemesters = (educationalYearId) => {
 module.exports = {
   findById,
   findSemester,
+  deleteSemester,
   getAllSemesters,
   findNextSemester,
   findSemesterById,
-  deleteSemester,
   getYearSemesters,
+  isSemesterOnGoing,
 };

@@ -319,6 +319,11 @@ module.exports = router;
  *         schema:
  *           type: number
  *         description: teacher id
+ *       - in: query
+ *         name: year
+ *         schema:
+ *           type: number
+ *         description: year
  *     responses:
  *       "200":
  *         description: OK
