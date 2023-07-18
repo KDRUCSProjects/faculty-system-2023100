@@ -164,30 +164,6 @@ export default function CreateShoka(props) {
           <View style={{ width: "60%", alignItems: "center" }}>
             <Text style={{ color: "white", fontSize: 23 }}>Create Shoka</Text>
           </View>
-          <View style={{ width: "20%", alignItems: "flex-end" }}>
-            <HeaderBackButton
-              onPress={() =>
-                Alert.alert("Save?", "Do you want save?", [
-                  {
-                    text: "No",
-                    onPress: () => {
-                      return;
-                    },
-                  },
-                  {
-                    text: "Yes",
-                    onPress: onSave,
-                  },
-                ])
-              }
-              backImage={() => (
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/save.png")}
-                ></ImageBackground>
-              )}
-            ></HeaderBackButton>
-          </View>
         </View>
 
         <ScrollView
@@ -241,7 +217,7 @@ export default function CreateShoka(props) {
                     style={{
                       borderWidth: 1,
                       borderRadius: 4,
-                      borderColor: "gray",
+                      borderColor: "black",
                     }}
                     placeholder="Choose Subject"
                     status={!selectedSubjectErr ? "basic" : "danger"}
@@ -302,7 +278,7 @@ export default function CreateShoka(props) {
                     style={{
                       borderWidth: 1,
                       borderRadius: 4,
-                      borderColor: "gray",
+                      borderColor: "black",
                     }}
                     placeholder="Choose Student"
                     status={!selectedStudentErr ? "basic" : "danger"}
@@ -364,6 +340,9 @@ export default function CreateShoka(props) {
                     label={"Midterm Marks"}
                     mode="outlined"
                     textColor="gray"
+                    contentStyle={{
+                      fontSize: 13,
+                    }}
                     keyboardType="number-pad"
                     inputMode="numeric"
                     maxLength={2}
@@ -416,6 +395,9 @@ export default function CreateShoka(props) {
                     label={"A & P Marks"}
                     mode="outlined"
                     textColor="gray"
+                    contentStyle={{
+                      fontSize: 13,
+                    }}
                     keyboardType="number-pad"
                     inputMode="numeric"
                     maxLength={2}
@@ -466,6 +448,9 @@ export default function CreateShoka(props) {
                     label={"Final Marks"}
                     mode="outlined"
                     textColor="gray"
+                    contentStyle={{
+                      fontSize: 13,
+                    }}
                     keyboardType="number-pad"
                     inputMode="numeric"
                     maxLength={2}
@@ -513,6 +498,25 @@ export default function CreateShoka(props) {
       >
         <ActivityIndicator size={60}></ActivityIndicator>
       </Modal>
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() =>
+          Alert.alert("Save?", "Do you want save?", [
+            {
+              text: "No",
+              onPress: () => {
+                return;
+              },
+            },
+            {
+              text: "Yes",
+              onPress: onSaveUpdate,
+            },
+          ])
+        }
+      >
+        <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -523,8 +527,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "100%",
     width: "100%",
+    backgroundColor: "white",
   },
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  btn: {
+    width: "90%",
+    borderRadius: 20,
+
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: "3%",
+    backgroundColor: "#EB6A70",
   },
 });

@@ -6,15 +6,23 @@ const { attendanceController } = require('../controllers');
 
 const router = express.Router();
 
-router.route('/').get(auth(), attendanceController.getAttendances);
+// router.route('/').get(auth(), attendanceController.getAttendances);
+router
+  .route('/todaysAttendance/:subjectId')
+  .get(auth('takeAttendance'), validate(attendanceValidation.getTodaysAttendance), attendanceController.getTodaysAttendance)
+  .post(
+    auth('takeAttendance'),
+    validate(attendanceValidation.takeTodaysAttendance),
+    attendanceController.takeTodaysAttendance
+  );
 
 router
-  .route('/:attendanceId')
-  .get(auth(), validate(attendanceValidation.getAttendanceById), attendanceController.getAttendanceById);
+  .route('/:subjectId')
+  .post(auth('takeAttendance'), validate(attendanceValidation.takeOneStdAttendance), attendanceController.takeOneStdAttendance);
 
 router
   .route('/subject/:subjectId')
-  .get(auth(), validate(attendanceValidation.getAttendance), attendanceController.getAttendance);
+  .get(auth('takeAttendance'), validate(attendanceValidation.getAttendance), attendanceController.getAttendance);
 
 module.exports = router;
 
@@ -53,20 +61,41 @@ module.exports = router;
 
 /**
  * @swagger
- * /attendance/{attendanceId}:
- *   get:
- *     summary: Get Attendance by id
- *     description: get a Attendance by id.
+ * /attendance/{subjectId}:
+ *   post:
+ *     summary: route to make a single student present or absent.
+ *     description: route to make a single student present or absent.
  *     tags: [Attendance]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: attendanceId
+ *         name: subjectId
  *         required: true
  *         schema:
  *           type: string
- *         description: Attendance id
+ *         description: subject id
+ *       - in: query
+ *         name: type
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [one, two, both]
+ *         description: select type to mark student absent ot present
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               studentId: 
+ *                 type: number
+ *               status:
+ *                 type: boolean
+ *             example:
+ *               studentId: 1
+ *               status: true
  *     responses:
  *       "200":
  *         description: OK
@@ -98,6 +127,91 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: subject id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Attendance'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /attendance/todaysAttendance/{subjectId}:
+ *   get:
+ *     summary: route to get todays attendance.
+ *     description: route to get todays attendance.
+ *     tags: [Attendance]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: subjectId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: subject id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Attendance'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /attendance/todaysAttendance/{subjectId}:
+ *   post:
+ *     summary: Route to take attendance of all class.
+ *     description: Route to take attendance of all class.
+ *     tags: [Attendance]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: subjectId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: subject id
+ *       - in: query
+ *         name: type
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [one, two, both]
+ *         description: select type one or two
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               students:
+ *                 type: array
+ *                 items:
+ *                   studentId:
+ *                     type: number
+ *                   status:
+ *                     type: boolean
+ *             example:
+ *               students: [{studentId: 1, status: true}]
  *     responses:
  *       "200":
  *         description: OK

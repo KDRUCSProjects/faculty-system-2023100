@@ -26,9 +26,11 @@ import { useSelector } from "react-redux";
 
 export default MainDrawer = (props) => {
   const teacherName = useSelector((state) => state.MainReducer.userName);
-  const teacherPhoto = useSelector((state) => state.MainReducer.photoUri);
+  let teacherPhoto = useSelector((state) => state.MainReducer.photoUri);
 
-  console.log(teacherPhoto);
+  if (!teacherPhoto) {
+    teacherPhoto = "";
+  }
 
   const dispatch = useDispatch();
 
@@ -43,8 +45,8 @@ export default MainDrawer = (props) => {
               style={{
                 width: 100,
                 height: 100,
-                borderWidth: 3,
-                borderColor: "blue",
+                borderWidth: 1,
+                borderColor: "#a7e9eb",
                 borderRadius: 100 / 2,
                 overflow: "hidden",
                 alignItems: "center",
@@ -59,9 +61,13 @@ export default MainDrawer = (props) => {
                   alignItems: "flex-end",
                   justifyContent: "flex-start",
                 }}
-                source={{
-                  uri: teacherPhoto,
-                }}
+                source={
+                  !teacherPhoto | teacherPhoto.includes("null")
+                    ? require("../../assets/images/avatar.png")
+                    : {
+                        uri: teacherPhoto,
+                      }
+                }
               ></ImageBackground>
             </View>
             <Text style={{ fontSize: 16, textAlign: "center" }}>

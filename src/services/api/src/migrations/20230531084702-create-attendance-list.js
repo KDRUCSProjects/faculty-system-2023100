@@ -32,8 +32,20 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      isPresent: {
+      isPresentOne: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      isPresentTwo: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      date: {
+        type: Sequelize.DATE,
+        required: true,
+      },
+      shamsiDate: {
+        type: Sequelize.DATE,
         required: true,
       },
       ...BaseModel(Sequelize),

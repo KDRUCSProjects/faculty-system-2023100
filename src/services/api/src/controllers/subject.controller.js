@@ -1,7 +1,8 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { subjectService, shokaService, attendanceService, userService, semesterService } = require('../services');
+const { subjectService, shokaService, attendanceService, userService, semesterService, educationalYearService } = require('../services');
 const ApiError = require('../utils/ApiError');
+const { subjectsFormatter } = require('../utils/marks.formatter');
 
 const createSubject = catchAsync(async (req, res) => {
   if (req.body.teacherId) {
@@ -50,6 +51,16 @@ const getSubject = catchAsync(async (req, res) => {
 
 const getTeacherSubjects = catchAsync(async (req, res) => {
   const { teacherId } = req.params;
+  if (req.query.year) {
+    const year = await educationalYearService.getEducationalYearByValue(req.query.year);
+    if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'Year Not Found');
+    const subjects = await subjectService.getTeacherSubjectsOfYear(teacherId, year.id);
+    if (subjects.length <= 0) {
+      return res.status(httpStatus.OK).send(subjects);
+    }
+    const results = subjectsFormatter(subjects);
+    return res.status(httpStatus.OK).send(results);
+  }
   const teacher = await userService.getTeacher(teacherId);
   if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'teacher not found');
   const subjects = await subjectService.getTeacherSubjects(teacherId);
