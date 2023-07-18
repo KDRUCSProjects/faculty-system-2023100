@@ -19,6 +19,9 @@ const getTeacherSubjects = {
   params: Joi.object().keys({
     teacherId: Joi.number().required(),
   }),
+  query: Joi.object().keys({
+    year: Joi.number().integer(),
+  }),
 };
 
 const getSemesterStudents = {

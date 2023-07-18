@@ -114,6 +114,34 @@ const getTeacherSubjects = (teacherId) => {
 };
 
 /**
+ * get teacher subjects
+ * @param {ObjectId} teacherId
+ * @returns {Promise<Student>}
+ */
+const getTeacherSubjectsOfYear = (teacherId, yearId) => {
+  return Subject.findAll({
+    where: { teacherId },
+    order: [['createdAt', 'DESC']],
+    include: [
+      {
+        model: Semester,
+        as: 'Semester',
+        required: true,
+        attributes: ['id', 'title'],
+        include: [
+          {
+            model: EducationalYear, as: 'EducationalYear',
+            where: { 'id': yearId },
+            attributes: ['id', 'year'],
+            required: true,
+          }
+        ],
+      },
+    ],
+  });
+};
+
+/**
  * get teach
  * @param {ObjectId} semesterId
  * @returns {Promise<StudentsList>}
@@ -169,4 +197,5 @@ module.exports = {
   getSemesterSubjects,
   getSemesterStudents,
   getUnassignedSubjects,
+  getTeacherSubjectsOfYear,
 };

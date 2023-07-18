@@ -9,6 +9,7 @@ module.exports = {
     host: mariadb.development.host,
     dialect: mariadb.development.dialect,
     logging: JSON.parse(mariadb.development.logging) || false,
+    timezone: "+04:30"
   },
   production: {
     username: mariadb.production.user,
