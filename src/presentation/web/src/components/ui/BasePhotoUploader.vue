@@ -18,7 +18,7 @@
       @addfile="handleFile"
       @removefile="$emit('photo', null)"
     />
-    <p v-if="photoSize" class="error">Can't upload the photo with size more than 2 mb</p>
+    <!-- <p v-if="photoSize" class="error">Can't upload the photo with size more than 2 mb</p> -->
   </div>
 
 </template>
@@ -71,16 +71,16 @@ export default {
       let theFile = this.$refs.pond._pond.getFile();
 
       if(theFile.fileSize > 1024 * 1024){
-  
+
         this.photoSize = true
-        // this.myFiles.pop();
+      
       }
       else{
         this.photoSize = false
-        this.$emit('photo', theFile.file || null, this.photoSize);
       }
-
       
+      this.$emit('photo', theFile.file || null)
+      this.$emit('photo-size-change', this.photoSize)
     },
   },
   components: {
