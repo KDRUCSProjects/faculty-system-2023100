@@ -1,10 +1,17 @@
-import { StyleSheet, View, Text, ImageBackground } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ImageBackground,
+  ScrollView,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { loadSubjects } from "../store/actions/actions";
 import { useEffect } from "react";
 import { Button } from "react-native-paper";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
+import SubjectItem from "./SubjectItem";
 
 export default function Subject(props) {
   const subjects = useSelector((state) => state.MainReducer.subjects);
@@ -47,13 +54,25 @@ export default function Subject(props) {
             </Text>
           </View>
         </View>
-        <Text style={{ fontSize: 20 }}>Subjects Screen</Text>
-        {subjects.map((subject) => (
-          <View key={subject.id} style={{ flexDirection: "row" }}>
-            <Text>"Subject: "{subject.name}</Text>
-            <Text>"semester: "{subject.SemesterId}</Text>
-          </View>
-        ))}
+        <Text style={{ fontSize: 20, margin: 10 }}>My Subjects</Text>
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          style={{}}
+        >
+          {subjects.map((subject, index) => (
+            <SubjectItem
+              key={subject.id}
+              subject={subject.name}
+              semester={subjects[index]["Semester.title"]}
+            ></SubjectItem>
+          ))}
+        </ScrollView>
       </View>
     </View>
   );

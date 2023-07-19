@@ -167,7 +167,10 @@ export default login = (props) => {
   });
 
   return (
-    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1 }}
+    >
       <LinearGradient
         colors={["#5DA3FF", "#00157D"]}
         style={styles.container}
@@ -208,6 +211,7 @@ export default login = (props) => {
             <TextInput
               style={styles.inputField}
               placeholder="Email"
+              autoCapitalize="none"
               onChangeText={(email) => {
                 setEmail(email);
                 setemailError(false);
@@ -278,7 +282,10 @@ export default login = (props) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.loginBtn} onPress={onLogin}>
+        <TouchableOpacity
+          style={styles.loginBtn}
+          onPress={onLogin}
+        >
           {isLoading ? (
             <ActivityIndicator size={"small"}></ActivityIndicator>
           ) : (

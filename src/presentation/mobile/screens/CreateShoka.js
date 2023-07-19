@@ -339,7 +339,8 @@ export default function CreateShoka(props) {
                     style={{ height: 50 }}
                     label={"Midterm Marks"}
                     mode="outlined"
-                    textColor="gray"
+                    textColor="black"
+                    outlineColor="black"
                     contentStyle={{
                       fontSize: 13,
                     }}
@@ -394,7 +395,8 @@ export default function CreateShoka(props) {
                     style={{ height: 50 }}
                     label={"A & P Marks"}
                     mode="outlined"
-                    textColor="gray"
+                    textColor="black"
+                    outlineColor="black"
                     contentStyle={{
                       fontSize: 13,
                     }}
@@ -447,7 +449,8 @@ export default function CreateShoka(props) {
                     style={{ height: 50 }}
                     label={"Final Marks"}
                     mode="outlined"
-                    textColor="gray"
+                    textColor="black"
+                    outlineColor="black"
                     contentStyle={{
                       fontSize: 13,
                     }}

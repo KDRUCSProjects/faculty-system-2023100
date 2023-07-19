@@ -79,13 +79,14 @@ const AttendenceItem = (props, ref) => {
             justifyContent: "flex-end",
             alignItems: "center",
             elevation: 30,
-            shadowColor: "yellow",
+            shadowColor: "#4e17f0",
           }}
         >
-          <View style={{ height: "15%", width: "97%" }}>
+          <View style={{ height: "15%", width: "90%" }}>
             <ImageBackground
               style={{ height: "100%", width: "100%", flex: 1 }}
               source={require("../assets/images/line.png")}
+              resizeMode="center"
             ></ImageBackground>
           </View>
           <View style={styles.imageContainer}>
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
     width: "80%",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: "16%",
+    marginBottom: "14%",
   },
   stdInfoContainer: {
     height: "90%",

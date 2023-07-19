@@ -16,11 +16,9 @@ import { base_ip } from "@env";
 
 export const authenticate = (userName, password) => {
   return async (dispatch) => {
-    const ip = base_ip;
-    console.log(ip);
     try {
       const response = await FetchWithTimeout(
-        "http://192.168.1.104:4000/auth/login",
+        "http://" + base_ip + ":4000/auth/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -63,7 +61,7 @@ export const authenticate = (userName, password) => {
       );
 
       const subjectsresp = await FetchWithTimeout(
-        "http://192.168.1.104:4000/subjects/teachers/" + userid,
+        "http://" + base_ip + ":4000/subjects/teachers/" + userid,
         {
           method: "GET",
           headers: {
@@ -75,7 +73,8 @@ export const authenticate = (userName, password) => {
       );
       const subjects = await subjectsresp.json();
 
-      const photoUri = "http://192.168.1.104:4000/storage/images/" + userPhoto;
+      const photoUri =
+        "http://" + base_ip + ":4000/storage/images/" + userPhoto;
 
       saveToken(
         userid,
@@ -190,7 +189,7 @@ export const updateAccount = (userName, lastName, email, photo) => {
     form.append("photo", photo);
 
     const updateResp = await FetchWithTimeout(
-      "http://192.168.1.104:4000/auth/updateProfile",
+      "http://" + base_ip + ":4000/auth/updateProfile",
       {
         method: "PATCH",
         headers: {
@@ -212,7 +211,7 @@ export const updateAccount = (userName, lastName, email, photo) => {
     }
     const updateRespData = await updateResp.json();
     const name = updateRespData.photo;
-    const photoUri = "http://192.168.1.104:4000/storage/images/" + name;
+    const photoUri = "http://" + base_ip + ":4000/storage/images/" + name;
 
     saveToken(
       userId,
@@ -248,7 +247,7 @@ export const checkPassword = (password) => {
       transformedData;
 
     const updateResp = await FetchWithTimeout(
-      "http://192.168.1.104:4000/auth/checkPassword",
+      "http://" + base_ip + ":4000/auth/checkPassword",
       {
         method: "POST",
         headers: {
@@ -282,7 +281,7 @@ export const changePassword = (
       transformedData;
 
     const updateResp = await FetchWithTimeout(
-      "http://192.168.1.104:4000/auth/change-password",
+      "http://" + base_ip + ":4000/auth/change-password",
       {
         method: "PATCH",
         headers: {
@@ -311,7 +310,7 @@ export const getStudentInfo = (id) => {
 
     const promise = new Promise((resolve, reject) => {
       FetchWithTimeout(
-        "http://192.168.1.104:4000/students/kankor/" + id,
+        "http://" + base_ip + ":4000/students/kankor/" + id,
         {},
         5000
       )
@@ -405,7 +404,7 @@ export const createShoka = (
       transformedData;
 
     const updateResp = await FetchWithTimeout(
-      "http://192.168.1.104:4000/shokaList",
+      "http://" + base_ip + ":4000/shokaList",
       {
         method: "POST",
         headers: {
