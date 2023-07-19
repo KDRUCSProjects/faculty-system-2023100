@@ -4,13 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="fonts/icofont/icofont.min.css" />
+    <!-- <link rel="stylesheet" href="css/style.css" /> -->
     <link rel="stylesheet" href="css/form.css" />
     <title>Registration Form</title>
     <script defer src="js/otp.js"></script>
   </head>
   <body>
     <main>
-      <div class="main-div">
+      <form action="submit" class="main-div form">
         <div class="left">
           <div class="profile-image-div">
             <img src="image/aa.jpg" alt="" />
@@ -18,7 +19,7 @@
             <button class="photo-btn">Select a photo</button>
           </div>
           <div class="submit-btn-div">
-            <button class="register-btn">Register</button>
+            <input type="submit" class="register-btn" value="Register" />
           </div>
         </div>
         <!-- ///////////////////////////////////////// -->
@@ -39,11 +40,33 @@
             <div class="kankor-div">
               <div class="kankor-id-div inputs-divs">
                 <p>Kankor ID</p>
-                <input type="text" placeholder="Kankor ID" required />
+                <input
+                  type="text"
+                  placeholder="Kankor ID"
+                  required
+                  name="kankorId"
+                />
               </div>
+
+              <div class="dob-div inputs-divs">
+                <p>DOB</p>
+                <input type="date" placeholder="DOB" name="dob" />
+              </div>
+
+              <div class="addmission-div inputs-divs">
+                <p>Addmission Date</p>
+                <input type="number" placeholder="" name="admissionYear" />
+              </div>
+
               <div class="kankor-year-div inputs-divs">
                 <p>Kankor Year</p>
-                <input type="text" name="" id="" placeholder="Year" required />
+                <input
+                  class="date-input"
+                  type="number"
+                  id=""
+                  placeholder="Year"
+                  name="educationalYear"
+                />
               </div>
             </div>
 
@@ -57,33 +80,35 @@
             <div class="kankor-div">
               <div class="fullname-div inputs-divs">
                 <p>Fullname</p>
-                <input type="text" placeholder="Fullname" required />
+                <input type="text" placeholder="Fullname" name="fullName" />
               </div>
               <div class="lastname-div inputs-divs">
-                <p>Lastname</p>
-                <input
+                <!-- <p>Lastname</p> -->
+                <!-- <input
                   type="text"
-                  name=""
                   id=""
                   placeholder="Lastname"
-                  required
-                />
+                  name="lastName"
+                /> -->
               </div>
             </div>
 
             <div class="kankor-div">
               <div class="fathername-div inputs-divs">
                 <p>Father Name</p>
-                <input type="text" placeholder="Father Name" required />
+                <input
+                  type="text"
+                  placeholder="Father Name"
+                  name="fatherName"
+                />
               </div>
               <div class="grand-father-name-div inputs-divs">
                 <p>Grand Father Name</p>
                 <input
                   type="text"
-                  name=""
                   id=""
                   placeholder="Grand Father Name"
-                  required
+                  name="grandFatherName"
                 />
               </div>
             </div>
@@ -98,93 +123,72 @@
             <div class="kankor-div">
               <div class="province-div inputs-divs">
                 <p>Province</p>
-                <input type="text" placeholder="Province" required />
+                <input type="text" placeholder="Province" name="province" />
               </div>
               <div class="division-div inputs-divs">
                 <p>Division</p>
                 <input
                   type="text"
-                  name=""
                   id=""
                   placeholder="division"
-                  required
+                  name="division"
                 />
               </div>
               <div class="district-div inputs-divs">
                 <p>District</p>
                 <input
                   type="text"
-                  name=""
                   id=""
                   placeholder="District"
-                  required
+                  name="district"
                 />
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="otp-hidden-div hidden">
+      </form>
+      <div class="overlay"></div>
+      <div class="otp-hidden-div">
         <div class="otp-div">
+          <i class="icofont-close opt-icon"></i>
           <h6 class="otp-heading">Enter Your Registration Code</h6>
           <p class="otp-p">
             Enter The Registration Code That The Adminsitration Provided You
             With
           </p>
           <div class="otp-inputs-div">
-            <input
-              class="code"
-              type="number"
-              placeholder="0"
-              min="0"
-              max="9"
-              required
-            />
-            <input
-              class="code"
-              type="number"
-              placeholder="0"
-              min="0"
-              max="9"
-              required
-            />
-            <input
-              class="code"
-              type="number"
-              placeholder="0"
-              min="0"
-              max="9"
-              required
-            />
-            <input
-              class="code"
-              type="number"
-              placeholder="0"
-              min="0"
-              max="9"
-              required
-            />
-            <input
-              class="code"
-              type="number"
-              placeholder="0"
-              min="0"
-              max="9"
-              required
-            />
-            <input
-              class="code"
-              type="number"
-              placeholder="0"
-              min="0"
-              max="9"
-              required
-            />
+            <input class="code" type="number" min="0" max="9" />
+            <input class="code" type="number" min="0" max="9" disabled />
+            <input class="code" type="number" min="0" max="9" disabled />
+            <input class="code" type="number" min="0" max="9" disabled />
+            <input class="code" type="number" min="0" max="9" disabled />
+            <input class="code" type="number" min="0" max="9" disabled />
           </div>
-          <button class="otp-button">VERIFY</button>
+          <button class="otp-button">
+            <div class="spinner-2-div hidden">
+              <i class="hidden icofont-spinner-alt-1 spinner-2"></i>
+            </div>
+            <span class="span-2">VERIFY</span>
+          </button>
         </div>
       </div>
-      <div class="overlay"></div>
+
+      <!-- ////////////////////////////////////////////////////////// -->
+      <!-- ////////////////////   Error Div  //////////////////////// -->
+
+      <div class="error-message-div">
+        <div class="icon-exc-div">
+          <i class="icofont-exclamation icon-exc"></i>
+        </div>
+        <div>
+          <p class="error-p">
+            This ID is not in our Database Please Enter a Valid ID.
+          </p>
+        </div>
+        <div>
+          <i class="icofont-close-line error-close"></i>
+        </div>
+      </div>
     </main>
   </body>
 </html>

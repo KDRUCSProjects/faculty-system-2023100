@@ -114,7 +114,7 @@ body {
   /* background-color: salmon; */
 }
 
-.submit-btn-div button {
+.register-btn {
   width: 25em;
   height: 40px;
   border-radius: 5px;
@@ -174,11 +174,15 @@ span {
   margin: 0px 20px 0px 0px;
 }
 
+.inputs-divs p {
+  font-size: 14px;
+}
+
 .inputs-divs input {
   width: 18em;
   border: none;
   height: 40px;
-  padding-left: 30px;
+  padding: 0em 2em 0em 2em;
   border-radius: 5px;
   margin-top: 8px;
   background-color: rgb(245, 245, 245);
@@ -186,11 +190,32 @@ span {
 }
 
 .kankor-id-div input {
-  width: 28em;
+  width: 10em;
 }
 
 .kankor-year-div input {
-  width: 8em;
+  width: 6em;
+}
+
+.addmission-div input {
+  width: 7em;
+  text-align: center;
+}
+
+.dob-div input {
+  width: 9em;
+}
+
+.date-input {
+  padding: 0em 0em 0em 6em;
+  text-align: center;
+}
+
+.addmission-div input::-webkit-inner-spin-button,
+.addmission-div input::-webkit-outer-spin-button,
+.date-input::-webkit-inner-spin-button,
+.date-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }
 
 .personal-information {
@@ -213,10 +238,10 @@ span {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(3px);
-  z-index: 1000;
+  z-index: 10000;
 }
 
 /* ///////////////////////////////////////////////////// */
@@ -234,6 +259,13 @@ span {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.opt-icon {
+  position: absolute;
+  right: 25px;
+  top: 25px;
+  font-size: 25px;
 }
 
 .otp-heading {
@@ -284,4 +316,27 @@ span {
   margin-bottom: 30px;
   background-color: #9861c2;
   color: white;
+}
+
+.span-2 {
+  color: white;
+}
+
+.spinner-2 {
+  display: inline-block;
+  font-size: 25px;
+  animation-name: spiner;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spiner {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
