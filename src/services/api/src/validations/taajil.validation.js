@@ -10,20 +10,36 @@ const createTaajil = {
   }),
 };
 
-const studentsWithTaajil = {
-  query: Joi.object().keys({
-    educationalYear: Joi.number(),
-  }),
-};
-
 const deleteTaajil = {
   params: Joi.object().keys({
     studentId: Joi.number().required('Student Id is required'),
   }),
 };
 
+const getTaajil = {
+  params: Joi.object().keys({
+    taajilId: Joi.number().required(),
+  }),
+};
+
+const updateTaajil = {
+  params: Joi.object().keys({
+    taajilId: Joi.number().required(),
+  }),
+  body: Joi.object()
+    .keys({
+      studentId: Joi.number(),
+      educationalYear: Joi.number(),
+      regNumber: Joi.number(),
+      attachment: Joi.string(),
+      notes: Joi.string(),
+    })
+    .min(1),
+};
+
 module.exports = {
+  getTaajil,
   createTaajil,
-  studentsWithTaajil,
+  updateTaajil,
   deleteTaajil,
 };

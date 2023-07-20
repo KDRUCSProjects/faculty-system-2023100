@@ -17,14 +17,28 @@ const createSubject = catchAsync(async (req, res) => {
 });
 
 const getSubjects = catchAsync(async (req, res) => {
+  if (req.query?.status) {
+    const unsignedSubjects = await subjectService.getUnassignedSubjects();
+    return res.status(httpStatus.OK).send(unsignedSubjects);
+  }
+  if (req.query?.semesterId) {
+    const semester = await semesterService.findSemesterById(req.query.semesterId);
+    if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+    const semSubjects = await subjectService.getSemesterSubjects(semester.id);
+    return res.status(httpStatus.OK).send(semSubjects);
+  }
   const results = await subjectService.getSubjects();
   res.status(httpStatus.OK).send(results);
 });
 
 const deleteSubject = catchAsync(async (req, res) => {
-  const subject = await subjectService.getSubject(req.params.subjectId);
+  const subject = await subjectService.getSubjectById(req.params.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
-  await subjectService.deleteSubject(subject);
+  const attendance = await attendanceService.findAttendanceBySubjectId(subject.id);
+  if (attendance) await attendanceService.deleteAttendance(attendance);
+  const shoka = await shokaService.findShokaBySubjectId(subject.id);
+  if (shoka) await shokaService.deleteShoka(shoka);
+  await subjectService.deleteSubject(req.user, subject);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
@@ -55,31 +69,29 @@ const updatedSubject = catchAsync(async (req, res) => {
     const teacher = await userService.getTeacher(req.body.teacherId);
     if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'Teacher not found');
   }
-  const subject = await subjectService.getSubject(req.params.subjectId);
+  const subject = await subjectService.getSubjectById(req.params.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
   const results = await subjectService.updatedSubject(subject, req.body);
   res.status(httpStatus.ACCEPTED).send(results);
 });
 
-
 const assignSubjectToTeacher = catchAsync(async (req, res) => {
-  const subject = await subjectService.getSubject(req.body.subjectId);
+  const subject = await subjectService.getSubjectById(req.body.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
   const teacher = await userService.getTeacher(req.body.teacherId);
   if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'Teacher Not Found');
-  const results = await subjectService.updatedSubject(subject, { teacherId: req.body.teacherId })
+  const results = await subjectService.updatedSubject(subject, { teacherId: req.body.teacherId });
   return res.status(httpStatus.ACCEPTED).send(results);
 });
-
 
 const takeBackSubjectFromTeacher = catchAsync(async (req, res) => {
-  const subject = await subjectService.getSubject(req.body.subjectId);
+  const subject = await subjectService.getSubjectById(req.body.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
-  if (subject.teacherId !== req.body.teacherId) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'this subject is not related to this teacher');
-  const results = await subjectService.updatedSubject(subject, { teacherId: null })
+  if (subject.teacherId !== req.body.teacherId)
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'this subject is not related to this teacher');
+  const results = await subjectService.updatedSubject(subject, { teacherId: null });
   return res.status(httpStatus.ACCEPTED).send(results);
 });
-
 
 module.exports = {
   getSubjects,

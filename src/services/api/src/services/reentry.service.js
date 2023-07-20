@@ -3,8 +3,6 @@ const ApiError = require('../utils/ApiError');
 
 // Sequelize Models
 const { Reentry, Student } = require('../models');
-const { educationalYearService } = require('.');
-
 /**
  * Create reentry
  * @param {Object} reentryBody
@@ -16,65 +14,33 @@ const createReentry = (reentryBody) => {
 
 /**
  * Get Reentry students
- * @param {Array} taajilBody
- * @returns {Promise<Taajil>}
+ * @param {Number} limit
+ * @param {Number} offset
+ * @returns {Promise<Reentry>}
  */
-
-const reentryStudents = async (query) => {
-  // If filter by year was requested:
-  if (query.educationalYear) {
-    return await getAllStudentsWithReentryByYear(query.educationalYear);
-  }
-
-  // Get all reentry students
-  return getAllStudentsWithReentry();
-};
-
-const getAllStudentsWithReentry = async () => {
-  return await Reentry.findAll();
-};
-
-const getAllStudentsWithReentryByYear = async (year) => {
-  const educationalYearId = await educationalYearService.findEducationalYearByValue(year);
-
-  if (!educationalYearId) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'No educational year found');
-  }
-
-  return await Reentry.findAll({
-    where: {
-      educationalYearId,
-    },
+const reentryStudents = (limit, offset) => {
+  return Reentry.findAndCountAll({
+    order: [['createdAt', 'DESC']],
+    limit,
+    offset,
+    include: [{ model: Student, as: 'Student' }],
   });
 };
 
-const deleteReentryById = async (id) => {
-  return await Reentry.destroy({
-    where: {
-      id,
-    },
-  });
-};
-
-const deleteReentry = async (id) => {
-  const theReentry = await findReentryById(id);
-
-  if (!theReentry) {
-    throw new ApiError(httpStatus.NOT_FOUND, `No reentry found by id: ${id}`);
-  }
-
-  // Delete/remove reentry from the student
-  await deleteReentryById(id);
-
-  // Let's send the student that reentry was removed from him/her
-  return await Student.findOne({ where: { id: theReentry.studentId } });
-};
-
-const findReentryById = async (id) => {
-  return await Reentry.findOne({
-    where: {
-      id,
-    },
+/**
+ * find Reentries by educationalYearId
+ * @param {Number} limit
+ * @param {Number} offset
+ * @param {ObjectId} yearId
+ * @returns {Promise<Reentry>}
+ */
+const findReentriesByYearId = (limit, offset, yearId) => {
+  return Reentry.findAndCountAll({
+    where: { educationalYearId: yearId },
+    order: [['createdAt', 'DESC']],
+    limit,
+    offset,
+    include: [{ model: Student, as: 'Student' }],
   });
 };
 
@@ -88,11 +54,80 @@ const findReentryByStdIdAndYearId = (studentId, educationalYearId) => {
   return Reentry.findOne({ where: { studentId, educationalYearId } });
 };
 
-// Delete a reentry
+/**
+ * find reentry by student id
+ * @param {ObjectId} studentId
+ * @returns {Promise<Reentry>}
+ */
+const findReentryByStudentId = (studentId) => {
+  return Reentry.findOne({
+    where: {
+      studentId,
+    },
+    include: [{ model: Student, as: 'Student' }],
+  });
+};
+
+/**
+ * find reentry by student kankor id
+ * @param {ObjectId} studentKankorId
+ * @returns {Promise<Reentry>}
+ */
+const findReentryByStdKankorId = (studentKankorId) => {
+  return Reentry.findOne({
+    include: [{ model: Student, as: 'Student', where: { kankorId: studentKankorId } }],
+  });
+};
+
+/**
+ * find reentry by id
+ * @param {ObjectId} reentryId
+ * @returns {Promise<Reentry>}
+ */
+const findReentryById = (reentryId) => {
+  return Reentry.findOne({
+    where: { id: reentryId },
+    include: [{ model: Student, as: 'Student' }],
+  });
+};
+
+/**
+ * delete reentry
+ * @param {Object} oldReentry
+ * @returns {Promise<Reentry>}
+ */
+const deleteReentry = (oldReentry) => {
+  if (oldReentry instanceof Reentry) {
+    return oldReentry.destroy();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
+};
+
+/**
+ * update reentry
+ * @param {Object} oldReentry
+ * @param {Object} newReentry
+ * @returns {Promise<Student>}
+ */
+const updateReentry = (oldReentry, newReentry) => {
+  if (oldReentry instanceof Reentry) {
+    oldReentry.set({
+      ...oldReentry,
+      ...newReentry,
+    });
+    return oldReentry.save();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
+};
+
 module.exports = {
   createReentry,
   deleteReentry,
+  updateReentry,
   reentryStudents,
-  deleteReentryById,
+  findReentryById,
+  findReentriesByYearId,
+  findReentryByStudentId,
+  findReentryByStdKankorId,
   findReentryByStdIdAndYearId,
 };

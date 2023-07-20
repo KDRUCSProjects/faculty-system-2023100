@@ -1,10 +1,11 @@
-const faker = require('faker');
+let number = 0;
 
-const shokas = [...Array(48)].map((re) => {
-  return {
-    subjectId: faker.datatype.number({ min: 1, max: 48 }),
-  };
-});
+const shokas = [];
+for (let index = 0; index < 46; index++) {
+  shokas.push({
+    subjectId: ++number,
+  });
+}
 
 module.exports = {
   async up(queryInterface, Sequelize) {

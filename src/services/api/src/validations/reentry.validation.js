@@ -7,6 +7,7 @@ const createReentry = {
     regNumber: Joi.number().required('Registration number of Reentry form is required'),
     attachment: Joi.string(),
     notes: Joi.string(),
+    reason: Joi.string().required().valid('Taajil', 'Mahrom', 'Special Taajil', 'Repeat'),
   }),
 };
 
@@ -18,12 +19,29 @@ const studentsWithReentry = {
 
 const deleteReentry = {
   params: Joi.object().keys({
-    id: Joi.number().required('Reentry Id is required'),
+    id: Joi.number().required(),
   }),
+};
+
+const updateReentry = {
+  params: Joi.object().keys({
+    id: Joi.number().required(),
+  }),
+  body: Joi.object()
+    .keys({
+      studentId: Joi.number(),
+      educationalYear: Joi.number(),
+      regNumber: Joi.number(),
+      attachment: Joi.string(),
+      notes: Joi.string(),
+      reason: Joi.string().valid('Taajil', 'Mahrom', 'Special Taajil', 'Repeat'),
+    })
+    .min(1),
 };
 
 module.exports = {
   createReentry,
-  studentsWithReentry,
   deleteReentry,
+  updateReentry,
+  studentsWithReentry,
 };

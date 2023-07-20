@@ -21,4 +21,10 @@ export default {
   removeTeacher(state, teacherId) {
     state.teachers = state.teachers.filter((teacher) => teacher.id !== teacherId);
   },
+  setCurrentTeacher(state, teacher) {
+    state.currentTeacher = teacher;
+  },
+  setCurrentTeacherAssignedSubjects(state, subjects) {
+    state.currentTeacherAssignedSubjects = subjects;
+  },
 };

@@ -1,6 +1,13 @@
-import { StyleSheet, View, Text, ImageBackground } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
+import { Divider } from "@ui-kitten/components";
 
 export default function Setting(props) {
   return (
@@ -34,10 +41,124 @@ export default function Setting(props) {
             ></HeaderBackButton>
           </View>
           <View style={{ width: "70%" }}>
-            <Text style={{ color: "white", fontSize: 23 }}>
-              FCS for University
-            </Text>
+            <Text style={{ color: "white", fontSize: 23 }}>Edit profile</Text>
           </View>
+        </View>
+        <View
+          style={{
+            height: "85%",
+            marginTop: "2%",
+            marginLeft: "2%",
+            justifyContent: "flex-start",
+            alignItems: "stretch",
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              height: "10%",
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+            onPress={() =>
+              props.navigation.navigate("EditProfile", {
+                screen: "Change account info",
+              })
+            }
+          >
+            <View
+              style={{
+                height: "100%",
+                width: "15%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <ImageBackground
+                style={{ width: "90%", height: "90%" }}
+                source={require("../assets/images/editProfile.png")}
+              ></ImageBackground>
+            </View>
+
+            <View
+              style={{
+                height: "100%",
+                width: "70%",
+                justifyContent: "center",
+                alignItems: "flex-start",
+              }}
+            >
+              <Text style={{ fontSize: 20 }}>Account info</Text>
+            </View>
+
+            <View
+              style={{
+                height: "100%",
+                width: "15%",
+                justifyContent: "center",
+                alignItems: "flex-end",
+              }}
+            >
+              <ImageBackground
+                style={{ width: "70%", height: "70%" }}
+                source={require("../assets/images/forward.png")}
+              ></ImageBackground>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              height: "10%",
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+            onPress={() =>
+              props.navigation.navigate("EditProfile", {
+                screen: "Change password",
+              })
+            }
+          >
+            <View
+              style={{
+                height: "100%",
+                width: "15%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <ImageBackground
+                style={{ width: "90%", height: "90%" }}
+                source={require("../assets/images/changePassword.png")}
+              ></ImageBackground>
+            </View>
+
+            <View
+              style={{
+                height: "100%",
+                width: "70%",
+                justifyContent: "center",
+                alignItems: "flex-start",
+              }}
+            >
+              <Text style={{ fontSize: 20 }}>Change password</Text>
+            </View>
+
+            <View
+              style={{
+                height: "100%",
+                width: "15%",
+                justifyContent: "center",
+                alignItems: "flex-end",
+              }}
+            >
+              <ImageBackground
+                style={{ width: "70%", height: "70%" }}
+                source={require("../assets/images/forward.png")}
+              ></ImageBackground>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

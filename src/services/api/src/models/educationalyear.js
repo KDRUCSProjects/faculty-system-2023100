@@ -16,7 +16,25 @@ module.exports = (sequelize, DataTypes) => {
   }
   EducationalYear.init(
     {
-      year: DataTypes.INTEGER,
+      year: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      onGoing: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      firstHalf: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      secondHalf: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       ...BaseModel(DataTypes),
     },
     {

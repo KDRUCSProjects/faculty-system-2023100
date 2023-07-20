@@ -7,6 +7,8 @@ export default {
   state() {
     return {
       teachers: [],
+      currentTeacher: null,
+      currentTeacherAssignedSubjects: [],
     };
   },
   getters,

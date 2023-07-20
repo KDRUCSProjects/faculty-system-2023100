@@ -1,24 +1,45 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const studentValidation = require('../validations/students.validations');
-const studentController = require('../controllers/student.controller');
-const shareValidation = require('../validations/share.validation');
+const { studentValidation, shareValidation } = require('../validations');
+const { studentController } = require('../controllers');
 const auth = require('../middlewares/auth');
 const upload = require('../middlewares/multer');
+const { attachImageToBody } = require('../middlewares/attachFileToBody');
 
 const router = express.Router();
 
 router
   .route('/')
   .get(auth(), validate(shareValidation.paginate), studentController.getStudents)
-  .post(auth(), upload.single('photo'), validate(studentValidation.registerStudent), studentController.registerStudent)
-  .delete(auth(), validate(studentValidation.deleteStudents), studentController.deleteStudents);
+  .delete(auth(), validate(studentValidation.deleteStudents), studentController.deleteStudents)
+  .post(
+    auth(),
+    upload.single('photo'),
+    attachImageToBody,
+    validate(studentValidation.registerStudent),
+    studentController.registerStudent
+  );
+
+router
+  .route('/students/:token')
+  .post(
+    upload.single('photo'),
+    attachImageToBody,
+    validate(studentValidation.tempToken),
+    studentController.registerYourSelf
+  );
 
 router
   .route('/:studentId')
   .get(auth(), validate(studentValidation.getStudent), studentController.getStudent)
-  .patch(auth(), upload.single('photo'), validate(studentValidation.updateStudent), studentController.updateStudent)
-  .delete(auth(), validate(studentValidation.getStudent), studentController.deleteStudent);
+  .delete(auth(), validate(studentValidation.getStudent), studentController.deleteStudent)
+  .patch(
+    auth(),
+    upload.single('photo'),
+    attachImageToBody,
+    validate(studentValidation.updateStudent),
+    studentController.updateStudent
+  );
 
 router.route('/kankor/:kankorId').get(validate(studentValidation.kankor), studentController.getStudentOnKankorId);
 
@@ -46,6 +67,23 @@ module.exports = router;
  *        description: The page number for pagination
  *        schema:
  *          type: integer
+ *      - name: status
+ *        in: query
+ *        description: student status 'taajils', 'reentry', 'tabdili', 'reserve'
+ *        schema:
+ *          type: string
+ *          example: taajils
+ *      - name: limit
+ *        in: query
+ *        schema:
+ *          type: number
+ *          example: 10
+ *        description: limit and default limit is 2000
+ *      - name: kankorId
+ *        in: query
+ *        schema:
+ *          type: string
+ *        description: search by kankor id
  *     responses:
  *       "200":
  *         description: OK
@@ -77,20 +115,33 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
- *             required:
- *               - name
  *             properties:
- *               name:
+ *               kankorId:
  *                 type: string
- *             example:
- *               kankorId : L2700283
- *               fullName : Shamsullah Shamsi
- *               fatherName : Abdul Rauf
- *               grandFatherName : Muhammad Tahir
- *               educationalYear: 2030
+ *                 required: true
+ *                 format: text
+ *               fullName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               fatherName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               grandFatherName:
+ *                 type: string
+ *                 required: true
+ *                 format: text
+ *               educationalYear:
+ *                 type: string
+ *                 required: true
+ *                 format: number
+ *               photo:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       "201":
  *         description: Created
@@ -182,28 +233,57 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
- *             required:
- *               - name
  *             properties:
- *               name:
+ *               kankorId:
  *                 type: string
- *             example:
- *               kankorId : L2700283
- *               fullName : Shamsullah
- *               nickName : Shamsi
- *               fatherName : Adbul Rauf
- *               grandFatherName : Muhammad Tahir
- *               province : Kandahar
- *               division : 6
- *               district : 15 District
- *               engName : shamsullah shamsi
- *               engFatherName : Abdul Rauf
- *               engGrandFatherName : Muhammad Tahir
- *               educationalYear: 2030
- *               admissionYear : 2019
+ *                 format: text
+ *               fullName:
+ *                 type: string
+ *                 format: text
+ *               fatherName:
+ *                 type: string
+ *                 format: text
+ *               grandFatherName:
+ *                 type: string
+ *                 format: text
+ *               province:
+ *                 type: string
+ *                 format: number
+ *               division:
+ *                 type: string
+ *                 format: number
+ *               district:
+ *                 type: string
+ *                 format: number
+ *               engName:
+ *                 type: string
+ *                 format: text
+ *               engLastName:
+ *                 type: string
+ *                 format: text
+ *               engFatherName:
+ *                 type: string
+ *                 format: text
+ *               engGrandFatherName:
+ *                 type: string
+ *                 format: text
+ *               dob:
+ *                 type: string
+ *                 format: date
+ *                 example: "2023-06-25"
+ *                 description: 'please select date using date picker'
+ *               educationalYear:
+ *                 type: string
+ *                 format: number
+ *               admissionYear:
+ *                 type: string
+ *                 format: number
+ *               photo:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       "201":
  *         description: ACCEPtED
@@ -272,4 +352,93 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /students/students/{token}:
+ *   post:
+ *     summary: Register Student By His Self
+ *     description: Register Student By His Self.
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: temporary token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - kankorId
+ *               - fullName
+ *               - fatherName
+ *               - grandFatherName
+ *               - educationalYear
+ *             properties:
+ *               kankorId:
+ *                 type: string
+ *                 format: text
+ *               fullName:
+ *                 type: string
+ *                 format: text
+ *               fatherName:
+ *                 type: string
+ *                 format: text
+ *               grandFatherName:
+ *                 type: string
+ *                 format: text
+ *               province:
+ *                 type: string
+ *                 format: number
+ *               division:
+ *                 type: string
+ *                 format: number
+ *               district:
+ *                 type: string
+ *                 format: number
+ *               engName:
+ *                 type: string
+ *                 format: text
+ *               engLastName:
+ *                 type: string
+ *                 format: text
+ *               engFatherName:
+ *                 type: string
+ *                 format: text
+ *               engGrandFatherName:
+ *                 type: string
+ *                 format: text
+ *               dob:
+ *                 type: string
+ *                 format: date
+ *                 example: "2023-06-25"
+ *                 description: 'please select date using date picker'
+ *               educationalYear:
+ *                 type: string
+ *                 format: number
+ *               admissionYear:
+ *                 type: string
+ *                 format: number
+ *               photo:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Student'
+ *       "404":
+ *         $ref: '#/components/responses/TokenNotFound'
+ *       "406":
+ *         $ref: '#/components/responses/TokenExpired'
  */

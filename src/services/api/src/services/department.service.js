@@ -39,10 +39,8 @@ const getDepartments = () => {
  * @returns {Promise<Department>}
  */
 const deleteDepartment = (departmentBody) => {
-  if (departmentBody instanceof Department) {
-    return departmentBody.destroy();
-  }
-  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'some thing went wrong');
+  if (departmentBody instanceof Department) return departmentBody.destroy();
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'some thing went wrong. please try again');
 };
 
 /**

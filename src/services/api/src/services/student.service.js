@@ -1,5 +1,8 @@
 // Sequelize Models
-const { Student, EducationalYear } = require('../models');
+const { QueryTypes, Op } = require('sequelize');
+const httpStatus = require('http-status');
+const { Student, EducationalYear, sequelize } = require('../models');
+const ApiError = require('../utils/ApiError');
 
 /**
  * Create a student
@@ -12,14 +15,33 @@ const registerStudent = (studentBody) => {
 
 /**
  * Create a Student
- * @param {ObjectId} StudentId
+ * @param {Number} offset
  * @returns {Promise<Student>}
  */
 const getStudents = (offset) => {
   return Student.findAndCountAll({
-    order: [['createdAt', 'ASC']],
-    limit: 10,
+    order: [['createdAt', 'DESC']],
+    limit: 2000,
     offset,
+    include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
+  });
+};
+
+/**
+ * get students like search by student kankor id
+ * @param {String} queryKankorId
+ * @returns {Promise<Student>}
+ */
+const getStudentByKankorId = (queryKankorId, limit, offset) => {
+  return Student.findAndCountAll({
+    where: {
+      kankorId: {
+        [Op.like]: `${queryKankorId || ''}%`,
+      },
+    },
+    limit,
+    offset,
+    order: [['createdAt', 'DESC']],
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
   });
 };
@@ -38,6 +60,7 @@ const updateStudent = (oldStudent, newStudent) => {
     });
     return oldStudent.save();
   }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
 
 /**
@@ -79,6 +102,68 @@ const deleteStudentById = (studentId) => {
   return Student.destroy({ where: { id: studentId } });
 };
 
+/**
+ * get unregistered Students
+ * @param {Number} limit
+ * @param {Number} offset
+ * @returns {Promise<Student>}
+ */
+const getUnRegisteredStudents = (limit, offset) => {
+  return sequelize.query(
+    `
+  select
+  student.id as id,
+  student.kankorId as kankorId,
+  student.fullName as fullName,
+  student.nickName as nickName,
+  student.fatherName as fatherName,
+  student.grandFatherName as grandFatherName,
+  student.photo as photo,
+  student.province as province,
+  student.division as division,
+  student.district as district,
+  student.engName as engName,
+  student.engLastName as engLastName,
+  student.engFatherName as engFatherName,
+  student.engGrandFatherName as engGrandFatherName,
+  student.dob as dob,
+  student.educationalYearId as educationalYearId,
+  student.admissionYear as admissionYear,
+  student.createdAt as createdAt,
+  student.updatedAt as updatedAt,
+  student.deletedAt as deletedAt,
+  student.isDeleted as isDeleted,
+  student.deletedBy as deletedBy
+  from students as student
+  where not exists (select 1 from studentslists where student.id = studentslists.studentId)
+  AND student.deletedAt IS NULL
+  ORDER BY student.createdAt DESC
+  limit ${offset}, ${limit};
+  `,
+    { type: QueryTypes.SELECT }
+  );
+};
+
+/**
+ * count unregistered Students
+ * @returns {Promise<Student>}
+ */
+const countUnregisteredStudent = () => {
+  return sequelize.query(
+    `
+  select
+  student.id as id,
+  student.deletedAt as deletedAt,
+  count(student.id) as count
+  from students as student
+  where not exists (select 1 from studentslists where student.id = studentslists.studentId)
+  AND student.deletedAt IS NULL
+  order by student.createdAt DESC;
+  `,
+    { type: QueryTypes.SELECT }
+  );
+};
+
 module.exports = {
   getStudent,
   getStudents,
@@ -86,5 +171,8 @@ module.exports = {
   updateStudent,
   registerStudent,
   deleteStudentById,
+  getStudentByKankorId,
   getStudentOnKankorId,
+  getUnRegisteredStudents,
+  countUnregisteredStudent,
 };

@@ -1,24 +1,15 @@
 // Sequelize Models
-
-const semesterService = require('./Semester.service');
+const httpStatus = require('http-status');
 const { EducationalYear } = require('../models');
+const ApiError = require('../utils/ApiError');
 
 /**
  * Create a EducationalYear
  * @param {Object} year
  * @returns {Promise<EducationalYear>}
  */
-const createEducationalYear = async (year) => {
-  const newYear = await EducationalYear.create({ year });
-  await semesterService.createFirstSemester(newYear.id);
-  await semesterService.createSecondSemester(newYear.id);
-  await semesterService.createThirdSemester(newYear.id);
-  await semesterService.createFourthSemester(newYear.id);
-  await semesterService.createFifthSemester(newYear.id);
-  await semesterService.createSixthSemester(newYear.id);
-  await semesterService.createSeventhSemester(newYear.id);
-  await semesterService.createEighthSemester(newYear.id);
-  return newYear;
+const createEducationalYear = (year) => {
+  return EducationalYear.create({ year });
 };
 
 /**
@@ -26,7 +17,7 @@ const createEducationalYear = async (year) => {
  * @returns {Promise<EducationalYear>}
  */
 const getEducationalYears = () => {
-  return EducationalYear.findAll();
+  return EducationalYear.findAll({ order: [['year', 'DESC']] });
 };
 
 /**
@@ -34,8 +25,9 @@ const getEducationalYears = () => {
  * @param {Object} year
  * @returns {Promise<EducationalYear>}
  */
-const deleteEducationalYear = async (year) => {
-  if (year instanceof EducationalYear) return await year.destroy();
+const deleteEducationalYear = (year) => {
+  if (year instanceof EducationalYear) return year.destroy();
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
 };
 
 /**
@@ -45,6 +37,26 @@ const deleteEducationalYear = async (year) => {
  */
 const getEducationalYear = (yearId) => {
   return EducationalYear.findOne({ where: { id: yearId } });
+};
+
+/**
+ * find next year
+ * @param {Number} year
+ * @returns {Promise<EducationalYear>}
+ */
+const findNextYear = (year) => {
+  const nextYear = year + 1;
+  return EducationalYear.findOne({ where: { year: nextYear } });
+};
+
+/**
+ * create next educational year
+ * @param {Number} year
+ * @returns {Promise<EducationalYear>}
+ */
+const createNextEducationalYear = (year) => {
+  const nextYear = year + 1;
+  return EducationalYear.create({ year: nextYear });
 };
 
 /**
@@ -68,11 +80,40 @@ const getEducationalYearByValue = (year) => {
   return EducationalYear.findOne({ where: { year } });
 };
 
+/**
+ * get current educational year
+ * @returns {Promise<EducationalYear>}
+ */
+const getCurrentEducationalYear = () => {
+  return EducationalYear.findOne({ where: { onGoing: true } });
+};
+
+/**
+ * Create a Student
+ * @param {Object} oldYear
+ * @param {Object} newYear
+ * @returns {Promise<EducationalYear>}
+ */
+const updateYear = (oldYear, newYear) => {
+  if (oldYear instanceof EducationalYear) {
+    oldYear.set({
+      ...oldYear,
+      ...newYear,
+    });
+    return oldYear.save();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
+};
+
 module.exports = {
+  updateYear,
+  findNextYear,
   createEducationalYear,
   getEducationalYears,
   deleteEducationalYear,
   getEducationalYear,
-  findEducationalYearByValue,
+  createNextEducationalYear,
   getEducationalYearByValue,
+  getCurrentEducationalYear,
+  findEducationalYearByValue,
 };

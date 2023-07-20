@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { studentService, educationalYearService } = require('../services');
+const { studentService, educationalYearService, taajilService, reentryService, tabdiliService, tokenService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const registerStudent = catchAsync(async (req, res) => {
@@ -13,22 +13,19 @@ const registerStudent = catchAsync(async (req, res) => {
   } else {
     educationalYearId = (await educationalYearService.createEducationalYear(req.body.educationalYear))?.id;
   }
-  if (req.file) {
-    req.body.imageUrl = req.file.path.split('\\')[3];
-  }
   const results = await studentService.registerStudent({
     ...req.body,
     educationalYearId,
   });
-  res.status(httpStatus.CREATED).send(results);
+  if (req.tempToken) {
+    await tokenService.deleteTemporaryToken(req.tempToken);
+  }
+  return res.status(httpStatus.CREATED).send(results);
 });
 
 const updateStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudent(req.params.studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not found');
-  if (req.file) {
-    req.body.imageUrl = req.file.path.split('\\')[3];
-  }
   const results = await studentService.updateStudent(student, req.body);
   return res.status(httpStatus.ACCEPTED).send(results);
 });
@@ -48,11 +45,49 @@ const deleteStudent = catchAsync(async (req, res) => {
 
 const getStudents = catchAsync(async (req, res) => {
   const page = req.query?.page ? req.query?.page : 1;
-  const offset = parseInt(((page - 1) * 10), 10);
-  const { rows, count } = await studentService.getStudents(offset);
+  const limit = req.query?.limit ? req.query?.limit : 2000;
+  const offset = parseInt(((page - 1) * limit), 10);
+
+  if (req.query.kankorId) {
+    const { count, rows } = await studentService.getStudentByKankorId(req.query.kankorId, limit, offset);
+    return res.status(httpStatus.OK).send({
+      page: parseInt(page, 10),
+      totalPages: Math.ceil(count / limit),
+      total: count,
+      results: rows
+    });
+  }
+
+  let result = null;
+
+  if (req.query?.status) {
+    switch (req.query.status) {
+      case 'taajils':
+        result = await taajilService.taajilStudents(limit, offset);
+        break;
+      case 'reentry':
+        result = await reentryService.reentryStudents(limit, offset)
+        break;
+      case 'tabdili':
+        result = await tabdiliService.getTabdilis(limit, offset);
+        break;
+      default:
+        throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameters');
+    }
+  } else {
+    const count = (await studentService.countUnregisteredStudent())[0]?.count;
+    const result = await studentService.getUnRegisteredStudents(limit, offset);
+    return res.status(httpStatus.OK).send({
+      page: parseInt(page, 10),
+      totalPages: Math.ceil(count / limit),
+      total: count,
+      results: result
+    });
+  }
+  const { rows, count } = result;
   res.status(httpStatus.OK).send({
     page: parseInt(page, 10),
-    totalPages: Math.ceil(count / 10),
+    totalPages: Math.ceil(count / limit),
     total: count,
     results: rows
   });
@@ -73,6 +108,14 @@ const deleteStudents = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(results);
 });
 
+const registerYourSelf = catchAsync(async (req, res, next) => {
+  const { token } = req.params;
+  const userToken = await tokenService.getTempToken(token);
+  if (!userToken) throw new ApiError(httpStatus.BAD_REQUEST, 'Token Not Found');
+  req.tempToken = userToken;
+  return registerStudent(req, res, next);
+});
+
 
 
 module.exports = {
@@ -82,5 +125,6 @@ module.exports = {
   deleteStudent,
   deleteStudents,
   registerStudent,
+  registerYourSelf,
   getStudentOnKankorId,
 };

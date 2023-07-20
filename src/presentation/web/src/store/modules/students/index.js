@@ -9,6 +9,9 @@ export default {
       students: [],
       currentStudent: null,
       counts: null,
+      studentsList: [],
+      searchedStudent: null,
+      reservedStudents: [],
     };
   },
   getters,

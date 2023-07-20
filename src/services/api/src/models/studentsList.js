@@ -42,19 +42,14 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      // enrollmentYearId: {
-      //   // This is different from Kankor Year.
-      //   // This is used to know when did a student actually enrolls in the faculty
-      //   type: Sequelize.INTEGER,
-      //   required: true,
-      //   trim: true,
-      //   references: {
-      //     model: 'EducationalYears',
-      //     key: 'id',
-      //   },
-      //   onDelete: 'cascade',
-      //   onUpdate: 'cascade',
-      // },
+      completed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      onGoing: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
       ...BaseModel(DataTypes),
     },
     {

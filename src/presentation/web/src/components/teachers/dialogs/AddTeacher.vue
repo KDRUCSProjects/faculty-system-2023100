@@ -4,7 +4,7 @@
     <v-btn color="primary" variant="flat">
       Add Teacher
 
-      <v-dialog max-width="550" activator="parent" v-model="dialog">
+      <v-dialog max-width="550" activator="parent" v-model="dialog" transition="slide-y-transition">
         <v-card class="pa-1" :loading="isLoading">
           <!-- <v-card-item>
             <v-card-title class="font-weight-bold">Teacher Registration</v-card-title>

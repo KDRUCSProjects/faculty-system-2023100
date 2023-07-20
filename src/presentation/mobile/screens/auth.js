@@ -4,9 +4,11 @@ import { useEffect } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { localAuth } from "../store/actions/actions";
 
 export default function auth(props) {
+  const dispatch = useDispatch();
   useEffect(() => {
     const tryLogin = async () => {
       const userData = await AsyncStorage.getItem("userData");
@@ -17,7 +19,17 @@ export default function auth(props) {
         return;
       }
       const transformedData = JSON.parse(userData);
-      const { token, userId, expirationDate } = transformedData;
+      const {
+        name,
+        lastName,
+        email,
+        photo,
+        photoUri,
+        subjects,
+        token,
+        userId,
+        expirationDate,
+      } = transformedData;
       const tExpirationDate = new Date(expirationDate);
       if (tExpirationDate <= new Date() || !token || !userId) {
         setTimeout(() => {
@@ -26,6 +38,18 @@ export default function auth(props) {
 
         return;
       }
+      dispatch(
+        localAuth(
+          userId,
+          name,
+          lastName,
+          email,
+          photo,
+          photoUri,
+          subjects,
+          token
+        )
+      );
       props.navigation.navigate("teacherScreen");
     };
     tryLogin();

@@ -1,35 +1,34 @@
 <template>
   <div>
     <!-- Default Btn/Slot -->
-    <v-btn :color="activatorColor" :variant="activatorVariant" :prepend-icon="activatorIcon">
-      Update Teacher
 
-      <v-dialog max-width="550" activator="parent" v-model="dialog">
-        <v-card class="pa-1" :loading="isLoading">
-          <v-card-text>
-            <v-form @submit.prevent="submitForm" ref="updateTeacherForm">
-              <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo"></base-photo-uploader>
+    <v-dialog max-width="550" activator="parent" v-model="dialog" transition="slide-y-transition">
+      <template v-slot:activator="{ props }">
+        <div v-bind="props">
+          <slot>
+            <v-btn color="primary"> Update Teacher </v-btn>
+          </slot>
+        </div>
+      </template>
 
-              <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Full Name"></v-text-field>
-              <v-text-field v-model="lastName" variant="outlined" label="Nick Name"></v-text-field>
-              <v-text-field
-                type="email"
-                :rules="rules.email"
-                v-model="email"
-                variant="outlined"
-                label="Email"
-              ></v-text-field>
-            </v-form>
+      <v-card class="pa-1" :loading="isLoading">
+        <v-card-text>
+          <v-form @submit.prevent="submitForm" ref="updateTeacherForm">
+            <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo"></base-photo-uploader>
 
-            <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
-          </v-card-text>
-          <v-card-actions class="mx-4">
-            <v-btn @click="submitForm" variant="flat" :loading="isLoading">Update Account</v-btn>
-            <v-btn @click="closeDialog" color="error">Cancel</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-btn>
+            <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Full Name"></v-text-field>
+            <v-text-field v-model="lastName" variant="outlined" label="Nick Name"></v-text-field>
+            <v-text-field type="email" :rules="rules.email" v-model="email" variant="outlined" label="Email"></v-text-field>
+          </v-form>
+
+          <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
+        </v-card-text>
+        <v-card-actions class="mx-4">
+          <v-btn @click="submitForm" variant="flat" :loading="isLoading">Update Account</v-btn>
+          <v-btn @click="closeDialog" color="error">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -38,18 +37,6 @@ export default {
   props: {
     teacherId: {
       type: Number,
-    },
-    activatorIcon: {
-      type: String,
-      default: 'mdi-account',
-    },
-    activatorVariant: {
-      type: String,
-      default: 'text',
-    },
-    activatorColor: {
-      type: String,
-      default: 'primary',
     },
   },
   data: () => ({
@@ -75,20 +62,21 @@ export default {
         ],
       };
     },
+    teacher() {
+      return this.$store.getters['teachers/currentTeacher'];
+    },
   },
   methods: {
     getPhoto(photo) {
       this.newPhoto = photo;
     },
     async setTeacher() {
-      const response = await this.$store.dispatch('teachers/loadTeacherById', this.teacherId);
+      await this.$store.dispatch('teachers/loadTeacherById', this.teacherId);
 
-      if (!response.data) return false;
-
-      this.name = response.data.name;
-      this.lastName = response.data.lastName;
-      this.email = response.data.email;
-      this.photo = response.data.photo;
+      this.name = this.teacher.name;
+      this.lastName = this.teacher.lastName;
+      this.email = this.teacher.email;
+      this.photo = this.teacher.photo;
     },
     async submitForm() {
       // Validate the form first
@@ -114,8 +102,10 @@ export default {
           data['photo'] = this.newPhoto;
         }
 
-        console.log(data);
         await this.$store.dispatch('teachers/updateTeacher', data);
+
+        // Set new data values
+        await this.setTeacher();
 
         this.closeDialog();
       } catch (e) {
@@ -128,9 +118,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       //   Also reset the form
-      this.$refs.updateTeacherForm.reset();
-      this.photo = null;
-      this.newPhoto = null;
+
       // tell parent that the windows is closed
       this.$emit('dialog-close');
     },

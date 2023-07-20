@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -22,10 +22,18 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../store/actions/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default MainDrawer = (props) => {
-  const [selectedItem, setselectedItem] = useState(0);
+  const teacherName = useSelector((state) => state.MainReducer.userName);
+  const teacherPhoto = useSelector((state) => state.MainReducer.photoUri);
+
+  console.log(teacherPhoto);
+
   const dispatch = useDispatch();
+
+  const [selectedItem, setselectedItem] = useState(0);
+
   return (
     <Drawer
       header={() => (
@@ -51,11 +59,13 @@ export default MainDrawer = (props) => {
                   alignItems: "flex-end",
                   justifyContent: "flex-start",
                 }}
-                source={require("../../assets/images/teacherProfile.jpg")}
+                source={{
+                  uri: teacherPhoto,
+                }}
               ></ImageBackground>
             </View>
             <Text style={{ fontSize: 16, textAlign: "center" }}>
-              Ahmad Shah
+              {teacherName}
             </Text>
           </View>
           <TouchableOpacity onPress={() => props.navigation.closeDrawer()}>
@@ -73,11 +83,20 @@ export default MainDrawer = (props) => {
           setselectedItem(0);
           props.navigation.navigate("teacherScreen");
         }
+
         if (index.row === 1) {
           setselectedItem(1);
-          props.navigation.navigate("settingsScreen");
+          props.navigation.navigate("Subjects");
         }
         if (index.row === 2) {
+          setselectedItem(2);
+          props.navigation.navigate("settingsScreen");
+        }
+        if (index.row === 3) {
+          setselectedItem(3);
+          props.navigation.navigate("CreateShoka");
+        }
+        if (index.row === 4) {
           AsyncStorage.clear().then().then();
           dispatch(logout());
           props.navigation.navigate("Login");
@@ -103,10 +122,29 @@ export default MainDrawer = (props) => {
         }
       />
       <DrawerItem
+        title="Subjects"
+        accessoryLeft={
+          <ImageBackground
+            source={require("../../assets/images/subjects.png")}
+            style={{ height: 50, width: 25 }}
+          ></ImageBackground>
+        }
+      />
+      <DrawerItem
         title="Settings"
         accessoryLeft={
           <ImageBackground
             source={require("../../assets/images/gear.png")}
+            style={{ height: 50, width: 25 }}
+          ></ImageBackground>
+        }
+      />
+
+      <DrawerItem
+        title="Create Shoka"
+        accessoryLeft={
+          <ImageBackground
+            source={require("../../assets/images/shoka.png")}
             style={{ height: 50, width: 25 }}
           ></ImageBackground>
         }

@@ -1,37 +1,37 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const subjectValidations = require('../validations/subject.validation');
-const subjectController = require('../controllers/subject.controller');
+const { subjectValidation } = require('../validations');
+const { subjectController } = require('../controllers');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(auth(), subjectController.getSubjects)
-  .post(auth(), validate(subjectValidations.createSubject), subjectController.createSubject);
+  .get(auth(), validate(subjectValidation.getSubjects), subjectController.getSubjects)
+  .post(auth(), validate(subjectValidation.createSubject), subjectController.createSubject);
 
 router
   .route('/:subjectId')
-  .get(auth(), validate(subjectValidations.getSubject), subjectController.getSubject)
-  .patch(auth(), validate(subjectValidations.updatedSubject), subjectController.updatedSubject)
-  .delete(auth(), validate(subjectValidations.getSubject), subjectController.deleteSubject);
+  .get(auth(), validate(subjectValidation.getSubject), subjectController.getSubject)
+  .patch(auth(), validate(subjectValidation.updatedSubject), subjectController.updatedSubject)
+  .delete(auth(), validate(subjectValidation.getSubject), subjectController.deleteSubject);
 
 router
   .route('/teachers/:teacherId')
-  .get(validate(subjectValidations.getTeacherSubjects), subjectController.getTeacherSubjects);
+  .get(auth(), validate(subjectValidation.getTeacherSubjects), subjectController.getTeacherSubjects);
 
 router
   .route('/students/:subjectId')
-  .get(validate(subjectValidations.getSemesterStudents), subjectController.getSemesterStudents);
+  .get(auth(), validate(subjectValidation.getSemesterStudents), subjectController.getSemesterStudents);
 
 router
   .route('/assign')
-  .post(auth(), validate(subjectValidations.assignSubjectToTeacher), subjectController.assignSubjectToTeacher)
+  .post(auth(), validate(subjectValidation.assignSubjectToTeacher), subjectController.assignSubjectToTeacher);
 
 router
   .route('/take')
-  .post(auth(), validate(subjectValidations.assignSubjectToTeacher), subjectController.takeBackSubjectFromTeacher);
+  .post(auth(), validate(subjectValidation.assignSubjectToTeacher), subjectController.takeBackSubjectFromTeacher);
 module.exports = router;
 
 /**
@@ -50,18 +50,27 @@ module.exports = router;
  *     tags: [Subject]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           example: unassigned
+ *         description: get unsigned subjects which are not assigned to any teacher
+ *       - in: query
+ *         name: semesterId
+ *         schema:
+ *           type: number
+ *         description: semester id to get all subject of the semester
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 results:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Subject'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/CustomSubject'
  *
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
@@ -146,9 +155,9 @@ module.exports = router;
  *     summary: Update a Subject
  *     description: Update a Subject
  *     tags: [Subject]
- *     security: 
+ *     security:
  *      - bearerAuth: []
- *     parameters: 
+ *     parameters:
  *      - in: path
  *        name: id
  *        required: true
@@ -204,7 +213,7 @@ module.exports = router;
  *           type: number
  *         description: subject id
  *     responses:
- *       "200":
+ *       "204":
  *         description: No content
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
@@ -213,7 +222,6 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-
 
 /**
  * @swagger
@@ -255,7 +263,6 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  */
 
-
 /**
  * @swagger
  * /subjects/take:
@@ -295,7 +302,6 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-
 
 /**
  * @swagger

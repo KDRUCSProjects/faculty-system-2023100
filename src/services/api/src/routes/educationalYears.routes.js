@@ -1,16 +1,19 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const educationalYearValidation = require('../validations/educationalYear.validation');
-const educationalYearController = require('../controllers/educationalYear.controller');
+const { educationalYearValidation } = require('../validations');
+const { educationalYearController } = require('../controllers');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(auth(), educationalYearController.getEducationalYears)
+  .get(auth(), validate(educationalYearValidation.getEducationalYears), educationalYearController.getEducationalYears)
   .post(auth(), validate(educationalYearValidation.createEducationalYear), educationalYearController.createEducationalYear);
 
+router
+  .route('/setCurrentYear')
+  .post(auth(), validate(educationalYearValidation.setCurrentYear), educationalYearController.setCurrentYear);
 router
   .route('/:yearId')
   .get(auth(), validate(educationalYearValidation.getEducationalYear), educationalYearController.getEducationalYear)
@@ -37,6 +40,12 @@ module.exports = router;
  *     tags: [EducationalYear]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: currentYear
+ *         schema:
+ *           type: boolean
+ *         description: if you want current just pass currentYear to true in query parameters
  *     responses:
  *       "200":
  *         description: OK
@@ -163,6 +172,47 @@ module.exports = router;
  *        schema:
  *          type: string
  *        description: value of year
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *              $ref: '#/components/schemas/EducationalYear'
+ *
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ */
+
+/**
+ * @swagger
+ * /years/setCurrentYear:
+ *   post:
+ *     summary: set current Year first half or second half.
+ *     description: set current Year first half or second half to true not both but one one .
+ *     tags: [EducationalYear]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - year
+ *             properties:
+ *               year:
+ *                 type: number
+ *               firstHalf:
+ *                 type: boolean
+ *               secondHalf:
+ *                 type: boolean
+ *             example:
+ *               year : 1402
+ *               firstHalf: true
  *     responses:
  *       "200":
  *         description: OK

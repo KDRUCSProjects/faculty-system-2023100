@@ -29,26 +29,36 @@ const getSemesterStudents = {
 
 const updatedSubject = {
   params: Joi.object().keys({
-    subjectId: Joi.number().required()
+    subjectId: Joi.number().required(),
   }),
-  body: Joi.object().keys({
-    name: Joi.string(),
-    credit: Joi.number().min(1).max(4).message('credit must be between 1 and 4'),
-    semesterId: Joi.number(),
-    teacherId: Joi.number(),
-  }).min(1),
+  body: Joi.object()
+    .keys({
+      name: Joi.string(),
+      credit: Joi.number().min(1).max(4).message('credit must be between 1 and 4'),
+      semesterId: Joi.number(),
+      teacherId: Joi.number(),
+    })
+    .min(1),
 };
 
 const assignSubjectToTeacher = {
   body: Joi.object().keys({
     subjectId: Joi.number().required(),
     teacherId: Joi.number().required(),
-  })
-}
+  }),
+};
+
+const getSubjects = {
+  query: Joi.object().keys({
+    semesterId: Joi.number(),
+    status: Joi.string().valid('unassigned'),
+  }),
+};
 
 module.exports = {
   createSubject,
   getSubject,
+  getSubjects,
   getSemesterStudents,
   getTeacherSubjects,
   updatedSubject,

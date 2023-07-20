@@ -4,14 +4,34 @@
       <router-view />
 
       <v-container>
-        <div id="notifications"></div>
+        <div id="notifications">
+          <div v-for="(item, i) in toastMessages" :key="i">
+            <base-toast :type="item.type" :text="item.text" :key="i"></base-toast>
+          </div>
+        </div>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
-<script setup>
-//
+<script>
+export default {
+  data: () => ({}),
+  methods: {},
+  computed: {
+    toastMessages() {
+      return this.$store.getters['toastMessages'];
+    },
+  },
+  async created() {
+    // Load all years
+    await this.$store.dispatch('years/loadEducationalYears');
+    // Load current on-going educational year
+    await this.$store.dispatch('years/loadCurrentOnGoingYear');
+    // Load all teachers
+    await this.$store.dispatch('teachers/loadTeachers');
+  },
+};
 </script>
 
 <style>
