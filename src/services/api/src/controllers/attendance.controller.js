@@ -49,6 +49,10 @@ const getTodaysAttendance = catchAsync(async (req, res) => {
   if (!subject.teacherId) throw new ApiError(httpStatus.BAD_REQUEST, 'Subject Should be assign to a teacher');
   const teacher = await userService.getTeacher(subject.teacherId);
   if (!teacher) throw new ApiError(httpStatus.BAD_REQUEST, 'Teacher Not Found');
+  // check subject is related to teacher
+  if (req.user.role !== 'admin' && subject.teacherId !== req.user.id) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'FORBiDDEN');
+  }
   // const date = moment().format('YYYY-MM-DD');
   const date = moment();
   const shamsiDate = moment(date).format('jYYYY-jMM-jDD HH:mm:ss');
