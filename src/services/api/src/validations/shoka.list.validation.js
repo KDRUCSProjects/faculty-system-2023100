@@ -1,6 +1,9 @@
 const Joi = require('joi');
 
 const createShokaList = {
+  query: Joi.object().keys({
+    chance: Joi.number().integer().min(2).max(3)
+  }),
   body: Joi.object().keys({
     subjectId: Joi.number().required().integer(),
     studentId: Joi.number().required().integer(),

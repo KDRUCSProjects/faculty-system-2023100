@@ -1,8 +1,7 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
-const shokaListValidation = require('../validations/shoka.list.validation');
-const shokaListController = require('../controllers/shoka.list.controller');
-const shareValidation = require('../validations/share.validation');
+const { shokaListValidation } = require('../validations');
+const { shokaListController } = require('../controllers');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();
@@ -31,6 +30,13 @@ module.exports = router;
  *     tags: [ShokaList]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: chance
+ *         schema: 
+ *           type: number
+ *           enum: [2,3]
+ *         description: if you want create first chance marks do not send query parameters
  *     requestBody:
  *       required: true
  *       content:

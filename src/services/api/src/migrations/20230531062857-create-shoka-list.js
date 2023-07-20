@@ -61,6 +61,15 @@ module.exports = {
           max: 60,
         },
       },
+      chance: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+        validate: {
+          min: 1,
+          max: 3,
+        },
+      },
       ...BaseModel(Sequelize),
     });
   },
