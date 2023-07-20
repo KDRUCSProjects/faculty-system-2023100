@@ -21,14 +21,9 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      educationalYearId: {
+      year: {
         type: Sequelize.INTEGER,
-        trim: true,
         required: true,
-        references: {
-          model: 'EducationalYears',
-          key: 'id',
-        },
       },
       semesterId: {
         type: Sequelize.INTEGER,
