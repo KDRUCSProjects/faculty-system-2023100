@@ -65,6 +65,15 @@ module.exports = (sequelize, DataTypes) => {
           max: 60,
         },
       },
+      chance: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+        validate: {
+          min: 1,
+          max: 3,
+        },
+      },
       ...BaseModel(DataTypes),
     },
     {

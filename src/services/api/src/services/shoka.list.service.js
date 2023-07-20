@@ -24,11 +24,12 @@ const getShokaList = (shokaId) => {
  * find Student if he has gotten marks in same subject
  * @param {ObjectId} shokaId
  * @param {ObjectId} studentId
+ * @param {Number} chance
  * @returns {Promise<ShokaList>}
  */
-const isStudentListedInShokaList = (shokaId, studentId) => {
+const isStudentListedInShokaList = (shokaId, studentId, chance) => {
   return ShokaList.findOne({
-    where: { shokaId, studentId },
+    where: { shokaId, studentId, chance },
   });
 };
 
