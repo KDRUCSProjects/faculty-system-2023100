@@ -11,6 +11,7 @@ const verify = document.querySelector('.span-2');
 const spinnerDiv = document.querySelector('.spinner-2-div');
 const errorDiv = document.querySelector('.error-message-div');
 const errorClose = document.querySelector('.error-close');
+const inputs = document.querySelectorAll('input');
 
 ////////////////////////////////////////////////////////////
 
@@ -110,8 +111,31 @@ function registerationFun(e) {
     body: JSON.stringify(data),
   })
     .then(res => {
-      if (!res.ok) throw new Error(res.status);
+      if (!res.ok) {
+        codes.forEach((input, index) => {
+          pin.pop();
+          input.value = '';
+          if (index > 0) {
+            input.setAttribute('disabled', true);
+          }
+        });
+        throw new Error(res.status);
+      }
       console.log(res.status);
+      if (res.ok) {
+        codes.forEach((input, index) => {
+          pin.pop();
+          input.value = '';
+          if (index > 0) {
+            input.setAttribute('disabled', true);
+          }
+        });
+        overlay.classList.add('hidden');
+        otp.classList.add('hidden');
+        inputs.forEach(input => {
+          input.value = '';
+        });
+      }
       return res.json();
     })
     .then(data => {
