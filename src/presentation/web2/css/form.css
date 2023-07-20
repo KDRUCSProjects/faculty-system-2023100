@@ -340,3 +340,69 @@ span {
     transform: rotate(360deg);
   }
 }
+
+.error-message-div {
+  /* display: flex; */
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  /* background-color: var(--erorr-color); */
+  background-color: white;
+  flex-direction: row;
+  width: 25rem;
+  padding: 20px;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  font-family: LatoRegular;
+  font-size: 15px;
+  transition: 0.5;
+  display: none;
+  animation-name: popUp;
+  animation-duration: 0.9s;
+  z-index: 2000;
+}
+
+.icon-exc-div {
+  margin-right: 20px;
+}
+
+.icon-exc {
+  font-size: 25px;
+  background-color: red;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  position: absolute;
+  top: 17px;
+  left: 20px;
+}
+
+.error-p {
+  font-family: LatoRegular;
+  text-align: center;
+  /* color: var(--secondry-color-alt); */
+}
+
+.error-close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  font-size: 25px;
+  cursor: pointer;
+  /* padding: 20px; */
+  /* color: var(--secondry-color-alt); */
+}
+
+@keyframes popUp {
+  from {
+    top: 0%;
+    left: 50%;
+  }
+
+  to {
+    top: 10%;
+    left: 50%;
+  }
+}

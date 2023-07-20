@@ -9,6 +9,8 @@ const iconClose = document.querySelector('.opt-icon');
 const otpBtn = document.querySelector('.otp-button');
 const verify = document.querySelector('.span-2');
 const spinnerDiv = document.querySelector('.spinner-2-div');
+const errorDiv = document.querySelector('.error-message-div');
+const errorClose = document.querySelector('.error-close');
 
 ////////////////////////////////////////////////////////////
 
@@ -115,8 +117,17 @@ function registerationFun(e) {
     .then(data => {
       console.log(data);
     })
-    .catch(err => {});
+    .catch(err => {
+      errorDiv.style.display = 'flex';
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+      }, 3000);
+    });
 }
+
+errorClose.addEventListener('click', function () {
+  errorDiv.style.display = 'none';
+});
 
 otpBtn.addEventListener('click', function () {
   spinnerDiv.classList.remove('hidden');
