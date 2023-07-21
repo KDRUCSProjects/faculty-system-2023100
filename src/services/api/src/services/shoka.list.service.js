@@ -88,10 +88,36 @@ const getShokaMarks = (shokaId) => {
   });
 };
 
+
+/**
+ * get subject marks
+ * @param {Number} shokaId
+ * @returns {Promise<ShokaList>}
+ */
+const getSubjectMarks = (shokaId) => {
+  return sequelize.query(
+    `
+    select shokalist.finalMarks as finalMarks, 
+    shokalist.midtermMarks as midter,
+    shokalist.assignmentOrProjectMarks as assignment, 
+    student.fullName as fullName, 
+    student.fatherName as fatherName 
+    from shokalists as shokalist 
+    inner join students as student on student.id = shokalist.studentId  
+    where shokaId = ${shokaId}
+    order by 
+      student.fullName ASC,
+      student.fatherName ASC
+    ;
+    `,
+    { type: QueryTypes.SELECT }
+  );
+};
 module.exports = {
   getShokaList,
   getShokaMarks,
   createShokaList,
   getStudentMarks,
+  getSubjectMarks,
   isStudentListedInShokaList,
 };

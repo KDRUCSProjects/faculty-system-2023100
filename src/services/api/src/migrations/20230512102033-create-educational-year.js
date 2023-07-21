@@ -17,7 +17,7 @@ module.exports = {
         allowNull: true,
       },
       year: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DOUBLE,
         allowNull: false,
       },
       onGoing: {
