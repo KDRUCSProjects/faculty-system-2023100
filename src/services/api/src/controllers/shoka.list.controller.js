@@ -7,9 +7,12 @@ const {
   semesterService,
   studentService,
   studentListService,
+  userService,
 } = require('../services');
 const ApiError = require('../utils/ApiError');
 const { marksFormatter } = require('../utils/marks.formatter');
+const Excel = require('exceljs');
+const path = require('path');
 
 const createShokaList = catchAsync(async (req, res) => {
   const { studentId, subjectId } = req.body;
@@ -112,8 +115,34 @@ const getStudentMarks = catchAsync(async (req, res) => {
 
 });
 
+
+const createShokaInExcel = catchAsync(async (req, res) => {
+  const { subjectId } = req.params;
+  const subject = await subjectService.getSubject(subjectId);
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  const shoka = await shokaService.findShokaBySubjectId(subjectId);
+  if (!shoka) throw new ApiError(httpStatus.NOT_FOUND, 'shoka not found');
+  if (!subject.teacherId) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Subject Should be assign to a teacher');
+  const teacher = await userService.getTeacher(subject.teacherId);
+  if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'teacher not found');
+  const stdMarks = await shokaListService.getSubjectMarks(shoka.id);
+
+  const filePath = path.join(__dirname, '../', 'storage', 'exportable', 'templates', 'shoka.xlsx')
+
+
+  // workbook.xlsx.write(res);
+  // res.end();
+  let workbook = new Excel.Workbook();
+  workbook = await workbook.xlsx.readFile(filePath);
+  let worksheet = workbook.getWorksheet('Sheet1');
+  worksheet.getRow(10).getCell(3).value = 79;
+  workbook.xlsx.writeFile('excel.xlsx');
+  return res.end();
+});
+
 module.exports = {
   getShokaList,
   createShokaList,
   getStudentMarks,
+  createShokaInExcel,
 };
