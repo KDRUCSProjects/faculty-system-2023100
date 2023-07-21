@@ -9,10 +9,10 @@ const {
   semesterService,
   studentListService,
 } = require('../services');
-const { findEligibleNextSemesterAfterConversion } = require('../utils/global');
+const { findEligibleNextSemesterAfterConversion, matchSemesterWithOnGoingSemester } = require('../utils/global');
 
 const createReentry = catchAsync(async (req, res) => {
-  const { studentId, reason } = req.body;
+  const { studentId, reason, educationalYear } = req.body;
   // check student id if it is correct student id
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, `student not found with id ${studentId}`);
@@ -55,25 +55,20 @@ const createReentry = catchAsync(async (req, res) => {
   // Get the semester that the student should/will start upcoming year.
   const eligibleNextSemester = await findEligibleNextSemesterAfterConversion(latestSemesterIdOfTaajil);
 
-  // Get current on-going year and first-half
-  const {
-    year: currentEducationalYear,
-    firstHalf,
-    id: currentEducationalYearId,
-  } = await educationalYearService.getCurrentEducationalYear();
+  // Match eligibleNextSemester with on-going semester
 
-  // Get eligible next semester year record (Year record)
-  const eligibleNextSemesterYear = await educationalYearService.getEducationalYear(eligibleNextSemester.educationalYearId);
+  const { eligible: semesterMatched, message, data } = await matchSemesterWithOnGoingSemester(eligibleNextSemester.id);
 
-  // Check if one year has passed.
-  if (currentEducationalYear != eligibleNextSemesterYear.year) {
+  if (!semesterMatched) {
     throw new ApiError(
       httpStatus.NOT_ACCEPTABLE,
-      `Student can only take reentry at ${eligibleNextSemesterYear.year} educational year`
+      `Student can only take reentry at class ${data.year} and ${data.eligibleSemester} semester`
     );
   }
 
-  req.body.educationalYearId = currentEducationalYearId;
+  // Validations completed ---- CONTINUE:-
+
+  req.body.year = educationalYear;
   req.body.semesterId = eligibleNextSemester.id;
 
   const reentry = await reentryService.createReentry(req.body);
