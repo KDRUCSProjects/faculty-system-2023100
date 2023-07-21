@@ -1,5 +1,12 @@
 const { http } = require('../config/logger');
-const { semesterService, educationalYearService, tabdiliService, taajilService, reentryService } = require('../services');
+const {
+  semesterService,
+  educationalYearService,
+  tabdiliService,
+  taajilService,
+  reentryService,
+  studentListService,
+} = require('../services');
 const ApiError = require('./ApiError');
 const httpStatus = require('http-status');
 
@@ -92,9 +99,80 @@ const findEligibleNextSemester = async (currentSemester) => {
   });
 };
 
+/**
+ * find semester year and half
+ * @param {ObjectId} semesterId
+ * @returns {Promise<Semester>}
+ */
+const findSemesterYearAndHalf = async (educationalYearId, title) => {
+  const { educationalYearId: id } = await semesterService.findSemesterByYearIdAndTitle(educationalYearId, title);
+  const { year, firstHalf } = await educationalYearService.getEducationalYear(id);
+
+  return { year: firstHalf };
+};
+
+/**
+ * match student current semester with on-going semester
+ * @param {ObjectId} semesterId
+ * @returns {Promise<Semester>}
+ */
+const matchStudentSemesterWithOnGoingSemester = async (studentId) => {
+  // Get student on-going semester id
+  const currentSemesterId = await studentListService.findStudentLatestSemesterId(studentId);
+
+  if (!currentSemesterId) {
+    return { message: 'Semester not found', eligible: 0 };
+  }
+
+  const currentSemester = await semesterService.findById(currentSemesterId);
+
+  // Get current on-going year
+  const currentYear = await educationalYearService.getCurrentEducationalYear();
+
+  // Find if current semester is first or second
+  const currentSemesterHalf = currentSemester.title % 2;
+  const semesterRank = currentSemesterHalf === 0 ? '2nd' : '1st';
+
+  const data = { year: currentYear?.year, eligibleSemester: semesterRank };
+
+  if (currentSemester.educationalYearId !== currentYear.id || currentSemesterHalf != currentYear.firstHalf) {
+    return { message: `Semester year and title doesnt match current year and its half`, eligible: 0, data };
+  }
+
+  return { message: 'All good', eligible: 1, data };
+};
+
+/**
+ * match semesterId with on-going semester
+ * @param {ObjectId} semesterId
+ * @returns {Promise<Semester>}
+ */
+const matchSemesterWithOnGoingSemester = async (semesterId) => {
+  // Find the desired semester
+  const theSemester = await semesterService.findById(semesterId);
+
+  // Get current on-going year
+  const currentYear = await educationalYearService.getCurrentEducationalYear();
+
+  // Find if current semester is first or second
+  const theSemesterHalf = theSemester.title % 2;
+  const semesterRank = theSemesterHalf === 0 ? '2nd' : '1st';
+
+  const data = { year: currentYear?.year, eligibleSemester: semesterRank };
+
+  if (theSemester.educationalYearId !== currentYear.id || theSemesterHalf != currentYear.firstHalf) {
+    return { message: `Semester year and title doesnt match current year and its half`, eligible: 0, data };
+  }
+
+  return { message: 'All good', eligible: 1, data };
+};
+
 module.exports = {
   findEligibleNextSemesterAfterConversion,
   checkStudentEligibilityForNextSemester,
   checkTaajilWithReentry,
   findEligibleNextSemester,
+  findSemesterYearAndHalf,
+  matchStudentSemesterWithOnGoingSemester,
+  matchSemesterWithOnGoingSemester,
 };

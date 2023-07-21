@@ -1,7 +1,7 @@
 <template>
-  <v-card class="mx-auto" max-width="650">
+  <v-card class="mx-auto theShadow" max-width="550">
     <v-card-item>
-      <v-card-title class="text-center font-weight-bold"> Change your password </v-card-title>
+      <v-card-title class="text-center font-weight-bold text-h5 mt-5"> Change account password </v-card-title>
       <v-card-subtitle class="text-center">
         <p>Just type it twice and try not to forget it.</p>
       </v-card-subtitle>
@@ -28,20 +28,20 @@
             <p>Symbol</p>
           </v-col>
         </v-row>
-        <v-form class="pa-3" @submit.prevent="submitForm" ref="changePasswordForm">
+        <v-form class="pa-3 mt-5" @submit.prevent="submitForm" ref="changePasswordForm">
           <v-text-field
             v-model="newPassword"
             type="password"
             label="New Password"
             placeholder="Enter new password"
-            variant="solo"
+            variant="outlined"
           ></v-text-field>
           <v-text-field
             v-model="confirmPassword"
             type="password"
             label="Confirm Password"
             placeholder="Enter the above password"
-            variant="solo"
+            variant="outlined"
           ></v-text-field>
           <span class="text-error" v-if="passwordComparison"> New password and confirm password doesn't match. </span>
           <v-btn

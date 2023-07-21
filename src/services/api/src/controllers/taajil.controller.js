@@ -1,7 +1,15 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { taajilService, educationalYearService, studentService, studentListService, reentryService } = require('../services');
+const {
+  taajilService,
+  educationalYearService,
+  studentService,
+  studentListService,
+  reentryService,
+  semesterService,
+} = require('../services');
+const { findSemesterYearAndHalf, matchStudentSemesterWithOnGoingSemester } = require('../utils/global');
 
 const createTaajil = catchAsync(async (req, res) => {
   const { studentId, educationalYear, type } = req.body;
@@ -59,16 +67,18 @@ const createTaajil = catchAsync(async (req, res) => {
   // check distance b/w current year and req.body.educationalYear (year the user selected).
   // if the distance is correct then it is clear that we don't give taajils in the past or future years;
   // The distance is correct if both currentYear and recieved year are equal.
-  const currentYear = await educationalYearService.getCurrentEducationalYear();
-  if (currentYear?.year !== educationalYear)
+
+  const { eligible: semesterMatched, message, data } = await matchStudentSemesterWithOnGoingSemester(studentId);
+  if (!semesterMatched) {
     throw new ApiError(
       httpStatus.NOT_ACCEPTABLE,
-      `You cant give taajil to student in past years. Only ${currentYear?.year} is possible at the moment`
+      `Student can only take taajil at class ${data.year} and ${data.eligibleSemester} semester`
     );
+  }
 
   // If the user tried, taking special taajil for the first time before general taajil
   if (!generalTaajil && type === 'special_taajil') {
-    throw new ApiError('Student can get common taajil without the special one');
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student can get common taajil without the special one');
   }
 
   // Validation Completed --- LET"S GO!
@@ -76,11 +86,8 @@ const createTaajil = catchAsync(async (req, res) => {
   // Get student on-going semester id
   const currentSemesterId = await studentListService.findStudentLatestSemesterId(studentId);
 
-  if (!currentSemesterId) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Student current semester cant be identified');
-  }
   // create new Taajil
-  req.body.educationalYearId = currentYear.id;
+  req.body.year = educationalYear;
   req.body.semesterId = currentSemesterId;
   const taajil = await taajilService.createTaajil(req.body);
   return res.status(httpStatus.CREATED).send(taajil);
