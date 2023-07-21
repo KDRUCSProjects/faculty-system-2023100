@@ -16,9 +16,9 @@
           </v-card-item>
           <v-divider class="mt-3"></v-divider>
           <v-card-text>
-            <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="active-tab">
+            <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="bg-teal-lighten-4">
               <v-tab :value="1"> Subjects </v-tab>
-              <v-tab :value="2"> Actions </v-tab>
+              <v-tab :value="2"> Migration </v-tab>
             </v-tabs>
             <v-window v-model="tab">
               <v-window-item :value="1">
@@ -28,14 +28,52 @@
                 </add-subject>
               </v-window-item>
               <v-window-item :value="2">
-                <v-card>
+                <v-card class="mt-7">
                   <v-card-item>
-                    <v-card-title>Students Promotion</v-card-title>
-                    <v-card-subtitle>Migrate students from this semester to next semester</v-card-subtitle>
+                    <v-card-title class="text-dark font-weight-bold text-h5">Students Migration</v-card-title>
                   </v-card-item>
+                  <v-card-text>
+                    <p>
+                      Migrate your currently enrolled students in this semester to the upcoming semester. This will not
+                      migrate students who has taajil, tabdili or students who has not completed the requireds marks for the
+                      next semester.
+                    </p>
+
+                    <v-alert
+                      v-if="!currentSemester?.completed"
+                      icon="mdi-alert"
+                      variant="outlined"
+                      type="error"
+                      class="pa-2 mt-4"
+                    >
+                      Do this only if your currently semester is finished
+                    </v-alert>
+                    <v-alert
+                      v-if="currentSemester?.completed"
+                      icon="mdi-alert"
+                      variant="outlined"
+                      type="error"
+                      class="pa-2 mt-4"
+                    >
+                      Students have migrated already to next semester
+                    </v-alert>
+                  </v-card-text>
                   <v-card-actions>
-                    <v-btn variant="flat" color="success" block @click="promoteSemesterStudents"> Promote Students </v-btn>
+                    <v-btn
+                      variant="tonal"
+                      size="x-large"
+                      color="success"
+                      prepend-icon="mdi-stairs-up"
+                      block
+                      @click="promoteSemesterStudents"
+                      :disabled="currentSemester.completed && !forceMigrate"
+                    >
+                      Promote Students
+                    </v-btn>
                   </v-card-actions>
+                  <v-card-text class="ma-0 pa-0" v-if="currentSemester?.completed">
+                    <v-checkbox label="Force migrate" v-model="forceMigrate"></v-checkbox>
+                  </v-card-text>
                 </v-card>
               </v-window-item>
             </v-window>
@@ -90,6 +128,7 @@ export default {
     page: 1,
     itemsPerPage: 8,
     selectedStudentId: null,
+    forceMigrate: false,
     mode: 'semester-students',
     headers: [
       // {
@@ -144,6 +183,9 @@ export default {
     year() {
       return this.$route.query.year;
     },
+    currentSemester() {
+      return this.$store.getters['semesters/semester'];
+    },
   },
   methods: {
     async promoteSemesterStudents() {
@@ -163,7 +205,10 @@ export default {
         return false;
       }
 
-      await this.$store.dispatch('students/promoteStudents', this.id);
+      const response = await this.$store.dispatch('students/promoteStudents', this.id);
+
+      // Reload this semester
+      await this.loadSubjects();
     },
     async getPageNumber(number) {
       this.page = number;
