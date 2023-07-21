@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       year: {
         // This is similar to kankor Year or current educational year
-        type: DataTypes.INTEGER,
+        type: DataTypes.DOUBLE,
         allowNull: false,
       },
       onGoing: {
