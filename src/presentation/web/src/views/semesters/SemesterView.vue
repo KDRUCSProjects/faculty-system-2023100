@@ -119,12 +119,12 @@ export default {
         sortable: true,
         key: 'fatherName',
       },
-      {
-        title: 'Kankor Year',
-        align: 'start',
-        sortable: true,
-        key: 'kankorYear',
-      },
+      // {
+      //   title: 'Kankor Year',
+      //   align: 'start',
+      //   sortable: true,
+      //   key: 'kankorYear',
+      // },
       { title: 'Actions', key: 'actions', sortable: false },
     ],
   }),
