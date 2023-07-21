@@ -75,6 +75,7 @@ const createReentry = catchAsync(async (req, res) => {
 
   // Next up, register student in the studentsList
   // add student in the StudentsList for eligible next semester
+
   await studentListService.createStudentList({
     studentId,
     semesterId: eligibleNextSemester.id,

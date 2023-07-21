@@ -34,6 +34,7 @@ app.component('base-confirm-password', BaseConfirmPassword);
 app.component('base-update-dialog', BaseUpdateDialog);
 app.component('base-select-year-dialog', BaseSelectYearDialog);
 app.component('base-toast', BaseToast);
+app.component('base-autocomplete-year', BaseAutoCompleteYear);
 app.component('base-menu', BaseMenu);
 
 registerPlugins(app);

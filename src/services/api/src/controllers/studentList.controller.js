@@ -204,7 +204,6 @@ const promoteStudents = catchAsync(async (req, res) => {
 
         const studentExists = await studentExistInNextSemester(studentId, req.params.semesterId);
         if (studentExists) {
-          console.log('yeah bitch');
           results.push({ message: 'Student is already in next semester', result });
           continue;
         }
