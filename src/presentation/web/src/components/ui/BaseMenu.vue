@@ -5,7 +5,14 @@
         <v-btn color="primary" variant="flat" v-bind="props"> {{ selected || defaultItem }} </v-btn>
       </template>
       <v-list>
-        <v-list-item v-for="(item, index) in items" :key="index" :value="index" @click="setItem(item)">
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="index"
+          :value="index"
+          @click="setItem(item)"
+          :class="{ 'bg-primary': item === selected }"
+          :variant="item === selected ? 'tonal' : 'flat'"
+        >
           <v-list-item-title>{{ item }}</v-list-item-title>
         </v-list-item>
       </v-list>
