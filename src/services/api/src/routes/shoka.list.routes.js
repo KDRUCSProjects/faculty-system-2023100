@@ -12,6 +12,9 @@ router
   .get(auth(), validate(shokaListValidation.getStudentMarks), shokaListController.getStudentMarks);
 
 router.route('/:subjectId').get(auth(), validate(shokaListValidation.getShokaList), shokaListController.getShokaList);
+router
+  .route('/shokas/:subjectId')
+  .get(validate(shokaListValidation.getShokaList), shokaListController.createShokaInExcel);
 module.exports = router;
 
 /**
@@ -147,6 +150,33 @@ module.exports = router;
  *           application/json:
  *             schema:
  *                $ref: '#/components/schemas/ShokaList'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+
+/**
+ * @swagger
+ * /shokaList/shokas/{subjectId}:
+ *   get:
+ *     summary: get a subject shoka in excel.
+ *     description: get a subject shoka in excel.
+ *     tags: [ShokaList]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: subjectId
+ *         schema:
+ *           type: number
+ *         description: subject id
+ *     responses:
+ *       "200":
+ *         description: OK AND EXCEL FILE WILL BE SENT
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
