@@ -120,6 +120,25 @@ const findSemesterByYearIdAndTitle = async (educationalYearId, title) => {
   });
 };
 
+/**
+ * Update semester completed status
+ * @param {Object} oldUser
+ * @param {Object} newUserBody
+ * @returns {Promise<User>}
+ */
+const updateSemesterStatus = (semesterId, status) => {
+  return Semester.update(
+    {
+      completed: !!status,
+    },
+    {
+      where: {
+        id: semesterId,
+      },
+    }
+  );
+};
+
 module.exports = {
   findById,
   findSemester,
@@ -130,4 +149,5 @@ module.exports = {
   getYearSemesters,
   findSemesterByYearIdAndTitle,
   isSemesterOnGoing,
+  updateSemesterStatus,
 };

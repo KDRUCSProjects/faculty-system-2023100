@@ -216,7 +216,8 @@ const promoteStudents = catchAsync(async (req, res) => {
     }
   }
 
-  console.log(results);
+  // Once promotion is completed, mark the current semester as completed
+  await semesterService.updateSemesterStatus(req.params.semesterId, true);
 
   return res.status(httpStatus.OK).send(results);
 });
