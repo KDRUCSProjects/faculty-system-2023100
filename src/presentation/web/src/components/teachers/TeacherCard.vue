@@ -15,15 +15,22 @@
     <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle>
 
     <v-card-actions class="mt-1 px-1">
-      <v-btn color="primary" variant="elevated" class="mr-1" :to="`/teachers/view/${teacherId}`" block> View Profile </v-btn>
+      <v-btn
+        append-icon="mdi-location-enter"
+        color="primary"
+        variant="tonal"
+        class="mr-1"
+        :to="`/teachers/view/${teacherId}`"
+        block
+      >
+        View Profile
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-
 export default {
-  
   props: {
     teacherId: {
       type: Number,

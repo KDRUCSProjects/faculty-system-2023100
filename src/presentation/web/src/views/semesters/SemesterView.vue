@@ -18,7 +18,8 @@
           <v-card-text>
             <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="bg-teal-lighten-4">
               <v-tab :value="1"> Subjects </v-tab>
-              <v-tab :value="2"> Migration </v-tab>
+              <v-tab :value="2"> Statistics </v-tab>
+              <v-tab :value="3"> Migration </v-tab>
             </v-tabs>
             <v-window v-model="tab">
               <v-window-item :value="1">
@@ -27,7 +28,8 @@
                   <v-btn variant="tonal" color="primary" block :prepend-icon="'mdi-plus'">New Subject</v-btn>
                 </add-subject>
               </v-window-item>
-              <v-window-item :value="2">
+              <v-window-item :value="2"> taajil, reentry statistics </v-window-item>
+              <v-window-item :value="3">
                 <v-card class="mt-7">
                   <v-card-item>
                     <v-card-title class="text-dark font-weight-bold text-h5">Students Migration</v-card-title>
@@ -43,7 +45,7 @@
                       v-if="!currentSemester?.completed"
                       icon="mdi-alert"
                       variant="outlined"
-                      type="error"
+                      type="warning"
                       class="pa-2 mt-4"
                     >
                       Do this only if your currently semester is finished

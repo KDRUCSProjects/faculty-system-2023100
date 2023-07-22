@@ -5,7 +5,7 @@
 
     <slot>
       <div style="width: 500px">
-        <v-text-field
+        <!-- <v-text-field
           clearable=""
           :loading="loading"
           density="compact"
@@ -15,7 +15,8 @@
           single-line
           hide-details
           @click:append-inner="onClick"
-        ></v-text-field>
+        ></v-text-field> -->
+        <!-- <v-list-item class="text-dark"> Educational Year: {{ currentYear.year }} - 1st Semester </v-list-item> -->
       </div>
     </slot>
 
@@ -102,6 +103,9 @@ export default {
     },
     abbreviation() {
       return this.buildAbbreviation(this.userFullName);
+    },
+    currentYear() {
+      return this.$store.getters['years/onGoingYear'];
     },
   },
 };
