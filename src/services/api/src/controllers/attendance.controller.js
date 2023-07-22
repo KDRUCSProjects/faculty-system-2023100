@@ -92,6 +92,9 @@ const getTodaysAttendance = catchAsync(async (req, res) => {
     }
     results = await attendanceListService.getSemesterSdtAndAttendance(attendance.id);
   }
+  if (results.length <= 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'There is not any student in the semester');
+  }
   const { subjectName, teacherId, teacherName } = results[0];
   const students = results.map((element) => {
     return {

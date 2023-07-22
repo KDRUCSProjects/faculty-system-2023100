@@ -195,6 +195,13 @@ module.exports = router;
  *         schema:
  *           type: number
  *         description: subject id
+ *       - in: query
+ *         name: chance
+ *         required: true
+ *         schema:
+ *           type: number
+ *           enum: [1,2,3]
+ *         description: chance
  *     responses:
  *       "200":
  *         description: OK
