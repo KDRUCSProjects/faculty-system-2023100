@@ -275,7 +275,15 @@ module.exports = router;
  *         name: subjectId
  *         schema:
  *           type: number
+ *           required: true
  *         description: subject id
+ *       - in: query
+ *         name: chance
+ *         required: true
+ *         schema:
+ *           type: number
+ *           enum: [1,2,3]
+ *         description: chance
  *     responses:
  *       "200":
  *         description: OK AND EXCEL FILE WILL BE SENT

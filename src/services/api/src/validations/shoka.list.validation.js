@@ -33,6 +33,9 @@ const getShokaList = {
   params: Joi.object().keys({
     subjectId: Joi.number().required(),
   }),
+  query: Joi.object().keys({
+    chance: Joi.number().min(1).max(3).required(),
+  }),
 };
 
 const deleteShokaList = {
