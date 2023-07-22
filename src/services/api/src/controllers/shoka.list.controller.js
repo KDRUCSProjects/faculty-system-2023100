@@ -13,6 +13,7 @@ const ApiError = require('../utils/ApiError');
 const { marksFormatter } = require('../utils/marks.formatter');
 const Excel = require('exceljs');
 const path = require('path');
+const crypto = require('crypto');
 
 const createShokaList = catchAsync(async (req, res) => {
 
@@ -163,12 +164,77 @@ const createShokaInExcel = catchAsync(async (req, res) => {
   const { subjectId } = req.params;
   const subject = await subjectService.getSubject(subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  const semester = await semesterService.findById(subject.semesterId);
+  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
   const shoka = await shokaService.findShokaBySubjectId(subjectId);
   if (!shoka) throw new ApiError(httpStatus.NOT_FOUND, 'shoka not found');
   if (!subject.teacherId) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Subject Should be assign to a teacher');
   const teacher = await userService.getTeacher(subject.teacherId);
   if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'teacher not found');
-  const stdMarks = await shokaListService.getSubjectMarks(shoka.id);
+  const conditions = [`shokalist.shokaId = ${shoka.id}`, `shokalist.deletedAt IS NULL`];
+
+  switch (req.query.chance) {
+    case 1:
+      conditions.push(`shokalist.chance = 1`);
+      break;
+    case 2:
+      conditions.push(`shokalist.chance = 2`);
+      break;
+    case 3:
+      conditions.push(`shokalist.chance = 3`);
+      break;
+    default:
+      throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameter');
+  };
+
+  const stdMarks = await shokaListService.getSubjectMarks(conditions);
+
+  if (stdMarks.length <= 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'shoka is empty');
+  }
+
+  let className;
+  let semesterName;
+  switch (semester.title) {
+    case 1:
+      className = 'لومړی'
+      semesterName = 'اول'
+      break;
+    case 2:
+      className = 'لومړی';
+      semesterName = 'دوهم';
+      break;
+    case 3:
+      className = 'دوهم';
+      semesterName = 'دریم';
+      break;
+    case 4:
+      className = 'دوهم';
+      semesterName = 'څلورم';
+      break;
+    case 5:
+      className = 'دریم';
+      semesterName = 'پنځم';
+      break;
+    case 6:
+      className = 'دریم';
+      semesterName = 'ښپږم';
+      break;
+    case 7:
+      className = 'څلورم';
+      semesterName = 'اووم';
+      break;
+    case 8:
+      className = 'څلورم';
+      semesterName = 'اتم';
+      break;
+    default:
+      className = 'لومړی';
+      semesterName = 'اول'
+      break;
+  }
+  const { chance } = req.query;
+  const headerText = `د کمپيوټر ساينس پوهنځي د ${className} ټولګی د ${semesterName} سمسټر د (${subject.name})  مضمون استاد (${teacher.name})   مميز (      )  د ${chance} چانس ازموينی نمري`
 
   const filePath = path.join(__dirname, '../', 'storage', 'exportable', 'templates', 'shoka.xlsx')
 
@@ -178,9 +244,28 @@ const createShokaInExcel = catchAsync(async (req, res) => {
   let workbook = new Excel.Workbook();
   workbook = await workbook.xlsx.readFile(filePath);
   let worksheet = workbook.getWorksheet('Sheet1');
-  worksheet.getRow(10).getCell(3).value = 79;
-  workbook.xlsx.writeFile('excel.xlsx');
-  return res.end();
+  worksheet.getRow(4).getCell(1).value = headerText;
+  let row = 6;
+  stdMarks.forEach(element => {
+    const { fullName, fatherName, practicalWork, assignment, midtermMarks, finalMarks } = element;
+    ++row;
+    let col = 9;
+    worksheet.getRow(row).getCell(col).value = fullName;
+    --col;
+    worksheet.getRow(row).getCell(col).value = fatherName;
+    --col;
+    worksheet.getRow(row).getCell(col).value = practicalWork;
+    --col;
+    worksheet.getRow(row).getCell(col).value = assignment;
+    --col;
+    worksheet.getRow(row).getCell(col).value = midtermMarks;
+    --col;
+    worksheet.getRow(row).getCell(col).value = finalMarks;
+  });
+  const now = Date.now();
+  const newPath = path.join(__dirname, '../', 'storage', 'files', `${now}.xlsx`);
+  await workbook.xlsx.writeFile(newPath);
+  return res.download(newPath);
 });
 
 module.exports = {

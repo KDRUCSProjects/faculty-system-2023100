@@ -130,10 +130,10 @@ const getShokaMarks = (shokaId) => {
 
 /**
  * get subject marks
- * @param {Number} shokaId
+ * @param {Array} conditions
  * @returns {Promise<ShokaList>}
  */
-const getSubjectMarks = (shokaId) => {
+const getSubjectMarks = (conditions) => {
   return sequelize.query(
     `
     select shokalist.finalMarks as finalMarks, 
@@ -144,7 +144,7 @@ const getSubjectMarks = (shokaId) => {
     student.fatherName as fatherName 
     from shokalists as shokalist 
     inner join students as student on student.id = shokalist.studentId  
-    where shokaId = ${shokaId}
+    where ${conditions.join(` AND `)}
     order by 
       student.fullName ASC,
       student.fatherName ASC
