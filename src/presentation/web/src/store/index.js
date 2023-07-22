@@ -9,6 +9,7 @@ import departmentModule from './modules/departments';
 import semestersModule from './modules/semesters';
 import yearsModule from './modules/years';
 import conversionModule from './modules/conversion';
+import tokensModule from './modules/tokens'
 
 export default createStore({
   modules: {
@@ -20,6 +21,7 @@ export default createStore({
     semesters: semestersModule,
     years: yearsModule,
     conversion: conversionModule,
+    tokens: tokensModule,
   },
   state: {
     toastMessages: [],
