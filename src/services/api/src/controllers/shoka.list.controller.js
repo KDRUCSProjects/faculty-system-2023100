@@ -15,6 +15,16 @@ const Excel = require('exceljs');
 const path = require('path');
 
 const createShokaList = catchAsync(async (req, res) => {
+
+  const midtermMarks = req.body.midtermMarks || 0;
+  const assignment = req.body.assignment || 0;
+  const finalMarks = req.body.finalMarks || 0;
+  const practicalWork = req.body.practicalWork || 0;
+  const totalMarks = (midtermMarks + assignment + finalMarks + practicalWork);
+
+  if (totalMarks > 100) {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Total Marks are Above 100');
+  }
   const { studentId, subjectId } = req.body;
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
@@ -39,7 +49,11 @@ const createShokaList = catchAsync(async (req, res) => {
       case 2:
         const studentFirstChanceMarks = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 1);
         if (!studentFirstChanceMarks) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student does not have first chance marks')
-        const firstChanceTotalMarks = (studentFirstChanceMarks.midtermMarks + studentFirstChanceMarks.assignmentOrProjectMarks + studentFirstChanceMarks.finalMarks)
+        const midtermMarks = studentFirstChanceMarks.midtermMarks || 0;
+        const assignment = studentFirstChanceMarks.assignment || 0;
+        const practicalWork = studentFirstChanceMarks.practicalWork || 0;
+        const finalMarks = studentFirstChanceMarks.finalMarks || 0;
+        const firstChanceTotalMarks = (midtermMarks + assignment + finalMarks + practicalWork);
         if (firstChanceTotalMarks >= 55) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student is pass in first chance')
 
         req.body.shokaId = shoka.id;
@@ -50,7 +64,11 @@ const createShokaList = catchAsync(async (req, res) => {
       case 3:
         const studentSecondChanceMarks = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 2);
         if (!studentSecondChanceMarks) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student does not have second chance marks')
-        const secondChanceTotalMarks = (studentSecondChanceMarks.midtermMarks + studentSecondChanceMarks.assignmentOrProjectMarks + studentSecondChanceMarks.finalMarks)
+        const secondMidtermMarks = studentSecondChanceMarks.midtermMarks || 0;
+        const secondAssignment = studentSecondChanceMarks.assignment || 0;
+        const secondPracticalWork = studentSecondChanceMarks.practicalWork || 0;
+        const secondFinalMarks = studentSecondChanceMarks.finalMarks || 0;
+        const secondChanceTotalMarks = (secondMidtermMarks + secondAssignment + secondPracticalWork + secondFinalMarks);
         if (secondChanceTotalMarks >= 55) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student is pass in second chance')
 
         req.body.shokaId = shoka.id;
@@ -73,10 +91,35 @@ const getShokaList = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(results);
 });
 
+const updateShokaList = catchAsync(async (req, res) => {
+  const { shokalistId } = req.params;
+  const shokaList = await shokaListService.getShokaListById(shokalistId);
+  if (!shokaList) throw new ApiError(httpStatus.NOT_FOUND, 'shoka marks not found');
+  const results = await shokaListService.updateShokaList(shokaList, req.body);
+  res.status(httpStatus.ACCEPTED).send(results);
+});
+
+
+const deleteShokaList = catchAsync(async (req, res) => {
+  const { shokalistId } = req.params;
+  const shokaList = await shokaListService.getShokaListById(shokalistId);
+  if (!shokaList) throw new ApiError(httpStatus.NOT_FOUND, 'shoka marks not found');
+  await shokaListService.deleteShokaList(shokaList);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
+
 const getStudentMarks = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   // create conditions for query
   const conditions = [`shokalist.deletedAt IS NULL`, `shokalist.studentId = ${studentId}`];
+
+  if (req.query.semesterId) {
+    conditions.push(`semester.id = ${req.query.semesterId}`);
+    const results = await shokaListService.getStudentMarks(conditions);
+    const formattedMarks = marksFormatter(results);
+    return res.status(httpStatus.OK).send(formattedMarks);
+  }
 
   if (req.query?.semester) {
     const { semester } = req.query;
@@ -141,8 +184,10 @@ const createShokaInExcel = catchAsync(async (req, res) => {
 });
 
 module.exports = {
+  deleteShokaList,
   getShokaList,
   createShokaList,
+  updateShokaList,
   getStudentMarks,
   createShokaInExcel,
 };

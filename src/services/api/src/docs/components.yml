@@ -200,16 +200,19 @@ components:
           type: number
         midtermMarks: 
           type: number
-        assignmentOrProjectMarks: 
+        assignment: 
           type: number
         finalMarks: 
+          type: number
+        practicalWork:
           type: number
       example:
         shokaFK: 1
         studentFK: 5
         midtermMarks: 16
-        assignmentOrProjectMarks: 11
+        assignment: 11
         finalMarks: 45
+        practicalWork: 45
 
     AttendanceList:
       type: object

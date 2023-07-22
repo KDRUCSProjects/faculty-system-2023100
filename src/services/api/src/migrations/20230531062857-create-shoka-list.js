@@ -36,30 +36,24 @@ module.exports = {
         allowNull: false,
         required: true,
         defaultValue: 0,
-        validate: {
-          min: 0,
-          max: 20,
-        },
       },
-      assignmentOrProjectMarks: {
+      assignment: {
         type: Sequelize.INTEGER,
         allowNull: false,
         required: true,
         defaultValue: 0,
-        validate: {
-          min: 0,
-          max: 20,
-        },
       },
       finalMarks: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0,
         required: true,
-        validate: {
-          min: 0,
-          max: 60,
-        },
+      },
+      practicalWork: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        required: true,
       },
       chance: {
         type: Sequelize.INTEGER,

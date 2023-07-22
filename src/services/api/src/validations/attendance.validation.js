@@ -48,13 +48,11 @@ const takeOneStdAttendance = {
   query: Joi.object().keys({
     type: Joi.string().required().valid('one', 'two', 'both'),
   }),
-  body: Joi.object()
-    .keys({
-      studentId: Joi.number().integer().min(1).required(),
-      status: Joi.boolean().required(),
-    }),
+  body: Joi.object().keys({
+    studentId: Joi.number().integer().min(1).required(),
+    status: Joi.boolean().required(),
+  }),
 };
-
 
 module.exports = {
   getAttendance,
