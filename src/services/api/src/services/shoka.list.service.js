@@ -112,11 +112,12 @@ const getStudentMarks = (conditions) => {
 /**
  * get subject marks
  * @param {ObjectId} shokaId
+ * @param {ObjectId} chance
  * @returns {Promise<ShokaList>}
  */
-const getShokaMarks = (shokaId) => {
+const getShokaMarks = (shokaId, chance) => {
   return ShokaList.findAll({
-    where: { shokaId },
+    where: { shokaId, chance },
     include: [
       { model: Student, as: 'Student' },
       {

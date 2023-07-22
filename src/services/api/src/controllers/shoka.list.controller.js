@@ -88,7 +88,8 @@ const getShokaList = catchAsync(async (req, res) => {
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
   const shoka = await shokaService.findShokaBySubjectId(subjectId);
   if (!shoka) throw new ApiError(httpStatus.NOT_FOUND, 'shoka not found');
-  const results = await shokaListService.getShokaMarks(shoka.id);
+  const { chance } = req.query;
+  const results = await shokaListService.getShokaMarks(shoka.id, chance);
   res.status(httpStatus.OK).send(results);
 });
 
@@ -235,6 +236,7 @@ const createShokaInExcel = catchAsync(async (req, res) => {
   }
   const { chance } = req.query;
   const headerText = `د کمپيوټر ساينس پوهنځي د ${className} ټولګی د ${semesterName} سمسټر د (${subject.name})  مضمون استاد (${teacher.name})   مميز (      )  د ${chance} چانس ازموينی نمري`
+  const footerText = `په پورته شرح د (   ${className}     ) ټولګی د ${semesterName} سمسټر ۱۴۰۲ تحصیلي کال دنمرو شقه بدون د قلم وهنی او تراش څخه تر تيب او صحت لري.`;
 
   const filePath = path.join(__dirname, '../', 'storage', 'exportable', 'templates', 'shoka.xlsx')
 
@@ -263,6 +265,7 @@ const createShokaInExcel = catchAsync(async (req, res) => {
     worksheet.getRow(row).getCell(col).value = finalMarks;
   });
   const now = Date.now();
+  worksheet.getRow(107).getCell(1).value = footerText;
   const newPath = path.join(__dirname, '../', 'storage', 'files', `${now}.xlsx`);
   await workbook.xlsx.writeFile(newPath);
   return res.download(newPath);
