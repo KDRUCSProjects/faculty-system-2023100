@@ -60,18 +60,21 @@
                       Students have migrated already to next semester
                     </v-alert>
                   </v-card-text>
-                  <v-card-actions>
-                    <v-btn
-                      variant="tonal"
-                      size="x-large"
-                      color="success"
-                      prepend-icon="mdi-stairs-up"
-                      block
-                      @click="promoteSemesterStudents"
-                      :disabled="currentSemester.completed && !forceMigrate"
-                    >
-                      Promote Students
-                    </v-btn>
+                  <v-card-actions class="mx-2">
+                    <div class="w-100">
+                      <migration-review>
+                        <v-btn
+                          variant="tonal"
+                          size="x-large"
+                          color="success"
+                          prepend-icon="mdi-stairs-up"
+                          block
+                          :disabled="currentSemester.completed && !forceMigrate"
+                        >
+                          Start Migration
+                        </v-btn>
+                      </migration-review>
+                    </div>
                   </v-card-actions>
                   <v-card-text class="ma-0 pa-0" v-if="currentSemester?.completed">
                     <v-checkbox label="Force migrate" v-model="forceMigrate"></v-checkbox>
@@ -107,6 +110,7 @@ import StudentsTable from '@/components/students/tables/StudentsTable.vue';
 import SubjectsList from '@/components/subjects/SubjectsList.vue';
 import { rankSemester } from '@/utils/global';
 import AddSubject from '@/components/subjects/dialogs/AddSubject.vue';
+import MigrationReview from '@/components/semesters/dialogs/MigrationReview';
 export default {
   provide() {
     return {
@@ -124,6 +128,7 @@ export default {
     StudentsTable,
     SubjectsList,
     AddSubject,
+    MigrationReview,
   },
   data: () => ({
     tab: 1,
