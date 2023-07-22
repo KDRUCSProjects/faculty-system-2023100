@@ -42,28 +42,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
-        validate: {
-          min: 0,
-          max: 20,
-        },
       },
-      assignmentOrProjectMarks: {
+      assignment: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
-        validate: {
-          min: 0,
-          max: 20,
-        },
       },
       finalMarks: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
-        validate: {
-          min: 0,
-          max: 60,
-        },
+      },
+      practicalWork: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
       chance: {
         type: DataTypes.INTEGER,

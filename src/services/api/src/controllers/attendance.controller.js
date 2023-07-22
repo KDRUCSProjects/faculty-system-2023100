@@ -92,7 +92,7 @@ const getTodaysAttendance = catchAsync(async (req, res) => {
     }
     results = await attendanceListService.getSemesterSdtAndAttendance(attendance.id);
   }
-  const { subjectName, teacherId, teacherName, } = results[0];
+  const { subjectName, teacherId, teacherName } = results[0];
   const students = results.map((element) => {
     return {
       studentId: element.studentId,
@@ -107,10 +107,7 @@ const getTodaysAttendance = catchAsync(async (req, res) => {
       isPresentTwo: element.isPresentTwo,
     };
   });
-  return res
-    .status(httpStatus.OK)
-    .send({ date, shamsiDate, subjectId, subjectName, teacherId, teacherName, students });
-
+  return res.status(httpStatus.OK).send({ date, shamsiDate, subjectId, subjectName, teacherId, teacherName, students });
 });
 
 const takeTodaysAttendance = catchAsync(async (req, res) => {
@@ -136,7 +133,7 @@ const takeTodaysAttendance = catchAsync(async (req, res) => {
   // check subject is related to teacher
   if (req.user.role !== 'admin' && subject.teacherId !== req.user.id) {
     throw new ApiError(httpStatus.FORBIDDEN, 'FORBiDDEN');
-  }  // find attendance
+  } // find attendance
   const attendance = await attendanceService.findAttendanceBySubjectId(subjectId);
   if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, 'attendance not found');
   // find teacher
@@ -148,7 +145,6 @@ const takeTodaysAttendance = catchAsync(async (req, res) => {
   // check if semester is on going
   const isSemesterOnGoing = await semesterService.isSemesterOnGoing(semester.id);
   if (!isSemesterOnGoing) throw new ApiError(httpStatus.NOT_ACCEPTABLE, `it is not ongoing semester's subject`);
-
 
   // get all students of the semester
   const semesterStudents = await studentListService.findSemesterStudents(semester.id);
@@ -288,18 +284,6 @@ const takeTodaysAttendance = catchAsync(async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
 const takeOneStdAttendance = catchAsync(async (req, res) => {
   // const date = moment().format('YYYY-MM-DD');
   const date = moment();
@@ -318,7 +302,6 @@ const takeOneStdAttendance = catchAsync(async (req, res) => {
   if (now.isAfter(sixPM)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'You Cannot Take Attendance After 6 pm');
   }
-
 
   const { subjectId } = req.params;
   const { studentId, status } = req.body;
@@ -357,17 +340,17 @@ const takeOneStdAttendance = catchAsync(async (req, res) => {
       if (doesStdHasAtt) {
         const result = await attendanceListService.updateTodaysAttendance(doesStdHasAtt, { isPresentOne: status });
         return res.status(httpStatus.ACCEPTED).send(result);
-      } else {
-        const newAtt = {
-          studentId,
-          attendanceId: attendance.id,
-          isPresentOne: status,
-          date,
-          shamsiDate,
-        };
-        const result = await attendanceListService.takeTodaysAttendance(newAtt);
-        return res.status(httpStatus.CREATED).send(result);
       }
+      const newAtt = {
+        studentId,
+        attendanceId: attendance.id,
+        isPresentOne: status,
+        date,
+        shamsiDate,
+      };
+      const result = await attendanceListService.takeTodaysAttendance(newAtt);
+      return res.status(httpStatus.CREATED).send(result);
+
     case 'two':
       const doesStdHas2Att = await attendanceListService.findStudentFirstCellAttendance(studentId, attendance.id);
       if (doesStdHas2Att) {
@@ -388,9 +371,10 @@ const takeOneStdAttendance = catchAsync(async (req, res) => {
     case 'both':
       const doesStdHasBothAtt = await attendanceListService.findStudentFirstCellAttendance(studentId, attendance.id);
       if (doesStdHasBothAtt) {
-        const result = await attendanceListService.updateTodaysAttendance(
-          doesStdHasBothAtt, { isPresentTwo: status, isPresentOne: status }
-        );
+        const result = await attendanceListService.updateTodaysAttendance(doesStdHasBothAtt, {
+          isPresentTwo: status,
+          isPresentOne: status,
+        });
         return res.status(httpStatus.ACCEPTED).send(result);
       } else {
         const newAtt = {

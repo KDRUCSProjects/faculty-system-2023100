@@ -1,6 +1,8 @@
 // Sequelize Models
 const { QueryTypes } = require('sequelize');
+const httpStatus = require('http-status');
 const { ShokaList, sequelize, Student, Subject, Shoka } = require('../models');
+const ApiError = require('../utils/ApiError');
 
 /**
  * Create a shoka list
@@ -18,6 +20,43 @@ const createShokaList = (shokaListBody) => {
  */
 const getShokaList = (shokaId) => {
   return ShokaList.findAll({ where: { shokaId } });
+};
+
+/**
+ * Get Shoka List by id
+ * @param {ObjectId} shokaListId
+ * @returns {Promise<ShokaList>}
+ */
+const getShokaListById = (shokaListId) => {
+  return ShokaList.findOne({ where: { id: shokaListId } });
+};
+
+/**
+ * delete a shoka list
+ * @param {Object} shokalist
+ * @returns {Promise<Subject>}
+ */
+const deleteShokaList = (shokaList) => {
+  if (shokaList instanceof ShokaList) {
+    return shokaList.destroy();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
+};
+
+/**
+ * update shoka list
+ * @param {Object} oldShokaListBody
+ * @param {Object} newShokaListBody
+ * @returns {Promise<ShokaList>}
+ */
+const updateShokaList = (oldShokaListBody, newShokaListBody) => {
+  if (oldShokaListBody instanceof ShokaList) {
+    oldShokaListBody.set({
+      ...newShokaListBody,
+    });
+    return oldShokaListBody.save();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
 
 /**
@@ -46,7 +85,8 @@ const getStudentMarks = (conditions) => {
     shokalist.shokaId,
     shokalist.studentId,
     shokalist.midtermMarks,
-    shokalist.assignmentOrProjectMarks,
+    shokalist.assignment,
+    shokalist.practicalWork,
     shokalist.finalMarks,
     shokalist.createdAt,
     shokalist.deletedAt,
@@ -88,7 +128,6 @@ const getShokaMarks = (shokaId) => {
   });
 };
 
-
 /**
  * get subject marks
  * @param {Number} shokaId
@@ -98,8 +137,9 @@ const getSubjectMarks = (shokaId) => {
   return sequelize.query(
     `
     select shokalist.finalMarks as finalMarks, 
-    shokalist.midtermMarks as midter,
-    shokalist.assignmentOrProjectMarks as assignment, 
+    shokalist.midtermMarks as midterm,
+    shokalist.assignment as assignment, 
+    shokalist.practicalWork as practicalWork,
     student.fullName as fullName, 
     student.fatherName as fatherName 
     from shokalists as shokalist 
@@ -119,5 +159,8 @@ module.exports = {
   createShokaList,
   getStudentMarks,
   getSubjectMarks,
+  updateShokaList,
+  deleteShokaList,
+  getShokaListById,
   isStudentListedInShokaList,
 };
