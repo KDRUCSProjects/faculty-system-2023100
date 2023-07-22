@@ -1,3 +1,4 @@
+const httpStatus = require('http-status');
 const { http } = require('../config/logger');
 const {
   semesterService,
@@ -8,7 +9,6 @@ const {
   studentListService,
 } = require('../services');
 const ApiError = require('./ApiError');
-const httpStatus = require('http-status');
 
 /**
  * find in which semester should the student must be enrolled after taajil, repeat or mahrom
@@ -23,7 +23,7 @@ const findEligibleNextSemesterAfterConversion = async (semesterId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Semester not found');
   }
 
-  let currentSemesterYear = await educationalYearService.getEducationalYear(currentSemester.educationalYearId);
+  const currentSemesterYear = await educationalYearService.getEducationalYear(currentSemester.educationalYearId);
 
   const nextSemesterYearId = await educationalYearService.findEducationalYearByValue(1 + currentSemesterYear.year);
 
@@ -68,7 +68,8 @@ const checkTaajilWithReentry = async (studentId, taajilType = 'taajil') => {
   if (generalTaajil && !reentryExistForTheTaajil) {
     // If has been given taajil, but not given reentry back
     return false;
-  } else if (generalTaajil && reentryExistForTheTaajil) {
+  }
+  if (generalTaajil && reentryExistForTheTaajil) {
     return true;
   }
 
