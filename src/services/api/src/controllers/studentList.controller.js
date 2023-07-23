@@ -222,6 +222,49 @@ const promoteStudents = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send(results);
 });
 
+const reviewStudentsPromotion = catchAsync(async (req, res) => {
+  // Get students of the given semester:
+  const semesterStudents = await studentListService.getAllStudentsBySemesterId(req.params.semesterId);
+  const studentsIds = semesterStudents.map((student) => student.studentId);
+
+  const results = [];
+
+  for await (const studentId of studentsIds) {
+    // First thing first, validate if the student can go to next semester by checking taajil, tabdili, mahromiat and repeat semester
+
+    const studentExists = await studentExistInNextSemester(studentId, req.params.semesterId);
+    const theStudent = await studentService.getStudent(studentId);
+
+    if (studentExists) {
+      results.push({
+        message: 'Student is already in next semester',
+        student: theStudent,
+        studentId,
+        eligibility: 0,
+        reason: 'duplicate',
+      });
+      continue;
+    }
+
+    const { message, eligible, reason } = await checkStudentEligibilityForNextSemester(studentId);
+
+    // Get student data
+    results.push({
+      studentId: studentId,
+      student: theStudent,
+      eligibility: !!eligible,
+      message,
+      reason,
+    });
+
+    // Once promotion is completed, mark the current semester as completed
+  }
+
+  console.log(results);
+
+  return res.send(results);
+});
+
 // Util functions
 
 const studentExistInNextSemester = async (studentId, currentSemesterId) => {
@@ -240,4 +283,5 @@ module.exports = {
   deleteStudentList,
   createStudentList,
   promoteStudents,
+  reviewStudentsPromotion,
 };
