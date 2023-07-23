@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-card class="theShadow py-5 pa-3">
+      
       <span class="pro" v-if="!studentRegistration"> {{ studentStatus }} </span>
       <v-card-item class="text-center mb-1">
         <v-avatar class="my-2" :size="avatarSize" color="secondary" variant="tonal">
