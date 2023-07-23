@@ -1,5 +1,6 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
+const { Op } = require('sequelize');
 
 // Sequelize Models
 const { Taajil, Student } = require('../models');
@@ -146,6 +147,19 @@ const findTaajilByStudentIdAndType = async (studentId, type) => {
   });
 };
 
+/**
+ * find tajil + special taajil count or data by semester id
+ * @param {ObjectId} studentKankorId
+ * @returns {Promise<Taajil>}
+ */
+const findTaajilBySemesterId = async (semesterId, onlyCount = true) => {
+  const query = {
+    where: { semesterId, [Op.or]: [{ type: 'taajil' }, { type: 'special_taajil' }] },
+  };
+
+  return onlyCount ? await Taajil.count(query) : await Taajil.findAll(query);
+};
+
 module.exports = {
   createTaajil,
   updateTaajil,
@@ -158,4 +172,5 @@ module.exports = {
   findTaajilByStdKankorId,
   deleteTaajilByStudentId,
   findTaajilByStudentIdAndType,
+  findTaajilBySemesterId,
 };

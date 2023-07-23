@@ -1,6 +1,13 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { semesterService, educationalYearService, subjectService } = require('../services');
+const {
+  semesterService,
+  educationalYearService,
+  subjectService,
+  taajilService,
+  reentryService,
+  tabdiliService,
+} = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const createSemester = catchAsync(async (req, res) => {
@@ -14,7 +21,33 @@ const createSemester = catchAsync(async (req, res) => {
 
 const getSemester = catchAsync(async (req, res) => {
   const semester = await semesterService.findSemesterById(req.params.semesterId);
+
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'Semester Not Found');
+
+  const taajilsCount = await taajilService.findTaajilBySemesterId(req.params.semesterId);
+  const reentryTaajilsCount = await reentryService.findReentryBySemesterIdAndType(req.params.semesterId, 'taajil');
+  const reentrySpecialTaajilsCount = await reentryService.findReentryBySemesterIdAndType(
+    req.params.semesterId,
+    'special_taajil'
+  );
+
+  const tabdiliCount = await tabdiliService.findTabdiliBySemesterId(req.params.semesterId);
+
+  const statistics = {
+    taajilsCount,
+    reentry: {
+      reentryTaajilsCount: reentryTaajilsCount + reentrySpecialTaajilsCount,
+      // Missing for now
+      reentryMahromCount: 0,
+      reentryMahromRepeatSemester: 0,
+    },
+    tabdiliCount,
+    // Missing for now
+    monfaqCount: 0,
+  };
+
+  semester.dataValues.statistics = statistics;
+
   return res.status(httpStatus.OK).send(semester);
 });
 
@@ -37,8 +70,6 @@ const getSemesters = catchAsync(async (req, res) => {
   const semesters = await semesterService.getAllSemesters();
   return res.status(httpStatus.OK).send(semesters);
 });
-
-
 
 module.exports = {
   getSemester,

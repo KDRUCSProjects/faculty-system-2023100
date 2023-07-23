@@ -28,7 +28,15 @@
                   <v-btn variant="tonal" color="primary" block :prepend-icon="'mdi-plus'">New Subject</v-btn>
                 </add-subject>
               </v-window-item>
-              <v-window-item :value="2"> taajil, reentry statistics </v-window-item>
+              <v-window-item :value="2">
+                <v-card>
+                  <v-card-text class="pa-0 mt-10">
+                    <div class="h-100 t-3">
+                      <base-bars :height="295" :datasets="semesterStatistics" :labels="statisticsLabels"></base-bars>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-window-item>
               <v-window-item :value="3">
                 <v-card class="mt-7">
                   <v-card-item>
@@ -111,6 +119,7 @@ import SubjectsList from '@/components/subjects/SubjectsList.vue';
 import { rankSemester } from '@/utils/global';
 import AddSubject from '@/components/subjects/dialogs/AddSubject.vue';
 import MigrationReview from '@/components/semesters/dialogs/MigrationReview';
+import BaseBars from '@/components/ui/charts/BaseBars.vue';
 export default {
   provide() {
     return {
@@ -129,6 +138,7 @@ export default {
     SubjectsList,
     AddSubject,
     MigrationReview,
+    BaseBars,
   },
   data: () => ({
     tab: 1,
@@ -173,6 +183,7 @@ export default {
       // },
       { title: 'Actions', key: 'actions', sortable: false },
     ],
+    statisticsLabels: ['Taajil', 'Reentry', 'Monfaq', 'Tabdil'],
   }),
   computed: {
     students() {
@@ -192,6 +203,21 @@ export default {
     },
     currentSemester() {
       return this.$store.getters['semesters/semester'];
+    },
+    semesterStatistics() {
+      // female data are set to null fr now
+      return [
+        {
+          label: 'Male',
+          backgroundColor: '#400D51',
+          data: [15, 3, 9, 3],
+        },
+        {
+          label: 'Female',
+          backgroundColor: '#536DFE',
+          data: [5, 2, 3, 5],
+        },
+      ];
     },
   },
   methods: {

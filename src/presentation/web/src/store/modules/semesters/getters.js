@@ -8,6 +8,9 @@ export default {
   semester(state) {
     return state.semester;
   },
+  currentSemesterStatistics(state) {
+    return state.semester?.statistics;
+  },
   semesterSubjects(state, _, rootState, rootGetters) {
     let subjects = state.semester?.Subjects;
 

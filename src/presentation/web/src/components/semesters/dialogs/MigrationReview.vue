@@ -18,7 +18,10 @@
               <v-card class="theShadow pa-7 bg-dark" style="height: 100vh">
                 <v-card-text class="d-flex justify-center align-center" style="height: 100vh">
                   <v-card-item class="text-center mx-auto">
-                    <v-card-title class="text-h4 pb-2 text-uppercase">Welcome to students migration</v-card-title>
+                    <v-card-title class="text-h4 pb-2 text-uppercase font-weight-bold">
+                      Welcome to students migration
+                    </v-card-title>
+                    <v-card-title class="text-h4 pb-2 text-uppercase text-secondary font-weight-bold">Overview</v-card-title>
                     <v-card-subtitle class="mt-4">
                       Please review your migration before submitting the process. <br />Here you will see which students are
                       eligible for the next semester.<br />
