@@ -16,9 +16,10 @@
           </v-card-item>
           <v-divider class="mt-3"></v-divider>
           <v-card-text>
-            <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="active-tab">
+            <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="bg-teal-lighten-4">
               <v-tab :value="1"> Subjects </v-tab>
-              <v-tab :value="2"> Actions </v-tab>
+              <v-tab :value="2"> Statistics </v-tab>
+              <v-tab :value="3"> Migration </v-tab>
             </v-tabs>
             <v-window v-model="tab">
               <v-window-item :value="1">
@@ -27,15 +28,57 @@
                   <v-btn variant="tonal" color="primary" block :prepend-icon="'mdi-plus'">New Subject</v-btn>
                 </add-subject>
               </v-window-item>
-              <v-window-item :value="2">
-                <v-card>
+              <v-window-item :value="2"> taajil, reentry statistics </v-window-item>
+              <v-window-item :value="3">
+                <v-card class="mt-7">
                   <v-card-item>
-                    <v-card-title>Students Promotion</v-card-title>
-                    <v-card-subtitle>Migrate students from this semester to next semester</v-card-subtitle>
+                    <v-card-title class="text-dark font-weight-bold text-h5">Students Migration</v-card-title>
                   </v-card-item>
-                  <v-card-actions>
-                    <v-btn variant="flat" color="success" block @click="promoteSemesterStudents"> Promote Students </v-btn>
+                  <v-card-text>
+                    <p>
+                      Migrate your currently enrolled students in this semester to the upcoming semester. This will not
+                      migrate students who has taajil, tabdili or students who has not completed the requireds marks for the
+                      next semester.
+                    </p>
+
+                    <v-alert
+                      v-if="!currentSemester?.completed"
+                      icon="mdi-alert"
+                      variant="outlined"
+                      type="warning"
+                      class="pa-2 mt-4"
+                    >
+                      Do this only if your currently semester is finished
+                    </v-alert>
+                    <v-alert
+                      v-if="currentSemester?.completed"
+                      icon="mdi-alert"
+                      variant="outlined"
+                      type="error"
+                      class="pa-2 mt-4"
+                    >
+                      Students have migrated already to next semester
+                    </v-alert>
+                  </v-card-text>
+                  <v-card-actions class="mx-2">
+                    <div class="w-100">
+                      <migration-review>
+                        <v-btn
+                          variant="tonal"
+                          size="x-large"
+                          color="success"
+                          prepend-icon="mdi-stairs-up"
+                          block
+                          :disabled="currentSemester.completed && !forceMigrate"
+                        >
+                          Start Migration
+                        </v-btn>
+                      </migration-review>
+                    </div>
                   </v-card-actions>
+                  <v-card-text class="ma-0 pa-0" v-if="currentSemester?.completed">
+                    <v-checkbox label="Force migrate" v-model="forceMigrate"></v-checkbox>
+                  </v-card-text>
                 </v-card>
               </v-window-item>
             </v-window>
@@ -67,6 +110,7 @@ import StudentsTable from '@/components/students/tables/StudentsTable.vue';
 import SubjectsList from '@/components/subjects/SubjectsList.vue';
 import { rankSemester } from '@/utils/global';
 import AddSubject from '@/components/subjects/dialogs/AddSubject.vue';
+import MigrationReview from '@/components/semesters/dialogs/MigrationReview';
 export default {
   provide() {
     return {
@@ -84,12 +128,14 @@ export default {
     StudentsTable,
     SubjectsList,
     AddSubject,
+    MigrationReview,
   },
   data: () => ({
     tab: 1,
     page: 1,
     itemsPerPage: 8,
     selectedStudentId: null,
+    forceMigrate: false,
     mode: 'semester-students',
     headers: [
       // {
@@ -144,27 +190,11 @@ export default {
     year() {
       return this.$route.query.year;
     },
+    currentSemester() {
+      return this.$store.getters['semesters/semester'];
+    },
   },
   methods: {
-    async promoteSemesterStudents() {
-      // if (this.mode !== 'enrollment') {
-      //   return alert('Switch back to semester students');
-      // }\
-
-      let res = await this.$refs.baseConfirmDialog.show({
-        warningTitle: 'Warning',
-        title: 'Are you sure you want to promote these students to next semester?',
-        subtitle: `Students Count: ${this.students?.length}`,
-        okButton: 'Yes, I am sure',
-      });
-
-      // If closed, return the function
-      if (!res) {
-        return false;
-      }
-
-      await this.$store.dispatch('students/promoteStudents', this.id);
-    },
     async getPageNumber(number) {
       this.page = number;
       // Also, now let's load students

@@ -17,14 +17,14 @@
         <div class="mx-1"></div>
       </template>
       <v-toolbar :color="'dark'">
-    <v-toolbar-title> All Departments </v-toolbar-title>
-    <v-divider inset vertical></v-divider>
-    <v-spacer></v-spacer>
+        <v-toolbar-title> All Departments </v-toolbar-title>
+        <v-divider inset vertical></v-divider>
+        <v-spacer></v-spacer>
 
-    <div class="mx-4">
-      <add-department></add-department>
-    </div>
-  </v-toolbar>
+        <div class="mx-4">
+          <add-department></add-department>
+        </div>
+      </v-toolbar>
       <v-row no-gutters>
         <v-col v-for="(department, index) in departments" :key="index" cols="3">
           <v-sheet class="ma-2 pa-2">
@@ -34,7 +34,6 @@
       </v-row>
     </base-contents>
   </div>
-
 </template>
 
 <script>
@@ -49,8 +48,8 @@ export default {
   },
 
   data: () => ({
-      depID: null,
-    }),  
+    depID: null,
+  }),
   async mounted() {
     // Load courses at app mount
     await this.$store.dispatch('departments/getDepartments');

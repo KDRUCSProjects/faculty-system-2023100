@@ -5,7 +5,11 @@
       Add Teacher
 
       <v-dialog max-width="550" activator="parent" v-model="dialog" transition="slide-y-transition">
-        <v-card class="pa-1" :loading="isLoading">
+        <v-toolbar :color="'dark'" class="mb-2">
+          <v-toolbar-title class=""> Add New Teacher Account </v-toolbar-title>
+        </v-toolbar>
+
+        <v-card class="" :loading="isLoading">
           <!-- <v-card-item>
             <v-card-title class="font-weight-bold">Teacher Registration</v-card-title>
             <v-card-subtitle>Fill the form to add new teacher account</v-card-subtitle>
@@ -13,8 +17,9 @@
 
           <v-card-text>
             <v-form @submit.prevent="submitForm" ref="addTeacherForm">
-              <base-photo-uploader @photo="getPhoto" @photo-size-change="handlePhotoSize"></base-photo-uploader>
-
+              <div style="max-width: 220px" class="text-align-center mx-auto">
+                <base-photo-uploader @photo="getPhoto" @photo-size-change="handlePhotoSize"></base-photo-uploader>
+              </div>
               <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Full Name"></v-text-field>
               <v-text-field v-model="lastName" variant="outlined" label="Nick Name"></v-text-field>
               <v-text-field
@@ -61,7 +66,7 @@ export default {
     isLoading: false,
     errorMessage: null,
     pSize: null,
-    dynamicPhotoSize: null
+    dynamicPhotoSize: null,
   }),
   computed: {
     rules() {
@@ -85,13 +90,13 @@ export default {
       };
     },
   },
-  
+
   methods: {
     getPhoto(photo) {
       this.photo = photo;
     },
     handlePhotoSize: function (photoSize) {
-      this.pSize = photoSize
+      this.pSize = photoSize;
     },
     async submitForm() {
       // Validate the form first
@@ -117,13 +122,12 @@ export default {
           data['photo'] = this.photo;
         }
 
-        if(!this.pSize) {
+        if (!this.pSize) {
           await this.$store.dispatch('teachers/addTeacher', data);
           this.closeDialog();
-        }else{
-          alert('photo size should be less than 2 mb')
+        } else {
+          alert('photo size should be less than 2 mb');
         }
-
       } catch (e) {
         // Show error message if happened
         this.errorMessage = e;
