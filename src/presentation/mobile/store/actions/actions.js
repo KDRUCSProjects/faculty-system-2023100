@@ -12,10 +12,14 @@ export const UPDATEACCOUNT = "UPDATEACCOUNT";
 export const CHECKPASSWORD = "CHECKPASSWORD";
 export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const GETSTUDENTINFO = "GETSTUDENTINFO";
+export const GETATTENDENCE = "GETATTENDENCE";
+export const GETSTUDENTSBYSUBJECT = "GETSTUDENTSBYSUBJECT";
 import { base_ip } from "@env";
+import { useNavigation } from "@react-navigation/native";
 
 export const authenticate = (userName, password) => {
   return async (dispatch) => {
+    console.log(base_ip);
     try {
       const response = await FetchWithTimeout(
         "http://" + base_ip + ":4000/auth/login",
@@ -31,12 +35,10 @@ export const authenticate = (userName, password) => {
         5000
       );
 
-      if (response.status === 400) {
-        throw new Error("UserName and Password Is Required!");
+      if (response.status == 401) {
+        throw new Error("UserName or Password Is Wong!");
       }
-      if (response.status === 401) {
-        throw new Error("UserName or Password Is Wrong!");
-      }
+
       if (!response.ok) {
         console.log(response.status);
         throw new Error("something went wrong");
@@ -102,7 +104,7 @@ export const authenticate = (userName, password) => {
         token,
       });
     } catch (e) {
-      throw new Error(e);
+      throw new Error(e.message);
     }
   };
 };
@@ -130,45 +132,133 @@ export const localAuth = (
       token,
     });
 };
-export const isPresent = (studentId) => {
-  return { type: ISPRESENT, studentId };
-};
-
-export const isAbsent = (studentId) => {
-  return { type: ISABSENT, studentId };
-};
-
-export const saveAttendence = (students) => {
+export const isPresent = (subjectId, studentId, type) => {
   return async (dispatch) => {
-    //   const response = await fetch("http://192.168.1.105:4000/auth/login", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       email: userName,
-    //       password: password,
-    //     }),
-    //   });
+    const userData = await AsyncStorage.getItem("userData");
 
-    //   if (response.status === 400) {
-    //     throw new Error("UserName and Password Is Required!");
-    //   }
-    //   if (response.status === 401) {
-    //     throw new Error("UserName or Password Is Wrong!");
-    //   }
-    //   if (!response.ok) {
-    //     console.log(response.status);
-    //     throw new Error("something went wrong");
-    //   }
+    const transformedData = JSON.parse(userData);
+    const { token } = transformedData;
+    const updateResp = await FetchWithTimeout(
+      "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          studentId: studentId,
+          status: true,
+        }),
+      },
+      5000
+    );
+    console.log(updateResp.status);
+    const code = await updateResp.status;
+    if (code == 401) {
+      const error = new Error("Please relogin");
+      error.code = 401;
+      throw error;
+    }
 
-    //   const respoonseData = await response.json();
-    //   console.log(respoonseData);
+    const data = await updateResp.json();
+    console.log(data);
 
-    // dispatch({
-    //   type: SAVEATTENDENCE,
+    if (code == 403) {
+      throw new Error("cant change student status!");
+    }
+    if (updateResp.status != 200 || updateResp.status != 202) {
+      console.log("error");
+    }
+    console.log(studentId);
+    dispatch({ type: ISPRESENT, id: studentId });
+  };
+};
 
-    //   students,
-    // });
-    console.log(students);
+export const isAbsent = (subjectId, studentId, type) => {
+  return async (dispatch) => {
+    const userData = await AsyncStorage.getItem("userData");
+
+    const transformedData = JSON.parse(userData);
+    const { token } = transformedData;
+    const updateResp = await FetchWithTimeout(
+      "http://" + base_ip + ":4000/attendancee/" + subjectId + "?type=" + type,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          studentId: studentId,
+          status: false,
+        }),
+      },
+      5000
+    );
+    const code = await updateResp.status;
+
+    const data = await updateResp.json();
+    console.log(data);
+
+    if (code == 401) {
+      const error = new Error("Please relogin");
+      error.code = 401;
+      throw error;
+    }
+    if (code == 403) {
+      throw new Error("cant change student status!");
+    }
+    if (code != 200 || code != 202) {
+      console.log("error");
+    }
+
+    dispatch({ type: ISABSENT, id: studentId });
+  };
+};
+
+export const saveAttendence = (subjectId, students, type) => {
+  return async (dispatch) => {
+    const userData = await AsyncStorage.getItem("userData");
+
+    const transformedData = JSON.parse(userData);
+    const { token } = transformedData;
+    const updateResp = await FetchWithTimeout(
+      "http://" +
+        base_ip +
+        ":4000/attendance/todaysAttendance/" +
+        subjectId +
+        "?type=" +
+        type,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({ students: students }),
+      },
+      5000
+    );
+    console.log(updateResp.status);
+    const code = await updateResp.status;
+    if (code == 401) {
+      const error = new Error("Please relogin");
+      error.code = 401;
+      throw error;
+    }
+
+    const data = await updateResp.json();
+    console.log(data);
+
+    if (code == 403) {
+      throw new Error("cant save status!");
+    }
+    if (updateResp.status != 200 || updateResp.status != 202) {
+      console.log("error");
+    }
+
+    //dispatch({ type: ISPRESENT, id: studentId });
   };
 };
 
@@ -207,7 +297,9 @@ export const updateAccount = (userName, lastName, email, photo) => {
       throw new Error("Email already taken");
     }
     if (updateResp.status == 401) {
-      throw new Error("Please relogin to update your info");
+      const error = new Error("Please relogin");
+      error.code = 401;
+      throw error;
     }
     const updateRespData = await updateResp.json();
     const name = updateRespData.photo;
@@ -438,6 +530,114 @@ export const createShoka = (
 
     if (updateResp.status != 200 || updateResp.status != 201) {
     }
+  };
+};
+
+export const getAttendence = (id) => {
+  return async (dispatch) => {
+    const userData = await AsyncStorage.getItem("userData");
+
+    const transformedData = JSON.parse(userData);
+    const { token } = transformedData;
+    const updateResp = await FetchWithTimeout(
+      "http://" + base_ip + ":4000/attendance/todaysAttendance/" + id,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      },
+      5000
+    );
+    console.log(updateResp.status);
+
+    let data = await updateResp.json();
+    data = data.students;
+
+    const code = await updateResp.status;
+    if (code == 401) {
+      const error = new Error("Please relogin");
+      error.code = 401;
+      throw error;
+    }
+
+    const studentData = new Array();
+    data.forEach((element) => {
+      let isPresentOne = false;
+      let isPresentTwo = false;
+      if (element.isPresentOne != 0) {
+        isPresentOne = true;
+      }
+      if (element.isPresentTwo != 0) {
+        isPresentTwo = true;
+      }
+      studentData.push({
+        studentId: element.studentId,
+        studentName: element.studentName,
+        nickName: element.nickName,
+        fatherName: element.fatherName,
+
+        grandFatherName: element.grandFatherName,
+        date: element.date,
+        shamsiDate: element.shamsiDate,
+        isPresentOne: isPresentOne,
+        isPresentTwo: isPresentTwo,
+      });
+    });
+
+    //console.log(studentData);
+
+    dispatch({ type: GETATTENDENCE, studentData });
+  };
+};
+
+export const getStudentBySubject = (subjectId) => {
+  return async (dispatch) => {
+    const userData = await AsyncStorage.getItem("userData");
+
+    const transformedData = JSON.parse(userData);
+    const { userPassword, subjects, token, userId, expirationDate } =
+      transformedData;
+
+    const updateResp = await FetchWithTimeout(
+      "http://" + base_ip + ":4000/subjects/students/" + subjectId,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      },
+      5000
+    );
+    let data = await updateResp.json();
+
+    const code = await updateResp.status;
+    if (code == 401) {
+      const error = new Error("Please relogin");
+      error.code = 401;
+      throw error;
+    }
+    const studentData = new Array();
+    data.forEach((element) => {
+      studentData.push({
+        studentId: element.studentId,
+        studentName: element.studentName,
+        nickName: element.nickName,
+        fatherName: element.fatherName,
+
+        grandFatherName: element.grandFatherName,
+        date: element.date,
+        shamsiDate: element.shamsiDate,
+        isPresentOne: 0,
+        isPresentTwo: 0,
+      });
+    });
+
+    console.log(studentData);
+
+    dispatch({ type: GETSTUDENTSBYSUBJECT, studentData });
   };
 };
 

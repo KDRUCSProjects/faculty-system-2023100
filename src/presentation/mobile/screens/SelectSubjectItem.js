@@ -5,7 +5,7 @@ import { Avatar, Button, Card, Text } from "react-native-paper";
 
 const { width, height } = Dimensions.get("window");
 
-const SubjectItem = (props) => (
+const SelectSubjectItem = (props) => (
   <Card
     style={{ margin: 20, width: width / 2.5, height: height / 3.5 }}
     onPress={() => props.onClick(props.subjectId)}
@@ -26,4 +26,4 @@ const SubjectItem = (props) => (
   </Card>
 );
 
-export default SubjectItem;
+export default SelectSubjectItem;

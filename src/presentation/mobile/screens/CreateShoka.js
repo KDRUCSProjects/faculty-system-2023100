@@ -19,6 +19,7 @@ import {
   changePassword,
   checkPassword,
   createShoka,
+  getStudentBySubject,
   logout,
   updateAccount,
 } from "../store/actions/actions";
@@ -28,7 +29,15 @@ import { useEffect } from "react";
 import { Modal } from "@ui-kitten/components/ui";
 
 export default function CreateShoka(props) {
-  const students = useSelector((state) => state.studentReducer.students);
+  const subjectIdParam = props.route.params.subjectId;
+  const getStudentDispatch = useDispatch();
+
+  const [isGetStudentLoading, setisGetStudentLoading] = useState(false);
+
+  const students = useSelector((state) => state.studentsBySubject.students);
+  console.log(students);
+  // var students = Object.keys(obj).map((key) => [key, obj[key]]);
+  // console.log(students);
 
   const subjects = useSelector((state) => state.MainReducer.subjects);
   const ref = useRef();
@@ -59,7 +68,7 @@ export default function CreateShoka(props) {
   const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
-    ref.current.scrollToEnd();
+    // ref.current.scrollToEnd();
   }, [marksError]);
 
   const onSave = async () => {
@@ -110,9 +119,7 @@ export default function CreateShoka(props) {
     } catch (e) {
       setisLoading(false);
       if (e.code == 401) {
-        try {
-          dispatch(logout());
-        } catch (e) {}
+        props.navigation.navigate("Login");
       }
       Alert.alert("Sorry!", e.message);
       return;
