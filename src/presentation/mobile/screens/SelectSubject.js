@@ -7,24 +7,29 @@ import {
   Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { loadSubjects } from "../store/actions/actions";
+import { getAttendence, loadSubjects } from "../store/actions/actions";
 import { useEffect } from "react";
 import { Button } from "react-native-paper";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
 import SubjectItem from "./SubjectItem";
-import { getStudentBySubject } from "../store/actions/actions";
-export default function Subject(props) {
+import SelectSubjectItem from "./SelectSubjectItem";
+
+export default function SelectSubject(props) {
   const subjects = useSelector((state) => state.MainReducer.subjects);
 
   const dispatch = useDispatch();
+
   const onclick = async (id) => {
-    console.log(id);
     try {
-      await dispatch(getStudentBySubject(subjectIdParam));
-      props.navigation.navigate("CreateShoka", { subjectId: id });
-    } catch (err) {
-      Alert.alert("Error!", err.message);
+      await dispatch(getAttendence(id));
+      props.navigation.navigate("selectType", { subjectId: id });
+    } catch (error) {
+      if (error.code == 401) {
+        props.navigation.navigate("Login");
+      }
+      Alert.alert("Error", error.message);
+      return;
     }
   };
 
@@ -64,27 +69,29 @@ export default function Subject(props) {
             </Text>
           </View>
         </View>
-        <Text style={{ fontSize: 20, margin: 10 }}>My Subjects</Text>
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          style={{}}
-        >
-          {subjects.map((subject, index) => (
-            <SubjectItem
-              key={subject.id}
-              subject={subject.name}
-              subjectId={subject.id}
-              onClick={onclick}
-              semester={subjects[index]["Semester.title"]}
-            ></SubjectItem>
-          ))}
-        </ScrollView>
+        <Text style={{ fontSize: 20, margin: 10 }}>Choose a subject</Text>
+        <View style={{ height: "70%" }}>
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            style={{}}
+          >
+            {subjects.map((subject, index) => (
+              <SelectSubjectItem
+                key={subject.id}
+                onClick={onclick}
+                subjectId={subject.id}
+                subject={subject.name}
+                semester={subjects[index]["Semester.title"]}
+              ></SelectSubjectItem>
+            ))}
+          </ScrollView>
+        </View>
       </View>
     </View>
   );

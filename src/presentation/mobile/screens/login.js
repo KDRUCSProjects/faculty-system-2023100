@@ -92,7 +92,7 @@ export default login = (props) => {
     const emailRegEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const paswordRegEx = /^(?=.*\d).{8,15}$/;
     if (email == "") {
-      setemailError("email is Required");
+      setemailError("Email is Required");
       return;
     }
     if (!emailRegEx.test(email)) {
@@ -100,7 +100,7 @@ export default login = (props) => {
       return;
     }
     if (password == "") {
-      setpasswordError("password is Required");
+      setpasswordError("Password is Required");
       return;
     }
 
@@ -118,6 +118,7 @@ export default login = (props) => {
     } catch (err) {
       setisLoading(false);
       seterror(err.message);
+      Alert.alert("Error!", err.message);
       //props.navigation.navigate("teacherScreen");
       return;
     }
@@ -131,7 +132,6 @@ export default login = (props) => {
     if (error) {
       setisLoading(false);
       seterror(null);
-      Alert.alert("Error", error, [<Text>ok</Text>]);
     }
   }, [isLoading, error]);
 

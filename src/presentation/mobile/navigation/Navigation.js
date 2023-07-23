@@ -26,6 +26,8 @@ import Subject from "../screens/Subjects";
 import AccountInfo from "../screens/AccountInfo";
 import ChangePassword from "../screens/ChangePassword";
 import CreateShoka from "../screens/CreateShoka";
+import SelectSubject from "../screens/SelectSubject";
+import SelectType from "../screens/SelectType";
 
 const studentScreen = () => {
   const stdScreen = createStackNavigator();
@@ -109,6 +111,17 @@ const Navigation = (props) => {
         options={{}}
       ></mainNavigation.Screen>
 
+      <mainNavigation.Screen
+        name="selectSubject"
+        component={SelectSubject}
+        options={{}}
+      ></mainNavigation.Screen>
+
+      <mainNavigation.Screen
+        name="selectType"
+        component={SelectType}
+        options={{}}
+      ></mainNavigation.Screen>
       <mainNavigation.Screen
         name="Login"
         component={login}

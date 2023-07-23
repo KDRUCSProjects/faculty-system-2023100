@@ -29,7 +29,7 @@ export default MainDrawer = (props) => {
   let teacherPhoto = useSelector((state) => state.MainReducer.photoUri);
 
   if (!teacherPhoto) {
-    teacherPhoto = "";
+    teacherPhoto = "null";
   }
 
   const dispatch = useDispatch();

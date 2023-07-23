@@ -34,7 +34,7 @@ export default function teacherScreen(props) {
     });
   }, [navigation]);
   const onTakeAttendence = () => {
-    props.navigation.navigate("attendenceScreen");
+    props.navigation.navigate("selectSubject");
   };
   return (
     <Layout
