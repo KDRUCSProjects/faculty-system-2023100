@@ -229,23 +229,4 @@ export default {
       throw e.response.data.message;
     }
   },
-  async promoteStudents(context, semesterId) {
-    try {
-      const token = context.rootGetters.token;
-
-      const response = await axios({
-        url: `/api/studentList/promote/${semesterId}`,
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      // Let's reload all semester data
-    } catch (e) {
-      context.commit('setToast', [0, e.response.data.message], { root: true });
-      throw e.response.data.message;
-    }
-  },
 };

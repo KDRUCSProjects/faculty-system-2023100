@@ -195,28 +195,6 @@ export default {
     },
   },
   methods: {
-    async promoteSemesterStudents() {
-      // if (this.mode !== 'enrollment') {
-      //   return alert('Switch back to semester students');
-      // }\
-
-      let res = await this.$refs.baseConfirmDialog.show({
-        warningTitle: 'Warning',
-        title: 'Are you sure you want to promote these students to next semester?',
-        subtitle: `Students Count: ${this.students?.length}`,
-        okButton: 'Yes, I am sure',
-      });
-
-      // If closed, return the function
-      if (!res) {
-        return false;
-      }
-
-      const response = await this.$store.dispatch('students/promoteStudents', this.id);
-
-      // Reload this semester
-      await this.loadSubjects();
-    },
     async getPageNumber(number) {
       this.page = number;
       // Also, now let's load students
