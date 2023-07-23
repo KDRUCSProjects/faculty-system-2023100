@@ -71,6 +71,19 @@ const updateTabdili = (oldTabdili, newTabdili) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
 };
 
+/**
+ * find tabdilicount or data by semester id
+ * @param {ObjectId} studentKankorId
+ * @returns {Promise<Taajil>}
+ */
+const findTabdiliBySemesterId = async (semesterId, onlyCount = true) => {
+  const query = {
+    where: { semesterId },
+  };
+
+  return onlyCount ? await Tabdili.count(query) : await Tabdili.findAll(query);
+};
+
 module.exports = {
   getTabdilis,
   createTabdili,
@@ -78,4 +91,5 @@ module.exports = {
   updateTabdili,
   findTabdiliById,
   findTabdiliByStudentId,
+  findTabdiliBySemesterId,
 };
