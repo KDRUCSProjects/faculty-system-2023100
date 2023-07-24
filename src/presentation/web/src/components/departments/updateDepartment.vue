@@ -3,7 +3,7 @@
       <!-- Default Btn/Slot -->
       <v-btn :color="activatorColor" @click="getDepartment" :variant="activatorVariant" :prepend-icon="activatorIcon">
         Edit
-        <v-dialog max-width="550" activator="parent" v-model="dialog">
+        <v-dialog max-width="550" activator="parent" v-model="dialog" transition="slide-y-transition">
           <v-card class="pa-1" :loading="isLoading">
             <v-card-text>
               <v-form @submit.prevent="submitForm" ref="updateDepartmentForm">

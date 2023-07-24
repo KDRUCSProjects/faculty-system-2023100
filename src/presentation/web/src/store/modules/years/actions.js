@@ -15,26 +15,26 @@ export default {
       throw e.response.data.message;
     }
   },
-  async deleteEducationalYearById(context, yearId) {
-    try {
-      const token = context.rootGetters.token;
+  // async deleteEducationalYearById(context, yearId) {
+  //   try {
+  //     const token = context.rootGetters.token;
 
-      const response = await axios({
-        url: `/api/years/${yearId}`,
-        method: 'delete',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  //     const response = await axios({
+  //       url: `/api/years/${yearId}`,
+  //       method: 'delete',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
 
-      context.commit('removeYear', yearId);
-      context.commit('setToast', 'Educational year successfully deleted', { root: true });
-    } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed deleting of Educational year'], { root: true });
-      throw e.response.data.message;
-    }
-  },
+  //     context.commit('removeYear', yearId);
+  //     context.commit('setToast', 'Educational year successfully deleted', { root: true });
+  //   } catch (e) {
+  //     context.commit('setToast', [0, e.response.data.message || 'Failed deleting of Educational year'], { root: true });
+  //     throw e.response.data.message;
+  //   }
+  // },
   async addEducationalYear(context, data) {
     try {
       const token = context.rootGetters.token;
