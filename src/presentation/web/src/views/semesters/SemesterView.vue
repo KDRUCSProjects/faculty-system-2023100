@@ -183,7 +183,7 @@ export default {
       // },
       { title: 'Actions', key: 'actions', sortable: false },
     ],
-    statisticsLabels: ['Taajil', 'Reentry', 'Monfaq', 'Tabdil'],
+    statisticsLabels: ['Total', 'Present', 'Taajil', 'Reentry', 'Monfaq', 'Tabdil'],
   }),
   computed: {
     students() {
@@ -206,16 +206,36 @@ export default {
     },
     semesterStatistics() {
       // female data are set to null fr now
+      const stats = this.$store.getters['semesters/currentSemesterStatistics'];
+      console.log(stats.male);
+
+      // Labels are like these: present, taajil, reentry monfaq, tabdili
+      let maleData = [
+        stats?.male?.total,
+        stats?.male?.present,
+        stats?.male?.taajil,
+        stats?.male?.reentry?.total,
+        stats?.male?.monfaq,
+        stats?.male?.tabdili,
+      ];
+      let femaleData = [
+        stats?.female?.total,
+        stats?.female?.present,
+        stats?.female?.taajil,
+        stats?.female?.reentry?.total,
+        stats?.female?.monfaq,
+        stats?.female?.tabdili,
+      ];
       return [
         {
           label: 'Male',
           backgroundColor: '#400D51',
-          data: [15, 3, 9, 3],
+          data: maleData,
         },
         {
           label: 'Female',
           backgroundColor: '#536DFE',
-          data: [5, 2, 3, 5],
+          data: femaleData,
         },
       ];
     },
