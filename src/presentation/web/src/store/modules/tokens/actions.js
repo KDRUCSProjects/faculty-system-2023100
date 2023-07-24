@@ -15,6 +15,8 @@ export default {
       });
 
       context.commit('setTokens', response.data);
+      context.commit('setToast', 'Token successfully generated', { root: true });
+
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message || 'Token load failed'], { root: true });
       throw e.response.data.message;

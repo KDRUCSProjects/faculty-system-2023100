@@ -38,7 +38,6 @@ export default {
       });
 
       context.commit('saveTeacher', response.data);
-
       context.commit('setToast', 'Teacher account has been added successfully', { root: true });
     } catch (e) {
       context.commit('setToast', [0, 'Failed adding Teacher account'], { root: true });
@@ -109,6 +108,7 @@ export default {
 
       context.commit('setCurrentTeacherAssignedSubjects', response.data);
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
     }
   },
@@ -130,6 +130,7 @@ export default {
 
       return response;
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
     }
   },
