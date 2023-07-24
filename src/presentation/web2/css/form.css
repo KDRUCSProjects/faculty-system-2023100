@@ -82,7 +82,8 @@ body {
   padding: 20px;
 }
 
-.profile-image-div {
+.profile-image-div,
+.profile-image-div-pic {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,20 +94,34 @@ body {
   width: 200px;
   border-radius: 100px;
   margin-bottom: 15px;
+  margin: 0px 50px 0px 50px;
+  text-align: center;
+}
+
+.profile-image-div-pic {
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
   margin: 50px 50px 15px 50px;
+  background-color: rgb(199, 199, 199);
 }
 
 .profile-image-div h4 {
-  font-size: 20px;
+  font-size: 18px;
   color: var(--primary-color);
 }
 
 .photo-btn {
   padding: 5px 10px;
   border: none;
+  font-size: 14px;
   border-radius: 3px;
   margin-top: 10px;
   background-color: var(--primary-background-color);
+}
+
+#input-file {
+  display: none;
 }
 
 .right {
@@ -115,6 +130,9 @@ body {
 }
 
 .register-btn {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
   width: 25em;
   height: 40px;
   border-radius: 5px;
@@ -190,25 +208,25 @@ span {
 }
 
 .kankor-id-div input {
-  width: 10em;
+  width: 12em;
 }
 
 .kankor-year-div input {
-  width: 6em;
+  width: 11em;
 }
 
 .addmission-div input {
-  width: 7em;
-  text-align: center;
+  width: 12em;
+  /* text-align: center; */
 }
 
 .dob-div input {
-  width: 9em;
+  width: 18em;
 }
 
 .date-input {
   padding: 0em 0em 0em 6em;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .addmission-div input::-webkit-inner-spin-button,

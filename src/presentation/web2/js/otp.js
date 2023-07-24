@@ -11,7 +11,10 @@ const verify = document.querySelector('.span-2');
 const spinnerDiv = document.querySelector('.spinner-2-div');
 const errorDiv = document.querySelector('.error-message-div');
 const errorClose = document.querySelector('.error-close');
-const inputs = document.querySelectorAll('input');
+const inputs = document.querySelectorAll('.input');
+const profileImg = document.querySelector('.profile-Img');
+const inputFile = document.getElementById('input-file');
+const photoHeadin = document.querySelector('.photo-heading');
 
 ////////////////////////////////////////////////////////////
 
@@ -49,7 +52,7 @@ codes.forEach((input, index1) => {
     }
 
     const arr = pin.join('');
-    console.log(arr);
+
     finalValue = arr;
 
     if (currentInput.value.length > 1) {
@@ -79,20 +82,24 @@ codes.forEach((input, index1) => {
   });
 });
 
-window.addEventListener('load', () => codes[0].focus());
+// window.addEventListener('load', () => );
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 
 const form = document.querySelector('.form');
+let formData;
 
 form.addEventListener('submit', e => {
   e.preventDefault();
+  const file = document.querySelector('#input-file').files[0];
+  codes[0].focus();
 
-  const formData = new FormData(form);
-  data = Object.fromEntries(formData);
-  console.log(formData.get(Date));
-  console.log(data);
+  formData = new FormData(form);
+  formData.append('photo', file);
+  // data = Object.fromEntries(formData);
+
+  // console.log(data);
 
   // mainDiv.classList.add('hidden');
   overlay.classList.remove('hidden');
@@ -102,15 +109,16 @@ form.addEventListener('submit', e => {
 });
 
 function registerationFun(e) {
-  // e.preventDefault();
   fetch(`http://localhost:4000/students/students/${finalValue}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
+    // headers: {
+    //   'Content-Type': 'multipart/form-data',
+    // },
+    body: formData,
   })
+    // body: JSON.stringify(data),
     .then(res => {
+      console.log(res);
       if (!res.ok) {
         codes.forEach((input, index) => {
           pin.pop();
@@ -121,7 +129,7 @@ function registerationFun(e) {
         });
         throw new Error(res.status);
       }
-      console.log(res.status);
+
       if (res.ok) {
         codes.forEach((input, index) => {
           pin.pop();
@@ -142,6 +150,7 @@ function registerationFun(e) {
       console.log(data);
     })
     .catch(err => {
+      console.log(err);
       errorDiv.style.display = 'flex';
       setTimeout(() => {
         errorDiv.style.display = 'none';
@@ -164,3 +173,10 @@ otpBtn.addEventListener('click', function () {
 });
 
 /////////////////////////////////////////////////////////////////
+
+inputFile.onchange = function (e) {
+  e.preventDefault();
+  profileImg.src = URL.createObjectURL(inputFile.files[0]);
+  profileImg.classList.remove('hidden');
+  photoHeadin.classList.add('hidden');
+};
