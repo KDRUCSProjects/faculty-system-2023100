@@ -3,7 +3,7 @@
     <v-card max-width="450" class="mx-auto" v-if="editProfile">
       <v-card-text>
         <v-form @submit.prevent="submitForm" ref="editProfileForm">
-          <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo" :defaultPhotoName="photo"></base-photo-uploader>
+          <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo" :defaultPhotoName="photo"  @photo-size-change="handlePhotoSize"></base-photo-uploader>
 
           <v-text-field :rules="rules.name" v-model="name" label="Name" variant="outlined"></v-text-field>
           <v-text-field v-model="lastName" label="Last Name" variant="outlined"></v-text-field>
@@ -56,6 +56,7 @@ export default {
     newChanges: false,
     serverResponse: null,
     errorMessage: null,
+    maxPhotoSize: false
   }),
   methods: {
     toggleView() {
@@ -63,6 +64,9 @@ export default {
     },
     getPhoto(photo) {
       this.newPhoto = photo;
+    },
+    handlePhotoSize: function (photoSize) {
+      this.maxPhotoSize = photoSize
     },
     setData(data) {
       // Data = {fullName, lastName, email}
@@ -86,13 +90,19 @@ export default {
           data['photo'] = this.newPhoto;
         }
 
-        await this.$store.dispatch('updateProfile', data);
+        if(this.maxPhotoSize) {
+          return this.$store.commit('setToast', [0, 'Maximum 2mb photo size allowed']) 
+        }
+        else{
+          await this.$store.dispatch('updateProfile', data);
 
-        // Now, also update the [photo]
-        this.photo = this.$store.getters['userData'].photo;
+          // Now, also update the [photo]
+          this.photo = this.$store.getters['userData'].photo;
 
-        // Once the update is completed, toggle back to view profile
-        this.toggleView();
+          // Once the update is completed, toggle back to view profile
+          this.toggleView();
+        }
+        
       } catch (e) {
         this.errorMessage = e;
       }

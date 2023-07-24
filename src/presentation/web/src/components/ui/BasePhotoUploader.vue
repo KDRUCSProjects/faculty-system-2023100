@@ -17,7 +17,6 @@
       @addfile="handleFile"
       @removefile="$emit('photo', null)"
     />
-    <!-- <p v-if="photoSize" class="error">Can't upload the photo with size more than 2 mb</p> -->
   </div>
 </template>
 

@@ -122,12 +122,14 @@ export default {
           data['photo'] = this.photo;
         }
 
-        if (!this.pSize) {
-          await this.$store.dispatch('teachers/addTeacher', data);
-          this.closeDialog();
-        } else {
-          alert('photo size should be less than 2 mb');
+
+        if (this.pSize) {
+          return this.$store.commit('setToast', [0, 'Maximum 2mb phot size allowed']) 
         }
+
+        await this.$store.dispatch('teachers/addTeacher', data);
+        this.closeDialog();
+
       } catch (e) {
         // Show error message if happened
         this.errorMessage = e;
