@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
+      completed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       ...BaseModel(DataTypes),
     },
     {

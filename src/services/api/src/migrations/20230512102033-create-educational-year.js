@@ -4,14 +4,20 @@ const BaseModel = require('../models/basemodel');
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('EducationalYears', {
+      // The overall all classes that the faculty has created for students (id)
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      year: {
+      period: {
         type: Sequelize.INTEGER,
+        unique: true,
+        allowNull: true,
+      },
+      year: {
+        type: Sequelize.DOUBLE,
         allowNull: false,
       },
       onGoing: {
@@ -28,6 +34,18 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      firstHalfStart: {
+        type: Sequelize.INTEGER,
+      },
+      firstHalfEnd: {
+        type: Sequelize.INTEGER,
+      },
+      SecondHalfStart: {
+        type: Sequelize.INTEGER,
+      },
+      SecondHalfEnd: {
+        type: Sequelize.INTEGER,
       },
       ...BaseModel(Sequelize),
     });

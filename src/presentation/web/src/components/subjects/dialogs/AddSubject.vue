@@ -11,9 +11,13 @@
         </div>
       </template>
 
-      <v-card class="pa-1" :loading="isLoading">
-        <v-card-item>
-          <v-card-title>Add Subject</v-card-title>
+      <v-card :loading="isLoading">
+        <v-toolbar :color="'dark'">
+          <v-toolbar-title class=""> Add New Subject </v-toolbar-title>
+        </v-toolbar>
+
+        <v-card-item class="">
+          <!-- <v-card-title>Add Subject</v-card-title> -->
           <v-card-subtitle> Fill in the blanks to add subject </v-card-subtitle>
         </v-card-item>
         <v-card-text>

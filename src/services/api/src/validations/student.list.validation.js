@@ -34,7 +34,9 @@ const deleteBunch = {
 };
 
 const promoteStudents = {
-  body: Joi.array().items(Joi.number().integer()).min(1),
+  params: Joi.object().keys({
+    semesterId: Joi.number().required('Semester Id is required'),
+  }),
 };
 
 module.exports = {

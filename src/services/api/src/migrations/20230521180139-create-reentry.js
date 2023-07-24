@@ -20,21 +20,26 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      educationalYearId: {
+      year: {
+        type: Sequelize.INTEGER,
+        required: true,
+      },
+      semesterId: {
         type: Sequelize.INTEGER,
         trim: true,
         required: true,
         references: {
-          model: 'EducationalYears',
+          model: 'Semesters',
           key: 'id',
         },
       },
       reason: {
-        type: Sequelize.ENUM('Taajil', 'Mahrom', 'Special Taajil', 'Repeat'),
-        defaultValue: 'Taajil',
+        type: Sequelize.ENUM('taajil', 'mahrom', 'special_taajil', 'repeat'),
+        defaultValue: 'taajil',
         required: true,
       },
       regNumber: Sequelize.INTEGER,
+      taajilRegNumber: Sequelize.INTEGER,
       attachment: Sequelize.STRING,
       notes: Sequelize.STRING,
       ...BaseModel(Sequelize),

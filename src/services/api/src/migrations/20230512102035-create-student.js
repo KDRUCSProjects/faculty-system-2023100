@@ -69,6 +69,10 @@ module.exports = {
       admissionYear: {
         type: Sequelize.DATE,
       },
+      gender: {
+        type: Sequelize.ENUM('male', 'female'),
+        defaultValue: 'male',
+      },
       ...BaseModel(Sequelize),
     });
   },

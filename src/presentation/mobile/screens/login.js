@@ -61,7 +61,7 @@ export default login = (props) => {
   useEffect(() => {
     navigation.addListener("beforeRemove", (event) => {
       event.preventDefault();
-      Alert.alert("Exit", "Do you want Exit?", [
+      Alert.alert("Exit!", "Do you want Exit?", [
         {
           text: "No",
           onPress: () => {
@@ -92,7 +92,7 @@ export default login = (props) => {
     const emailRegEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const paswordRegEx = /^(?=.*\d).{8,15}$/;
     if (email == "") {
-      setemailError("email is Required");
+      setemailError("Email is Required");
       return;
     }
     if (!emailRegEx.test(email)) {
@@ -100,7 +100,7 @@ export default login = (props) => {
       return;
     }
     if (password == "") {
-      setpasswordError("password is Required");
+      setpasswordError("Password is Required");
       return;
     }
 
@@ -118,6 +118,7 @@ export default login = (props) => {
     } catch (err) {
       setisLoading(false);
       seterror(err.message);
+      Alert.alert("Error!", err.message);
       //props.navigation.navigate("teacherScreen");
       return;
     }
@@ -131,7 +132,6 @@ export default login = (props) => {
     if (error) {
       setisLoading(false);
       seterror(null);
-      Alert.alert("Error", error, [<Text>ok</Text>]);
     }
   }, [isLoading, error]);
 
@@ -167,7 +167,10 @@ export default login = (props) => {
   });
 
   return (
-    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1 }}
+    >
       <LinearGradient
         colors={["#5DA3FF", "#00157D"]}
         style={styles.container}
@@ -208,6 +211,7 @@ export default login = (props) => {
             <TextInput
               style={styles.inputField}
               placeholder="Email"
+              autoCapitalize="none"
               onChangeText={(email) => {
                 setEmail(email);
                 setemailError(false);
@@ -278,7 +282,10 @@ export default login = (props) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.loginBtn} onPress={onLogin}>
+        <TouchableOpacity
+          style={styles.loginBtn}
+          onPress={onLogin}
+        >
           {isLoading ? (
             <ActivityIndicator size={"small"}></ActivityIndicator>
           ) : (

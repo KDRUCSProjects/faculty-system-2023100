@@ -18,6 +18,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         required: true,
       },
+      completed: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       ...BaseModel(Sequelize),
     });
   },

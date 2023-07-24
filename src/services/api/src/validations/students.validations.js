@@ -18,6 +18,7 @@ const registerStudent = {
     admissionYear: Joi.date(),
     photo: Joi.string().allow(null),
     dob: Joi.date(),
+    gender: Joi.string().valid('male', 'female'),
   }),
 };
 
@@ -43,6 +44,7 @@ const updateStudent = {
       admissionYear: Joi.date(),
       photo: Joi.string().allow(null),
       dob: Joi.date(),
+      gender: Joi.string().valid('male', 'female'),
     })
     .min(1)
     .required(),
@@ -94,6 +96,7 @@ const tempToken = {
       admissionYear: Joi.date(),
       photo: Joi.string().allow(null),
       dob: Joi.date(),
+      gender: Joi.string().valid('male', 'female'),
     })
     .min(1)
     .required(),
