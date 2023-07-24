@@ -40,6 +40,7 @@ const routes = [
   {
     path: '/departments',
     component: () => import('@/views/departments/departmentList.vue'),
+    // component: () => import('@/views/setupWizard/setupWizard.vue')
   },
   {
     path: '/settings',

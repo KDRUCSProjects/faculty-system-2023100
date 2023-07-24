@@ -27,12 +27,18 @@ import { HeaderBackButton } from "@react-navigation/stack";
 import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { saveAttendence } from "../store/actions/actions";
+import Toast from "react-native-simple-toast";
+import { logout } from "../store/actions/actions";
 
 export default function attendence(props) {
   const childRef = useRef(null);
   var [offSetX, setOffSetX] = useState(0);
   const scrollRef = useRef({});
   const students = useSelector((state) => state.studentReducer.students);
+  const subjectId = props.route.params.subjectId;
+  const status = props.route.params.status;
+
+  const dispatch = useDispatch();
 
   let StudentsSize = students.length;
 
@@ -48,8 +54,30 @@ export default function attendence(props) {
     });
   };
   const saveAttendenceDispatch = useDispatch();
-  const onSaveAttendence = () => {
-    saveAttendenceDispatch(saveAttendence(students));
+  const onSaveAttendence = async () => {
+    const selectedStudents = new Array();
+    students.forEach((student) => {
+      selectedStudents.push({
+        studentId: student.studentId,
+        status: student.isPresentOne,
+      });
+    });
+
+    console.log(...selectedStudents);
+    try {
+      await saveAttendenceDispatch(
+        saveAttendence(subjectId, selectedStudents, status)
+      );
+    } catch (err) {
+      Alert.alert("Error!", err.message);
+      if (err.code == 401) {
+        props.navigation.navigate("Login");
+      }
+    }
+
+    Toast.BOTTOM;
+    Toast.show("Attendence updated", 2);
+    props.navigation.navigate("teacherScreen");
   };
 
   return (
@@ -123,18 +151,22 @@ export default function attendence(props) {
           ref={scrollRef}
         >
           {students.map((student, index) => {
-            const studentName = student.name;
-            const studentId = student.id;
-            const isPresent = student.isPresent;
+            const studentName = student.studentName;
+            const studentId = student.studentId;
+            const isPresent = student.isPresentOne;
+            const fatherName = student.fatherName;
+            const grandFatherName = student.grandFatherName;
 
             return (
               <AttendenceItem
                 key={studentId}
                 ref={childRef}
                 studentName={studentName}
+                fatherName={fatherName}
+                grandFatherName={grandFatherName}
                 studentId={studentId}
                 isPresent={isPresent}
-                onPresent={onPresent}
+                onStatus={onPresent}
                 studentsSize={StudentsSize}
                 index={index}
                 students={students}

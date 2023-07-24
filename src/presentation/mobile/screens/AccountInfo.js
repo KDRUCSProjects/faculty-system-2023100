@@ -105,7 +105,10 @@ export default function AccountInfo(props) {
       );
     } catch (e) {
       console.log(e);
-      Alert.alert("Sorry!", e.toString());
+      if (e.code == 401) {
+        props.navigation.navigate("Login");
+      }
+      Alert.alert("Sorry!", e.message);
     }
 
     Toast.BOTTOM;

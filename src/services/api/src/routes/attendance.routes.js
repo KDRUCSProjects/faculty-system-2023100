@@ -18,7 +18,11 @@ router
 
 router
   .route('/:subjectId')
-  .post(auth('takeAttendance'), validate(attendanceValidation.takeOneStdAttendance), attendanceController.takeOneStdAttendance);
+  .post(
+    auth('takeAttendance'),
+    validate(attendanceValidation.takeOneStdAttendance),
+    attendanceController.takeOneStdAttendance
+  );
 
 router
   .route('/subject/:subjectId')
@@ -89,7 +93,7 @@ module.exports = router;
  *           schema:
  *             type: object
  *             properties:
- *               studentId: 
+ *               studentId:
  *                 type: number
  *               status:
  *                 type: boolean

@@ -32,26 +32,70 @@ const getAttendanceById = catchAsync(async (req, res) => {
 });
 
 const getTodaysAttendance = catchAsync(async (req, res) => {
+  const day = moment().format('dddd');
+  if (day === 'Friday' || day === 'friday') {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'You Cannot Take Attendance on Friday');
+  }
+
+  // prevent attendance to be not taken after six pm
+  const now = moment();
+  const sixPM = moment().set({ hour: 18, minute: 0, second: 0 });
+  if (now.isAfter(sixPM)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'You Cannot Take Attendance After 6 pm');
+  }
   const { subjectId } = req.params;
   const subject = await subjectService.getSubjectById(subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
   if (!subject.teacherId) throw new ApiError(httpStatus.BAD_REQUEST, 'Subject Should be assign to a teacher');
   const teacher = await userService.getTeacher(subject.teacherId);
   if (!teacher) throw new ApiError(httpStatus.BAD_REQUEST, 'Teacher Not Found');
+  // check subject is related to teacher
+  if (req.user.role !== 'admin' && subject.teacherId !== req.user.id) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'FORBiDDEN');
+  }
   // const date = moment().format('YYYY-MM-DD');
   const date = moment();
-  const shamsiDate = moment(date).format('jYYYY/jMM/jDD');
+  const shamsiDate = moment(date).format('jYYYY-jMM-jDD HH:mm:ss');
   // const date = moment().format('MMMM Do YYYY, h:mm:ss a');
   // find attendance
   const attendance = await attendanceService.findAttendanceBySubjectId(subjectId);
   if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, 'attendance not found');
 
-  const results = await attendanceListService.getSemesterSdtAndAttendance(attendance.id);
+  let results = await attendanceListService.getSemesterSdtAndAttendance(attendance.id);
 
   if (results.length <= 0) {
-    return res.status(httpStatus.OK).send(results);
+    // get all students of the semester
+    // find semester
+    const semester = await semesterService.findById(subject.semesterId);
+    if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+    // check if semester is on going
+    const isSemesterOnGoing = await semesterService.isSemesterOnGoing(semester.id);
+    if (!isSemesterOnGoing) throw new ApiError(httpStatus.NOT_ACCEPTABLE, `it is not ongoing semester's subject`);
+
+    const semesterStudents = await studentListService.findSemesterStudents(semester.id);
+    // take attendance for absent students
+    for await (const element of semesterStudents) {
+      const doesStdHasAtt = await attendanceListService.findStudentFirstCellAttendance(element.studentId, attendance.id);
+      if (doesStdHasAtt) {
+        await attendanceListService.updateTodaysAttendance(doesStdHasAtt, { isPresentOne: false, isPresentTwo: false });
+      } else {
+        const newAtt = {
+          studentId: element.studentId,
+          attendanceId: attendance.id,
+          isPresentOne: false,
+          isPresentTwo: false,
+          date,
+          shamsiDate,
+        };
+        await attendanceListService.takeTodaysAttendance(newAtt);
+      }
+    }
+    results = await attendanceListService.getSemesterSdtAndAttendance(attendance.id);
   }
-  const { subjectName, teacherId, teacherName, } = results[0];
+  if (results.length <= 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'There is not any student in the semester');
+  }
+  const { subjectName, teacherId, teacherName } = results[0];
   const students = results.map((element) => {
     return {
       studentId: element.studentId,
@@ -66,16 +110,14 @@ const getTodaysAttendance = catchAsync(async (req, res) => {
       isPresentTwo: element.isPresentTwo,
     };
   });
-  return res
-    .status(httpStatus.OK)
-    .send({ date, shamsiDate, subjectId, subjectName, teacherId, teacherName, students });
-
+  return res.status(httpStatus.OK).send({ date, shamsiDate, subjectId, subjectName, teacherId, teacherName, students });
 });
 
 const takeTodaysAttendance = catchAsync(async (req, res) => {
   // prevent attendance to be not taken on friday
+  // const date = moment().format('YYYY-MM-DD');
   const date = moment();
-  const shamsiDate = moment(date).format('jYYYY-jMM-jDD');
+  const shamsiDate = moment(date).format('jYYYY-jMM-jDD HH:mm:ss');
   const day = moment().format('dddd');
   if (day === 'Friday' || day === 'friday') {
     throw new ApiError(httpStatus.BAD_REQUEST, 'You Cannot Take Attendance on Friday');
@@ -94,7 +136,7 @@ const takeTodaysAttendance = catchAsync(async (req, res) => {
   // check subject is related to teacher
   if (req.user.role !== 'admin' && subject.teacherId !== req.user.id) {
     throw new ApiError(httpStatus.FORBIDDEN, 'FORBiDDEN');
-  }  // find attendance
+  } // find attendance
   const attendance = await attendanceService.findAttendanceBySubjectId(subjectId);
   if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, 'attendance not found');
   // find teacher
@@ -106,7 +148,6 @@ const takeTodaysAttendance = catchAsync(async (req, res) => {
   // check if semester is on going
   const isSemesterOnGoing = await semesterService.isSemesterOnGoing(semester.id);
   if (!isSemesterOnGoing) throw new ApiError(httpStatus.NOT_ACCEPTABLE, `it is not ongoing semester's subject`);
-
 
   // get all students of the semester
   const semesterStudents = await studentListService.findSemesterStudents(semester.id);
@@ -246,21 +287,10 @@ const takeTodaysAttendance = catchAsync(async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
 const takeOneStdAttendance = catchAsync(async (req, res) => {
+  // const date = moment().format('YYYY-MM-DD');
   const date = moment();
-  const shamsiDate = moment(date).format('jYYYY-jMM-jDD');
+  const shamsiDate = moment(date).format('jYYYY-jMM-jDD HH:mm:ss');
 
   // prevent attendance to be not taken on friday
   const day = moment().format('dddd');
@@ -275,7 +305,6 @@ const takeOneStdAttendance = catchAsync(async (req, res) => {
   if (now.isAfter(sixPM)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'You Cannot Take Attendance After 6 pm');
   }
-
 
   const { subjectId } = req.params;
   const { studentId, status } = req.body;
@@ -314,17 +343,17 @@ const takeOneStdAttendance = catchAsync(async (req, res) => {
       if (doesStdHasAtt) {
         const result = await attendanceListService.updateTodaysAttendance(doesStdHasAtt, { isPresentOne: status });
         return res.status(httpStatus.ACCEPTED).send(result);
-      } else {
-        const newAtt = {
-          studentId,
-          attendanceId: attendance.id,
-          isPresentOne: status,
-          date,
-          shamsiDate,
-        };
-        const result = await attendanceListService.takeTodaysAttendance(newAtt);
-        return res.status(httpStatus.CREATED).send(result);
       }
+      const newAtt = {
+        studentId,
+        attendanceId: attendance.id,
+        isPresentOne: status,
+        date,
+        shamsiDate,
+      };
+      const result = await attendanceListService.takeTodaysAttendance(newAtt);
+      return res.status(httpStatus.CREATED).send(result);
+
     case 'two':
       const doesStdHas2Att = await attendanceListService.findStudentFirstCellAttendance(studentId, attendance.id);
       if (doesStdHas2Att) {
@@ -345,9 +374,10 @@ const takeOneStdAttendance = catchAsync(async (req, res) => {
     case 'both':
       const doesStdHasBothAtt = await attendanceListService.findStudentFirstCellAttendance(studentId, attendance.id);
       if (doesStdHasBothAtt) {
-        const result = await attendanceListService.updateTodaysAttendance(
-          doesStdHasBothAtt, { isPresentTwo: status, isPresentOne: status }
-        );
+        const result = await attendanceListService.updateTodaysAttendance(doesStdHasBothAtt, {
+          isPresentTwo: status,
+          isPresentOne: status,
+        });
         return res.status(httpStatus.ACCEPTED).send(result);
       } else {
         const newAtt = {

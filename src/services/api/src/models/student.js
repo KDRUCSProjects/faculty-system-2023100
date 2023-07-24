@@ -46,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
+      gender: {
+        type: DataTypes.ENUM('male', 'female'),
+        defaultValue: 'male',
+      },
       admissionYear: DataTypes.DATE,
       ...BaseModel(DataTypes),
     },

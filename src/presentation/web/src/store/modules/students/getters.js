@@ -1,12 +1,14 @@
 import { toDateFormat } from '@/utils/date';
 
 export default {
-  students(state) {
+  students(state, getters, rootState, rootGetters) {
     return state.students.filter((student) => {
       student.createdAt = toDateFormat(student.createdAt);
 
       // Static status
       student.status = 'reserve';
+      // Convert kankorYear (educationalYearId) to real value
+      student.kankorYear = rootGetters['years/yearById'](student.educationalYearId)?.year;
       return student;
     });
   },

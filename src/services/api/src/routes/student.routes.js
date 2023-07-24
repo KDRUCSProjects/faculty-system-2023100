@@ -142,6 +142,9 @@ module.exports = router;
  *               photo:
  *                 type: string
  *                 format: binary
+ *               gender:
+ *                 type: string
+ *                 enum: [male, female]
  *     responses:
  *       "201":
  *         description: Created
@@ -284,6 +287,9 @@ module.exports = router;
  *               photo:
  *                 type: string
  *                 format: binary
+ *               gender:
+ *                 type: string
+ *                 enum: [male, female]
  *     responses:
  *       "201":
  *         description: ACCEPtED
@@ -430,6 +436,9 @@ module.exports = router;
  *               photo:
  *                 type: string
  *                 format: binary
+ *               gender:
+ *                 type: string
+ *                 enum: [male, female]
  *     responses:
  *       "200":
  *         description: OK

@@ -4,6 +4,7 @@ import {
   Text,
   Dimensions,
   ImageBackground,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import { RadioButton } from "react-native-paper";
@@ -26,23 +27,32 @@ const AttendenceItem = (props, ref) => {
   const indexprop = props.index;
   const students = useSelector((state) => state.studentReducer.students);
 
+  const [newStudent, setnewStudent] = useState(false);
+
   let StudentsSize = students.length;
 
   const [checked, setChecked] = useState(props.isPresent);
   const dispatch = useDispatch();
 
-  const onStatusContainer = (status) => {
-    console.log(props.students);
-
+  const onStatusContainer = async (status) => {
     if (status == "onPresent") {
-      dispatch(isPresent(props.studentId));
-
-      return props.onPresent();
+      try {
+        await dispatch(isPresent("1", props.studentId, "both"));
+        setnewStudent(!newStudent);
+        return props.onStatus();
+      } catch (err) {
+        Alert.alert("Error", err.message);
+      }
     }
-    if (status == "onAbsent") {
-      dispatch(isAbsent(props.studentId));
+    try {
+      if (status == "onAbsent") {
+        await dispatch(isAbsent("1", props.studentId, "both"));
 
-      return props.onPresent();
+        setnewStudent(!newStudent);
+        return props.onStatus();
+      }
+    } catch (err) {
+      Alert.alert("Error", err.message);
     }
   };
 
@@ -50,13 +60,13 @@ const AttendenceItem = (props, ref) => {
 
   let prev =
     indexprop == 0
-      ? students[indexprop].isPresent
-      : students[indexprop - 1].isPresent;
+      ? students[indexprop].isPresentOne
+      : students[indexprop - 1].isPresentOne;
 
   let next =
     indexprop < StudentsSize - 1
-      ? students[indexprop + 1].isPresent
-      : students[indexprop].isPresent;
+      ? students[indexprop + 1].isPresentOne
+      : students[indexprop].isPresentOne;
 
   return (
     <View style={styles.studentContainer}>
@@ -79,13 +89,14 @@ const AttendenceItem = (props, ref) => {
             justifyContent: "flex-end",
             alignItems: "center",
             elevation: 30,
-            shadowColor: "yellow",
+            shadowColor: "#4e17f0",
           }}
         >
-          <View style={{ height: "15%", width: "97%" }}>
+          <View style={{ height: "15%", width: "90%" }}>
             <ImageBackground
               style={{ height: "100%", width: "100%", flex: 1 }}
               source={require("../assets/images/line.png")}
+              resizeMode="center"
             ></ImageBackground>
           </View>
           <View style={styles.imageContainer}>
@@ -124,7 +135,7 @@ const AttendenceItem = (props, ref) => {
               style={{
                 height: "33.33%",
                 width: "100%",
-                backgroundColor: prev ? "green" : "red",
+                backgroundColor: prev ? "#69be28" : "#d32d41",
                 borderTopLeftRadius: width / 20,
                 borderTopRightRadius: width / 20,
                 justifyContent: "center",
@@ -134,29 +145,31 @@ const AttendenceItem = (props, ref) => {
               }}
             >
               <Text style={styles.trackText}>
-                {indexprop == 0 ? "" : students[indexprop - 1].name}
+                {indexprop == 0 ? "" : students[indexprop - 1].studentName}
               </Text>
             </View>
             <View
               style={{
                 height: "33.33%",
                 width: "100%",
-                backgroundColor: students[indexprop].isPresent
-                  ? "green"
-                  : "red",
+                backgroundColor: students[indexprop].isPresentOne
+                  ? "#69be28"
+                  : "#d32d41",
                 justifyContent: "center",
                 alignItems: "center",
                 borderBottomColor: "black",
                 borderBottomWidth: 1,
               }}
             >
-              <Text style={styles.trackText}>{students[indexprop].name}</Text>
+              <Text style={styles.trackText}>
+                {students[indexprop].studentName}
+              </Text>
             </View>
             <View
               style={{
                 height: "33.33%",
                 width: "100%",
-                backgroundColor: next ? "green" : "red",
+                backgroundColor: next ? "#69be28" : "#d32d41",
                 borderBottomLeftRadius: width / 20,
                 borderBottomRightRadius: width / 20,
                 justifyContent: "center",
@@ -165,7 +178,7 @@ const AttendenceItem = (props, ref) => {
             >
               <Text style={styles.trackText}>
                 {indexprop < StudentsSize - 1
-                  ? students[indexprop + 1].name
+                  ? students[indexprop + 1].studentName
                   : ""}
               </Text>
             </View>
@@ -201,11 +214,11 @@ const AttendenceItem = (props, ref) => {
             </View>
             <View style={styles.stdInfoItem}>
               <Text style={styles.text}>Father Name: </Text>
-              <Text style={styles.text}></Text>
+              <Text style={styles.text}>{props.fatherName}</Text>
             </View>
             <View style={styles.stdInfoItem}>
-              <Text style={styles.text}>Age: </Text>
-              <Text style={styles.text}></Text>
+              <Text style={{ fontSize: 17 }}>Grand Father Name: </Text>
+              <Text style={styles.text}>{props.grandFatherName}</Text>
             </View>
           </View>
         </View>
@@ -246,7 +259,7 @@ const AttendenceItem = (props, ref) => {
           style={{
             height: "100%",
             width: "100%",
-            backgroundColor: "red",
+            backgroundColor: "#d32d41",
             borderTopRightRadius: width / 3,
             borderBottomRightRadius: width / 3,
             justifyContent: "center",
@@ -265,7 +278,7 @@ const AttendenceItem = (props, ref) => {
           style={{
             height: "100%",
             width: "100%",
-            backgroundColor: "green",
+            backgroundColor: "#69be28",
             borderTopLeftRadius: width / 3,
             borderBottomLeftRadius: width / 3,
             justifyContent: "center",
@@ -301,7 +314,7 @@ const styles = StyleSheet.create({
     width: "80%",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: "16%",
+    marginBottom: "14%",
   },
   stdInfoContainer: {
     height: "90%",
@@ -327,7 +340,7 @@ const styles = StyleSheet.create({
   },
   trackText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 15,
     textTransform: "capitalize",
   },
 });

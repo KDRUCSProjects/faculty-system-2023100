@@ -9,6 +9,7 @@ export default {
       currentYear: null,
       currentYearSemesters: [],
       semester: null,
+      reviewStudents: [],
     };
   },
   getters,

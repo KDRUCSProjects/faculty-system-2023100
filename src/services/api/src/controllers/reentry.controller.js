@@ -7,10 +7,12 @@ const {
   studentService,
   taajilService,
   semesterService,
-  studentListService } = require('../services');
+  studentListService,
+} = require('../services');
+const { findEligibleNextSemesterAfterConversion, matchSemesterWithOnGoingSemester } = require('../utils/global');
 
 const createReentry = catchAsync(async (req, res) => {
-  const { studentId } = req.body;
+  const { studentId, reason, educationalYear } = req.body;
   // check student id if it is correct student id
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, `student not found with id ${studentId}`);
@@ -20,29 +22,65 @@ const createReentry = catchAsync(async (req, res) => {
   // find student all student lists
   const studentList = await studentListService.findAllStudentListOfSingleStudent(studentId);
   // if student has not registered to any semester we will give reentry
-  if (studentList.length < 0) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student Needs to be Registered to any class');
-  // if student does not have active Taajil OR student's previous semester is active
-  if (!studentAllTajils[0].onGoing || studentList[0].onGoing) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student does not have any active Taajil And he is enrolled in a semester');
+  if (studentList.length < 0)
+    throw new ApiError(
+      httpStatus.NOT_ACCEPTABLE,
+      `Student is not registered in any semester. Student should be registered in 1st semester of ${student.admissionYear}} educational year!`
+    );
+
+  // Here starts our actual validation and code:
+
+  const generalTaajil = await taajilService.findTaajilByStudentIdAndType(studentId, 'taajil');
+  const specialTaajil = await taajilService.findTaajilByStudentIdAndType(studentId, 'special_taajil');
+
+  // Now, if the students wants reentry for general taajil reason, check their taajil record first:
+  if (reason === 'taajil' && !generalTaajil) {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student has not taken any taajil yet.');
+  } else if (reason === 'special_taajil' && !specialTaajil) {
+    // If user tried giving reentry for special_taajil but the student has not taken any special taajil
+    throw new ApiError(httpStatus.NOT_FOUND, 'Student has not taken any special taajil yet.');
+  }
+
+  const reentryExistForGeneralTaail = await reentryService.findReentryByStudentIdAndReason(studentId, 'taajil');
+  const reentryExistForSpecialTaail = await reentryService.findReentryByStudentIdAndReason(studentId, 'special_taajil');
+  if (reason === 'taajil' && generalTaajil && reentryExistForGeneralTaail) {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already has taken reentry for common taajil');
+  } else if (reason === 'special_taajil' && specialTaajil && reentryExistForSpecialTaail) {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already has taken reentry for special taajil.');
+  }
+
   // check if one year has been passed
-  const taajilEducationalYear = await educationalYearService.getEducationalYear(studentAllTajils[0].educationalYearId);
-  const currentEducationalYear = await educationalYearService.getCurrentEducationalYear();
-  const currentYear = currentEducationalYear.year;
-  const taajilYear = taajilEducationalYear.year;
-  if (currentYear <= taajilYear) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student should wait until next year');
-  // find semester which the student has taken Taajil
-  const semesterTitleToStudent = (await semesterService.findSemesterById(studentList[0].semesterId)).title;
-  const semesterIdToAddStudent = (await semesterService.findSemester({
-    educationalYearId: currentEducationalYear.id,
-    title: semesterTitleToStudent,
-  })).id;
-  // create new student list for student 
+  const latestSemesterIdOfTaajil = specialTaajil?.semesterId || generalTaajil?.semesterId;
+
+  // Get the semester that the student should/will start upcoming year.
+  const eligibleNextSemester = await findEligibleNextSemesterAfterConversion(latestSemesterIdOfTaajil);
+
+  // Match eligibleNextSemester with on-going semester
+
+  const { eligible: semesterMatched, message, data } = await matchSemesterWithOnGoingSemester(eligibleNextSemester.id);
+
+  if (!semesterMatched) {
+    throw new ApiError(
+      httpStatus.NOT_ACCEPTABLE,
+      `Student can only take reentry at class ${data.year} and ${data.eligibleSemester} semester`
+    );
+  }
+
+  // Validations completed ---- CONTINUE:-
+
+  req.body.year = educationalYear;
+  req.body.semesterId = eligibleNextSemester.id;
+
+  const reentry = await reentryService.createReentry(req.body);
+
+  // Next up, register student in the studentsList
+  // add student in the StudentsList for eligible next semester
+
   await studentListService.createStudentList({
     studentId,
-    semesterId: semesterIdToAddStudent,
+    semesterId: eligibleNextSemester.id,
   });
-  await taajilService.updateTaajil(studentAllTajils[0], { 'onGoing': false });
-  req.body.educationalYearId = currentEducationalYear.id;
-  const reentry = await reentryService.createReentry(req.body);
+
   return res.status(httpStatus.CREATED).send(reentry);
 });
 
@@ -66,7 +104,7 @@ const reentryStudents = catchAsync(async (req, res) => {
   // calculate query parameters
   const page = req.query?.page ? req.query?.page : 1;
   const limit = req.query?.limit ? req.query?.limit : 2000;
-  const offset = parseInt(((page - 1) * limit), 10);
+  const offset = parseInt((page - 1) * limit, 10);
 
   if (req.query?.educationalYear) {
     const { educationalYear } = req.query;
@@ -77,17 +115,16 @@ const reentryStudents = catchAsync(async (req, res) => {
       page: parseInt(page, 10),
       totalPages: Math.ceil(count / limit),
       total: count,
-      results: rows
+      results: rows,
     });
   }
-
 
   const { count, rows } = await reentryService.reentryStudents(limit, offset);
   return res.status(httpStatus.OK).send({
     page: parseInt(page, 10),
     totalPages: Math.ceil(count / limit),
     total: count,
-    results: rows
+    results: rows,
   });
 });
 
@@ -98,7 +135,6 @@ const deleteReentry = catchAsync(async (req, res) => {
   await reentryService.deleteReentry(reentry);
   return res.status(httpStatus.NO_CONTENT).send();
 });
-
 
 const updateReentry = catchAsync(async (req, res) => {
   const { id } = req.params;

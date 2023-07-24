@@ -130,11 +130,12 @@ const getTeacherSubjectsOfYear = (teacherId, yearId) => {
         attributes: ['id', 'title'],
         include: [
           {
-            model: EducationalYear, as: 'EducationalYear',
-            where: { 'id': yearId },
+            model: EducationalYear,
+            as: 'EducationalYear',
+            where: { id: yearId },
             attributes: ['id', 'year'],
             required: true,
-          }
+          },
         ],
       },
     ],

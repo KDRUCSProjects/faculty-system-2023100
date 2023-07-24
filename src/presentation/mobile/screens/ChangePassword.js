@@ -72,7 +72,10 @@ export default function ChangePassword(props) {
       await dispatch(checkPassword(currentPassword));
     } catch (e) {
       console.log(e);
-      Alert.alert("Sorry!", e.toString());
+      if (e.code == 401) {
+        props.navigation.navigate("Login");
+      }
+      Alert.alert("Sorry!", e.message);
       return;
     }
 

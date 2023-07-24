@@ -1,5 +1,6 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
+const { Op } = require('sequelize');
 
 // Sequelize Models
 const { Taajil, Student } = require('../models');
@@ -135,6 +136,30 @@ const deleteTaajil = (taajilBody) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
 };
 
+/**
+ * find tajil by student id and taajil type
+ * @param {ObjectId} studentKankorId
+ * @returns {Promise<Taajil>}
+ */
+const findTaajilByStudentIdAndType = async (studentId, type) => {
+  return await Taajil.findOne({
+    where: { studentId, type },
+  });
+};
+
+/**
+ * find tajil + special taajil count or data by semester id
+ * @param {ObjectId} studentKankorId
+ * @returns {Promise<Taajil>}
+ */
+const findTaajilBySemesterId = async (semesterId, onlyCount = true) => {
+  const query = {
+    where: { semesterId, [Op.or]: [{ type: 'taajil' }, { type: 'special_taajil' }] },
+  };
+
+  return onlyCount ? await Taajil.count(query) : await Taajil.findAll(query);
+};
+
 module.exports = {
   createTaajil,
   updateTaajil,
@@ -146,4 +171,6 @@ module.exports = {
   findTaajilByStudentId,
   findTaajilByStdKankorId,
   deleteTaajilByStudentId,
+  findTaajilByStudentIdAndType,
+  findTaajilBySemesterId,
 };

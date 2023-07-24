@@ -1,9 +1,9 @@
 // Sequelize Models
 const { Op, QueryTypes } = require('sequelize');
 const moment = require('moment');
+const httpStatus = require('http-status');
 const { AttendanceList, sequelize } = require('../models');
 const ApiError = require('../utils/ApiError');
-const httpStatus = require('http-status');
 
 /**
  * create attendance

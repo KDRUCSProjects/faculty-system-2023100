@@ -104,8 +104,13 @@ export default {
         //   to: '/subjects',
         // },
         {
+          title: 'Reports',
+          icon: 'mdi-chart-bar',
+          to: '/reports',
+        },
+        {
           title: 'Departments',
-          icon: 'mdi-cog-outline',
+          icon: 'mdi-home-city-outline',
           to: '/departments',
         },
         {

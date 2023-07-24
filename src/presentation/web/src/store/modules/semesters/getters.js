@@ -8,6 +8,9 @@ export default {
   semester(state) {
     return state.semester;
   },
+  currentSemesterStatistics(state) {
+    return state.semester?.statistics;
+  },
   semesterSubjects(state, _, rootState, rootGetters) {
     let subjects = state.semester?.Subjects;
 
@@ -21,5 +24,24 @@ export default {
     });
 
     return subjectsWithTeachers;
+  },
+  reviewStudents(state) {
+    const students = state.reviewStudents;
+
+    const theStudents = students.map((student) => {
+      student.student.eligibility = student.eligibility;
+      student.student.message = student.message;
+      student.student.reason = student.reason;
+
+      if (student.reason) {
+        student.student[student.reason] = student.reason;
+      }
+
+      return student.student;
+    });
+
+    console.log(theStudents);
+
+    return theStudents;
   },
 };

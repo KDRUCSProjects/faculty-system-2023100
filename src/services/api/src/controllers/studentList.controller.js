@@ -1,13 +1,28 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { studentService, semesterService, studentListService, taajilService, tabdiliService, educationalYearService } = require('../services');
+const {
+  studentService,
+  semesterService,
+  studentListService,
+  taajilService,
+  tabdiliService,
+  educationalYearService,
+} = require('../services');
 const ApiError = require('../utils/ApiError');
+const { checkStudentEligibilityForNextSemester, findEligibleNextSemester } = require('../utils/global');
 
 const createStudentList = catchAsync(async (req, res) => {
   const { studentId, semesterId } = req.body;
   /** check if the student id is correct */
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+
+  // First, check if student kankor year matches current on-going year
+  const currentEduYear = (await educationalYearService.getCurrentEducationalYear())?.year;
+  const studentKankorYear = (await educationalYearService.getEducationalYear(student.educationalYearId))?.year;
+
+  if (studentKankorYear !== currentEduYear)
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, `Student can be only enrolled at ${studentKankorYear}. `);
 
   /** check if tabdily has been given to the student */
   const studentTabdili = await tabdiliService.findTabdiliByStudentId(studentId);
@@ -22,7 +37,7 @@ const createStudentList = catchAsync(async (req, res) => {
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
 
   /** check if the semester title is one */
-  if (semester.title !== 1) throw new ApiError(httpStatus.ACCEPTED, `${semesterId} is not first semester's id`);
+  if (semester.title !== 1) throw new ApiError(httpStatus.ACCEPTED, `You can only enroll the student at first semester`);
 
   const result = await studentListService.createStudentList(req.body);
   return res.status(httpStatus.CREATED).send(result);
@@ -31,7 +46,7 @@ const createStudentList = catchAsync(async (req, res) => {
 const getStudentLists = catchAsync(async (req, res) => {
   const page = req.query?.page ? req.query?.page : 1;
   const limit = req.query?.limit ? req.query?.limit : 2000;
-  const offset = parseInt(((page - 1) * limit), 10);
+  const offset = parseInt((page - 1) * limit, 10);
 
   // check if semester id exists
   if (req.query?.semesterId) {
@@ -45,7 +60,7 @@ const getStudentLists = catchAsync(async (req, res) => {
       page: parseInt(page, 10),
       totalPages: Math.ceil(count / limit),
       total: count,
-      results: results
+      results: results,
     });
   }
 
@@ -57,7 +72,7 @@ const getStudentLists = catchAsync(async (req, res) => {
       page: parseInt(page, 10),
       totalPages: Math.ceil(count / limit),
       total: count,
-      results: results
+      results: results,
     });
   }
 
@@ -68,7 +83,7 @@ const getStudentLists = catchAsync(async (req, res) => {
   const { year } = req.query;
 
   // create an query object //
-  const queryArray = [`year.year = ${year}`, `student.deletedAt IS NULL`]
+  const queryArray = [`year.year = ${year}`, `student.deletedAt IS NULL`];
 
   if (req.query?.semester) {
     queryArray.push(`semester.title = ${req.query.semester}`);
@@ -78,7 +93,7 @@ const getStudentLists = catchAsync(async (req, res) => {
       page: parseInt(page, 10),
       totalPages: Math.ceil(count / limit),
       total: count,
-      results: results
+      results: results,
     });
   }
 
@@ -86,16 +101,16 @@ const getStudentLists = catchAsync(async (req, res) => {
     const classTitle = req.query.class;
     switch (classTitle) {
       case 1:
-        queryArray.push(`(semester.title = 1 OR semester.title = 2)`)
+        queryArray.push(`(semester.title = 1 OR semester.title = 2)`);
         break;
       case 2:
         queryArray.push(`(semester.title = 3 OR semester.title = 4)`);
         break;
       case 3:
-        queryArray.push(`(semester.title = 5 OR semester.title = 6)`)
+        queryArray.push(`(semester.title = 5 OR semester.title = 6)`);
         break;
       case 4:
-        queryArray.push(`(semester.title = 7 OR semester.title = 8)`)
+        queryArray.push(`(semester.title = 7 OR semester.title = 8)`);
         break;
       default:
         throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Query Parameters');
@@ -107,7 +122,7 @@ const getStudentLists = catchAsync(async (req, res) => {
     page: parseInt(page, 10),
     totalPages: Math.ceil(count / limit),
     total: count,
-    results: results
+    results: results,
   });
 });
 
@@ -134,18 +149,33 @@ const deleteBunch = catchAsync(async (req, res) => {
 });
 
 const promoteStudents = catchAsync(async (req, res) => {
+  // Get students of the given semester:
+  const semesterStudents = await studentListService.getAllStudentsBySemesterId(req.params.semesterId);
+  const studentsIds = semesterStudents.map((student) => student.studentId);
+
   const results = [];
 
-  for await (const studentId of req.body) {
-    let semesterYear = nextSemester = lastSemester = nextYear = result = null;
+  for await (const studentId of studentsIds) {
+    let semesterYear = (nextSemester = lastSemester = nextYear = result = null);
+
+    // First thing first, validate if the student can go to next semester by checking taajil, tabdili, mahromiat and repeat semester
+
+    const { message, eligible } = await checkStudentEligibilityForNextSemester(studentId);
+
+    if (!eligible) {
+      results.push({ message: message, result });
+      // Skip this student
+      continue;
+    }
 
     const studentAllLists = await studentListService.findAllStudentListOfSingleStudent(studentId);
-    if (studentAllLists.length >= 1 && studentAllLists.length < 10) {
+    if (studentAllLists.length >= 1 && studentAllLists.length < 15) {
       lastSemester = await semesterService.findSemesterById(studentAllLists[0].semesterId);
       if (lastSemester.title === 8) {
-        if (!lastSemester.onGoing) {
-          result = await studentListService.updatedStudentList(studentAllLists[0], { 'onGoing': false, 'completed': true });
-        }
+        // Find latest semester, if it's the 8th semester, then student is graduated.
+        // if (!lastSemester.onGoing) {
+        //   result = await studentListService.updatedStudentList(studentAllLists[0], { 'onGoing': false, 'completed': true });
+        // }
         results.push({ message: 'Student is Graduated', result });
         continue;
       }
@@ -153,15 +183,31 @@ const promoteStudents = catchAsync(async (req, res) => {
       if (lastSemester.title % 2 === 0) {
         nextYear = await educationalYearService.findNextYear(semesterYear.year);
         if (!nextYear) {
+          // If student was promoted to a year that didn't exist, then create one:
           nextYear = await educationalYearService.createNextEducationalYear(semesterYear.year);
         }
         nextSemester = await semesterService.findNextSemester(nextYear.id, lastSemester.title);
-        await studentListService.updatedStudentList(studentAllLists[0], { 'onGoing': false, 'completed': true });
+        // await studentListService.updatedStudentList(studentAllLists[0], { onGoing: false, completed: true });
+
+        const studentExists = await studentExistInNextSemester(studentId, req.params.semesterId);
+        if (studentExists) {
+          results.push({ message: 'Student is already in next semester', result });
+          continue;
+        }
+
         result = await studentListService.createStudentList({ studentId, semesterId: nextSemester.id });
         results.push(result);
       } else {
+        // If semesters were odd (1, 3, 5)
         nextSemester = await semesterService.findNextSemester(semesterYear.id, lastSemester.title);
-        await studentListService.updatedStudentList(studentAllLists[0], { 'onGoing': false, 'completed': true });
+        // await studentListService.updatedStudentList(studentAllLists[0], { onGoing: false, completed: true });
+
+        const studentExists = await studentExistInNextSemester(studentId, req.params.semesterId);
+        if (studentExists) {
+          results.push({ message: 'Student is already in next semester', result });
+          continue;
+        }
+
         result = await studentListService.createStudentList({ studentId, semesterId: nextSemester.id });
         results.push(result);
       }
@@ -169,9 +215,67 @@ const promoteStudents = catchAsync(async (req, res) => {
       results.push({ studentId, message: 'student does not have enrollment in first semester' });
     }
   }
+
+  // Once promotion is completed, mark the current semester as completed
+  await semesterService.updateSemesterStatus(req.params.semesterId, true);
+
   return res.status(httpStatus.OK).send(results);
 });
 
+const reviewStudentsPromotion = catchAsync(async (req, res) => {
+  // Get students of the given semester:
+  const semesterStudents = await studentListService.getAllStudentsBySemesterId(req.params.semesterId);
+  const studentsIds = semesterStudents.map((student) => student.studentId);
+
+  const results = [];
+
+  for await (const studentId of studentsIds) {
+    // First thing first, validate if the student can go to next semester by checking taajil, tabdili, mahromiat and repeat semester
+
+    const studentExists = await studentExistInNextSemester(studentId, req.params.semesterId);
+    const theStudent = await studentService.getStudent(studentId);
+
+    if (studentExists) {
+      results.push({
+        message: 'Student is already in next semester',
+        student: theStudent,
+        studentId,
+        eligibility: 0,
+        reason: 'duplicate',
+      });
+      continue;
+    }
+
+    const { message, eligible, reason } = await checkStudentEligibilityForNextSemester(studentId);
+
+    // Get student data
+    results.push({
+      studentId: studentId,
+      student: theStudent,
+      eligibility: !!eligible,
+      message,
+      reason,
+    });
+
+    // Once promotion is completed, mark the current semester as completed
+  }
+
+  console.log(results);
+
+  return res.send(results);
+});
+
+// Util functions
+
+const studentExistInNextSemester = async (studentId, currentSemesterId) => {
+  const nextSemester = await findEligibleNextSemester(currentSemesterId);
+
+  // Prevent duplicate students to next semester
+  // Creating a trigger for this in the DB is really important, as this can help us boost the speed.
+  const exists = await studentListService.getStudentListByStdIdAndSemesterId(studentId, nextSemester.id);
+
+  return !!exists;
+};
 
 module.exports = {
   deleteBunch,
@@ -179,4 +283,5 @@ module.exports = {
   deleteStudentList,
   createStudentList,
   promoteStudents,
+  reviewStudentsPromotion,
 };
