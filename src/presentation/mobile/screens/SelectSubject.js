@@ -5,6 +5,7 @@ import {
   ImageBackground,
   ScrollView,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getAttendence, loadSubjects } from "../store/actions/actions";
@@ -14,17 +15,27 @@ import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
 import SubjectItem from "./SubjectItem";
 import SelectSubjectItem from "./SelectSubjectItem";
+import { useState } from "react";
 
 export default function SelectSubject(props) {
   const subjects = useSelector((state) => state.MainReducer.subjects);
 
   const dispatch = useDispatch();
-
-  const onclick = async (id) => {
+  const [selected, setselected] = useState(null);
+  const onclick = (id) => {
+    setselected(id);
+  };
+  const onNext = async () => {
+    if (!selected) {
+      Alert.alert("Error!", "One Subject should be selected");
+      return;
+    }
+    console.log(selected);
     try {
-      await dispatch(getAttendence(id));
-      props.navigation.navigate("selectType", { subjectId: id });
+      await dispatch(getAttendence(selected));
+      props.navigation.navigate("selectType", { subjectId: selected });
     } catch (error) {
+      //props.navigation.navigate("selectType", { subjectId: selected });
       if (error.code == 401) {
         props.navigation.navigate("Login");
       }
@@ -69,8 +80,17 @@ export default function SelectSubject(props) {
             </Text>
           </View>
         </View>
-        <Text style={{ fontSize: 20, margin: 10 }}>Choose a subject</Text>
-        <View style={{ height: "70%" }}>
+        <Text
+          style={{
+            fontSize: 2,
+            margin: 10,
+            fontWeight: "bold",
+            fontStyle: "italic",
+          }}
+        >
+          Choose a subject
+        </Text>
+        <View style={{ height: "65%" }}>
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
@@ -85,12 +105,72 @@ export default function SelectSubject(props) {
               <SelectSubjectItem
                 key={subject.id}
                 onClick={onclick}
+                selected={selected == subject.id ? true : false}
                 subjectId={subject.id}
                 subject={subject.name}
                 semester={subjects[index]["Semester.title"]}
               ></SelectSubjectItem>
             ))}
           </ScrollView>
+        </View>
+        <View
+          style={{
+            height: "30%",
+            width: "90%",
+            flexDirection: "row",
+            alignItems: "flex-start",
+            marginTop: "10%",
+            justifyContent: "space-between",
+            marginHorizontal: 10,
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              backgroundColor: "blue",
+              height: 45,
+              width: 80,
+              borderRadius: 8,
+              padding: 10,
+              marginLeft: 15,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => props.navigation.goBack()}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontSize: 18,
+                textAlign: "center",
+                textAlignVertical: "center",
+              }}
+            >
+              Back
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.primary,
+              height: 45,
+              width: 80,
+              borderRadius: 8,
+              padding: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={onNext}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontSize: 18,
+                textAlign: "center",
+                textAlignVertical: "center",
+              }}
+            >
+              Next
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

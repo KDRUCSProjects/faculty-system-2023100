@@ -14,8 +14,9 @@ export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const GETSTUDENTINFO = "GETSTUDENTINFO";
 export const GETATTENDENCE = "GETATTENDENCE";
 export const GETSTUDENTSBYSUBJECT = "GETSTUDENTSBYSUBJECT";
-import { base_ip } from "@env";
+
 import { useNavigation } from "@react-navigation/native";
+const base_ip = process.env.REACT_APP_base_ip;
 
 export const authenticate = (userName, password) => {
   return async (dispatch) => {
@@ -154,22 +155,14 @@ export const isPresent = (subjectId, studentId, type) => {
       5000
     );
     console.log(updateResp.status);
-    const code = await updateResp.status;
-    if (code == 401) {
-      const error = new Error("Please relogin");
-      error.code = 401;
+    const data = await updateResp.json();
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
       throw error;
     }
 
-    const data = await updateResp.json();
-    console.log(data);
-
-    if (code == 403) {
-      throw new Error("cant change student status!");
-    }
-    if (updateResp.status != 200 || updateResp.status != 202) {
-      console.log("error");
-    }
     console.log(studentId);
     dispatch({ type: ISPRESENT, id: studentId });
   };
@@ -201,16 +194,10 @@ export const isAbsent = (subjectId, studentId, type) => {
     const data = await updateResp.json();
     console.log(data);
 
-    if (code == 401) {
-      const error = new Error("Please relogin");
-      error.code = 401;
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
       throw error;
-    }
-    if (code == 403) {
-      throw new Error("cant change student status!");
-    }
-    if (code != 200 || code != 202) {
-      console.log("error");
     }
 
     dispatch({ type: ISABSENT, id: studentId });
@@ -241,23 +228,13 @@ export const saveAttendence = (subjectId, students, type) => {
       5000
     );
     console.log(updateResp.status);
-    const code = await updateResp.status;
-    if (code == 401) {
-      const error = new Error("Please relogin");
-      error.code = 401;
+    const data = await updateResp.json();
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
       throw error;
     }
-
-    const data = await updateResp.json();
-    console.log(data);
-
-    if (code == 403) {
-      throw new Error("cant save status!");
-    }
-    if (updateResp.status != 200 || updateResp.status != 202) {
-      console.log("error");
-    }
-
     //dispatch({ type: ISPRESENT, id: studentId });
   };
 };
@@ -293,12 +270,11 @@ export const updateAccount = (userName, lastName, email, photo) => {
 
     console.log(updateResp.status);
 
-    if (updateResp.status == 400) {
-      throw new Error("Email already taken");
-    }
-    if (updateResp.status == 401) {
-      const error = new Error("Please relogin");
-      error.code = 401;
+    const data = await updateResp.json();
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
       throw error;
     }
     const updateRespData = await updateResp.json();
@@ -354,8 +330,12 @@ export const checkPassword = (password) => {
     );
     console.log(updateResp.status);
 
-    if (updateResp.status != 200) {
-      throw new Error("Please enter correct password");
+    const data = await updateResp.json();
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
+      throw error;
     }
   };
 };
@@ -390,8 +370,12 @@ export const changePassword = (
     );
     console.log(updateResp.status);
 
-    if (updateResp.status != 200 || updateResp.status != 202) {
-      throw new Error("Password Can't be Changed right now, try later");
+    const data = await updateResp.json();
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
+      throw error;
     }
   };
 };
@@ -479,7 +463,9 @@ export const createShoka = (
   studentId,
   midtermMarks,
   assignmentsMarks,
-  finalMarks
+  finalMarks,
+  practicalMarks,
+  status
 ) => {
   return async (dispatch) => {
     console.log(
@@ -487,7 +473,8 @@ export const createShoka = (
       studentId,
       midtermMarks,
       assignmentsMarks,
-      finalMarks
+      finalMarks,
+      status
     );
     const userData = await AsyncStorage.getItem("userData");
 
@@ -495,40 +482,76 @@ export const createShoka = (
     const { userPassword, subjects, token, userId, expirationDate } =
       transformedData;
 
-    const updateResp = await FetchWithTimeout(
-      "http://" + base_ip + ":4000/shokaList",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+    let updateResp;
+    console.log(status == "first");
+    if (status == "first") {
+      updateResp = await FetchWithTimeout(
+        "http://" + base_ip + ":4000/shokaList",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            subjectId: subjectId,
+            studentId: studentId,
+            midtermMarks: midtermMarks,
+            assignment: assignmentsMarks,
+            finalMarks: finalMarks,
+            practicalWork: practicalMarks,
+          }),
         },
-        body: JSON.stringify({
-          subjectId: subjectId,
-          studentId: studentId,
-          midtermMarks: midtermMarks,
-          assignmentOrProjectMarks: assignmentsMarks,
-          finalMarks: finalMarks,
-        }),
-      },
-      5000
-    );
-    console.log(updateResp.status);
-    if (updateResp.status == 406) {
-      const error = new Error(
-        "Selected student does not exists in this semester"
+        5000
       );
-      error.code = 406;
-      throw error;
+    } else if (status == "second") {
+      updateResp = await FetchWithTimeout(
+        "http://" + base_ip + ":4000/shokaList?chance=2",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            subjectId: subjectId,
+            studentId: studentId,
+            midtermMarks: midtermMarks,
+            assignment: assignmentsMarks,
+            finalMarks: finalMarks,
+            practicalWork: practicalMarks,
+          }),
+        },
+        5000
+      );
+    } else {
+      updateResp = await FetchWithTimeout(
+        "http://" + base_ip + ":4000/shokaList?chance=3",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            subjectId: subjectId,
+            studentId: studentId,
+            midtermMarks: midtermMarks,
+            assignment: assignmentsMarks,
+            finalMarks: finalMarks,
+            practicalWork: practicalMarks,
+          }),
+        },
+        5000
+      );
     }
 
-    if (updateResp.status == 401) {
-      const error = new Error("Please relogin");
-      error.code = 401;
-      throw error;
-    }
+    const data = await updateResp.json();
 
-    if (updateResp.status != 200 || updateResp.status != 201) {
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
+      throw error;
     }
   };
 };
@@ -553,14 +576,13 @@ export const getAttendence = (id) => {
     console.log(updateResp.status);
 
     let data = await updateResp.json();
-    data = data.students;
 
-    const code = await updateResp.status;
-    if (code == 401) {
-      const error = new Error("Please relogin");
-      error.code = 401;
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
       throw error;
     }
+    data = data.students;
 
     const studentData = new Array();
     data.forEach((element) => {
@@ -614,28 +636,29 @@ export const getStudentBySubject = (subjectId) => {
     let data = await updateResp.json();
 
     const code = await updateResp.status;
-    if (code == 401) {
-      const error = new Error("Please relogin");
-      error.code = 401;
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
       throw error;
     }
     const studentData = new Array();
     data.forEach((element) => {
       studentData.push({
-        studentId: element.studentId,
-        studentName: element.studentName,
-        nickName: element.nickName,
-        fatherName: element.fatherName,
+        studentId: element.Student.id,
+        studentName: element.Student.fullName,
+        nickName: element.Student.nickName,
+        fatherName: element.Student.fatherName,
 
-        grandFatherName: element.grandFatherName,
-        date: element.date,
-        shamsiDate: element.shamsiDate,
+        grandFatherName: element.Student.grandFatherName,
+        date: element.Student.date,
+        shamsiDate: element.Student.shamsiDate,
         isPresentOne: 0,
         isPresentTwo: 0,
       });
     });
 
-    console.log(studentData);
+    console.log(data);
 
     dispatch({ type: GETSTUDENTSBYSUBJECT, studentData });
   };

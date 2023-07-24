@@ -28,6 +28,7 @@ import ChangePassword from "../screens/ChangePassword";
 import CreateShoka from "../screens/CreateShoka";
 import SelectSubject from "../screens/SelectSubject";
 import SelectType from "../screens/SelectType";
+import SelectChance from "../screens/selectChance";
 
 const studentScreen = () => {
   const stdScreen = createStackNavigator();
@@ -122,6 +123,19 @@ const Navigation = (props) => {
         component={SelectType}
         options={{}}
       ></mainNavigation.Screen>
+
+      <mainNavigation.Screen
+        name="CreateShoka"
+        component={CreateShoka}
+        options={{}}
+      ></mainNavigation.Screen>
+
+      <mainNavigation.Screen
+        name="SelectChance"
+        component={SelectChance}
+        options={{}}
+      ></mainNavigation.Screen>
+
       <mainNavigation.Screen
         name="Login"
         component={login}
@@ -167,7 +181,7 @@ const DrawerNavigator = (props) => {
   return (
     <drawer.Navigator
       drawerContent={(props) => <MainDrawer {...props} />}
-      screenOptions={{ swipeEnabled: false, gestureEnabled: false }}
+      screenOptions={{ swipeEnabled: false, gestureEnabled: true }}
     >
       <drawer.Screen
         name="Home"
@@ -184,12 +198,6 @@ const DrawerNavigator = (props) => {
       <drawer.Screen
         name="Subjects"
         component={Subject}
-      ></drawer.Screen>
-
-      <drawer.Screen
-        name="CreateShoka"
-        component={CreateShoka}
-        options={{}}
       ></drawer.Screen>
     </drawer.Navigator>
   );

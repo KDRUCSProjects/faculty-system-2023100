@@ -5,26 +5,42 @@ import {
   ImageBackground,
   ScrollView,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { loadSubjects } from "../store/actions/actions";
+import { getAttendence, loadSubjects } from "../store/actions/actions";
 import { useEffect } from "react";
 import { Button } from "react-native-paper";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
 import SubjectItem from "./SubjectItem";
+import SelectSubjectItem from "./SelectSubjectItem";
+import { useState } from "react";
 import { getStudentBySubject } from "../store/actions/actions";
-export default function Subject(props) {
+
+export default function Subjects(props) {
   const subjects = useSelector((state) => state.MainReducer.subjects);
 
   const dispatch = useDispatch();
-  const onclick = async (id) => {
-    console.log(id);
+  const [selected, setselected] = useState(null);
+  const onclick = (id) => {
+    setselected(id);
+  };
+  const onNext = async () => {
+    if (!selected) {
+      Alert.alert("Error!", "One Subject should be selected");
+      return;
+    }
+    console.log(selected);
     try {
-      await dispatch(getStudentBySubject(subjectIdParam));
-      props.navigation.navigate("CreateShoka", { subjectId: id });
-    } catch (err) {
-      Alert.alert("Error!", err.message);
+      await dispatch(getStudentBySubject(selected));
+      props.navigation.navigate("SelectChance", { subjectId: selected });
+    } catch (error) {
+      if (error.code == 401) {
+        props.navigation.navigate("Login");
+      }
+      Alert.alert("Error", error.message);
+      return;
     }
   };
 
@@ -64,27 +80,102 @@ export default function Subject(props) {
             </Text>
           </View>
         </View>
-        <Text style={{ fontSize: 20, margin: 10 }}>My Subjects</Text>
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            alignItems: "center",
+        <Text
+          style={{
+            fontSize: 25,
+            margin: 10,
+            fontWeight: "bold",
+            fontStyle: "italic",
           }}
-          style={{}}
         >
-          {subjects.map((subject, index) => (
-            <SubjectItem
-              key={subject.id}
-              subject={subject.name}
-              subjectId={subject.id}
-              onClick={onclick}
-              semester={subjects[index]["Semester.title"]}
-            ></SubjectItem>
-          ))}
-        </ScrollView>
+          Choose a subject
+        </Text>
+        <View style={{ height: "65%" }}>
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            style={{}}
+          >
+            {subjects ? (
+              subjects.map((subject, index) => (
+                <SubjectItem
+                  key={subject.id}
+                  onClick={onclick}
+                  selected={selected == subject.id ? true : false}
+                  subjectId={subject.id}
+                  subject={subject.name}
+                  semester={subjects[index]["Semester.title"]}
+                ></SubjectItem>
+              ))
+            ) : (
+              <View></View>
+            )}
+          </ScrollView>
+        </View>
+        <View
+          style={{
+            height: "30%",
+            width: "90%",
+            flexDirection: "row",
+            alignItems: "flex-start",
+            marginTop: "10%",
+            justifyContent: "space-between",
+            marginHorizontal: 10,
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              backgroundColor: "blue",
+              height: 45,
+              width: 80,
+              borderRadius: 8,
+              padding: 10,
+              marginLeft: 15,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => props.navigation.goBack()}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontSize: 18,
+                textAlign: "center",
+                textAlignVertical: "center",
+              }}
+            >
+              Back
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.primary,
+              height: 45,
+              width: 80,
+              borderRadius: 8,
+              padding: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={onNext}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontSize: 18,
+                textAlign: "center",
+                textAlignVertical: "center",
+              }}
+            >
+              Next
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
