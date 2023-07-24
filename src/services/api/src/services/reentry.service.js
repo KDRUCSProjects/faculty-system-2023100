@@ -135,12 +135,22 @@ const findReentryByStudentIdAndReason = async (studentId, reason) => {
  * @param {ObjectId} studentKankorId
  * @returns {Promise<Taajil>}
  */
-const findReentryBySemesterIdAndType = async (semesterId, type, onlyCount = true) => {
+const findReentryBySemesterIdAndType = async (semesterId, options = { type, gender: null, count: false }) => {
   const query = {
-    where: { semesterId, reason: type },
+    where: { semesterId, reason: options.type },
   };
 
-  return onlyCount ? await Reentry.count(query) : await Reentry.findAll(query);
+  const results = (await Reentry.findAll(query))?.map((reentry) => reentry.studentId);
+
+  const studentsQuery = {
+    where: {
+      id: results,
+    },
+  };
+
+  if (options.gender) studentsQuery.where.gender = options.gender;
+
+  return options.count ? await Student.count(studentsQuery) : await Student.findAll(studentsQuery);
 };
 
 module.exports = {
