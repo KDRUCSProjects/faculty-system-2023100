@@ -61,7 +61,7 @@ export default login = (props) => {
   useEffect(() => {
     navigation.addListener("beforeRemove", (event) => {
       event.preventDefault();
-      Alert.alert("Exit", "Do you want Exit?", [
+      Alert.alert("Exit!", "Do you want Exit?", [
         {
           text: "No",
           onPress: () => {

@@ -17,37 +17,37 @@ import SubjectItem from "./SubjectItem";
 import SelectSubjectItem from "./SelectSubjectItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function SelectType(props) {
+export default function SelectChance(props) {
   const subjects = useSelector((state) => state.MainReducer.subjects);
-  const [isOne, setisOne] = useState(false);
-  const [isTwo, setisTwo] = useState(false);
-  const [isBoth, setisBoth] = useState(true);
+  const [isFirst, setisFirst] = useState(true);
+  const [isSecond, setisSecond] = useState(false);
+  const [isThird, setisThird] = useState(false);
   const [isError, setisError] = useState(false);
   const id = props.route.params.subjectId;
 
   const dispatch = useDispatch();
 
   const onclick = async () => {
-    if (!isOne && !isTwo && !isBoth) {
+    if (!isFirst && !isSecond && !isThird) {
       setisError(true);
       return;
     }
-    if (isOne) {
-      props.navigation.navigate("attendenceScreen", {
+    if (isFirst) {
+      props.navigation.navigate("CreateShoka", {
         subjectId: id,
-        status: "one",
+        status: "first",
       });
     }
-    if (isTwo) {
-      props.navigation.navigate("attendenceScreen", {
+    if (isSecond) {
+      props.navigation.navigate("CreateShoka", {
         subjectId: id,
-        status: "two",
+        status: "second",
       });
     }
-    if (isBoth) {
-      props.navigation.navigate("attendenceScreen", {
+    if (isThird) {
+      props.navigation.navigate("CreateShoka", {
         subjectId: id,
-        status: "both",
+        status: "third",
       });
     }
   };
@@ -90,7 +90,7 @@ export default function SelectType(props) {
         </View>
         <Text
           style={{
-            fontSize: 28,
+            fontSize: 25,
             margin: 10,
             fontWeight: "bold",
             fontStyle: "italic",
@@ -140,12 +140,12 @@ export default function SelectType(props) {
                 }}
                 tintColor={colors.primary}
                 trackColor={colors.primary}
-                value={isOne}
+                value={isFirst}
                 onValueChange={() => {
                   setisError(false);
-                  setisOne(!isOne);
-                  setisTwo(false);
-                  setisBoth(false);
+                  setisFirst(!isFirst);
+                  setisSecond(false);
+                  setisThird(false);
                 }}
               />
             </View>
@@ -186,12 +186,12 @@ export default function SelectType(props) {
                 }}
                 tintColor={colors.primary}
                 trackColor={colors.primary}
-                value={isTwo}
+                value={isSecond}
                 onValueChange={() => {
                   setisError(false);
-                  setisOne(false);
-                  setisTwo(!isTwo);
-                  setisBoth(false);
+                  setisFirst(false);
+                  setisSecond(!isSecond);
+                  setisThird(false);
                 }}
               />
             </View>
@@ -221,7 +221,7 @@ export default function SelectType(props) {
                   fontStyle: "italic",
                 }}
               >
-                Both
+                Third
               </Text>
             </View>
             <View style={{ width: "20%" }}>
@@ -232,12 +232,12 @@ export default function SelectType(props) {
                 }}
                 tintColor={colors.primary}
                 trackColor={colors.primary}
-                value={isBoth}
+                value={isThird}
                 onValueChange={() => {
                   setisError(false);
-                  setisOne(false);
-                  setisTwo(false);
-                  setisBoth(!isBoth);
+                  setisFirst(false);
+                  setisSecond(false);
+                  setisThird(!isThird);
                 }}
               />
             </View>

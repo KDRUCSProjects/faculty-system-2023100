@@ -7,13 +7,16 @@ import {
 } from "../actions/actions";
 import { LOGOUT } from "../actions/actions";
 
-const initialState = {};
+const initialState = {
+  students: [],
+};
 
 const studentsBySubject = (state = initialState, action) => {
   switch (action.type) {
     case GETSTUDENTSBYSUBJECT:
+      console.log("action" + action.studentData);
       return {
-        ...action.data,
+        students: action.studentData,
       };
 
     default:
