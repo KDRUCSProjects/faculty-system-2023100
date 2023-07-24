@@ -5,7 +5,7 @@ const { firstUserValidation,  } = require('../validations');
 const router = express.Router();
 
 // Route for creating users
-router.post('/', createUser);
+router.post('/',validate(firstUserValidation.validatefirstUsers), createUser);
 
 module.exports = router;
 
