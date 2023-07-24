@@ -2,19 +2,25 @@
   <div>
     <base-contents>
     <div class="card-list">
-        <card title="Students" Total="34" iconType="$vuetify"></card>
-        <card title="Teachers" Total="34"></card>
-        <card title="Male Student" Total="34"></card>
-        <card title="Female Student" Total="34"></card>
-        <card title="All managers" Total="34"></card>
-        <card title="All Users" Total="34"></card>
-       
+      <v-card
+        v-for="card in cards" :key="card.title"
+        class="mx-auto"
+        width="300"
+        prepend-icon = "mdi-home"
+      >
+      <!-- <span class="icon" :class="card.icon"></span> -->
+        <template v-slot:title>
+          {{ card.total }}
+        </template>
+
+        <v-card-text>
+          {{ card.title }}
+        </v-card-text>
+  </v-card>
     </div>
     <div class="chart-section">
       <card>
-        <v-list>
-              <v-list-item ></v-list-item>
-        </v-list>
+      
       </card>
       <chartCard></chartCard>
     </div>
@@ -28,8 +34,40 @@ import chartCard from '../components/Dashboard/chartCart.vue/chartCard.vue'
 
 export default {
   components: { card, chartCard },
-  data: () => {
-    
+  data() {
+    return {
+      cards: [
+        {
+          title: "Card 1",
+          total: 10,
+          icon: "home"
+        },
+        {
+          title: "mdi-home",
+          total: 5,
+          icon: "home"
+        },
+        {
+          title: "Card 3",
+          total: 8,
+          icon: "home"
+        },
+        {
+          title: "Card 1",
+          total: 10,
+          icon: "home"
+        },
+        {
+          title: "Card 2",
+          total: 5,
+          icon: "home"
+        },
+        {
+          title: "Card 3",
+          total: 8,
+          icon: "home"
+        }
+      ]}
   },
   methods: {
     

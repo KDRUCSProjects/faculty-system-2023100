@@ -34,6 +34,10 @@ export default {
       throw e.response.data.message;
     }
   },
+  // load all the Students
+  async loadAllStudent(context) {
+    
+  },
   async loadStudentById(context, studentId) {
     try {
       const token = context.rootGetters.token;
