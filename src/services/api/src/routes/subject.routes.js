@@ -324,6 +324,12 @@ module.exports = router;
  *         schema:
  *           type: number
  *         description: year
+ *       - in: query
+ *         name: all
+ *         schema:
+ *           type: number
+ *           enum: [0, 1]
+ *         description: if you want to get all the subjects of the teachers throughout the years, select 1.
  *     responses:
  *       "200":
  *         description: OK
