@@ -15,6 +15,19 @@ const routes = require('./routes');
 const { errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 
+// App Localization
+const i18n = require('i18n');
+
+/**
+ * configure shared state
+ */
+i18n.configure({
+  locales: ['en', 'ps'],
+  defaultLocale: 'ps',
+  directory: path.join(__dirname, '/locales'),
+  objectNotation: true,
+});
+
 const app = express();
 
 if (config.env !== 'test') {
