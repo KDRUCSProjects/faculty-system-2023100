@@ -1,6 +1,7 @@
 const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
+const firstuserRoute = require('./firstUser.routes');
 const docsRoute = require('./docs.route');
 const fileExportRoute = require('./fileExport.route');
 const depratmentRoute = require('./department.route');
@@ -30,6 +31,10 @@ const defaultRoutes = [
   {
     path: '/users',
     route: userRoute,
+  },
+  {
+    path: '/first_users',
+    route: firstuserRoute,
   },
   {
     path: '/departments',
