@@ -64,7 +64,7 @@ body {
     url(../image/light-library.jpg);
   background-size: cover;
   font-family: LatoRegular;
-  background-repeat: no-repeat;
+  /* background-repeat: no-repeat; */
   height: 100vh;
 }
 
@@ -85,8 +85,8 @@ body {
   top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-width: 1140px;
-  margin: 0 auto;
+  /* max-width: 1140px;
+  margin: 0 auto; */
   padding: 10px;
 }
 
@@ -255,7 +255,7 @@ input {
 /* ////////////////////////////////////////////////// */
 
 .profile-card-main-div {
-  background-color: var(--background-color-alt);
+  /* background-color: var(--background-color-alt); */
   border-radius: 10px;
   z-index: 100;
   left: 50%;
@@ -344,7 +344,7 @@ input {
 }
 
 .profile-right {
-  width: 40%;
+  /* width: 40%; */
   background-color: var(--background-color);
   display: flex;
   flex-direction: column;
