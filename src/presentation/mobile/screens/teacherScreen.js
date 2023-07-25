@@ -34,7 +34,10 @@ export default function teacherScreen(props) {
     });
   }, [navigation]);
   const onTakeAttendence = () => {
-    props.navigation.navigate("selectSubject");
+    props.navigation.navigate("selectSubject", { choice: "takeAttendence" });
+  };
+  const onCreateShoka = () => {
+    props.navigation.navigate("selectSubject", { choice: "createShoka" });
   };
   return (
     <Layout
@@ -95,6 +98,7 @@ export default function teacherScreen(props) {
                 alignItems: "center",
                 justifyContent: "space-around",
               }}
+              onPress={onCreateShoka}
             >
               <View style={{ height: 90, width: 90 }}>
                 <ImageBackground
@@ -102,7 +106,7 @@ export default function teacherScreen(props) {
                   source={require("../assets/images/viewAttendence.png")}
                 ></ImageBackground>
               </View>
-              <Text style={{ fontSize: 25 }}>View Attendence</Text>
+              <Text style={{ fontSize: 25 }}>Create Shoka</Text>
             </TouchableWithoutFeedback>
           </View>
 
