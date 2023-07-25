@@ -21,6 +21,7 @@ const getTeacherSubjects = {
   }),
   query: Joi.object().keys({
     year: Joi.number().integer(),
+    all: Joi.number().integer(),
   }),
 };
 
