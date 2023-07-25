@@ -7,6 +7,7 @@ import {
   Dimensions,
   Alert,
   Button,
+  ActivityIndicator,
 } from "react-native";
 
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -29,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { saveAttendence } from "../store/actions/actions";
 import Toast from "react-native-simple-toast";
 import { logout } from "../store/actions/actions";
+import { Modal } from "@ui-kitten/components";
 
 export default function attendence(props) {
   const childRef = useRef(null);
@@ -38,9 +40,11 @@ export default function attendence(props) {
   const subjectId = props.route.params.subjectId;
   const status = props.route.params.status;
 
+  const [isLoading, setisLoading] = useState(false);
+
   const dispatch = useDispatch();
 
-  let StudentsSize = students.length;
+  let StudentsSize = students?.length;
 
   const onScroll = (event) => {
     setOffSetX(event.nativeEvent.contentOffset.x);
@@ -65,9 +69,11 @@ export default function attendence(props) {
 
     console.log(...selectedStudents);
     try {
+      setisLoading(true);
       await saveAttendenceDispatch(
         saveAttendence(subjectId, selectedStudents, status)
       );
+      setisLoading(false);
     } catch (err) {
       Alert.alert("Error!", err.message);
       if (err.code == 401) {
@@ -150,29 +156,38 @@ export default function attendence(props) {
           pagingEnabled
           ref={scrollRef}
         >
-          {students.map((student, index) => {
-            const studentName = student.studentName;
-            const studentId = student.studentId;
-            const isPresent = student.isPresentOne;
-            const fatherName = student.fatherName;
-            const grandFatherName = student.grandFatherName;
+          {!isLoading ? (
+            students.map((student, index) => {
+              const studentName = student.studentName;
+              const studentId = student.studentId;
+              const isPresent = student.isPresentOne;
+              const fatherName = student.fatherName;
+              const grandFatherName = student.grandFatherName;
 
-            return (
-              <AttendenceItem
-                key={studentId}
-                ref={childRef}
-                studentName={studentName}
-                fatherName={fatherName}
-                grandFatherName={grandFatherName}
-                studentId={studentId}
-                isPresent={isPresent}
-                onStatus={onPresent}
-                studentsSize={StudentsSize}
-                index={index}
-                students={students}
-              ></AttendenceItem>
-            );
-          })}
+              return (
+                <AttendenceItem
+                  key={studentId}
+                  ref={childRef}
+                  studentName={studentName}
+                  fatherName={fatherName}
+                  grandFatherName={grandFatherName}
+                  studentId={studentId}
+                  isPresent={isPresent}
+                  onStatus={onPresent}
+                  studentsSize={StudentsSize}
+                  index={index}
+                  students={students}
+                ></AttendenceItem>
+              );
+            })
+          ) : (
+            <Modal
+              visible={isLoading}
+              backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+            >
+              <ActivityIndicator size={60}></ActivityIndicator>
+            </Modal>
+          )}
         </ScrollView>
       </View>
     </View>

@@ -135,9 +135,7 @@ export default function teacherScreen(props) {
           </View>
         </View>
 
-        <View style={{ alignSelf: "flex-start", margin: "2%" }}>
-          <Text style={{ fontSize: 25 }}>Your ID:CS10733854</Text>
-        </View>
+        <View style={{ alignSelf: "flex-start", margin: "2%" }}></View>
       </Layout>
     </Layout>
   );

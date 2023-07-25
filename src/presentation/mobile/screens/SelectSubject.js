@@ -6,6 +6,7 @@ import {
   ScrollView,
   Alert,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getAttendence, loadSubjects } from "../store/actions/actions";
@@ -16,12 +17,14 @@ import { HeaderBackButton } from "@react-navigation/stack";
 import SubjectItem from "./SubjectItem";
 import SelectSubjectItem from "./SelectSubjectItem";
 import { useState } from "react";
+import { Modal } from "@ui-kitten/components";
 
 export default function SelectSubject(props) {
   const subjects = useSelector((state) => state.MainReducer.subjects);
 
   const dispatch = useDispatch();
   const [selected, setselected] = useState(null);
+  const [isLoading, setisLoading] = useState(false);
   const onclick = (id) => {
     setselected(id);
   };
@@ -32,7 +35,9 @@ export default function SelectSubject(props) {
     }
     console.log(selected);
     try {
+      setisLoading(true);
       await dispatch(getAttendence(selected));
+      setisLoading(false);
       props.navigation.navigate("selectType", { subjectId: selected });
     } catch (error) {
       //props.navigation.navigate("selectType", { subjectId: selected });
@@ -82,7 +87,7 @@ export default function SelectSubject(props) {
         </View>
         <Text
           style={{
-            fontSize: 2,
+            fontSize: 25,
             margin: 10,
             fontWeight: "bold",
             fontStyle: "italic",
@@ -101,7 +106,7 @@ export default function SelectSubject(props) {
             }}
             style={{}}
           >
-            {subjects.map((subject, index) => (
+            {subjects?.map((subject, index) => (
               <SelectSubjectItem
                 key={subject.id}
                 onClick={onclick}
@@ -111,6 +116,13 @@ export default function SelectSubject(props) {
                 semester={subjects[index]["Semester.title"]}
               ></SelectSubjectItem>
             ))}
+
+            <Modal
+              visible={isLoading}
+              backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+            >
+              <ActivityIndicator size={60}></ActivityIndicator>
+            </Modal>
           </ScrollView>
         </View>
         <View

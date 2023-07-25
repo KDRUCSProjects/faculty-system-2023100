@@ -175,7 +175,7 @@ export const isAbsent = (subjectId, studentId, type) => {
     const transformedData = JSON.parse(userData);
     const { token } = transformedData;
     const updateResp = await FetchWithTimeout(
-      "http://" + base_ip + ":4000/attendancee/" + subjectId + "?type=" + type,
+      "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
       {
         method: "POST",
         headers: {
@@ -248,12 +248,17 @@ export const updateAccount = (userName, lastName, email, photo) => {
     const expDate = new Date(expirationDate);
 
     console.log(photo);
-
     const form = new FormData();
-    form.append("name", userName);
-    form.append("lastName", lastName);
-    form.append("email", email);
-    form.append("photo", photo);
+    if (photo) {
+      form.append("name", userName);
+      form.append("lastName", lastName);
+      form.append("email", email);
+      form.append("photo", photo);
+    } else {
+      form.append("name", userName);
+      form.append("lastName", lastName);
+      form.append("email", email);
+    }
 
     const updateResp = await FetchWithTimeout(
       "http://" + base_ip + ":4000/auth/updateProfile",
@@ -268,16 +273,15 @@ export const updateAccount = (userName, lastName, email, photo) => {
       5000
     );
 
-    console.log(updateResp.status);
-
     const data = await updateResp.json();
+    console.log(data);
 
-    if (!updateResp.ok) {
+    if (updateResp.status != 202) {
       const error = new Error(data.message);
       error.code = data.code;
       throw error;
     }
-    const updateRespData = await updateResp.json();
+    const updateRespData = data;
     const name = updateRespData.photo;
     const photoUri = "http://" + base_ip + ":4000/storage/images/" + name;
 
@@ -330,13 +334,14 @@ export const checkPassword = (password) => {
     );
     console.log(updateResp.status);
 
-    const data = await updateResp.json();
+    // const data = await updateResp.json();
+    // const code = await updateResp.status;
 
-    if (!updateResp.ok) {
-      const error = new Error(data.message);
-      error.code = data.code;
-      throw error;
-    }
+    // if (code != 200) {
+    //   const error = new Error(data.message);
+    //   error.code = data.code;
+    //   throw error;
+    // }
   };
 };
 
@@ -347,11 +352,8 @@ export const changePassword = (
 ) => {
   return async (dispatch) => {
     const userData = await AsyncStorage.getItem("userData");
-
     const transformedData = JSON.parse(userData);
-    const { userPassword, subjects, token, userId, expirationDate } =
-      transformedData;
-
+    const { token } = transformedData;
     const updateResp = await FetchWithTimeout(
       "http://" + base_ip + ":4000/auth/change-password",
       {
@@ -368,11 +370,9 @@ export const changePassword = (
       },
       5000
     );
-    console.log(updateResp.status);
-
     const data = await updateResp.json();
-
-    if (!updateResp.ok) {
+    console.log(data);
+    if (updateResp.status == 401) {
       const error = new Error(data.message);
       error.code = data.code;
       throw error;

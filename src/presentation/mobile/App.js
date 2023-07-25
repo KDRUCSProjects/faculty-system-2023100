@@ -17,6 +17,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import GetInfo from "./store/reducers/getInfo";
 import * as fonts from "expo-font";
 import studentsBySubject from "./store/reducers/studentsBySubject";
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["Warning: ..."]);
+LogBox.ignoreAllLogs();
 
 export default function App() {
   const store = createStore(
