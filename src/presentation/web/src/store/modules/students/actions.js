@@ -24,15 +24,20 @@ export default {
       });
 
       context.commit('setStudents', response.data.results);
+      context.commit('setToast', 'All Student successfully loaded', { root: true });
       context.commit('setCounts', {
         total: response.data.total,
         totalPages: response.data.totalPages,
         page: response.data.page,
       });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'All Teacher load failed'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || 'All Student load failed'], { root: true });
       throw e.response.data.message;
     }
+  },
+  // load all the Students
+  async loadAllStudent(context) {
+    
   },
   async loadStudentById(context, studentId) {
     try {
@@ -49,6 +54,7 @@ export default {
 
       return response;
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Student load by failed'], { root: true });
       throw e.response.data.message;
     }
   },
@@ -153,6 +159,7 @@ export default {
       // Plus, also load current semester data
       context.dispatch('semesters/loadSemesterById', semesterId, { root: true });
     } catch (e) {
+      context.commit('setToast', [0, 'Semester students load filed'], { root: true });
       throw e.response.data.message;
     }
   },
@@ -175,6 +182,7 @@ export default {
 
       return response.data;
     } catch (e) {
+      context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
     }
   },
@@ -197,7 +205,7 @@ export default {
 
       // Let's reload the students
       context.dispatch('loadStudentsListBySemesterId', semesterId);
-      context.commit('setToast', 'Student has been added successfully', { root: true });
+      context.commit('setToast', 'Student added successfully to Semester', { root: true });
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
@@ -225,24 +233,7 @@ export default {
       });
       // Let's reload the students
       context.dispatch('loadStudentsListBySemesterId', semesterId);
-    } catch (e) {
-      throw e.response.data.message;
-    }
-  },
-  async promoteStudents(context, semesterId) {
-    try {
-      const token = context.rootGetters.token;
-
-      const response = await axios({
-        url: `/api/studentList/promote/${semesterId}`,
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      // Let's reload all semester data
+      context.commit('setToast', 'Student successfully remove from Semester', { root: true });
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;

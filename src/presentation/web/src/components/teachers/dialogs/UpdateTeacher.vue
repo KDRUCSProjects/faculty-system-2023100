@@ -11,7 +11,11 @@
         </div>
       </template>
 
-      <v-card class="pa-1" :loading="isLoading">
+      <v-card :loading="isLoading" class="pb-5">
+        <v-toolbar :color="'dark'">
+          <v-toolbar-title class=""> Update Teacher Account </v-toolbar-title>
+        </v-toolbar>
+
         <v-card-text>
           <v-form @submit.prevent="submitForm" ref="updateTeacherForm">
             <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo"></base-photo-uploader>

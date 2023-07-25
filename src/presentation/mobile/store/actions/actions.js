@@ -12,10 +12,15 @@ export const UPDATEACCOUNT = "UPDATEACCOUNT";
 export const CHECKPASSWORD = "CHECKPASSWORD";
 export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const GETSTUDENTINFO = "GETSTUDENTINFO";
-import { base_ip } from "@env";
+export const GETATTENDENCE = "GETATTENDENCE";
+export const GETSTUDENTSBYSUBJECT = "GETSTUDENTSBYSUBJECT";
+
+import { useNavigation } from "@react-navigation/native";
+const base_ip = process.env.REACT_APP_base_ip;
 
 export const authenticate = (userName, password) => {
   return async (dispatch) => {
+    console.log(base_ip);
     try {
       const response = await FetchWithTimeout(
         "http://" + base_ip + ":4000/auth/login",
@@ -31,12 +36,10 @@ export const authenticate = (userName, password) => {
         5000
       );
 
-      if (response.status === 400) {
-        throw new Error("UserName and Password Is Required!");
+      if (response.status == 401) {
+        throw new Error("UserName or Password Is Wong!");
       }
-      if (response.status === 401) {
-        throw new Error("UserName or Password Is Wrong!");
-      }
+
       if (!response.ok) {
         console.log(response.status);
         throw new Error("something went wrong");
@@ -102,7 +105,7 @@ export const authenticate = (userName, password) => {
         token,
       });
     } catch (e) {
-      throw new Error(e);
+      throw new Error(e.message);
     }
   };
 };
@@ -130,45 +133,109 @@ export const localAuth = (
       token,
     });
 };
-export const isPresent = (studentId) => {
-  return { type: ISPRESENT, studentId };
-};
-
-export const isAbsent = (studentId) => {
-  return { type: ISABSENT, studentId };
-};
-
-export const saveAttendence = (students) => {
+export const isPresent = (subjectId, studentId, type) => {
   return async (dispatch) => {
-    //   const response = await fetch("http://192.168.1.105:4000/auth/login", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       email: userName,
-    //       password: password,
-    //     }),
-    //   });
+    const userData = await AsyncStorage.getItem("userData");
 
-    //   if (response.status === 400) {
-    //     throw new Error("UserName and Password Is Required!");
-    //   }
-    //   if (response.status === 401) {
-    //     throw new Error("UserName or Password Is Wrong!");
-    //   }
-    //   if (!response.ok) {
-    //     console.log(response.status);
-    //     throw new Error("something went wrong");
-    //   }
+    const transformedData = JSON.parse(userData);
+    const { token } = transformedData;
+    const updateResp = await FetchWithTimeout(
+      "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          studentId: studentId,
+          status: true,
+        }),
+      },
+      5000
+    );
+    console.log(updateResp.status);
+    const data = await updateResp.json();
 
-    //   const respoonseData = await response.json();
-    //   console.log(respoonseData);
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
+      throw error;
+    }
 
-    // dispatch({
-    //   type: SAVEATTENDENCE,
+    console.log(studentId);
+    dispatch({ type: ISPRESENT, id: studentId });
+  };
+};
 
-    //   students,
-    // });
-    console.log(students);
+export const isAbsent = (subjectId, studentId, type) => {
+  return async (dispatch) => {
+    const userData = await AsyncStorage.getItem("userData");
+
+    const transformedData = JSON.parse(userData);
+    const { token } = transformedData;
+    const updateResp = await FetchWithTimeout(
+      "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          studentId: studentId,
+          status: false,
+        }),
+      },
+      5000
+    );
+    const code = await updateResp.status;
+
+    const data = await updateResp.json();
+    console.log(data);
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
+      throw error;
+    }
+
+    dispatch({ type: ISABSENT, id: studentId });
+  };
+};
+
+export const saveAttendence = (subjectId, students, type) => {
+  return async (dispatch) => {
+    const userData = await AsyncStorage.getItem("userData");
+
+    const transformedData = JSON.parse(userData);
+    const { token } = transformedData;
+    const updateResp = await FetchWithTimeout(
+      "http://" +
+        base_ip +
+        ":4000/attendance/todaysAttendance/" +
+        subjectId +
+        "?type=" +
+        type,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({ students: students }),
+      },
+      5000
+    );
+    console.log(updateResp.status);
+    const data = await updateResp.json();
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
+      throw error;
+    }
+    //dispatch({ type: ISPRESENT, id: studentId });
   };
 };
 
@@ -181,12 +248,17 @@ export const updateAccount = (userName, lastName, email, photo) => {
     const expDate = new Date(expirationDate);
 
     console.log(photo);
-
     const form = new FormData();
-    form.append("name", userName);
-    form.append("lastName", lastName);
-    form.append("email", email);
-    form.append("photo", photo);
+    if (photo) {
+      form.append("name", userName);
+      form.append("lastName", lastName);
+      form.append("email", email);
+      form.append("photo", photo);
+    } else {
+      form.append("name", userName);
+      form.append("lastName", lastName);
+      form.append("email", email);
+    }
 
     const updateResp = await FetchWithTimeout(
       "http://" + base_ip + ":4000/auth/updateProfile",
@@ -201,15 +273,15 @@ export const updateAccount = (userName, lastName, email, photo) => {
       5000
     );
 
-    console.log(updateResp.status);
+    const data = await updateResp.json();
+    console.log(data);
 
-    if (updateResp.status == 400) {
-      throw new Error("Email already taken");
+    if (updateResp.status != 202) {
+      const error = new Error(data.message);
+      error.code = data.code;
+      throw error;
     }
-    if (updateResp.status == 401) {
-      throw new Error("Please relogin to update your info");
-    }
-    const updateRespData = await updateResp.json();
+    const updateRespData = data;
     const name = updateRespData.photo;
     const photoUri = "http://" + base_ip + ":4000/storage/images/" + name;
 
@@ -262,9 +334,14 @@ export const checkPassword = (password) => {
     );
     console.log(updateResp.status);
 
-    if (updateResp.status != 200) {
-      throw new Error("Please enter correct password");
-    }
+    // const data = await updateResp.json();
+    // const code = await updateResp.status;
+
+    // if (code != 200) {
+    //   const error = new Error(data.message);
+    //   error.code = data.code;
+    //   throw error;
+    // }
   };
 };
 
@@ -275,11 +352,8 @@ export const changePassword = (
 ) => {
   return async (dispatch) => {
     const userData = await AsyncStorage.getItem("userData");
-
     const transformedData = JSON.parse(userData);
-    const { userPassword, subjects, token, userId, expirationDate } =
-      transformedData;
-
+    const { token } = transformedData;
     const updateResp = await FetchWithTimeout(
       "http://" + base_ip + ":4000/auth/change-password",
       {
@@ -296,10 +370,12 @@ export const changePassword = (
       },
       5000
     );
-    console.log(updateResp.status);
-
-    if (updateResp.status != 200 || updateResp.status != 202) {
-      throw new Error("Password Can't be Changed right now, try later");
+    const data = await updateResp.json();
+    console.log(data);
+    if (updateResp.status == 401) {
+      const error = new Error(data.message);
+      error.code = data.code;
+      throw error;
     }
   };
 };
@@ -387,7 +463,9 @@ export const createShoka = (
   studentId,
   midtermMarks,
   assignmentsMarks,
-  finalMarks
+  finalMarks,
+  practicalMarks,
+  status
 ) => {
   return async (dispatch) => {
     console.log(
@@ -395,7 +473,8 @@ export const createShoka = (
       studentId,
       midtermMarks,
       assignmentsMarks,
-      finalMarks
+      finalMarks,
+      status
     );
     const userData = await AsyncStorage.getItem("userData");
 
@@ -403,41 +482,185 @@ export const createShoka = (
     const { userPassword, subjects, token, userId, expirationDate } =
       transformedData;
 
+    let updateResp;
+    console.log(status == "first");
+    if (status == "first") {
+      updateResp = await FetchWithTimeout(
+        "http://" + base_ip + ":4000/shokaList",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            subjectId: subjectId,
+            studentId: studentId,
+            midtermMarks: midtermMarks,
+            assignment: assignmentsMarks,
+            finalMarks: finalMarks,
+            practicalWork: practicalMarks,
+          }),
+        },
+        5000
+      );
+    } else if (status == "second") {
+      updateResp = await FetchWithTimeout(
+        "http://" + base_ip + ":4000/shokaList?chance=2",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            subjectId: subjectId,
+            studentId: studentId,
+            midtermMarks: midtermMarks,
+            assignment: assignmentsMarks,
+            finalMarks: finalMarks,
+            practicalWork: practicalMarks,
+          }),
+        },
+        5000
+      );
+    } else {
+      updateResp = await FetchWithTimeout(
+        "http://" + base_ip + ":4000/shokaList?chance=3",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            subjectId: subjectId,
+            studentId: studentId,
+            midtermMarks: midtermMarks,
+            assignment: assignmentsMarks,
+            finalMarks: finalMarks,
+            practicalWork: practicalMarks,
+          }),
+        },
+        5000
+      );
+    }
+
+    const data = await updateResp.json();
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
+      throw error;
+    }
+  };
+};
+
+export const getAttendence = (id) => {
+  return async (dispatch) => {
+    const userData = await AsyncStorage.getItem("userData");
+
+    const transformedData = JSON.parse(userData);
+    const { token } = transformedData;
     const updateResp = await FetchWithTimeout(
-      "http://" + base_ip + ":4000/shokaList",
+      "http://" + base_ip + ":4000/attendance/todaysAttendance/" + id,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
-        body: JSON.stringify({
-          subjectId: subjectId,
-          studentId: studentId,
-          midtermMarks: midtermMarks,
-          assignmentOrProjectMarks: assignmentsMarks,
-          finalMarks: finalMarks,
-        }),
       },
       5000
     );
     console.log(updateResp.status);
-    if (updateResp.status == 406) {
-      const error = new Error(
-        "Selected student does not exists in this semester"
-      );
-      error.code = 406;
+
+    let data = await updateResp.json();
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
       throw error;
     }
+    data = data.students;
 
-    if (updateResp.status == 401) {
-      const error = new Error("Please relogin");
-      error.code = 401;
+    const studentData = new Array();
+    data.forEach((element) => {
+      let isPresentOne = false;
+      let isPresentTwo = false;
+      if (element.isPresentOne != 0) {
+        isPresentOne = true;
+      }
+      if (element.isPresentTwo != 0) {
+        isPresentTwo = true;
+      }
+      studentData.push({
+        studentId: element.studentId,
+        studentName: element.studentName,
+        nickName: element.nickName,
+        fatherName: element.fatherName,
+
+        grandFatherName: element.grandFatherName,
+        date: element.date,
+        shamsiDate: element.shamsiDate,
+        isPresentOne: isPresentOne,
+        isPresentTwo: isPresentTwo,
+      });
+    });
+
+    //console.log(studentData);
+
+    dispatch({ type: GETATTENDENCE, studentData });
+  };
+};
+
+export const getStudentBySubject = (subjectId) => {
+  return async (dispatch) => {
+    const userData = await AsyncStorage.getItem("userData");
+
+    const transformedData = JSON.parse(userData);
+    const { userPassword, subjects, token, userId, expirationDate } =
+      transformedData;
+
+    const updateResp = await FetchWithTimeout(
+      "http://" + base_ip + ":4000/subjects/students/" + subjectId,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      },
+      5000
+    );
+    let data = await updateResp.json();
+
+    const code = await updateResp.status;
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
       throw error;
     }
+    const studentData = new Array();
+    data.forEach((element) => {
+      studentData.push({
+        studentId: element.Student.id,
+        studentName: element.Student.fullName,
+        nickName: element.Student.nickName,
+        fatherName: element.Student.fatherName,
 
-    if (updateResp.status != 200 || updateResp.status != 201) {
-    }
+        grandFatherName: element.Student.grandFatherName,
+        date: element.Student.date,
+        shamsiDate: element.Student.shamsiDate,
+        isPresentOne: 0,
+        isPresentTwo: 0,
+      });
+    });
+
+    console.log(data);
+
+    dispatch({ type: GETSTUDENTSBYSUBJECT, studentData });
   };
 };
 

@@ -27,7 +27,7 @@
         </v-btn>
       </template>
 
-      <template v-slot:top>
+      <template v-slot:top v-if="!hideToolbar">
         <v-toolbar :color="enrollmentMode ? 'dark' : 'primary'">
           <v-toolbar-title>
             {{ enrollmentMode ? 'Reserved  Students' : 'Semester Students' }}
@@ -102,7 +102,7 @@ import { VDataTable } from 'vuetify/labs/VDataTable';
 
 export default {
   inject: ['enableStudentsAddition'],
-  props: ['headers', 'students'],
+  props: ['headers', 'students', 'hideToolbar'],
   components: {
     VDataTable,
   },

@@ -38,20 +38,22 @@ const findEligibleNextSemesterAfterConversion = async (semesterId) => {
 const checkStudentEligibilityForNextSemester = async (studentId) => {
   // 1. Let's check if the student has been given tabdili:
   const isTabdil = await tabdiliService.findTabdiliByStudentId(studentId);
-  if (isTabdil) return { message: 'Student is tabdil', eligible: 0 };
+  if (isTabdil) return { message: 'Student is tabdil', eligible: 0, reason: 'tabdil' };
 
   // 2. Check if student has been given taajil and has not given reentry for that taajil:
   // 2.1 Let's check the general taajil first:
   const generalTaajilWithReentryisOK = await checkTaajilWithReentry(studentId, 'taajil');
-  if (!generalTaajilWithReentryisOK) return { message: 'Student has taajil. Please add reentry.', eligible: 0 };
+  if (!generalTaajilWithReentryisOK)
+    return { message: 'Student has taajil. Please add reentry.', eligible: 0, reason: 'taajil' };
 
   // 2.2 Let's check the special taajil:
   const specialTaajilWithReentryisOK = await checkTaajilWithReentry(studentId, 'special_taajil');
-  if (!specialTaajilWithReentryisOK) return { message: 'Student has special taajil. Please add reentry.', eligible: 0 };
+  if (!specialTaajilWithReentryisOK)
+    return { message: 'Student has special taajil. Please add reentry.', eligible: 0, reason: 'taajil' };
 
   // 3. Check what?
 
-  return { message: 'All good', eligible: 1 };
+  return { message: 'All good', eligible: 1, reason: null };
 };
 
 // This function checks if the student has been given taajil and has given back its reentry

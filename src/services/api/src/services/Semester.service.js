@@ -2,6 +2,7 @@
 const httpStatus = require('http-status');
 const { Semester, EducationalYear, Subject, User } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { taajilService, reentryService, tabdiliService, studentListService } = require('.');
 
 /**
  * Get All Semesters with education year
@@ -120,6 +121,25 @@ const findSemesterByYearIdAndTitle = async (educationalYearId, title) => {
   });
 };
 
+/**
+ * Update semester completed status
+ * @param {Object} oldUser
+ * @param {Object} newUserBody
+ * @returns {Promise<User>}
+ */
+const updateSemesterStatus = (semesterId, status) => {
+  return Semester.update(
+    {
+      completed: !!status,
+    },
+    {
+      where: {
+        id: semesterId,
+      },
+    }
+  );
+};
+
 module.exports = {
   findById,
   findSemester,
@@ -130,4 +150,5 @@ module.exports = {
   getYearSemesters,
   findSemesterByYearIdAndTitle,
   isSemesterOnGoing,
+  updateSemesterStatus,
 };

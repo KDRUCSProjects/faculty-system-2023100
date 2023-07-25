@@ -41,11 +41,11 @@ const createShokaList = catchAsync(async (req, res) => {
   }
   if (!req.query.chance) {
     const doesStdHasMarks = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 1);
-    if (doesStdHasMarks) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has marks in first chance of this subject and shoka');
+    if (doesStdHasMarks)
+      throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has marks in first chance of this subject and shoka');
     req.body.shokaId = shoka.id;
     const shokaList = await shokaListService.createShokaList(req.body);
     return res.status(httpStatus.CREATED).send(shokaList);
-
   } else {
     switch (req.query.chance) {
       case 2:
@@ -74,8 +74,8 @@ const createShokaList = catchAsync(async (req, res) => {
         const secondAssignment = studentSecondChanceMarks.assignment || 0;
         const secondPracticalWork = studentSecondChanceMarks.practicalWork || 0;
         const secondFinalMarks = studentSecondChanceMarks.finalMarks || 0;
-        const secondChanceTotalMarks = (secondMidtermMarks + secondAssignment + secondPracticalWork + secondFinalMarks);
-        if (secondChanceTotalMarks >= 55) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student is pass in second chance')
+        const secondChanceTotalMarks = secondMidtermMarks + secondAssignment + secondPracticalWork + secondFinalMarks;
+        if (secondChanceTotalMarks >= 55) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student is pass in second chance');
 
         req.body.shokaId = shoka.id;
         req.body.chance = 3;
@@ -248,7 +248,6 @@ const updateShokaList = catchAsync(async (req, res) => {
   }
 });
 
-
 const deleteShokaList = catchAsync(async (req, res) => {
   const { shokalistId } = req.params;
   const shokaList = await shokaListService.getShokaListById(shokalistId);
@@ -269,7 +268,6 @@ const deleteShokaList = catchAsync(async (req, res) => {
     return res.status(httpStatus.NO_CONTENT).send();
   }
 });
-
 
 const getStudentMarks = catchAsync(async (req, res) => {
   const { studentId } = req.params;
@@ -295,16 +293,16 @@ const getStudentMarks = catchAsync(async (req, res) => {
     const classTitle = req.query.class;
     switch (classTitle) {
       case 1:
-        conditions.push(`(semester.title = 1 OR semester.title = 2)`)
+        conditions.push(`(semester.title = 1 OR semester.title = 2)`);
         break;
       case 2:
         conditions.push(`(semester.title = 3 OR semester.title = 4)`);
         break;
       case 3:
-        conditions.push(`(semester.title = 5 OR semester.title = 6)`)
+        conditions.push(`(semester.title = 5 OR semester.title = 6)`);
         break;
       case 4:
-        conditions.push(`(semester.title = 7 OR semester.title = 8)`)
+        conditions.push(`(semester.title = 7 OR semester.title = 8)`);
         break;
       default:
         throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Query Parameters');
@@ -317,9 +315,7 @@ const getStudentMarks = catchAsync(async (req, res) => {
   const results = await shokaListService.getStudentMarks(conditions);
   const formatMarks = marksFormatter(results);
   return res.status(httpStatus.OK).send(formatMarks);
-
 });
-
 
 const createShokaInExcel = catchAsync(async (req, res) => {
   const { subjectId } = req.params;
@@ -455,7 +451,7 @@ const createShokaInExcel = catchAsync(async (req, res) => {
       break;
     default:
       throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameter');
-  };
+  }
 
 
 
@@ -468,8 +464,8 @@ const createShokaInExcel = catchAsync(async (req, res) => {
   let semesterName;
   switch (semester.title) {
     case 1:
-      className = 'لومړی'
-      semesterName = 'اول'
+      className = 'لومړی';
+      semesterName = 'اول';
       break;
     case 2:
       className = 'لومړی';
@@ -501,21 +497,21 @@ const createShokaInExcel = catchAsync(async (req, res) => {
       break;
     default:
       className = 'لومړی';
-      semesterName = 'اول'
+      semesterName = 'اول';
       break;
   }
 
   const headerText = `د کمپيوټر ساينس پوهنځي د ${className} ټولګی د ${semesterName} سمسټر د (${subject.name})  مضمون استاد (${teacher.name})   مميز (      )  د ${chance} چانس ازموينی نمري`
   const footerText = `په پورته شرح د (   ${className}     ) ټولګی د ${semesterName} سمسټر ۱۴۰۲ تحصیلي کال دنمرو شقه بدون د قلم وهنی او تراش څخه تر تيب او صحت لري.`;
 
-  const filePath = path.join(__dirname, '../', 'storage', 'exportable', 'templates', 'shoka.xlsx')
-
+  const filePath = path.join(__dirname, '../', 'storage', 'exportable', 'templates', 'shoka.xlsx');
 
   // workbook.xlsx.write(res);
   // res.end();
   let workbook = new Excel.Workbook();
   workbook = await workbook.xlsx.readFile(filePath);
   let worksheet = workbook.getWorksheet('Sheet1');
+
   worksheet.getRow(4).getCell(1).value = headerText;
   let row = 6;
   results.forEach(element => {

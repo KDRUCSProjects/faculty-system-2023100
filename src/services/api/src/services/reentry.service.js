@@ -130,6 +130,29 @@ const findReentryByStudentIdAndReason = async (studentId, reason) => {
   });
 };
 
+/**
+ * find reentry taajil count or data by semester id and type
+ * @param {ObjectId} studentKankorId
+ * @returns {Promise<Taajil>}
+ */
+const findReentryBySemesterIdAndType = async (semesterId, options = { type, gender: null, count: false }) => {
+  const query = {
+    where: { semesterId, reason: options.type },
+  };
+
+  const results = (await Reentry.findAll(query))?.map((reentry) => reentry.studentId);
+
+  const studentsQuery = {
+    where: {
+      id: results,
+    },
+  };
+
+  if (options.gender) studentsQuery.where.gender = options.gender;
+
+  return options.count ? await Student.count(studentsQuery) : await Student.findAll(studentsQuery);
+};
+
 module.exports = {
   createReentry,
   deleteReentry,
@@ -141,4 +164,5 @@ module.exports = {
   findReentryByStdKankorId,
   findReentryByStdIdAndYearId,
   findReentryByStudentIdAndReason,
+  findReentryBySemesterIdAndType,
 };

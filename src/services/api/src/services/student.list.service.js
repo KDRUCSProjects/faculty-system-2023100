@@ -242,6 +242,29 @@ const findStudentCurrentSemester = (studentId) => {
   });
 };
 
+/**
+ * find all students count by semester id
+ * @param {ObjectId} studentId
+ * @returns {Promise<StudentsList>}
+ */
+const getAllStudentsCountBySemesterId = async (semesterId, options = { gender: null, count: false }) => {
+  const records = await StudentsList.findAll({
+    where: { semesterId },
+    attributes: ['studentId'],
+  });
+
+  const results = records?.map((rec) => rec.studentId);
+
+  const query = {
+    where: {
+      id: results,
+    },
+  };
+  if (options.gender) query.where.gender = options.gender;
+
+  return options.count ? await Student.count(query) : await Student.findAll(query);
+};
+
 module.exports = {
   getStudentLists,
   countStudentList,
@@ -257,4 +280,5 @@ module.exports = {
   getStudentListByStdIdAndSemesterId,
   findStudentLatestSemesterId,
   getAllStudentsBySemesterId,
+  getAllStudentsCountBySemesterId,
 };

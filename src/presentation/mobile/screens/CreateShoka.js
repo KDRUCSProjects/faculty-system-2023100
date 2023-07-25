@@ -19,6 +19,7 @@ import {
   changePassword,
   checkPassword,
   createShoka,
+  getStudentBySubject,
   logout,
   updateAccount,
 } from "../store/actions/actions";
@@ -28,7 +29,12 @@ import { useEffect } from "react";
 import { Modal } from "@ui-kitten/components/ui";
 
 export default function CreateShoka(props) {
-  const students = useSelector((state) => state.studentReducer.students);
+  const subjectIdParam = props.route.params.subjectId;
+  const status = props.route.params.status;
+
+  const [isGetStudentLoading, setisGetStudentLoading] = useState(false);
+
+  const students = useSelector((state) => state.studentsBySubject.students);
 
   const subjects = useSelector((state) => state.MainReducer.subjects);
   const ref = useRef();
@@ -40,13 +46,14 @@ export default function CreateShoka(props) {
   const [midTerm, setmidTerm] = useState("");
   const [assignments, setassignments] = useState("");
   const [finals, setfinals] = useState("");
+  const [practicalMarks, setpracticalMarks] = useState("");
 
   const [midTermError, setmidTermError] = useState(false);
   const [assignmentsError, setassignmentsError] = useState(false);
   const [finalsError, setfinalsError] = useState(false);
   const [marksError, setmarksError] = useState(false);
   const [selectedStudentErr, setselectedStudentErr] = useState(false);
-  const [selectedSubjectErr, setselectedSubjectErr] = useState(false);
+  const [practicalMarksErr, setpracticalMarksErr] = useState(false);
 
   const [studentId, setstudentId] = useState(null);
   const [subjectId, setsubjectId] = useState(null);
@@ -64,11 +71,6 @@ export default function CreateShoka(props) {
 
   const onSave = async () => {
     const numRegEx = /\b([0-9]|[1-9][0-9]|100)\b/;
-
-    if (!selectedSubject) {
-      setselectedSubjectErr("a Subject should be selected!");
-      return;
-    }
 
     if (!selectedStudent) {
       setselectedStudentErr("a Student should be selected!");
@@ -102,17 +104,41 @@ export default function CreateShoka(props) {
       return;
     }
 
+    if (practicalMarks == "") {
+      setpracticalMarksErr("This field is required!");
+      return;
+    }
+    if (parseInt(practicalMarks) > 60) {
+      setpracticalMarksErr("practical marks should be between 0-60");
+      return;
+    }
+    if (
+      parseInt(practicalMarks) +
+        parseInt(finals) +
+        parseInt(assignments) +
+        parseInt(midTerm) >
+      100
+    ) {
+      setmarksError("Whole marks shouldn't be greater than 100");
+      return;
+    }
     try {
       setisLoading(true);
       await dispatch(
-        createShoka(subjectId, studentId, midTerm, assignments, finals)
+        createShoka(
+          subjectIdParam,
+          studentId,
+          midTerm,
+          assignments,
+          finals,
+          practicalMarks,
+          status
+        )
       );
     } catch (e) {
       setisLoading(false);
       if (e.code == 401) {
-        try {
-          dispatch(logout());
-        } catch (e) {}
+        props.navigation.navigate("Login");
       }
       Alert.alert("Sorry!", e.message);
       return;
@@ -203,67 +229,6 @@ export default function CreateShoka(props) {
                     justifyContent: "center",
                   }}
                 >
-                  <Text style={{ fontSize: 17 }}>Subject</Text>
-                </View>
-
-                <View
-                  style={{
-                    width: "60%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Select
-                    style={{
-                      borderWidth: 1,
-                      borderRadius: 4,
-                      borderColor: "black",
-                    }}
-                    placeholder="Choose Subject"
-                    status={!selectedSubjectErr ? "basic" : "danger"}
-                    size="large"
-                    value={selectedSubject}
-                    selectedIndex={selectedIndex}
-                    onSelect={(index) => {
-                      setselectedSubject(subjects[index.row].name);
-                      setsubjectId(subjects[index.row].id);
-                      setselectedSubjectErr(false);
-                      return setSelectedIndex(index);
-                    }}
-                  >
-                    {subjects.map((subject) => {
-                      return (
-                        <SelectItem
-                          key={subject.id}
-                          title={subject.name}
-                        ></SelectItem>
-                      );
-                    })}
-                  </Select>
-                  {selectedSubjectErr ? (
-                    <Text style={{ color: "red" }}>{selectedSubjectErr}</Text>
-                  ) : (
-                    <View></View>
-                  )}
-                </View>
-              </View>
-
-              <View
-                style={{
-                  width: "90%",
-                  height: 90,
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
-              >
-                <View
-                  style={{
-                    width: "40%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
                   <Text style={{ fontSize: 17 }}>Student</Text>
                 </View>
 
@@ -286,8 +251,8 @@ export default function CreateShoka(props) {
                     value={selectedStudent}
                     selectedIndex={selectedStudentIndex}
                     onSelect={(index) => {
-                      setselectedStudent(students[index.row].name);
-                      setstudentId(students[index.row].id);
+                      setselectedStudent(students[index.row].studentName);
+                      setstudentId(students[index.row].studentId);
                       setselectedStudentErr(false);
                       return setselectedStudentIndex(index);
                     }}
@@ -295,8 +260,8 @@ export default function CreateShoka(props) {
                     {students.map((student) => {
                       return (
                         <SelectItem
-                          key={student.id}
-                          title={student.name}
+                          key={student.studentId}
+                          title={student.studentName}
                         ></SelectItem>
                       );
                     })}
@@ -473,6 +438,61 @@ export default function CreateShoka(props) {
                 </View>
               </View>
 
+              <View
+                style={{
+                  width: "90%",
+                  height: 90,
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    width: "40%",
+                    height: 60,
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text style={{ fontSize: 17 }}>Practical work Marks</Text>
+                </View>
+
+                <View
+                  style={{
+                    width: "60%",
+                    height: 60,
+                    justifyContent: "center",
+                  }}
+                >
+                  <TextInput
+                    style={{ height: 50 }}
+                    label={"Final Marks"}
+                    mode="outlined"
+                    textColor="black"
+                    outlineColor="black"
+                    contentStyle={{
+                      fontSize: 13,
+                    }}
+                    keyboardType="number-pad"
+                    inputMode="numeric"
+                    maxLength={2}
+                    error={practicalMarksErr}
+                    value={practicalMarks}
+                    onChangeText={(text) => {
+                      setmarksError(false);
+                      setfinalsError(false);
+                      setpracticalMarksErr(false);
+                      setpracticalMarks(text);
+                    }}
+                  ></TextInput>
+                  {practicalMarksErr ? (
+                    <Text style={{ color: "red" }}>{practicalMarksErr}</Text>
+                  ) : (
+                    <View></View>
+                  )}
+                </View>
+              </View>
+
               {marksError ? (
                 <View
                   style={{
@@ -497,10 +517,11 @@ export default function CreateShoka(props) {
 
       <Modal
         visible={isLoading}
-        backdropStyle={styles.backdrop}
+        backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
       >
         <ActivityIndicator size={60}></ActivityIndicator>
       </Modal>
+
       <TouchableOpacity
         style={styles.btn}
         onPress={() =>
@@ -513,7 +534,7 @@ export default function CreateShoka(props) {
             },
             {
               text: "Yes",
-              onPress: onSaveUpdate,
+              onPress: onSave,
             },
           ])
         }

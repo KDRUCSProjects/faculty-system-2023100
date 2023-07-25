@@ -29,7 +29,7 @@ export default MainDrawer = (props) => {
   let teacherPhoto = useSelector((state) => state.MainReducer.photoUri);
 
   if (!teacherPhoto) {
-    teacherPhoto = "";
+    teacherPhoto = "null";
   }
 
   const dispatch = useDispatch();
@@ -84,7 +84,7 @@ export default MainDrawer = (props) => {
         </View>
       )}
       selectedIndex={new IndexPath(selectedItem)}
-      onSelect={(index) => {
+      onSelect={async (index) => {
         if (index.row === 0) {
           setselectedItem(0);
           props.navigation.navigate("teacherScreen");
@@ -98,14 +98,11 @@ export default MainDrawer = (props) => {
           setselectedItem(2);
           props.navigation.navigate("settingsScreen");
         }
+
         if (index.row === 3) {
-          setselectedItem(3);
-          props.navigation.navigate("CreateShoka");
-        }
-        if (index.row === 4) {
-          AsyncStorage.clear().then().then();
-          dispatch(logout());
           props.navigation.navigate("Login");
+          await dispatch(logout());
+          await AsyncStorage.clear().then().then();
         }
 
         // props.navigation.navigate(props.state.routeNames[index.row]);
@@ -146,15 +143,6 @@ export default MainDrawer = (props) => {
         }
       />
 
-      <DrawerItem
-        title="Create Shoka"
-        accessoryLeft={
-          <ImageBackground
-            source={require("../../assets/images/shoka.png")}
-            style={{ height: 50, width: 25 }}
-          ></ImageBackground>
-        }
-      />
       <DrawerItem
         title={"Logout"}
         accessoryLeft={

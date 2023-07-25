@@ -10,6 +10,7 @@ const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
 const { authLimiter } = require('./middlewares/rateLimiter');
+const { setupWizardMiddleware } = require('./middlewares/setUpWizerd');
 const routes = require('./routes');
 const { errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
@@ -54,6 +55,7 @@ app.use('/storage/images', express.static(path.join(__dirname, 'storage', 'image
 // v1 api routes
 app.use(routes);
 
+app.use(setupWizardMiddleware);
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
