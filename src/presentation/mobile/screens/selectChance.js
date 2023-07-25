@@ -90,13 +90,13 @@ export default function SelectChance(props) {
         </View>
         <Text
           style={{
-            fontSize: 25,
+            fontSize: 20,
             margin: 10,
             fontWeight: "bold",
             fontStyle: "italic",
           }}
         >
-          Choose Attendence type
+          Choose Chance for this student
         </Text>
         <View
           style={{

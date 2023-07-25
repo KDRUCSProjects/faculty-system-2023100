@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -20,6 +21,7 @@ import {
   updateAccount,
 } from "../store/actions/actions";
 import Toast from "react-native-simple-toast";
+import { Modal } from "@ui-kitten/components";
 
 export default function ChangePassword(props) {
   const username = useSelector((state) => state.MainReducer.userName);
@@ -36,6 +38,7 @@ export default function ChangePassword(props) {
   const [passwordError, setpasswordError] = useState(false);
   const [newPassError, setnewPassError] = useState(false);
   const [confirmPassError, setconfirmPassError] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   const dispatch = useDispatch();
   const onChangePassword = async () => {
@@ -68,23 +71,27 @@ export default function ChangePassword(props) {
       return;
     }
 
-    try {
-      await dispatch(checkPassword(currentPassword));
-    } catch (e) {
-      console.log(e);
-      if (e.code == 401) {
-        props.navigation.navigate("Login");
-      }
-      Alert.alert("Sorry!", e.message);
-      return;
-    }
+    // try {
+    //   await dispatch(checkPassword(currentPassword));
+    // } catch (e) {
+    //   if (e.code == 401) {
+    //     props.navigation.navigate("Login");
+    //   }
+    //   Alert.alert("Sorry!", e.message);
+    //   return;
+    // }
 
     try {
+      setisLoading(true);
       await dispatch(
         changePassword(currentPassword, newPassword, confirmPassword)
       );
+      setisLoading(false);
     } catch (e) {
       console.log(e);
+      if (e.code == 401) {
+        // props.navigation.navigate("Login");
+      }
       Alert.alert("Sorry!", e.toString());
       return;
     }
@@ -138,13 +145,13 @@ export default function ChangePassword(props) {
         >
           <View
             style={{
-              height: "50%",
+              height: "40%",
               width: "100%",
               alignItems: "center",
               justifyContent: "space-around",
             }}
           >
-            <View style={{ height: 200, width: 200, margin: 10 }}>
+            <View style={{ height: 180, width: 180, margin: 10 }}>
               <ImageBackground
                 style={{ width: "100%", height: "100%" }}
                 source={require("../assets/images/reset-password.png")}
@@ -153,7 +160,7 @@ export default function ChangePassword(props) {
             <Text style={{ fontWeight: "bold", fontSize: 30 }}>
               Change Password
             </Text>
-            <Text style={{ fontWeight: "bold", fontSize: 13 }}>
+            <Text style={{ fontWeight: "bold", fontSize: 13, marginTop: 3 }}>
               Please enter your Password
             </Text>
           </View>
@@ -173,11 +180,12 @@ export default function ChangePassword(props) {
                 alignItems: "center",
               }}
             >
-              <View style={{ width: "90%", height: 90 }}>
+              <View style={{ width: "90%", height: 120 }}>
                 <TextInput
                   style={{ height: 60 }}
                   label={"Current password"}
                   mode="outlined"
+                  autoCapitalize="none"
                   textColor="gray"
                   contentStyle={{ fontSize: 15 }}
                   error={passwordError}
@@ -201,11 +209,12 @@ export default function ChangePassword(props) {
                 )}
               </View>
 
-              <View style={{ width: "90%", height: 90 }}>
+              <View style={{ width: "90%", height: 120 }}>
                 <TextInput
                   style={{ height: 60 }}
                   label={"New password"}
                   mode="outlined"
+                  autoCapitalize="none"
                   contentStyle={{ fontSize: 15 }}
                   textColor="gray"
                   error={newPassError}
@@ -228,12 +237,13 @@ export default function ChangePassword(props) {
                   <View></View>
                 )}
               </View>
-              <View style={{ width: "90%", height: 90 }}>
+              <View style={{ width: "90%", height: 120 }}>
                 <TextInput
                   style={{ height: 60 }}
                   label={"Confirm password"}
                   mode="outlined"
                   textColor="gray"
+                  autoCapitalize="none"
                   contentStyle={{ fontSize: 15 }}
                   error={confirmPassError}
                   value={confirmPassword}
@@ -258,6 +268,12 @@ export default function ChangePassword(props) {
             </View>
           </View>
         </ScrollView>
+        <Modal
+          visible={isLoading}
+          backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <ActivityIndicator size={60}></ActivityIndicator>
+        </Modal>
       </View>
       <TouchableOpacity
         style={styles.btn}
@@ -271,7 +287,7 @@ export default function ChangePassword(props) {
             },
             {
               text: "Yes",
-              onPress: onSaveUpdate,
+              onPress: onChangePassword,
             },
           ])
         }

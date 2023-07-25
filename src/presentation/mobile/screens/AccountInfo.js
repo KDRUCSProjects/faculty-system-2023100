@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -19,6 +20,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import Toast from "react-native-simple-toast";
 import { Modal } from "@ui-kitten/components/ui";
+import * as FileSystem from "expo-file-system";
 
 export default function AccountInfo(props) {
   const username = useSelector((state) => state.MainReducer.userName);
@@ -36,6 +38,7 @@ export default function AccountInfo(props) {
   const [imgEditedName, setimgEditedName] = useState(false);
 
   const [visible, setVisible] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
   const { height, width } = Dimensions.get("screen");
 
   const askPermission = async () => {
@@ -62,10 +65,25 @@ export default function AccountInfo(props) {
 
     const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [16, 9],
-      quality: 0.1,
+      aspect: [16, 12],
+      quality: 0.7,
     });
     if (!image.cancelled) {
+      const getFileSize = async (uri) => {
+        let fileInfo = await FileSystem.getInfoAsync(uri);
+        console.log(fileInfo);
+        if (fileInfo.size / 1024 / 1024 > 2097152) {
+          return false;
+        } else {
+          return true;
+        }
+      };
+      if (!getFileSize(image.uri)) {
+        Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
+
+        return;
+      }
+
       setimgEditedName(image.uri.split("/").pop());
       console.log(imgEditedName);
       setimgEdited(image.uri);
@@ -81,10 +99,24 @@ export default function AccountInfo(props) {
 
     const image = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      aspect: [16, 9],
-      quality: 0.1,
+      aspect: [16, 12],
+      quality: 0.7,
     });
     if (!image.cancelled) {
+      const getFileSize = async (uri) => {
+        let fileInfo = await FileSystem.getInfoAsync(uri);
+        console.log(fileInfo);
+        if (fileInfo.size / 1024 / 1024 > 2097152) {
+          return false;
+        } else {
+          return true;
+        }
+      };
+      if (!getFileSize(image.uri)) {
+        Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
+
+        return;
+      }
       setimgEditedName(image.uri.split("/").pop());
       console.log(imgEditedName);
       setimgEdited(image.uri);
@@ -95,14 +127,21 @@ export default function AccountInfo(props) {
   const dispatch = useDispatch();
   const onSaveUpdate = async () => {
     try {
-      const photo = imgEditedName ? imgEditedName : teacherPhotoName;
-      await dispatch(
-        updateAccount(userName, lastName, email, {
-          uri: imgEdited,
-          name: imgEditedName,
-          type: "image/jpeg",
-        })
-      );
+      const photoName = imgEditedName ? imgEditedName : teacherPhotoName;
+
+      setisLoading(true);
+      if (imgEdited) {
+        await dispatch(
+          updateAccount(userName, lastName, email, {
+            uri: imgEdited,
+            name: imgEditedName,
+            type: "image/jpeg",
+          })
+        );
+      } else {
+        await dispatch(updateAccount(userName, lastName, email));
+      }
+      setisLoading(false);
     } catch (e) {
       console.log(e);
       if (e.code == 401) {
@@ -376,6 +415,13 @@ export default function AccountInfo(props) {
                 <Text> Select from Gallerry</Text>
               </TouchableOpacity>
             </View>
+          </Modal>
+
+          <Modal
+            visible={isLoading}
+            backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          >
+            <ActivityIndicator size={60}></ActivityIndicator>
           </Modal>
         </View>
         <TouchableOpacity

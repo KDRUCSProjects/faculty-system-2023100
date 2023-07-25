@@ -6,6 +6,7 @@ import {
   ScrollView,
   Alert,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getAttendence, loadSubjects } from "../store/actions/actions";
@@ -17,12 +18,14 @@ import SubjectItem from "./SubjectItem";
 import SelectSubjectItem from "./SelectSubjectItem";
 import { useState } from "react";
 import { getStudentBySubject } from "../store/actions/actions";
+import { Modal } from "@ui-kitten/components";
 
 export default function Subjects(props) {
   const subjects = useSelector((state) => state.MainReducer.subjects);
 
   const dispatch = useDispatch();
   const [selected, setselected] = useState(null);
+  const [isLoading, setisLoading] = useState(false);
   const onclick = (id) => {
     setselected(id);
   };
@@ -33,7 +36,9 @@ export default function Subjects(props) {
     }
     console.log(selected);
     try {
+      setisLoading(true);
       await dispatch(getStudentBySubject(selected));
+      setisLoading(false);
       props.navigation.navigate("SelectChance", { subjectId: selected });
     } catch (error) {
       if (error.code == 401) {
@@ -116,6 +121,12 @@ export default function Subjects(props) {
               <View></View>
             )}
           </ScrollView>
+          <Modal
+            visible={isLoading}
+            backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          >
+            <ActivityIndicator size={60}></ActivityIndicator>
+          </Modal>
         </View>
         <View
           style={{

@@ -5,6 +5,7 @@ import {
   Dimensions,
   ImageBackground,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { useState } from "react";
 import { RadioButton } from "react-native-paper";
@@ -20,6 +21,7 @@ import { useSelector } from "react-redux";
 import { forwardRef } from "react";
 import { useImperativeHandle } from "react";
 import { useEffect } from "react";
+import { Modal } from "@ui-kitten/components";
 
 const { height, width } = Dimensions.get("window");
 
@@ -28,6 +30,7 @@ const AttendenceItem = (props, ref) => {
   const students = useSelector((state) => state.studentReducer.students);
 
   const [newStudent, setnewStudent] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   let StudentsSize = students.length;
 
@@ -37,7 +40,9 @@ const AttendenceItem = (props, ref) => {
   const onStatusContainer = async (status) => {
     if (status == "onPresent") {
       try {
+        setisLoading(true);
         await dispatch(isPresent("1", props.studentId, "both"));
+        setisLoading(false);
         setnewStudent(!newStudent);
         return props.onStatus();
       } catch (err) {
@@ -46,7 +51,9 @@ const AttendenceItem = (props, ref) => {
     }
     try {
       if (status == "onAbsent") {
+        setisLoading(true);
         await dispatch(isAbsent("1", props.studentId, "both"));
+        setisLoading(false);
 
         setnewStudent(!newStudent);
         return props.onStatus();
@@ -288,6 +295,12 @@ const AttendenceItem = (props, ref) => {
           <Text style={{ fontSize: 20, color: "white" }}>Present</Text>
         </TouchableOpacity>
       </View>
+      <Modal
+        visible={isLoading}
+        backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+      >
+        <ActivityIndicator size={60}></ActivityIndicator>
+      </Modal>
     </View>
   );
 };

@@ -517,10 +517,11 @@ export default function CreateShoka(props) {
 
       <Modal
         visible={isLoading}
-        backdropStyle={styles.backdrop}
+        backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
       >
         <ActivityIndicator size={60}></ActivityIndicator>
       </Modal>
+
       <TouchableOpacity
         style={styles.btn}
         onPress={() =>
