@@ -81,6 +81,15 @@ const getEducationalYearByValue = (year) => {
 };
 
 /**
+ * get educational year by period
+ * @param {Number} period
+ * @returns {Promise<EducationalYear>}
+ */
+const getYearByPeriod = (period) => {
+  return EducationalYear.findOne({ where: { period: period } });
+};
+
+/**
  * get current educational year
  * @returns {Promise<EducationalYear>}
  */
@@ -108,6 +117,7 @@ const updateYear = (oldYear, newYear) => {
 module.exports = {
   updateYear,
   findNextYear,
+  getYearByPeriod,
   createEducationalYear,
   getEducationalYears,
   deleteEducationalYear,

@@ -1,7 +1,7 @@
 // Sequelize Models
 const { QueryTypes } = require('sequelize');
 const httpStatus = require('http-status');
-const { ShokaList, sequelize, Student, Subject, Shoka } = require('../models');
+const { ShokaList, sequelize, Student, Subject, Shoka, StudentsList } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -84,7 +84,7 @@ const getStudentMarks = (conditions) => {
     shokalist.id,
     shokalist.shokaId,
     shokalist.studentId,
-    shokalist.midtermMarks,
+    shokalist.projectMarks,
     shokalist.assignment,
     shokalist.practicalWork,
     shokalist.finalMarks,
@@ -109,13 +109,61 @@ const getStudentMarks = (conditions) => {
   );
 };
 
+
 /**
  * get subject marks
  * @param {ObjectId} shokaId
  * @param {ObjectId} chance
  * @returns {Promise<ShokaList>}
  */
-const getShokaMarks = (shokaId, chance) => {
+const findFailStudents = (shokaId, chance) => {
+  return sequelize.query(
+    `
+    select
+    student.fullName as fullName,
+    student.fatherName as fatherName,
+    student.grandFatherName as grandFatherName,
+    shokalist.studentId as studentId,
+    shokalist.shokaId as shokaId, 
+    shokalist.projectMarks as projectMarks, 
+    shokalist.assignment as assignment, 
+    shokalist.finalMarks as finalMarks, 
+    shokalist.practicalWork as practicalWork, 
+    shokalist.chance as chance,
+    (
+      COALESCE(shokalist.projectMarks, 0) + COALESCE(shokalist.assignment, 0) + COALESCE(shokalist.finalMarks, 0) + COALESCE(shokalist.practicalWork, 0)
+    ) as total 
+    from shokalists as shokalist
+    inner join students as student on student.id = shokalist.studentId
+    where shokalist.chance = ${chance}
+    AND shokalist.shokaId = ${shokaId}
+    AND shokalist.deletedAt IS NULL
+    AND (COALESCE(shokalist.projectMarks , 0) + COALESCE(shokalist.assignment  , 0) + COALESCE(shokalist.finalMarks   , 0) + COALESCE(shokalist.practicalWork   , 0)) < 55;
+   `,
+    { type: QueryTypes.SELECT }
+  );
+}
+
+/**
+ * get subject marks
+ * @param {ObjectId} semesterId
+ * @param {ObjectId} shokaId
+ * @returns {Promise<ShokaList>}
+ */
+const getShokaMarks = (semesterId, shokaId) => {
+  return sequelize.query(
+    `
+    select 
+    student.id as studentId,
+    student.fullName,
+    student.fatherName,
+    student.grandFatherName
+    from studentslists as studentlist inner join students as student on student.id = studentlist.studentId 
+    where studentlist.semesterId = ${semesterId}
+    AND  student.id NOT IN (select studentId from shokalists where shokaId = ${shokaId});
+    `,
+    { type: QueryTypes.SELECT }
+  )
   return ShokaList.findAll({
     where: { shokaId, chance },
     include: [
@@ -137,12 +185,13 @@ const getShokaMarks = (shokaId, chance) => {
 const getSubjectMarks = (conditions) => {
   return sequelize.query(
     `
-    select shokalist.finalMarks as finalMarks, 
-    shokalist.midtermMarks as midterm,
+    select shokalist.finalMarks as finalMarks,
     shokalist.assignment as assignment, 
     shokalist.practicalWork as practicalWork,
+    shokalist.projectMarks as projectMarks,
     student.fullName as fullName, 
-    student.fatherName as fatherName 
+    student.fatherName as fatherName,
+    student.id as studentId
     from shokalists as shokalist 
     inner join students as student on student.id = shokalist.studentId  
     where ${conditions.join(` AND `)}
@@ -163,5 +212,6 @@ module.exports = {
   updateShokaList,
   deleteShokaList,
   getShokaListById,
+  findFailStudents,
   isStudentListedInShokaList,
 };

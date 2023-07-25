@@ -204,7 +204,17 @@ const updatedStudentList = (oldStudentList, newStudentList) => {
  * @returns {Promise<StudentsList>}
  */
 const findSemesterStudents = (semesterId) => {
-  return StudentsList.findAll({ where: { semesterId } });
+  return StudentsList.findAll(
+    {
+      where: { semesterId },
+      include: [
+        {
+          model: Student, as: 'Student',
+          attributes: ['id', 'fullName', 'fatherName'],
+        }
+      ]
+    }
+  );
 };
 
 /**

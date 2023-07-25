@@ -7,7 +7,7 @@ const createShokaList = {
   body: Joi.object().keys({
     subjectId: Joi.number().required().integer(),
     studentId: Joi.number().required().integer(),
-    midtermMarks: Joi.number().min(0),
+    projectMarks: Joi.number().min(0),
     assignment: Joi.number().min(0),
     finalMarks: Joi.number().min(0),
     practicalWork: Joi.number().min(0),
@@ -20,7 +20,7 @@ const updateShokaList = {
   }),
   body: Joi.object()
     .keys({
-      midtermMarks: Joi.number().min(0),
+      projectMarks: Joi.number().min(0),
       assignment: Joi.number().min(0),
       finalMarks: Joi.number().min(0),
       practicalWork: Joi.number().min(0),

@@ -16,11 +16,11 @@ const marksFormatter = (arr) => {
   let semesterNumbers = 0;
 
   const newArr = arr.map((element) => {
-    const midtermMarks = element.midtermMarks ? element.midtermMarks : 0;
+    const projectMarks = element.projectMarks ? element.projectMarks : 0;
     const assignment = element.assignment ? element.assignment : 0;
     const practicalWork = element.practicalWork ? element.practicalWork : 0;
     const finalMarks = element.finalMarks ? element.finalMarks : 0;
-    const totalMarks = (midtermMarks + assignment + finalMarks + practicalWork);
+    const totalMarks = (projectMarks + assignment + finalMarks + practicalWork);
     const totalWithCredit = totalMarks * element.subjectCredit;
     return {
       ...element,

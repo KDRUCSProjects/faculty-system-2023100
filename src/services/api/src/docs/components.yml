@@ -198,7 +198,7 @@ components:
           type: number
         studentFK: 
           type: number
-        midtermMarks: 
+        projectMarks: 
           type: number
         assignment: 
           type: number
@@ -209,7 +209,7 @@ components:
       example:
         shokaFK: 1
         studentFK: 5
-        midtermMarks: 16
+        projectMarks: 16
         assignment: 11
         finalMarks: 45
         practicalWork: 45

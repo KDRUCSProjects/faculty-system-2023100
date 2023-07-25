@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      midtermMarks: {
+      projectMarks: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
