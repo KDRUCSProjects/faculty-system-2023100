@@ -13,14 +13,11 @@
       imageResizeTargetWidth="200"
       imageResizeTargetHeight="200"
       stylePanelLayout="compact circle"
-      styleLoadIndicatorPosition="right bottom"
-      styleButtonRemoveItemPosition="left bottom"
+      styleButtonRemoveItemPosition="center bottom"
       @addfile="handleFile"
       @removefile="$emit('photo', null)"
     />
-    <p v-if="photoSize" class="error">Can't upload the photo with size more than 2 mb</p>
   </div>
-
 </template>
 
 <script>
@@ -65,22 +62,19 @@ export default {
       // FilePond instance methods are available on `this.$refs.pond`
     },
     removeMassage: function () {
-      console.log('clicked')
+      console.log('clicked');
     },
     handleFile() {
       let theFile = this.$refs.pond._pond.getFile();
 
-      if(theFile.fileSize > 1024 * 1024){
-  
-        this.photoSize = true
-        // this.myFiles.pop();
-      }
-      else{
-        this.photoSize = false
-        this.$emit('photo', theFile.file || null, this.photoSize);
+      if (theFile.fileSize > 1024 * 1024) {
+        this.photoSize = true;
+      } else {
+        this.photoSize = false;
       }
 
-      
+      this.$emit('photo', theFile.file || null);
+      this.$emit('photo-size-change', this.photoSize);
     },
   },
   components: {
@@ -100,7 +94,7 @@ export default {
   margin-right: auto;
 }
 
-.error{
-  color: red
+.error {
+  color: red;
 }
 </style>

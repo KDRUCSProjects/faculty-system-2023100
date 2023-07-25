@@ -21,7 +21,6 @@ export default {
       throw e.response.data.message;
     }
   },
-
   async loadSemesterById(context, semesterId) {
     try {
       const token = context.rootGetters.token;
@@ -37,6 +36,43 @@ export default {
 
       context.commit('setSemester', response.data);
     } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async reviewSemesterStudentsPromotion(context, semesterId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/studentList/promote/${semesterId}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setReviewStudents', response.data);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async promoteStudentsBySemester(context, semesterId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/studentList/promote/${semesterId}`,
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setToast', [1, 'Migration has been completed successfully'], { root: true });
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
     }
   },

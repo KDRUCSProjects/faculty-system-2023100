@@ -17,6 +17,7 @@ router
 router
   .route('/:yearId')
   .get(auth(), validate(educationalYearValidation.getEducationalYear), educationalYearController.getEducationalYear)
+  .patch(auth('manageUsers'), validate(educationalYearValidation.setDate), educationalYearController.setDate)
   .delete(auth(), validate(educationalYearValidation.getEducationalYear), educationalYearController.deleteEducationalYear);
 
 router
@@ -46,6 +47,11 @@ module.exports = router;
  *         schema:
  *           type: boolean
  *         description: if you want current just pass currentYear to true in query parameters
+ *       - in: query
+ *         name: period
+ *         schema:
+ *           type: number
+ *         description: period number
  *     responses:
  *       "200":
  *         description: OK
@@ -118,6 +124,53 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: EducationalYearId id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/EducationalYear'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ * 
+ *   patch:
+ *     summary: set new fields of EducationalYear by id or value.
+ *     description: set new fields of EducationalYear by id or value.
+ *     tags: [EducationalYear]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: EducationalYearId id or educational year
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstHalfStart:
+ *                 type: integer
+ *               firstHalfEnd:
+ *                 type: integer
+ *               SecondHalfStart:
+ *                 type: integer
+ *               SecondHalfEnd:
+ *                 type: integer
+ *             example:
+ *               firstHalfStart: 2023
+ *               firstHalfEnd: 2023
+ *               SecondHalfStart: 2023
+ *               SecondHalfEnd: 2023
  *     responses:
  *       "200":
  *         description: OK

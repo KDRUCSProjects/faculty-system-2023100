@@ -34,7 +34,10 @@ export default function teacherScreen(props) {
     });
   }, [navigation]);
   const onTakeAttendence = () => {
-    props.navigation.navigate("attendenceScreen");
+    props.navigation.navigate("selectSubject", { choice: "takeAttendence" });
+  };
+  const onCreateShoka = () => {
+    props.navigation.navigate("selectSubject", { choice: "createShoka" });
   };
   return (
     <Layout
@@ -80,7 +83,7 @@ export default function teacherScreen(props) {
         <View style={[styles.attendenceContainer, styles.shadowProp]}>
           <View
             style={{
-              elevation: 3,
+              elevation: 2,
               shadowColor: "rgba(100, 100, 111, 0.4)",
 
               borderRadius: 15,
@@ -95,6 +98,7 @@ export default function teacherScreen(props) {
                 alignItems: "center",
                 justifyContent: "space-around",
               }}
+              onPress={onCreateShoka}
             >
               <View style={{ height: 90, width: 90 }}>
                 <ImageBackground
@@ -102,13 +106,13 @@ export default function teacherScreen(props) {
                   source={require("../assets/images/viewAttendence.png")}
                 ></ImageBackground>
               </View>
-              <Text style={{ fontSize: 25 }}>View Attendence</Text>
+              <Text style={{ fontSize: 25 }}>Create Shoka</Text>
             </TouchableWithoutFeedback>
           </View>
 
           <View
             style={{
-              elevation: 3,
+              elevation: 2,
               shadowColor: "rgba(100, 100, 111, 0.4)",
               borderRadius: 15,
               width: "80%",
@@ -135,9 +139,7 @@ export default function teacherScreen(props) {
           </View>
         </View>
 
-        <View style={{ alignSelf: "flex-start", margin: "2%" }}>
-          <Text style={{ fontSize: 25 }}>Your ID:CS10733854</Text>
-        </View>
+        <View style={{ alignSelf: "flex-start", margin: "2%" }}></View>
       </Layout>
     </Layout>
   );

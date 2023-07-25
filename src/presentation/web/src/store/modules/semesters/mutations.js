@@ -8,4 +8,7 @@ export default {
   setSemester(state, payload) {
     state.semester = payload;
   },
+  setReviewStudents(state, payload) {
+    state.reviewStudents = payload;
+  },
 };

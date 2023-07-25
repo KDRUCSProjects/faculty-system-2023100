@@ -24,6 +24,7 @@ import BaseUpdateDialog from '@/components/ui/BaseUpdateDialog';
 import BaseSelectYearDialog from '@/components/ui/dialogs/BaseSelectYear.vue';
 import BaseToast from '@/components/ui/BaseToast.vue';
 import BaseAutoCompleteYear from '@/components/ui/BaseAutoCompleteYear.vue';
+import BaseMenu from '@/components/ui/BaseMenu.vue';
 
 // Register global components
 app.component('base-contents', BaseContents);
@@ -34,6 +35,7 @@ app.component('base-update-dialog', BaseUpdateDialog);
 app.component('base-select-year-dialog', BaseSelectYearDialog);
 app.component('base-toast', BaseToast);
 app.component('base-autocomplete-year', BaseAutoCompleteYear);
+app.component('base-menu', BaseMenu);
 
 registerPlugins(app);
 

@@ -11,10 +11,23 @@ const getEducationalYear = {
     yearId: Joi.number().required(),
   }),
 };
+const setDate = {
+  params: Joi.object().keys({
+    yearId: Joi.number().required(),
+  }),
+  body: Joi.object().keys({
+    firstHalfStart: Joi.number().integer().positive(),
+    firstHalfEnd: Joi.number().integer().positive(),
+    SecondHalfStart: Joi.number().integer().positive(),
+    SecondHalfEnd: Joi.number().integer().positive(),
+    period: Joi.number().integer().positive(),
+  }).min(1),
+};
 
 const getEducationalYears = {
   query: Joi.object().keys({
     currentYear: Joi.boolean().valid(true),
+    period: Joi.number().integer().positive(),
   }),
 };
 
@@ -36,6 +49,7 @@ const setCurrentYear = {
 };
 
 module.exports = {
+  setDate,
   setCurrentYear,
   getYearByValue,
   getEducationalYear,

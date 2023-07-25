@@ -15,16 +15,27 @@ import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { default as theme } from "./ui/colors.json";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import GetInfo from "./store/reducers/getInfo";
+import * as fonts from "expo-font";
+import studentsBySubject from "./store/reducers/studentsBySubject";
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["Warning: ..."]);
+LogBox.ignoreAllLogs();
 
 export default function App() {
   const store = createStore(
-    combineReducers({ MainReducer, studentReducer, GetInfo }),
+    combineReducers({
+      MainReducer,
+      studentReducer,
+      GetInfo,
+      studentsBySubject,
+    }),
     applyMiddleware(thunk)
   );
 
   return (
     <React.Fragment>
       <IconRegistry icons={EvaIconsPack}></IconRegistry>
+
       <ApplicationProvider
         {...eva}
         theme={eva.light}
@@ -42,7 +53,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+
     alignItems: "center",
     justifyContent: "center",
   },

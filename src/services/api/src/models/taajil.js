@@ -33,13 +33,22 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      educationalYearId: {
+      year: {
+        type: DataTypes.INTEGER,
+        required: true,
+      },
+      semesterId: {
         type: DataTypes.INTEGER,
         required: true,
         references: {
-          model: 'EducationalYear',
+          model: 'Semester',
           key: 'id',
         },
+      },
+      type: {
+        type: DataTypes.ENUM('taajil', 'special_taajil'),
+        defaultValue: 'taajil',
+        required: true,
       },
       regNumber: DataTypes.INTEGER,
       attachment: DataTypes.STRING,

@@ -33,7 +33,7 @@ const resetPassword = catchAsync(async (req, res) => {
 
 const changePassword = catchAsync(async (req, res) => {
   const doMatch = await userService.verifyEmailAndPassword(req.user, req.body.currentPassword);
-  if (!doMatch) throw new ApiError(httpStatus.UNAUTHORIZED, 'incorrect password');
+  if (!doMatch) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'incorrect password');
   req.user.password = req.body.newPassword;
   const results = await userService.updateUser(req.user);
   return res.status(httpStatus.ACCEPTED).send(results);

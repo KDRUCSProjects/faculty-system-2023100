@@ -7,6 +7,7 @@ import {
   Dimensions,
   Alert,
   Button,
+  ActivityIndicator,
 } from "react-native";
 
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -27,14 +28,23 @@ import { HeaderBackButton } from "@react-navigation/stack";
 import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { saveAttendence } from "../store/actions/actions";
+import Toast from "react-native-simple-toast";
+import { logout } from "../store/actions/actions";
+import { Modal } from "@ui-kitten/components";
 
 export default function attendence(props) {
   const childRef = useRef(null);
   var [offSetX, setOffSetX] = useState(0);
   const scrollRef = useRef({});
   const students = useSelector((state) => state.studentReducer.students);
+  const subjectId = props.route.params.subjectId;
+  const status = props.route.params.status;
 
-  let StudentsSize = students.length;
+  const [isLoading, setisLoading] = useState(false);
+
+  const dispatch = useDispatch();
+
+  let StudentsSize = students?.length;
 
   const onScroll = (event) => {
     setOffSetX(event.nativeEvent.contentOffset.x);
@@ -48,8 +58,32 @@ export default function attendence(props) {
     });
   };
   const saveAttendenceDispatch = useDispatch();
-  const onSaveAttendence = () => {
-    saveAttendenceDispatch(saveAttendence(students));
+  const onSaveAttendence = async () => {
+    const selectedStudents = new Array();
+    students.forEach((student) => {
+      selectedStudents.push({
+        studentId: student.studentId,
+        status: student.isPresentOne,
+      });
+    });
+
+    console.log(...selectedStudents);
+    try {
+      setisLoading(true);
+      await saveAttendenceDispatch(
+        saveAttendence(subjectId, selectedStudents, status)
+      );
+      setisLoading(false);
+    } catch (err) {
+      Alert.alert("Error!", err.message);
+      if (err.code == 401) {
+        props.navigation.navigate("Login");
+      }
+    }
+
+    Toast.BOTTOM;
+    Toast.show("Attendence updated", 2);
+    props.navigation.navigate("teacherScreen");
   };
 
   return (
@@ -122,25 +156,39 @@ export default function attendence(props) {
           pagingEnabled
           ref={scrollRef}
         >
-          {students.map((student, index) => {
-            const studentName = student.name;
-            const studentId = student.id;
-            const isPresent = student.isPresent;
+          {!isLoading ? (
+            students.map((student, index) => {
+              const studentName = student.studentName;
+              const studentId = student.studentId;
+              const isPresent = student.isPresentOne;
+              const fatherName = student.fatherName;
+              const grandFatherName = student.grandFatherName;
 
-            return (
-              <AttendenceItem
-                key={studentId}
-                ref={childRef}
-                studentName={studentName}
-                studentId={studentId}
-                isPresent={isPresent}
-                onPresent={onPresent}
-                studentsSize={StudentsSize}
-                index={index}
-                students={students}
-              ></AttendenceItem>
-            );
-          })}
+              return (
+                <AttendenceItem
+                  key={studentId}
+                  ref={childRef}
+                  studentName={studentName}
+                  fatherName={fatherName}
+                  grandFatherName={grandFatherName}
+                  studentId={studentId}
+                  type={status}
+                  isPresent={isPresent}
+                  onStatus={onPresent}
+                  studentsSize={StudentsSize}
+                  index={index}
+                  students={students}
+                ></AttendenceItem>
+              );
+            })
+          ) : (
+            <Modal
+              visible={isLoading}
+              backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+            >
+              <ActivityIndicator size={60}></ActivityIndicator>
+            </Modal>
+          )}
         </ScrollView>
       </View>
     </View>

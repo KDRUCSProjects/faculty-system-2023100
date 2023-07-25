@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { semesterService, educationalYearService, subjectService } = require('../services');
 const ApiError = require('../utils/ApiError');
+const { getStatsBySemesterId } = require('../utils/semesters');
 
 const createSemester = catchAsync(async (req, res) => {
   const year = await educationalYearService.getEducationalYear(req.body.educationalYearId);
@@ -14,7 +15,17 @@ const createSemester = catchAsync(async (req, res) => {
 
 const getSemester = catchAsync(async (req, res) => {
   const semester = await semesterService.findSemesterById(req.params.semesterId);
+
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'Semester Not Found');
+
+  const maleStats = await getStatsBySemesterId(req.params.semesterId, 'male');
+  const femaleStats = await getStatsBySemesterId(req.params.semesterId, 'female');
+
+  semester.dataValues.statistics = {
+    male: maleStats,
+    female: femaleStats,
+  };
+
   return res.status(httpStatus.OK).send(semester);
 });
 
@@ -37,8 +48,6 @@ const getSemesters = catchAsync(async (req, res) => {
   const semesters = await semesterService.getAllSemesters();
   return res.status(httpStatus.OK).send(semesters);
 });
-
-
 
 module.exports = {
   getSemester,

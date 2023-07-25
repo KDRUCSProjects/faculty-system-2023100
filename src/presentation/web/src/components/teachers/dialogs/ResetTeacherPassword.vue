@@ -3,7 +3,7 @@
       <!-- Default Btn/Slot -->
       
   
-        <v-dialog max-width="550" activator="parent" v-model="dialog">
+        <v-dialog max-width="550" activator="parent" v-model="dialog" transition="slide-y-transition">
           <template v-slot:activator="{ props }">
             <div v-bind="props">
               <slot>

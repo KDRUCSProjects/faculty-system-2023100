@@ -7,6 +7,7 @@ const createTaajil = {
     regNumber: Joi.number().required('Registration number of Taajil form is required'),
     attachment: Joi.string(),
     notes: Joi.string(),
+    type: Joi.string().required('Taajil type is required').valid('taajil', 'special_taajil'),
   }),
 };
 
@@ -28,8 +29,6 @@ const updateTaajil = {
   }),
   body: Joi.object()
     .keys({
-      studentId: Joi.number(),
-      educationalYear: Joi.number(),
       regNumber: Joi.number(),
       attachment: Joi.string(),
       notes: Joi.string(),

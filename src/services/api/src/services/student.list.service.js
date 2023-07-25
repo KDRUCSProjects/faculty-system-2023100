@@ -1,7 +1,7 @@
 // Sequelize Models
 const httpStatus = require('http-status');
 const { QueryTypes } = require('sequelize');
-const { StudentsList, sequelize, Student } = require('../models');
+const { StudentsList, sequelize, Student, Semester, EducationalYear } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -154,6 +154,35 @@ const findAllStudentListOfSingleStudent = (studentId) => {
 };
 
 /**
+ * find student latest semester
+ * @param {ObjectId} studentId
+ * @returns {Promise<StudentsList>}
+ */
+const findStudentLatestSemesterId = async (studentId) => {
+  const records = await StudentsList.findAll({
+    where: { studentId },
+    order: [['createdAt', 'DESC']],
+  });
+
+  return records[0]?.semesterId;
+};
+
+/**
+ * find student latest semester
+ * @param {ObjectId} studentId
+ * @returns {Promise<StudentsList>}
+ */
+const getAllStudentsBySemesterId = async (semesterId) => {
+  const records = await StudentsList.findAll({
+    where: { semesterId },
+    order: [['createdAt', 'DESC']],
+    raw: true,
+  });
+
+  return records;
+};
+
+/**
  * update student list
  * @param {Object} oldStudentList
  * @param {Object} newStudentList
@@ -169,6 +198,73 @@ const updatedStudentList = (oldStudentList, newStudentList) => {
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong please try again');
 };
 
+/**
+ * find all students of the semester
+ * @param {ObjectId} semesterId
+ * @returns {Promise<StudentsList>}
+ */
+const findSemesterStudents = (semesterId) => {
+  return StudentsList.findAll(
+    {
+      where: { semesterId },
+      include: [
+        {
+          model: Student, as: 'Student',
+          attributes: ['id', 'fullName', 'fatherName'],
+        }
+      ]
+    }
+  );
+};
+
+/**
+ * find student current semester
+ * @param {ObjectId} studentId
+ * @returns {Promise<StudentsList>}
+ */
+const findStudentCurrentSemester = (studentId) => {
+  return StudentsList.findOne({
+    where: { studentId, onGoing: true, completed: false },
+    include: [
+      {
+        model: Semester,
+        required: true,
+        include: [
+          {
+            model: EducationalYear,
+            as: 'EducationalYear',
+            where: { onGoing: true },
+            required: true,
+          },
+        ],
+      },
+    ],
+  });
+};
+
+/**
+ * find all students count by semester id
+ * @param {ObjectId} studentId
+ * @returns {Promise<StudentsList>}
+ */
+const getAllStudentsCountBySemesterId = async (semesterId, options = { gender: null, count: false }) => {
+  const records = await StudentsList.findAll({
+    where: { semesterId },
+    attributes: ['studentId'],
+  });
+
+  const results = records?.map((rec) => rec.studentId);
+
+  const query = {
+    where: {
+      id: results,
+    },
+  };
+  if (options.gender) query.where.gender = options.gender;
+
+  return options.count ? await Student.count(query) : await Student.findAll(query);
+};
+
 module.exports = {
   getStudentLists,
   countStudentList,
@@ -176,8 +272,13 @@ module.exports = {
   deleteStudentList,
   updatedStudentList,
   findStudentListById,
+  findSemesterStudents,
   getYearAndClassStudentList,
+  findStudentCurrentSemester,
   findListedStudentByStudentId,
   findAllStudentListOfSingleStudent,
   getStudentListByStdIdAndSemesterId,
+  findStudentLatestSemesterId,
+  getAllStudentsBySemesterId,
+  getAllStudentsCountBySemesterId,
 };

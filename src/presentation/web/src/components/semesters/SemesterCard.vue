@@ -2,8 +2,10 @@
   <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
     <!-- <span class="pro"> 120 Students </span> -->
 
-    <v-card-title class="pb-0">{{ rankSemester(title) }} Semester</v-card-title>
-    <v-card-subtitle class="py-0 my-0" style="font-family: monospace"> {{ studentsCount }} students </v-card-subtitle>
+    <v-card-title class="pb-0"
+      ><span class="text-secondary">{{ rankSemester(title) }}</span> Semester</v-card-title
+    >
+    <v-card-subtitle class="py-0 my-0" style="font-family: monospace"> {{ subjectsCount }} subjects </v-card-subtitle>
     <v-divider></v-divider>
     <v-card-subtitle class="text-primary">{{ year }} year</v-card-subtitle>
 
@@ -32,9 +34,9 @@ export default {
     title: {
       type: String,
     },
-    studentsCount: {
+    subjectsCount: {
       type: Number,
-      default: 120,
+      default: 6,
     },
     year: {
       type: Number,

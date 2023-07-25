@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -19,6 +20,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import Toast from "react-native-simple-toast";
 import { Modal } from "@ui-kitten/components/ui";
+import * as FileSystem from "expo-file-system";
 
 export default function AccountInfo(props) {
   const username = useSelector((state) => state.MainReducer.userName);
@@ -31,10 +33,12 @@ export default function AccountInfo(props) {
 
   const teacherPhotoName = useSelector((state) => state.MainReducer.photo);
   const teacherPhoto = useSelector((state) => state.MainReducer.photoUri);
+
   const [imgEdited, setimgEdited] = useState(false);
   const [imgEditedName, setimgEditedName] = useState(false);
 
   const [visible, setVisible] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
   const { height, width } = Dimensions.get("screen");
 
   const askPermission = async () => {
@@ -61,10 +65,25 @@ export default function AccountInfo(props) {
 
     const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [16, 9],
-      quality: 0.1,
+      aspect: [16, 12],
+      quality: 0.7,
     });
     if (!image.cancelled) {
+      const getFileSize = async (uri) => {
+        let fileInfo = await FileSystem.getInfoAsync(uri);
+        console.log(fileInfo);
+        if (fileInfo.size / 1024 / 1024 > 2097152) {
+          return false;
+        } else {
+          return true;
+        }
+      };
+      if (!getFileSize(image.uri)) {
+        Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
+
+        return;
+      }
+
       setimgEditedName(image.uri.split("/").pop());
       console.log(imgEditedName);
       setimgEdited(image.uri);
@@ -80,10 +99,24 @@ export default function AccountInfo(props) {
 
     const image = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      aspect: [16, 9],
-      quality: 0.1,
+      aspect: [16, 12],
+      quality: 0.7,
     });
     if (!image.cancelled) {
+      const getFileSize = async (uri) => {
+        let fileInfo = await FileSystem.getInfoAsync(uri);
+        console.log(fileInfo);
+        if (fileInfo.size / 1024 / 1024 > 2097152) {
+          return false;
+        } else {
+          return true;
+        }
+      };
+      if (!getFileSize(image.uri)) {
+        Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
+
+        return;
+      }
       setimgEditedName(image.uri.split("/").pop());
       console.log(imgEditedName);
       setimgEdited(image.uri);
@@ -94,17 +127,27 @@ export default function AccountInfo(props) {
   const dispatch = useDispatch();
   const onSaveUpdate = async () => {
     try {
-      const photo = imgEditedName ? imgEditedName : teacherPhotoName;
-      await dispatch(
-        updateAccount(userName, lastName, email, {
-          uri: imgEdited,
-          name: imgEditedName,
-          type: "image/jpeg",
-        })
-      );
+      const photoName = imgEditedName ? imgEditedName : teacherPhotoName;
+
+      setisLoading(true);
+      if (imgEdited) {
+        await dispatch(
+          updateAccount(userName, lastName, email, {
+            uri: imgEdited,
+            name: imgEditedName,
+            type: "image/jpeg",
+          })
+        );
+      } else {
+        await dispatch(updateAccount(userName, lastName, email));
+      }
+      setisLoading(false);
     } catch (e) {
       console.log(e);
-      Alert.alert("Sorry!", e.toString());
+      if (e.code == 401) {
+        props.navigation.navigate("Login");
+      }
+      Alert.alert("Sorry!", e.message);
     }
 
     Toast.BOTTOM;
@@ -147,30 +190,6 @@ export default function AccountInfo(props) {
             <View style={{ width: "60%", alignItems: "center" }}>
               <Text style={{ color: "white", fontSize: 23 }}>Profile</Text>
             </View>
-            <View style={{ width: "20%", alignItems: "flex-end" }}>
-              <HeaderBackButton
-                onPress={() =>
-                  Alert.alert("Save?", "Do you want save?", [
-                    {
-                      text: "No",
-                      onPress: () => {
-                        return;
-                      },
-                    },
-                    {
-                      text: "Yes",
-                      onPress: onSaveUpdate,
-                    },
-                  ])
-                }
-                backImage={() => (
-                  <ImageBackground
-                    style={{ height: 25, width: 32 }}
-                    source={require("../assets/images/save.png")}
-                  ></ImageBackground>
-                )}
-              ></HeaderBackButton>
-            </View>
           </View>
 
           <ScrollView
@@ -188,18 +207,20 @@ export default function AccountInfo(props) {
               <View
                 style={{
                   height: 200,
+                  width: 400,
                   justifyContent: "space-around",
                   alignItems: "center",
-                  margin: 10,
                 }}
               >
                 <View style={{}}>
                   <View
                     style={{
-                      borderWidth: 2,
-                      height: 120,
-                      width: 120,
-                      borderRadius: 120 / 2,
+                      borderColor: "#a7e9eb",
+                      borderWidth: 1,
+                      height: 140,
+                      width: 140,
+                      borderRadius: 140 / 2,
+                      overflow: "hidden",
                     }}
                   >
                     {!imgEdited ? (
@@ -207,10 +228,18 @@ export default function AccountInfo(props) {
                         style={{
                           height: "100%",
                           width: "100%",
+
                           overflow: "hidden",
                           borderRadius: 120 / 2,
                         }}
-                        source={{ uri: teacherPhoto }}
+                        resizeMode="center"
+                        source={
+                          teacherPhoto.includes("null")
+                            ? require("../assets/images/avatar.png")
+                            : {
+                                uri: teacherPhoto,
+                              }
+                        }
                       ></ImageBackground>
                     ) : (
                       <ImageBackground
@@ -228,15 +257,37 @@ export default function AccountInfo(props) {
                 <TouchableOpacity
                   style={{
                     justifyContent: "center",
-                    margin: 20,
+                    position: "absolute",
+                    bottom: 30,
+
+                    left: 230,
                   }}
                   onPress={onChangeImg}
                 >
-                  <Text style={{ color: "blue", fontSize: 16 }}>
-                    Change profile picture
-                  </Text>
+                  <View
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 20,
+                      backgroundColor: "#a7e9eb",
+                      overflow: "hidden",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: 5,
+                    }}
+                  >
+                    <ImageBackground
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                      source={require("../assets/images/changePic1.png")}
+                      resizeMode="center"
+                    ></ImageBackground>
+                  </View>
                 </TouchableOpacity>
               </View>
+
               <View
                 style={{
                   height: "70%",
@@ -244,10 +295,22 @@ export default function AccountInfo(props) {
                   alignItems: "center",
                 }}
               >
-                <View style={{ width: "90%", height: 80 }}>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    width: "90%",
+                    alignItems: "flex-start",
+                    fontSize: 18,
+                    padding: 5,
+                  }}
+                >
+                  Basic Details
+                </Text>
+                <View style={{ width: "90%", height: 100 }}>
                   <TextInput
                     style={{ height: 60 }}
                     label={"Username"}
+                    contentStyle={{ fontSize: 15 }}
                     mode="outlined"
                     textColor="gray"
                     value={userName}
@@ -257,9 +320,10 @@ export default function AccountInfo(props) {
                   ></TextInput>
                 </View>
 
-                <View style={{ width: "90%", height: 80 }}>
+                <View style={{ width: "90%", height: 100 }}>
                   <TextInput
                     style={{ height: 60 }}
+                    contentStyle={{ fontSize: 15 }}
                     label={"Lastname"}
                     mode="outlined"
                     textColor="gray"
@@ -267,11 +331,12 @@ export default function AccountInfo(props) {
                     onChangeText={(text) => setlastName(text)}
                   ></TextInput>
                 </View>
-                <View style={{ width: "90%", height: 80 }}>
+                <View style={{ width: "90%", height: 100 }}>
                   <TextInput
                     style={{ height: 60 }}
                     label={"Email"}
                     mode="outlined"
+                    contentStyle={{ fontSize: 15 }}
                     textColor="gray"
                     value={email}
                     onChangeText={(text) => setemail(text)}
@@ -351,7 +416,33 @@ export default function AccountInfo(props) {
               </TouchableOpacity>
             </View>
           </Modal>
+
+          <Modal
+            visible={isLoading}
+            backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          >
+            <ActivityIndicator size={60}></ActivityIndicator>
+          </Modal>
         </View>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() =>
+            Alert.alert("Save?", "Do you want save?", [
+              {
+                text: "No",
+                onPress: () => {
+                  return;
+                },
+              },
+              {
+                text: "Yes",
+                onPress: onSaveUpdate,
+              },
+            ])
+          }
+        >
+          <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -363,8 +454,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "100%",
     width: "100%",
+    backgroundColor: "white",
   },
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  btn: {
+    width: "90%",
+    borderRadius: 20,
+
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: "3%",
+    backgroundColor: "#EB6A70",
   },
 });

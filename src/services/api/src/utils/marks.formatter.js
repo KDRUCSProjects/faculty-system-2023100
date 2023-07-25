@@ -16,10 +16,11 @@ const marksFormatter = (arr) => {
   let semesterNumbers = 0;
 
   const newArr = arr.map((element) => {
-    const midtermMarks = element.midtermMarks ? element.midtermMarks : 0;
-    const assignmentOrProjectMarks = element.assignmentOrProjectMarks ? element.assignmentOrProjectMarks : 0;
+    const projectMarks = element.projectMarks ? element.projectMarks : 0;
+    const assignment = element.assignment ? element.assignment : 0;
+    const practicalWork = element.practicalWork ? element.practicalWork : 0;
     const finalMarks = element.finalMarks ? element.finalMarks : 0;
-    const totalMarks = midtermMarks + assignmentOrProjectMarks + finalMarks;
+    const totalMarks = (projectMarks + assignment + finalMarks + practicalWork);
     const totalWithCredit = totalMarks * element.subjectCredit;
     return {
       ...element,
@@ -67,6 +68,55 @@ const marksFormatter = (arr) => {
   return newArr;
 };
 
+const subjectsFormatter = (arr) => {
+  // semesters array
+  const semesters = {
+    1: { semesterSubject: [] },
+    2: { semesterSubject: [] },
+    3: { semesterSubject: [] },
+    4: { semesterSubject: [] },
+    5: { semesterSubject: [] },
+    6: { semesterSubject: [] },
+    7: { semesterSubject: [] },
+    8: { semesterSubject: [] },
+  };
+
+
+  const newArr = [];
+
+  arr.forEach((element) => {
+    semesters[element.Semester.title].semesterSubject.push(element);
+  });
+
+  for (const key in semesters) {
+    if (semesters[key].semesterSubject.length > 0) {
+
+      const semesterId = semesters[key].semesterSubject[0].Semester.id;
+      const title = semesters[key].semesterSubject[0].Semester.title;
+      const year = semesters[key].semesterSubject[0].Semester.EducationalYear.year;
+      const subjects = [];
+
+      semesters[key].semesterSubject.forEach((element) => {
+        subjects.push({
+          subjectId: element.id,
+          subjectName: element.name,
+          subjectTitle: element.credit,
+        });
+      });
+      newArr.push({
+        semesterId,
+        title,
+        year,
+        subjects
+      });
+    }
+  }
+
+  return newArr;
+};
+
+
 module.exports = {
   marksFormatter,
+  subjectsFormatter,
 };

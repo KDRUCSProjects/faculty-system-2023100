@@ -26,9 +26,11 @@ import { useSelector } from "react-redux";
 
 export default MainDrawer = (props) => {
   const teacherName = useSelector((state) => state.MainReducer.userName);
-  const teacherPhoto = useSelector((state) => state.MainReducer.photoUri);
+  let teacherPhoto = useSelector((state) => state.MainReducer.photoUri);
 
-  console.log(teacherPhoto);
+  if (!teacherPhoto) {
+    teacherPhoto = "null";
+  }
 
   const dispatch = useDispatch();
 
@@ -43,8 +45,8 @@ export default MainDrawer = (props) => {
               style={{
                 width: 100,
                 height: 100,
-                borderWidth: 3,
-                borderColor: "blue",
+                borderWidth: 1,
+                borderColor: "#a7e9eb",
                 borderRadius: 100 / 2,
                 overflow: "hidden",
                 alignItems: "center",
@@ -59,9 +61,13 @@ export default MainDrawer = (props) => {
                   alignItems: "flex-end",
                   justifyContent: "flex-start",
                 }}
-                source={{
-                  uri: teacherPhoto,
-                }}
+                source={
+                  !teacherPhoto | teacherPhoto.includes("null")
+                    ? require("../../assets/images/avatar.png")
+                    : {
+                        uri: teacherPhoto,
+                      }
+                }
               ></ImageBackground>
             </View>
             <Text style={{ fontSize: 16, textAlign: "center" }}>
@@ -78,7 +84,7 @@ export default MainDrawer = (props) => {
         </View>
       )}
       selectedIndex={new IndexPath(selectedItem)}
-      onSelect={(index) => {
+      onSelect={async (index) => {
         if (index.row === 0) {
           setselectedItem(0);
           props.navigation.navigate("teacherScreen");
@@ -92,14 +98,11 @@ export default MainDrawer = (props) => {
           setselectedItem(2);
           props.navigation.navigate("settingsScreen");
         }
+
         if (index.row === 3) {
-          setselectedItem(3);
-          props.navigation.navigate("CreateShoka");
-        }
-        if (index.row === 4) {
-          AsyncStorage.clear().then().then();
-          dispatch(logout());
           props.navigation.navigate("Login");
+          await dispatch(logout());
+          await AsyncStorage.clear().then().then();
         }
 
         // props.navigation.navigate(props.state.routeNames[index.row]);
@@ -140,15 +143,6 @@ export default MainDrawer = (props) => {
         }
       />
 
-      <DrawerItem
-        title="Create Shoka"
-        accessoryLeft={
-          <ImageBackground
-            source={require("../../assets/images/shoka.png")}
-            style={{ height: 50, width: 25 }}
-          ></ImageBackground>
-        }
-      />
       <DrawerItem
         title={"Logout"}
         accessoryLeft={

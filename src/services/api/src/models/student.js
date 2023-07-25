@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.EducationalYear, { foreignKey: 'educationalYearId', as: 'EducationalYear' });
       this.hasOne(models.StudentsList);
+      this.hasMany(models.AttendanceList);
+      this.hasMany(models.ShokaList, { as: 'ShokaList' });
     }
   }
   Student.init(
@@ -44,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: 'cascade',
         onUpdate: 'cascade',
+      },
+      gender: {
+        type: DataTypes.ENUM('male', 'female'),
+        defaultValue: 'male',
       },
       admissionYear: DataTypes.DATE,
       ...BaseModel(DataTypes),
