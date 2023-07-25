@@ -21,6 +21,10 @@ import * as Permissions from "expo-permissions";
 import Toast from "react-native-simple-toast";
 import { Modal } from "@ui-kitten/components/ui";
 import * as FileSystem from "expo-file-system";
+import * as updates from "expo-updates";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { logout } from "../store/actions/actions";
 
 export default function AccountInfo(props) {
   const username = useSelector((state) => state.MainReducer.userName);
@@ -143,9 +147,12 @@ export default function AccountInfo(props) {
       }
       setisLoading(false);
     } catch (e) {
+      setisLoading(false);
       console.log(e);
       if (e.code == 401) {
-        props.navigation.navigate("Login");
+        await dispatch(logout());
+        await AsyncStorage.clear().then().then();
+        updates.reloadAsync();
       }
       Alert.alert("Sorry!", e.message);
     }

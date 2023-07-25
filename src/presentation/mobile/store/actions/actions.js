@@ -377,6 +377,11 @@ export const changePassword = (
       error.code = data.code;
       throw error;
     }
+    if (updateResp.status == 406) {
+      const error = new Error(data.message);
+      error.code = data.code;
+      throw error;
+    }
   };
 };
 
