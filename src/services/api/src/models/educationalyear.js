@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
         // The actual end date of first semester (shamsi maybe)
         type: DataTypes.INTEGER,
       },
-      SecondHalfEnd: {
+      SecondHalfStart: {
         // The actual start date of second semester (shamsi maybe)
         type: DataTypes.INTEGER,
       },

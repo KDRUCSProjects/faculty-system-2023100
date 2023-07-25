@@ -31,7 +31,7 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      midtermMarks: {
+      projectMarks: {
         type: Sequelize.INTEGER,
         allowNull: false,
         required: true,

@@ -16,8 +16,8 @@ router
 
 router
   .route('/:shokalistId')
-  .patch(auth('getUsers'), validate(shokaListValidation.updateShokaList), shokaListController.updateShokaList)
-  .delete(auth('getUsers'), validate(shokaListValidation.deleteShokaList), shokaListController.deleteShokaList);
+  .patch(auth('takeAttendance'), validate(shokaListValidation.updateShokaList), shokaListController.updateShokaList)
+  .delete(auth('takeAttendance'), validate(shokaListValidation.deleteShokaList), shokaListController.deleteShokaList);
 
 router
   .route('/:subjectId')
@@ -63,7 +63,7 @@ module.exports = router;
  *                 type: number
  *               studentId:
  *                 type: number
- *               midtermMarks:
+ *               projectMarks:
  *                 type: number
  *               assignment:
  *                 type: number
@@ -74,7 +74,7 @@ module.exports = router;
  *             example:
  *               subjectId: 1
  *               studentId: 5
- *               midtermMarks: 16
+ *               projectMarks: 16
  *               assignment: 11
  *               finalMarks: 45
  *               practicalWork: 8
@@ -123,7 +123,7 @@ module.exports = router;
  *                 type: number
  *               studentId:
  *                 type: number
- *               midtermMarks:
+ *               projectMarks:
  *                 type: number
  *               assignment:
  *                 type: number
@@ -134,7 +134,7 @@ module.exports = router;
  *               chance:
  *                 type: number
  *             example:
- *               midtermMarks: 16
+ *               projectMarks: 16
  *               assignment: 11
  *               finalMarks: 45
  *               practicalWork: 8

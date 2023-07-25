@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.EducationalYear, { foreignKey: 'educationalYearId', as: 'EducationalYear' });
       this.hasOne(models.StudentsList);
       this.hasMany(models.AttendanceList);
+      this.hasMany(models.ShokaList, { as: 'ShokaList' });
     }
   }
   Student.init(
