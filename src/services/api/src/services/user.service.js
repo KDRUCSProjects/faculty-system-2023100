@@ -3,6 +3,7 @@ const ApiError = require('../utils/ApiError');
 
 // Sequelize Models
 const { User } = require('../models');
+const { __ } = require('i18n');
 
 /**
  * Create a user
@@ -11,7 +12,7 @@ const { User } = require('../models');
  */
 const createUser = async (userBody) => {
   if (await User.isEmailTaken(userBody.email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+    throw new ApiError(httpStatus.BAD_REQUEST, __('users.emailAlreadyTaken'));
   }
   return User.create(userBody);
 };

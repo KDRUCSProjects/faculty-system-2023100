@@ -2,7 +2,6 @@
 const httpStatus = require('http-status');
 const { Semester, EducationalYear, Subject, User } = require('../models');
 const ApiError = require('../utils/ApiError');
-const { taajilService, reentryService, tabdiliService, studentListService } = require('.');
 
 /**
  * Get All Semesters with education year

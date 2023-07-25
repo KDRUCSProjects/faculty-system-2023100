@@ -46,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       email: {
         type: DataTypes.STRING,
         required: true,
+        unique: true,
         trim: true,
         validate(value) {
           if (!validator.isEmail(value)) {
