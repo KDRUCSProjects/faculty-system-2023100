@@ -490,4 +490,242 @@
 }
 
 @media screen and (max-width: 600px) {
+  .profile-image-div-pic {
+    width: 300px;
+    height: 300px;
+    border-radius: 100%;
+    margin: 50px 10px 15px 10px;
+  }
+
+  .profile-image-div-pic img {
+    border-radius: 100%;
+    width: 300px;
+  }
+
+  .photo-heading {
+    font-size: 20px;
+  }
+
+  .profile-image-div h4 {
+    font-size: 25px;
+  }
+
+  .photo-btn {
+    margin-top: 20px;
+    font-size: 20px;
+    margin-bottom: 100px;
+  }
+
+  .register-btn {
+    position: absolute;
+    left: 60px;
+    bottom: 10px;
+    width: 20em;
+    height: 50px;
+    margin-top: 50px;
+    margin-bottom: 0px;
+    font-size: 20px;
+  }
+
+  h1 {
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  h6 {
+    font-size: 18px;
+  }
+
+  .tag-div {
+    margin-left: 20px;
+  }
+
+  .inputs-divs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .inputs-divs input {
+    width: 20em;
+    margin-bottom: 20px;
+    border: none;
+    height: 65px;
+    padding: 0em 2em 0em 2em;
+    font-size: 20px;
+
+    /* box-shadow: 0px 0px 3px 1px lightgray inset; */
+  }
+
+  .kankor-id-div input {
+    width: 20em;
+  }
+
+  .kankor-year-div input {
+    width: 20em;
+  }
+
+  .addmission-div input {
+    width: 20em;
+    /* text-align: center; */
+  }
+
+  .dob-div input {
+    width: 20em;
+  }
+
+  .date-input {
+    width: 20em;
+    padding: 0em 0em 0em 0em;
+    /* text-align: center; */
+  }
+
+  .personal-information {
+    margin: 20px 0px 30px 30px;
+  }
+
+  .province-div input {
+    width: 20em;
+  }
+
+  .division-div input {
+    width: 20em;
+  }
+
+  .district-div input {
+    width: 20em;
+  }
+
+  /* ///////////////////////////////////////////////////// */
+  /* //////////////////////////////////////////////////////// */
+}
+
+@media screen and (max-width: 480px) {
+  .profile-image-div-pic {
+    width: 200px;
+    height: 200px;
+    margin: 50px 10px 15px 10px;
+  }
+
+  .profile-image-div-pic img {
+    border-radius: 100%;
+    width: 200px;
+  }
+
+  .photo-heading {
+    font-size: 14px;
+  }
+
+  .profile-image-div h4 {
+    font-size: 18px;
+  }
+
+  .photo-btn {
+    margin-top: 10px;
+    font-size: 16px;
+    margin-bottom: 100px;
+  }
+
+  .register-btn {
+    left: 35px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  h6 {
+    font-size: 14px;
+  }
+
+  .inputs-divs input {
+    width: 18em;
+    height: 45px;
+    font-size: 14px;
+  }
+
+  .kankor-id-div input {
+    width: 18em;
+  }
+
+  .kankor-year-div input {
+    width: 18em;
+  }
+
+  .addmission-div input {
+    width: 18em;
+    /* text-align: center; */
+  }
+
+  .dob-div input {
+    width: 18em;
+  }
+
+  .date-input {
+    width: 18em;
+  }
+
+  .personal-information {
+    margin: 20px 0px 30px 20px;
+  }
+
+  .province-div input {
+    width: 18em;
+  }
+
+  .division-div input {
+    width: 18em;
+  }
+
+  .district-div input {
+    width: 18em;
+  }
+
+  /* ///////////////////////////////////////////////////// */
+  /* //////////////////////////////////////////////////////// */
+
+  .otp-div {
+    padding: 20px;
+  }
+
+  .opt-icon {
+    right: 20px;
+    top: 20px;
+    font-size: 20px;
+  }
+
+  .otp-heading {
+    font-size: 18px;
+    font-family: LatoBold;
+    margin: 20px 0px 10px 0px;
+  }
+
+  .otp-p {
+    font-size: 12px;
+    font-family: LatoLight;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .otp-inputs-div input {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    text-align: center;
+    margin: 5px;
+  }
+
+  .otp-inputs-div {
+    margin-bottom: 20px;
+  }
+
+  .otp-button {
+    width: 400px;
+    height: 30px;
+    margin-bottom: 10px;
+    font-size: 11px;
+  }
+
+  .spinner-2 {
+    font-size: 16px;
+  }
 }

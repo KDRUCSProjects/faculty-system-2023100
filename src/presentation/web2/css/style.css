@@ -154,6 +154,11 @@ input {
   color: #3a7bd5;
 }
 
+/* .row {
+  max-width: 1140px;
+  margin: 0px auto;
+} */
+
 .spinner {
   right: 25px;
   top: 27px;
@@ -261,6 +266,7 @@ input {
   animation-name: goDown;
   animation-duration: 0.5s;
   animation-timing-function: ease-out;
+  /* width: 1140px; */
 }
 
 @keyframes goDown {
@@ -345,7 +351,7 @@ input {
   padding: 10px;
   margin-left: 10px;
   border-radius: 5px;
-  padding: 30px 20px 30px 10px;
+  padding: 30px 50px 30px 10px;
 }
 
 .icon-close {
