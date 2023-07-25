@@ -172,6 +172,7 @@ export default function attendence(props) {
                   fatherName={fatherName}
                   grandFatherName={grandFatherName}
                   studentId={studentId}
+                  type={status}
                   isPresent={isPresent}
                   onStatus={onPresent}
                   studentsSize={StudentsSize}

@@ -26,28 +26,29 @@ export default function Subjects(props) {
   const dispatch = useDispatch();
   const [selected, setselected] = useState(null);
   const [isLoading, setisLoading] = useState(false);
-  const onclick = (id) => {
+
+  const onclick = async (id) => {
     setselected(id);
+
+    // if (!selected) {
+    //   Alert.alert("Error!", "One Subject should be selected");
+    //   return;
+    // }
+    // console.log(selected);
+    // try {
+    //   setisLoading(true);
+    //   await dispatch(getStudentBySubject(selected));
+    //   setisLoading(false);
+    //   props.navigation.navigate("SelectChance", { subjectId: selected });
+    // } catch (error) {
+    //   if (error.code == 401) {
+    //     props.navigation.navigate("Login");
+    //   }
+    //   Alert.alert("Error", error.message);
+    //   return;
+    // }
   };
-  const onNext = async () => {
-    if (!selected) {
-      Alert.alert("Error!", "One Subject should be selected");
-      return;
-    }
-    console.log(selected);
-    try {
-      setisLoading(true);
-      await dispatch(getStudentBySubject(selected));
-      setisLoading(false);
-      props.navigation.navigate("SelectChance", { subjectId: selected });
-    } catch (error) {
-      if (error.code == 401) {
-        props.navigation.navigate("Login");
-      }
-      Alert.alert("Error", error.message);
-      return;
-    }
-  };
+  const onNext = async () => {};
 
   return (
     <View style={styles.container}>
@@ -95,7 +96,7 @@ export default function Subjects(props) {
         >
           Choose a subject
         </Text>
-        <View style={{ height: "65%" }}>
+        <View style={{ height: "80%" }}>
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
@@ -128,7 +129,8 @@ export default function Subjects(props) {
             <ActivityIndicator size={60}></ActivityIndicator>
           </Modal>
         </View>
-        <View
+
+        {/* <View
           style={{
             height: "30%",
             width: "90%",
@@ -186,7 +188,7 @@ export default function Subjects(props) {
               Next
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </View>
   );

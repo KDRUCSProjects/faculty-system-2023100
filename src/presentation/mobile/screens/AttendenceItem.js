@@ -28,6 +28,7 @@ const { height, width } = Dimensions.get("window");
 const AttendenceItem = (props, ref) => {
   const indexprop = props.index;
   const students = useSelector((state) => state.studentReducer.students);
+  const type = props.type;
 
   const [newStudent, setnewStudent] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -41,7 +42,7 @@ const AttendenceItem = (props, ref) => {
     if (status == "onPresent") {
       try {
         setisLoading(true);
-        await dispatch(isPresent("1", props.studentId, "both"));
+        await dispatch(isPresent("1", props.studentId, type));
         setisLoading(false);
         setnewStudent(!newStudent);
         return props.onStatus();
@@ -52,7 +53,7 @@ const AttendenceItem = (props, ref) => {
     try {
       if (status == "onAbsent") {
         setisLoading(true);
-        await dispatch(isAbsent("1", props.studentId, "both"));
+        await dispatch(isAbsent("1", props.studentId, type));
         setisLoading(false);
 
         setnewStudent(!newStudent);

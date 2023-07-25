@@ -18,36 +18,46 @@ import SubjectItem from "./SubjectItem";
 import SelectSubjectItem from "./SelectSubjectItem";
 import { useState } from "react";
 import { Modal } from "@ui-kitten/components";
+import { getStudentBySubject } from "../store/actions/actions";
 
 export default function SelectSubject(props) {
   const subjects = useSelector((state) => state.MainReducer.subjects);
-
+  const choice = props.route.params.choice;
   const dispatch = useDispatch();
   const [selected, setselected] = useState(null);
   const [isLoading, setisLoading] = useState(false);
-  const onclick = (id) => {
-    setselected(id);
-  };
-  const onNext = async () => {
-    if (!selected) {
-      Alert.alert("Error!", "One Subject should be selected");
-      return;
-    }
-    console.log(selected);
+
+  const onclick = async (id) => {
+    console.log(id);
     try {
-      setisLoading(true);
-      await dispatch(getAttendence(selected));
-      setisLoading(false);
-      props.navigation.navigate("selectType", { subjectId: selected });
+      if (choice == "takeAttendence") {
+        setisLoading(true);
+        await dispatch(getAttendence(id));
+        setisLoading(false);
+        props.navigation.navigate("selectType", { subjectId: id });
+      } else {
+        setisLoading(true);
+        await dispatch(getStudentBySubject(id));
+        setisLoading(false);
+        props.navigation.navigate("SelectChance", { subjectId: id });
+      }
     } catch (error) {
       //props.navigation.navigate("selectType", { subjectId: selected });
       if (error.code == 401) {
         props.navigation.navigate("Login");
       }
       Alert.alert("Error", error.message);
+      setisLoading(false);
       return;
     }
   };
+  // const onNext = async () => {
+  //   if (!selected) {
+  //     Alert.alert("Error!", "One Subject should be selected");
+  //     return;
+  //   }
+
+  //};
 
   return (
     <View style={styles.container}>
@@ -95,7 +105,7 @@ export default function SelectSubject(props) {
         >
           Choose a subject
         </Text>
-        <View style={{ height: "65%" }}>
+        <View style={{ height: "80%" }}>
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
@@ -125,7 +135,8 @@ export default function SelectSubject(props) {
             </Modal>
           </ScrollView>
         </View>
-        <View
+
+        {/* <View
           style={{
             height: "30%",
             width: "90%",
@@ -183,7 +194,7 @@ export default function SelectSubject(props) {
               Next
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </View>
   );
