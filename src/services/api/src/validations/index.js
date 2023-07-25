@@ -15,4 +15,4 @@ module.exports.taajilValidation = require('./taajil.validation');
 module.exports.teacherValidation = require('./teachers.validation');
 module.exports.tabdiliValidation = require('./tabdili.validation');
 module.exports.shokaValidation = require('./shoka.validation');
-module.exports.firstUserValidation = require('./firstUser.Validation');
+// module.exports.firstUserValidation = require('./firstUser.Validation');

@@ -1,23 +1,19 @@
 const express = require('express');
 const { createUser } = require('../controllers/app_setup.controller');
 const validate = require('../middlewares/validate');
-const { firstUserValidation,  } = require('../validations');
+// const { firstUserValidation } = require('../validations');
 const router = express.Router();
 
 // Route for creating users
-router.post('/',validate(firstUserValidation.validatefirstUsers), createUser);
+// router.post('/', validate(firstUserValidation.validatefirstUsers), createUser);
 
 module.exports = router;
-
-
-
-
 
 /**
  * @swagger
  * tags:
  *   name: first_User
- *   description: first User setup 
+ *   description: first User setup
  */
 
 /**
@@ -87,4 +83,3 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *
  */
-
