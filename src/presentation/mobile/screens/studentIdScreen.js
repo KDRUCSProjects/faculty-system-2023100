@@ -51,6 +51,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useRef } from "react";
 import { PanGestureHandler } from "react-native-gesture-handler";
+import * as updates from "expo-updates";
 
 export default studentIdScreen = (props) => {
   const onTeacher = () => props.navigation.navigate("Login");
@@ -122,6 +123,9 @@ export default studentIdScreen = (props) => {
     } catch (err) {
       setisLoading(false);
       console.log(err.message);
+      if (err.code) {
+        updates.reloadAsync();
+      }
       Alert.alert("Error!", err.message);
     }
   };

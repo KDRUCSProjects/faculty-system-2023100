@@ -9,6 +9,7 @@ import {
   Button,
   ActivityIndicator,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../constants/colors";
@@ -31,6 +32,7 @@ import { saveAttendence } from "../store/actions/actions";
 import Toast from "react-native-simple-toast";
 import { logout } from "../store/actions/actions";
 import { Modal } from "@ui-kitten/components";
+import * as updates from "expo-updates";
 
 export default function attendence(props) {
   const childRef = useRef(null);
@@ -75,9 +77,12 @@ export default function attendence(props) {
       );
       setisLoading(false);
     } catch (err) {
+      setisLoading(false);
       Alert.alert("Error!", err.message);
       if (err.code == 401) {
-        props.navigation.navigate("Login");
+        await dispatch(logout());
+        await AsyncStorage.clear().then().then();
+        updates.reloadAsync();
       }
     }
 

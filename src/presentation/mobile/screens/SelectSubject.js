@@ -19,6 +19,9 @@ import SelectSubjectItem from "./SelectSubjectItem";
 import { useState } from "react";
 import { Modal } from "@ui-kitten/components";
 import { getStudentBySubject } from "../store/actions/actions";
+import * as updates from "expo-updates";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { logout } from "../store/actions/actions";
 
 export default function SelectSubject(props) {
   const subjects = useSelector((state) => state.MainReducer.subjects);
@@ -42,13 +45,19 @@ export default function SelectSubject(props) {
         props.navigation.navigate("SelectChance", { subjectId: id });
       }
     } catch (error) {
-      //props.navigation.navigate("selectType", { subjectId: selected });
-      if (error.code == 401) {
-        props.navigation.navigate("Login");
-      }
-      Alert.alert("Error", error.message);
       setisLoading(false);
-      return;
+      //props.navigation.navigate("selectType", { subjectId: selected });
+      Alert.alert("Error", error.message);
+      if (error.code == 400) {
+        // props.navigation.replace("Login");
+        await dispatch(logout());
+        await AsyncStorage.clear().then().then();
+        updates.reloadAsync();
+
+        return;
+      }
+
+      // return;
     }
   };
   // const onNext = async () => {

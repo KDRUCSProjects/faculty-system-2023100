@@ -22,6 +22,10 @@ import { forwardRef } from "react";
 import { useImperativeHandle } from "react";
 import { useEffect } from "react";
 import { Modal } from "@ui-kitten/components";
+import * as updates from "expo-updates";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { logout } from "../store/actions/actions";
 
 const { height, width } = Dimensions.get("window");
 
@@ -47,7 +51,13 @@ const AttendenceItem = (props, ref) => {
         setnewStudent(!newStudent);
         return props.onStatus();
       } catch (err) {
+        setisLoading(false);
         Alert.alert("Error", err.message);
+        if (err.code == 401) {
+          await dispatch(logout());
+          await AsyncStorage.clear().then().then();
+          updates.reloadAsync();
+        }
       }
     }
     try {
@@ -60,7 +70,13 @@ const AttendenceItem = (props, ref) => {
         return props.onStatus();
       }
     } catch (err) {
+      setisLoading(false);
       Alert.alert("Error", err.message);
+      if (err.code == 401) {
+        await dispatch(logout());
+        await AsyncStorage.clear().then().then();
+        updates.reloadAsync();
+      }
     }
   };
 

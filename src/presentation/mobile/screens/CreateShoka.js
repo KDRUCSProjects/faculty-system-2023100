@@ -27,6 +27,7 @@ import Toast from "react-native-simple-toast";
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import { useEffect } from "react";
 import { Modal } from "@ui-kitten/components/ui";
+import * as updates from "expo-updates";
 
 export default function CreateShoka(props) {
   const subjectIdParam = props.route.params.subjectId;
@@ -138,7 +139,10 @@ export default function CreateShoka(props) {
     } catch (e) {
       setisLoading(false);
       if (e.code == 401) {
-        props.navigation.navigate("Login");
+        // props.navigation.navigate("Login");
+        await dispatch(logout());
+        await AsyncStorage.clear().then().then();
+        updates.reloadAsync();
       }
       Alert.alert("Sorry!", e.message);
       return;
