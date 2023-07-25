@@ -25,6 +25,8 @@ export default createStore({
   },
   state: {
     toastMessages: [],
+    totalStudents: 0,
+    totalTeachers: 0,
   },
   getters: {
     toastMessages(state) {

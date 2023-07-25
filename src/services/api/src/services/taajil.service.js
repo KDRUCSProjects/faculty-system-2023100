@@ -152,12 +152,22 @@ const findTaajilByStudentIdAndType = async (studentId, type) => {
  * @param {ObjectId} studentKankorId
  * @returns {Promise<Taajil>}
  */
-const findTaajilBySemesterId = async (semesterId, onlyCount = true) => {
+const findTaajilBySemesterId = async (semesterId, options = { count: false, gender: null }) => {
   const query = {
     where: { semesterId, [Op.or]: [{ type: 'taajil' }, { type: 'special_taajil' }] },
   };
 
-  return onlyCount ? await Taajil.count(query) : await Taajil.findAll(query);
+  const taajilStudents = (await Taajil.findAll(query))?.map((taajil) => taajil.studentId);
+
+  const studentsQuery = {
+    where: {
+      id: taajilStudents,
+    },
+  };
+
+  if (options.gender) studentsQuery.where.gender = options.gender;
+
+  return options.count ? await Student.count(studentsQuery) : await Student.findAll(studentsQuery);
 };
 
 module.exports = {

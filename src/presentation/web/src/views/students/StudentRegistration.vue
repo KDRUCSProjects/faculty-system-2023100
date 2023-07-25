@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="4">
         <v-card class="theShadow maxHeight">
-          <base-photo-uploader @photo="setPhoto"></base-photo-uploader>
+          <base-photo-uploader @photo="setPhoto" @photo-size-change="handlePhotoSize"></base-photo-uploader>
           <v-card-item class="text-center">
             <v-card-title class="text-h5">{{ profilePhotoTitle }}</v-card-title>
             <v-card-subtitle class="my-1">{{ profilePhotoSubtitle }}</v-card-subtitle>
@@ -126,6 +126,7 @@
 <script>
 export default {
   data: () => ({
+    maxPhotoSize: false,
     step: 1,
     newStudentRegAgain: false,
     errorMessage: null,
@@ -158,6 +159,9 @@ export default {
         this.shouldSubmit = true;
       }
     },
+    handlePhotoSize: function (photoSize) {
+      this.maxPhotoSize = photoSize
+    },
     previousWindow() {
       // Maximum steps reached
       if (this.step === 1) return false;
@@ -179,23 +183,28 @@ export default {
 
       try {
         // Continue submitting the form
-        await this.$store.dispatch('students/addStudent', {
-          kankorId: this.kankorId,
-          fullName: this.fullName,
-          nickName: this.lastName,
-          fatherName: this.fatherName,
-          grandFatherName: this.grandFatherName,
-          photo: this.photo,
-          province: this.province,
-          division: this.division,
-          district: this.district,
-          engName: this.engName,
-          // This field is not yet added to the Model
-          // engLastName: this.engLastName,
-          engFatherName: this.engFatherName,
-          engGrandFatherName: this.engGrandFatherName,
-          educationalYear: this.educationalYear,
-        });
+        if(!this.maxPhotoSize){
+          await this.$store.dispatch('students/addStudent', {
+            kankorId: this.kankorId,
+            fullName: this.fullName,
+            nickName: this.lastName,
+            fatherName: this.fatherName,
+            grandFatherName: this.grandFatherName,
+            photo: this.photo,
+            province: this.province,
+            division: this.division,
+            district: this.district,
+            engName: this.engName,
+            // This field is not yet added to the Model
+            // engLastName: this.engLastName,
+            engFatherName: this.engFatherName,
+            engGrandFatherName: this.engGrandFatherName,
+            educationalYear: this.educationalYear,
+          });
+        }
+        else{
+          return this.$store.commit('setToast', [0, 'Maximum 2mb phot size allowed']) 
+        }
 
         // Show a success toast and redirect if addNewStudentAgain was false
         if (!this.newStudentRegAgain) {

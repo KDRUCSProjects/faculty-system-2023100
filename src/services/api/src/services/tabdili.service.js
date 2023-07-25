@@ -76,12 +76,22 @@ const updateTabdili = (oldTabdili, newTabdili) => {
  * @param {ObjectId} studentKankorId
  * @returns {Promise<Taajil>}
  */
-const findTabdiliBySemesterId = async (semesterId, onlyCount = true) => {
+const findTabdiliBySemesterId = async (semesterId, options = { count: false, gender: null }) => {
   const query = {
     where: { semesterId },
   };
 
-  return onlyCount ? await Tabdili.count(query) : await Tabdili.findAll(query);
+  const results = (await Tabdili.findAll(query))?.map((tabdili) => tabdili.studentId);
+
+  const studentsQuery = {
+    where: {
+      id: results,
+    },
+  };
+
+  if (options.gender) studentsQuery.where.gender = options.gender;
+
+  return options.count ? await Student.count(studentsQuery) : await Student.findAll(studentsQuery);
 };
 
 module.exports = {
