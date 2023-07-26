@@ -1,7 +1,6 @@
 @media screen and (max-width: 750px) {
   .main-div {
     top: 50%;
-    background-color: #278aff;
   }
 
   /* /////////////////////////////////// */
@@ -9,7 +8,6 @@
   .main-heading-div {
     width: 30rem;
     top: 15%;
-    background-color: #8ac185;
   }
 
   .main-heading-div h1 {
@@ -32,6 +30,11 @@
     top: 20px;
   }
 
+  .icon {
+    top: 23px;
+    font-size: 25px;
+  }
+
   /* ////////////////////////////////////////////////////////
       //////////////////////////////////////////////////////////// */
 
@@ -50,8 +53,27 @@
   }
 
   .profile-img-div {
-    width: 18em;
+    width: 13em;
     margin: 10px 0px 0px 0px;
+  }
+
+  .profile-img-div img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .biography-heading-div {
+    width: 10em;
+  }
+
+  .biography-heading-div h2 {
+    display: inline-block;
+  }
+
+  .biography-heading-div p {
+    display: inline-block;
+
+    width: 10em;
   }
 
   .profile-right {
@@ -71,7 +93,6 @@
   .personal-information-divs {
     flex-direction: column;
     justify-content: flex-start;
-    margin-top: 10px;
     margin: 10px;
     padding: 10px;
     width: 8em;
@@ -92,12 +113,6 @@
 }
 
 @media screen and (max-width: 520px) {
-  .main-div {
-    background-color: ;
-  }
-
-  /* /////////////////////////////////// */
-
   .main-heading-div {
     width: 25rem;
     top: 10%;
@@ -112,8 +127,6 @@
     font-size: 16px;
   }
 
-  }
-
   #top-box {
     flex-wrap: wrap;
     justify-content: center;
@@ -123,9 +136,12 @@
     justify-content: center;
     align-items: center;
   }
+}
 
-  /* ////////////////////////////////////////////////////////
-          //////////////////////////////////////////////////////////// */
+@media screen and (max-width: 490px) {
+  .profile-card-main-div {
+    top: 75%;
+  }
 
   @keyframes goDown {
     from {
@@ -134,29 +150,9 @@
     }
 
     to {
-      top: 40%;
+      top: 75%;
       left: 50%;
     }
-  }
-
-  .profile-left {
-    width: 100%;
-    padding: 30px 0px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .profile-img-div {
-    width: 18em;
-    margin: 10px 0px 0px 0px;
-  }
-
-  .profile-right {
-    width: 100%;
-    margin-left: 0px;
-    padding: 30px 30px;
   }
 
   .personal-information-div {
@@ -172,21 +168,173 @@
     justify-content: flex-start;
     margin-top: 10px;
     margin: 10px;
-    background-color: #278aff;
     padding: 10px;
-    width: 10em;
+    width: 100%;
   }
 
   .round-div {
-    margin: 0px 0px 15px 0px;
+    width: 70px;
+    height: 70px;
+    font-size: 25px;
   }
 
   .info-name {
-    margin-bottom: 10px;
-    text-align: center;
+    font-size: 20px;
   }
 
   .info-name-lable {
-    text-align: center;
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 490px) {
+  .main-div {
+  }
+
+  /* /////////////////////////////////// */
+
+  input {
+    width: 20rem;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .main-heading-div {
+    width: 20rem;
+    top: 15%;
+  }
+
+  .main-heading-div h1 {
+    font-size: 22px;
+    line-height: 25px;
+  }
+
+  .bubble-icon {
+    font-size: 25px;
+    top: 18px;
+  }
+
+  .spinner {
+    top: 17px;
+    font-size: 25px;
+  }
+
+  .icon {
+    top: 20px;
+    font-size: 20px;
+  }
+
+  /* ////////////////////////////////////////////////////////
+          //////////////////////////////////////////////////////////// */
+
+  .profile-card-main-div {
+    flex-wrap: wrap;
+    top: 75%;
+    width: 90%;
+  }
+
+  @keyframes goDown {
+    from {
+      top: 0%;
+      left: 50%;
+    }
+
+    to {
+      top: 75%;
+      left: 50%;
+    }
+  }
+
+  .error-message-div {
+    width: 20rem;
+    padding: 10px;
+    top: 5%;
+    font-size: 14px;
+  }
+
+  .error-p-div {
+    width: 15em;
+  }
+
+  .icon-exc-div {
+    margin-right: 20px;
+    display: inline-block;
+  }
+
+  .icon-exc {
+    font-size: 20px;
+  }
+
+  .error-p {
+    width: 15em;
+  }
+
+  .error-close-div {
+    display: inline-block;
+  }
+
+  @keyframes popUp {
+    from {
+      top: 0%;
+      left: 50%;
+    }
+
+    to {
+      top: 5%;
+      left: 50%;
+    }
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .main-div {
+    top: 60%;
+  }
+
+  /* /////////////////////////////////// */
+
+  input {
+    width: 15rem;
+    height: 35px;
+    font-size: 14px;
+    padding: 0px 30px 0px 40px;
+  }
+
+  .main-heading-div {
+    width: 15rem;
+  }
+
+  .bubble-icon {
+    font-size: 22px;
+    top: 17px;
+  }
+
+  .spinner {
+    top: 16px;
+    font-size: 22px;
+  }
+
+  .icon {
+    top: 20px;
+    left: 20px;
+    font-size: 18px;
+  }
+
+  /* ////////////////////////////////////////////////////////
+              //////////////////////////////////////////////////////////// */
+
+  .personal-information-div {
+    margin: 0px;
+  }
+
+  .error-message-div {
+    width: 15rem;
+    padding: 10px;
+    top: 5%;
+    font-size: 11px;
+  }
+
+  .error-p-div {
+    width: 15em;
   }
 }
