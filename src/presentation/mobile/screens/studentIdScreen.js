@@ -55,7 +55,7 @@ import * as updates from "expo-updates";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../store/actions/actions";
 
-export default studentIdScreen = (props) => {
+export default StudentIdScreen = (props) => {
   const onTeacher = () => props.navigation.navigate("Login");
 
   const [studentInfo, setstudentInfo] = useState(null);

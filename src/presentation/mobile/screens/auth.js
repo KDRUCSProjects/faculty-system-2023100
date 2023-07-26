@@ -7,7 +7,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { localAuth } from "../store/actions/actions";
 
-export default function auth(props) {
+export default function Auth(props) {
   const dispatch = useDispatch();
   useEffect(() => {
     const tryLogin = async () => {
@@ -61,7 +61,10 @@ export default function auth(props) {
         style={{ height: 500, width: 141, overflow: "hidden", margin: 10 }}
       ></Image>
 
-      <ActivityIndicator size={"large"} color="blue"></ActivityIndicator>
+      <ActivityIndicator
+        size={"large"}
+        color="blue"
+      ></ActivityIndicator>
     </View>
   );
 }

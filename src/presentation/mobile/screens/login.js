@@ -46,7 +46,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useRef } from "react";
 
-export default login = (props) => {
+export default Login = (props) => {
   const [email, setEmail] = useState("");
   const [isLoading, setisLoading] = useState(false);
   const [error, seterror] = useState(null);
