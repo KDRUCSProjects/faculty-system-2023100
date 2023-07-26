@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const i18n = require('i18n');
 const catchAsync = require('../utils/catchAsync');
 const { teacherService } = require('../services');
 

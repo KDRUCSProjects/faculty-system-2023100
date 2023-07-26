@@ -1,22 +1,156 @@
 {
-    "attendance": {},
-    "attendanceList": {},
-    "auth": {},
-    "department": {},
-    "educationalYear": {},
-    "reentry": {},
-    "semester": {},
-    "shokaList": {},
-    "shoka": {},
-    "studentList": {},
-    "student": {},
-    "subject": {},
-    "taajil": {},
-    "tabdili": {},
-    "teachers": {},
-    "tokens": {},
-    "users": {
-      "emailAlreadyTaken": "ایمل مخکی استفاده سوی دی "
+  "attendance": {
+    "subjectNotFound": "مضمون ونه موندل سو",
+    "semesterNotFound": "سمسټر ونه موندل سو",
+    "studentNotFound":"محصل ونه موندل سو",
+    "attendanceNotFound": "حاضري ونه موندل شوه",
+    "cannotTakeAttendanceOnFriday": "تاسو نشئ کولی د جمعې په ورځ حاضري واخلئ",
+    "subjectShouldBeAssignToTeacher": "مضمون باید یو استاد ته وسپارل شي",
+    "teacherNotFound": "استاد ونه موندل سو",
+    "forbidden": "منعه",
+    "noStudentsInSemester": "په سمستر کې هیڅ محصل نشته",
+    "invalidQueryParameters": "د پوښتنې ناسم پیرامیټونه",
+    "cannotTakeAttendanceAfter6PM": "تاسو نشئ کولی د ماښام له 6 بجو وروسته حاضري واخلئ",
+    "notOngoingSemesterSubject": "دا د روان سمستر مضمون نه دی",
+    "studentDoesNotExistInThisSemester":"محصل په دې سمستر کې شتون نلري"
+  },
+  "attendanceList": {
+    "studentHasAttendance": "محصل حاضری لری",
+    "studentNotFound": "محصل ونه موندل سو",
+    "studentsNeedsToAddToSemester": "محصل باید پدې سمستر کې اضافه شي",
+    "attendanceNotFound": "حاضري ونه موندل شوه",
+    "studentNotInSemester": "محصل  پدې سمستر کې ندي"
+  },
+  "auth": {
+    "incorrectPassword": "غلط پټنوم",
+    "unauthorized": "بی اجازه"
+  },
+  "department": {
+    "departmentNotFound": "څانګه ونه موندل سوه"
+  },
+  "educationalYear": {
+    "yearAlreadyCreated": "کال لا دمخه جوړ سوی",
+    "periodYearNotFound": "  د دوری کال ونه موندل سو",
+    "yearNotFound": "کال ونه موندل سو",
+    "periodExists": "دوره شتون لري"
+  },
+  "reentry": {
+    "studentNotFound": "دا ايډی درلودنکی محصل ونه موندل سو  {{studentId}}",
+    "studentHasNoTaajil": "محصل هیڅ تاجیل نه لري",
+    "studentNotRegisteredInSemester": "Student is not registered in any semester. Student should be registered in 1st semester of {{admissionYear}} educational year!",
+    "studentHasNoGeneralTaajil": "محصل تر اوسه هیڅ تعجیل نه دی کړی.",
+    "studentHasNoSpecialTaajil": "محصل تر اوسه کوم خاص تعجیل نه دی اخیستی.",
+    "studentAlreadyTookReentryGeneralTaajil": "  لا دمخه د عام تعجیل لپاره بیا داخله اخیستې ده",
+    "studentAlreadyTookReentrySpecialTaajil": "محصل  لا دمخه د خاص تعجیل لپاره بیا داخله اخیستې ده.",
+    "reentryNotAllowedSemester": "Student can only take reentry at class {{year}} and {{eligibleSemester}} semester",
+    "reentryNotFoundWithStudentId": "Reentry Not Found With Student id {{studentId}}",
+    "reentryNotFoundWithId": "Reentry Not Found with id {{reentryId}}",
+    "reentryNotFoundWithKankorId": "Reentry Not Found With Student Kankor id {{kankorId}}",
+    "educationalYearNotFound": "{{educationalYear}} educationalکال ونه موندل سو",
+    "reentryIdNotFound": "د {{id}} د بیا ننوتلو id ونه موندل شو"
+  },
+  "semester": {
+    "create": {
+      "yearNotFound": "تعلیمی کال ونه موندل سو ",
+      "alreadyCreated": "سمسټر مخکی جوړ سوی دی "
+    },
+    "get": {
+      "notFound": "سمسټر ونه موندل سو",
+      "yearNotFound": "کال ونه موندل سو"
+    },
+    "delete": {
+      "notFound": "سمسټر ونه موندل سو",
+      "subjectsExist": "سمسټر مضامین لری"
     }
-  }
+  },
+  "shokaList": {
+    "totalMarksAbove100": "ټول نمرې له 100 څخه پورته دي",
+    "studentNotFound": "محصل ونه موندل سو",
+    "subjectNotFound": "مضمون ونه موندل سو",
+    "shokaNotFound": "شوکا ونه موندل شو",
+    "studentNotListed": "پدې سمستر کې محصل  شتون نلري",
+    "invalidChanceParameter": "د پوښتنې ناسم پیرامیټونه",
+    "studentHasFirstChanceMarks": "محصل  د دې مضمون او شوکا په لومړي چانس کې نمرې لري",
+    "studentDoesNotHaveFirstChanceMarks": "محصل  د لومړي چانس نمرې نلري",
+    "studentHasSecondChanceMarks": " محصل د دوهم چانس نمرې لري",
+    "studentDoesNotHaveSecondChanceMarks": " محصل د دوهم چانس نمرې نلري",
+    "studentHasThirdChanceMarks": " محصل دریم چانس نمرې لري",
+    "studentIsPassFirstChance": " محصل په لومړي چانس کې بریالی دی",
+    "studentIsPassSecondChance": " محصل په دوهم چانس کې بریالی دی",
+    "forbidden": "منعه",
+    "shokaMarksNotFound": "د شوکا نمری ونه موندل سوې",
+    "marksUpdateForbidden": "تاسو د نمرو نوی کولو اجازه نلرئ",
+    "marksDeleteForbidden": "تاسو د نمرو د ډیلیټ کولو اجازه نلرئ",
+    "cannotDeleteAfterThreeDays": "تاسو نسئ کولی د دریو ورځو وروسته نمری ډیلیټ کړئ",
+    "shokaIsEmpty": "شوقه خالي ده",
+    "semesterNotFound": "سمسټر ونه موندل سو",
+    "teacherNotFound": "استاد ونه موندل سو",
+    "subjectShouldBeAssigned": "موضوع باید یو استاد ته وسپارل شي",
+    "classNotFound": "د ناسم ټولګي پوښتنې پیرامیټر",
+    "studentMarksNotFound": "د محصل نمرې ونه موندل شوې",
+    "invalidParameters": "د پوښتنې ناسم پیرامیټونه"
+  },
+  "shoka": {
+    "get": {
+      "notFound": "Shoka not found"
+    },
+    "getBySubjectId": {
+      "subjectNotFound": "مضمون ونه موندل سو",
+      "shokaNotFound": "حاضري ونه موندل شوه"
+    }
+  },
+  "studentList": {
+    
+      "studentNotFound": "محصل ونه موندل سو",
+      "studentListNotFound": "د محصلینو لیست ونه موندل سو",
+      "yearNotFound": "کال ونه موندل سو",
+      "studentAlreadyEnrolled": "محصل  لا دمخه په سمستر کې نومول شوی دی",
+      "semesterNotFound": "سمسټر ونه موندل سو",
+      "onlyEnrollFirstSemester": "تاسو کولی شئ یوازې په لومړي سمستر کې محصل  نوم لیکنه وکړئ",
+      "enrollmentNotAllowed": "محصل یوازې په {{studentKankorYear}} کې نوم لیکنه کولی شي.",
+      "studentHasTabdili": "محصل تبدیلی لری",
+      "invalidQueryParameters": "د پوښتنې ناسم پیرامیټونه",
+      "studentDeletedMessage": "student id {{studentId}} and semester id {{semesterId}} is deleted",
+      "studentNotInSemesterMessage": "student id {{studentId}} and semester id {{semesterId}} is not Found",
+      "studentDoesNotHaveEnrollment": "محصل په لومړي سمستر کې نوم لیکنه نلري"
+  },
+  "student": {
+    "studnetAlreadyTakenKankorId": "محصل مخکی لا په دی کانکور ايډی ثبت سوی دی ",
+    "invalidParameters": "د پوښتنې ناسم پیرامیټونه",
+    "studentNotFound": "محصل ونه موندل سو",
+    "tokenNotFound": "ټوکن ونه موندل شو"
+  },
+  "subject": {
+    "subjectNotFound": "مضمون ونه موندل سو",
+    "teacherNotFound": "استاد ونه موندل سو",
+    "yearNotFound": "کال ونه موندل سو",
+    "semesterNotFound": "سمسټر ونه موندل سو"
+  },
+  "taajil": {
+    "studentNotFound": "محصل ونه موندل سو",
+    "studentNotRegisteredInAnySemester": " محصل په هیڅ سمستر کې راجستر ندي. محصل باید په لومړي سمستر کې ثبت سي {{admissionYear}} په دا کال ",
+    "cannotGiveGeneralTaajilAgain": "د دوهم ځل لپاره عمومی  تعجیل نسي ورکولای!",
+    "noSpecialTaajilAllowed": "زده کوونکی نور نه شي کولای تعجیل ترلاسه کړي",
+    "reentryForOldTaajilMissing": "ستاسو د زاړه تعجیل لپاره بیا ننوتل  ورک دي. مهرباني وکړئ لومړی  بیا داخله واخلئ.",
+    "taajilYearAndSemesterMismatch": "محصل یوازی کولای سی په دا کال {{year}} and {{eligibleSemester}} او سمسټر تعجل واخلی",
+    "specialTaajilWithoutGeneralTaajil": "محصل کولای سی د خاص تعجل پر ځای عام تعجل واخلی ",
+    "taajilNotfoundWithStudentId": "د محصل په دغه ايډی تعجل ونه موندل سو {{studentId}}",
+    "taajilNotfoundWithId": "په دغه ايډی تعجل ونه موندل سو{{taajilId}}",
+    "taajilNotfoundWithKankorId": "دغه کانکور ايډی سره تعجل ونه  موندل سو {{kankorId}}",
+    "educationalYearNotFound": "تعلیمی کال ونه موندل سو",
+    "taajilNotfound": "تعجل ونه موندل سو "
+  },
+  "tabdili": {
+    "studentAlreadyHasTabdili": "محصل مخکنی تبدیلی لری",
+    "studentNotFound": "محصل ونه موندل سو",
+    "tabdiliNotFound": "تبدیلی نسته "
+
+  },
+  "teachers": {},
+  "users": {
+    "teacherHasSubjects": "استاد مضامین لری",
+    "userNotFound": "یوزر ونه موندل سو "
+  },
   
+  "tokens": {}
+}

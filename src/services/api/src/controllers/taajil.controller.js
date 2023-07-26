@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const i18n = require('i18n');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const {
@@ -15,13 +16,13 @@ const createTaajil = catchAsync(async (req, res) => {
   const { studentId, educationalYear, type } = req.body;
   // check student if the id of student is correct
   const student = await studentService.getStudent(studentId);
-  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('studentNotFound'));
   // find all student list of single student by student id
   const studentList = await studentListService.findAllStudentListOfSingleStudent(studentId);
   if (studentList.length <= 0)
     throw new ApiError(
       httpStatus.NOT_ACCEPTABLE,
-      `Student is not registered in any semester. Student should be registered in 1st semester of ${student.admissionYear} educational year`
+      i18n.__('studentNotRegisteredInAnySemester', { admissionYear: student.admissionYear })
     );
 
   // Prevent taking taajil for the second time
@@ -30,15 +31,14 @@ const createTaajil = catchAsync(async (req, res) => {
 
   if (generalTaajil && type === 'taajil') {
     // If student has taken general taajil, and tries taking it again.
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Cannot give general taajil for the second time!');
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('cannotGiveGeneralTaajilAgain'));
   }
 
   if (specialTaajil && type === 'special_taajil') {
     // If student has taken special taajil, and tries taking it again.
     throw new ApiError(
       httpStatus.NOT_ACCEPTABLE,
-      'Student can no longer get taajil. Has gotten both general and special taajils'
-    );
+    i18n.__('noSpecialTaajilAllowed'));
   }
 
   // Get current on-going year and first-half
@@ -52,16 +52,17 @@ const createTaajil = catchAsync(async (req, res) => {
     if (!reentryExistForGeneralTaail)
       throw new ApiError(
         httpStatus.NOT_ACCEPTABLE,
-        'Reentry for your old taajil is still missing. Please take that reentry first.'
-      );
+        i18n.__('reentryForOldTaajilMissing'));
+    
 
     // Plus, prevent if special_taajil is taking place before general taajil
     const { year } = await educationalYearService.getEducationalYear(generalTaajil.educationalYearId);
     if (currentEducationalYear <= year)
       throw new ApiError(
         httpStatus.NOT_ACCEPTABLE,
-        `You have taken taajil at ${year}. Hence, you cannot get special taajil at this year`
-      );
+        i18n.__('taajilYearAndSemesterMismatch', { year, eligibleSemester: data.eligibleSemester })
+        );
+     
   }
 
   // check distance b/w current year and req.body.educationalYear (year the user selected).
@@ -72,13 +73,13 @@ const createTaajil = catchAsync(async (req, res) => {
   if (!semesterMatched) {
     throw new ApiError(
       httpStatus.NOT_ACCEPTABLE,
-      `Student can only take taajil at class ${data.year} and ${data.eligibleSemester} semester`
-    );
+      i18n.__('taajilYearAndSemesterMismatch', { year: data.year, eligibleSemester: data.eligibleSemester })
+      );
   }
 
   // If the user tried, taking special taajil for the first time before general taajil
   if (!generalTaajil && type === 'special_taajil') {
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student can get common taajil without the special one');
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE,i18n.__('specialTaajilWithoutGeneralTaajil'));
   }
 
   // Validation Completed --- LET"S GO!
@@ -97,17 +98,17 @@ const taajilStudents = catchAsync(async (req, res) => {
   if (req.query?.studentId) {
     const { studentId } = req.query;
     const results = await taajilService.findTaajilByStudentId(studentId);
-    if (!results) throw new ApiError(httpStatus.NOT_FOUND, `Taajil Not Found With Student id ${studentId}`);
+    if (!results) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('taajilNotfoundWithStudentId', { studentId }));
     return res.status(httpStatus.OK).send(results);
   } else if (req.query?.taajilId) {
     const { taajilId } = req.query;
     const results = await taajilService.findTaajilById(taajilId);
-    if (!results) throw new ApiError(httpStatus.NOT_FOUND, `Taajil Not Found wint id ${taajilId}`);
+    if (!results) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('taajilNotfoundWithId', { taajilId }));
     return res.status(httpStatus.OK).send(results);
   } else if (req.query?.kankorId) {
     const { kankorId } = req.query;
     const results = await taajilService.findTaajilByStdKankorId(kankorId);
-    if (!results) throw new ApiError(httpStatus.NOT_FOUND, `Taajil Not Found Student With Kankor id ${kankorId}`);
+    if (!results) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('taajilNotfoundWithKankorId', { kankorId }));
     return res.status(httpStatus.OK).send(results);
   }
   // calculate query parameters
@@ -117,7 +118,7 @@ const taajilStudents = catchAsync(async (req, res) => {
 
   if (req.query?.educationalYear) {
     const educationalYearId = await educationalYearService.findEducationalYearByValue(req.query.educationalYear);
-    if (!educationalYearId) throw new ApiError(httpStatus.NOT_FOUND, 'educationalYear not found');
+    if (!educationalYearId) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('educationalYearNotFound'));
     const { count, rows } = await taajilService.findTaajilsByYearId(limit, offset, educationalYearId);
     return res.status(httpStatus.OK).send({
       page: parseInt(page, 10),
@@ -138,27 +139,27 @@ const taajilStudents = catchAsync(async (req, res) => {
 
 const getTaajil = catchAsync(async (req, res) => {
   const taajil = await taajilService.findTaajilById(req.params.taajilId);
-  if (!taajil) throw new ApiError(httpStatus.NOT_FOUND, 'Taajil Not Found');
+  if (!taajil) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('taajilNotfound'));
   return res.status(httpStatus.OK).send(taajil);
 });
 
 const updateTaajil = catchAsync(async (req, res) => {
   const taajil = await taajilService.findTaajilById(req.params.taajilId);
-  if (!taajil) throw new ApiError(httpStatus.NOT_FOUND, 'Taajil Not Found');
+  if (!taajil) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('taajilNotfound'));
   const results = await taajilService.updateTaajil(taajil, req.body);
   return res.status(httpStatus.ACCEPTED).send(results);
 });
 
 const deleteTaajil = catchAsync(async (req, res) => {
   const taajil = await taajilService.findTaajilByStudentId(req.params.studentId);
-  if (!taajil) throw new ApiError(httpStatus.NOT_FOUND, 'Taajil Not Found');
+  if (!taajil) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('taajilNotfound'));
   await taajilService.deleteTaajil(taajil);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
 const deleteTaajilById = catchAsync(async (req, res) => {
   const taajil = await taajilService.findTaajilById(req.params.taajilId);
-  if (!taajil) throw new ApiError(httpStatus.NOT_FOUND, 'Taajil Not Found');
+  if (!taajil) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('taajilNotfound'));
   await taajilService.deleteTaajil(taajil);
   return res.status(httpStatus.NO_CONTENT).send();
 });

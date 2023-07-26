@@ -1,11 +1,12 @@
 const httpStatus = require('http-status');
+const i18n = require('i18n');
 const catchAsync = require('../utils/catchAsync');
 const { educationalYearService, semesterService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const createEducationalYear = catchAsync(async (req, res) => {
   const year = await educationalYearService.findEducationalYearByValue(req.body.educationalYear);
-  if (year) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Year already created');
+  if (year) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('yearAlreadyCreated'));
   const results = await educationalYearService.createEducationalYear(req.body.educationalYear);
   res.status(httpStatus.CREATED).send(results);
 });
@@ -18,7 +19,7 @@ const getEducationalYears = catchAsync(async (req, res) => {
   if (req.query.period) {
     const semesters = [];
     const periodYear = await educationalYearService.getYearByPeriod(req.query.period);
-    if (!periodYear) throw new ApiError(httpStatus.NOT_FOUND, 'Period Year Not Found');
+    if (!periodYear) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('periodYearNotFound'));
     const firstSemester = await semesterService.findSemesterByYearIdAndTitle(periodYear.id, 1);
     const secondSemester = await semesterService.findSemesterByYearIdAndTitle(periodYear.id, 2);
     semesters.push({
@@ -68,14 +69,14 @@ const getEducationalYears = catchAsync(async (req, res) => {
 
 const deleteEducationalYear = catchAsync(async (req, res) => {
   const year = await educationalYearService.getEducationalYear(req.params.yearId);
-  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
+  if (!year) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('yearNotFound'));
   await educationalYearService.deleteEducationalYear(year);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
 const getEducationalYear = catchAsync(async (req, res) => {
   const year = await educationalYearService.getEducationalYear(req.params.yearId);
-  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
+  if (!year) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('yearNotFound'));
   res.status(httpStatus.OK).send(year);
 });
 
@@ -86,12 +87,12 @@ const setDate = catchAsync(async (req, res) => {
   if (!year) {
     year = await educationalYearService.getEducationalYearByValue(req.params.yearId);
   }
-  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
+  if (!year) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('yearNotFound'));
   const { period } = req.body;
   if (period) {
     const periodYear = await educationalYearService.getYearByPeriod(period);
     if (periodYear) {
-      throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Period exits');
+      throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('periodExists'));
     }
   }
   const results = await educationalYearService.updateYear(year, req.body);
@@ -100,13 +101,13 @@ const setDate = catchAsync(async (req, res) => {
 
 const getEducationalYearByValue = catchAsync(async (req, res) => {
   const year = await educationalYearService.getEducationalYearByValue(req.params.year);
-  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
+  if (!year) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('yearNotFound'));
   res.status(httpStatus.OK).send(year);
 });
 
 const setCurrentYear = catchAsync(async (req, res) => {
   const year = await educationalYearService.getEducationalYearByValue(req.body.year);
-  if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
+  if (!year) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('yearNotFound'));
   const currentYear = await educationalYearService.getCurrentEducationalYear();
   if (currentYear && (currentYear?.year !== year.year)) {
     await educationalYearService.updateYear(currentYear, { onGoing: false });

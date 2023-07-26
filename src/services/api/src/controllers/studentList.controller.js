@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const i18n = require('i18n');
 const catchAsync = require('../utils/catchAsync');
 const {
   studentService,
@@ -15,29 +16,29 @@ const createStudentList = catchAsync(async (req, res) => {
   const { studentId, semesterId } = req.body;
   /** check if the student id is correct */
   const student = await studentService.getStudent(studentId);
-  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('studentNotFound'));
 
   // First, check if student kankor year matches current on-going year
   const currentEduYear = (await educationalYearService.getCurrentEducationalYear())?.year;
   const studentKankorYear = (await educationalYearService.getEducationalYear(student.educationalYearId))?.year;
 
   if (studentKankorYear !== currentEduYear)
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, `Student can be only enrolled at ${studentKankorYear}. `);
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('enrollmentNotAllowed', { studentKankorYear }));
 
   /** check if tabdily has been given to the student */
   const studentTabdili = await tabdiliService.findTabdiliByStudentId(studentId);
-  if (studentTabdili) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has got tabdili');
+  if (studentTabdili) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('studentHasTabdili'));
 
   /** find student all student lists */
   const studentList = await studentListService.findAllStudentListOfSingleStudent(studentId);
   /** if student has not registered to any semester we will give reentry */
-  if (studentList.length >= 1) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student is Already Enrolled in a semester');
+  if (studentList.length >= 1) throw new ApiError(httpStatus.NOT_ACCEPTABLE,  i18n.__('studentAlreadyEnrolled'));
   /** check semester id if it is correct */
   const semester = await semesterService.findSemesterById(semesterId);
-  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('semesterNotFound'));
 
   /** check if the semester title is one */
-  if (semester.title !== 1) throw new ApiError(httpStatus.ACCEPTED, `You can only enroll the student at first semester`);
+  if (semester.title !== 1) throw new ApiError(httpStatus.ACCEPTED, i18n.__('onlyEnrollFirstSemester'));
 
   const result = await studentListService.createStudentList(req.body);
   return res.status(httpStatus.CREATED).send(result);
@@ -52,7 +53,7 @@ const getStudentLists = catchAsync(async (req, res) => {
   if (req.query?.semesterId) {
     const { semesterId } = req.query;
     const semester = await semesterService.findSemesterById(semesterId);
-    if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+    if (!semester) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('semesterNotFound'));
     const queryArray = [`student.deletedAt IS NULL`, `semester.id = ${semesterId}`];
     const count = (await studentListService.countStudentList(queryArray))[0]?.count;
     const results = await studentListService.getYearAndClassStudentList(queryArray, limit, offset);
@@ -78,7 +79,7 @@ const getStudentLists = catchAsync(async (req, res) => {
 
   if (req.query?.year) {
     const year = await educationalYearService.findEducationalYearByValue(req.query.year);
-    if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
+    if (!year) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('yearNotFound'));
   }
   const { year } = req.query;
 
@@ -113,7 +114,7 @@ const getStudentLists = catchAsync(async (req, res) => {
         queryArray.push(`(semester.title = 7 OR semester.title = 8)`);
         break;
       default:
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Query Parameters');
+        throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('invalidQueryParameters'));
     }
   }
   const count = (await studentListService.countStudentList(queryArray))[0]?.count;
@@ -128,7 +129,7 @@ const getStudentLists = catchAsync(async (req, res) => {
 
 const deleteStudentList = catchAsync(async (req, res) => {
   const studentList = await studentListService.findStudentListById(req.params.studentListId);
-  if (!studentList) throw new ApiError(httpStatus.NOT_FOUND, 'student list not found');
+  if (!studentList) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('student list not found'));
   await studentListService.deleteStudentList(studentList);
   return res.status(httpStatus.NO_CONTENT).send();
 });
@@ -140,9 +141,9 @@ const deleteBunch = catchAsync(async (req, res) => {
     const studentList = await studentListService.getStudentListByStdIdAndSemesterId(studentId, semesterId);
     if (studentList) {
       await studentListService.deleteStudentList(studentList);
-      results.push({ message: `student id ${studentId} and semester id ${semesterId} is deleted` });
+      results.push({ message: i18n.__('studentDeletedMessage', { studentId, semesterId }) });
     } else {
-      results.push({ message: `student id ${studentId} and semester id ${semesterId} is not Found` });
+      results.push({ message: i18n.__('studentNotInSemesterMessage', { studentId, semesterId }) });
     }
   }
   return res.status(httpStatus.OK).send(results);

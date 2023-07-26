@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const i18n = require('i18n');
 const catchAsync = require('../utils/catchAsync');
 const {
   shokaListService,
@@ -25,24 +26,25 @@ const createShokaList = catchAsync(async (req, res) => {
   const totalMarks = (projectMarks + assignment + finalMarks + practicalWork);
 
   if (totalMarks > 100) {
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Total Marks are Above 100');
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('totalMarksAbove100'));
   }
   const { studentId, subjectId } = req.body;
   const student = await studentService.getStudent(studentId);
-  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('studentNotFound'));
   const subject = await subjectService.getSubjectById(subjectId);
-  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('subjectNotFound'));
   const shoka = await shokaService.findShokaBySubjectId(subjectId);
-  if (!shoka) throw new ApiError(httpStatus.NOT_FOUND, 'shoka not found');
+  if (!shoka) throw new ApiError(httpStatus.NOT_FOUND,i18n.__('shokaNotFound'));
   const semester = await semesterService.findSemesterById(subject.semesterId);
   const isStudentListed = await studentListService.findListedStudentByStudentId(studentId);
   if (isStudentListed.length === 0 || (isStudentListed.length >= 1 && !(semester.id === isStudentListed[0]?.semesterId))) {
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student does not exists in this semester');
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('studentNotListed'));
+    
   }
   if (!req.query.chance) {
     const doesStdHasMarks = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 1);
     if (doesStdHasMarks)
-      throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has marks in first chance of this subject and shoka');
+      throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('studentHasFirstChanceMarks'));
     req.body.shokaId = shoka.id;
     const shokaList = await shokaListService.createShokaList(req.body);
     return res.status(httpStatus.CREATED).send(shokaList);
@@ -50,15 +52,15 @@ const createShokaList = catchAsync(async (req, res) => {
     switch (req.query.chance) {
       case 2:
         const studentFirstChanceMarks = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 1);
-        if (!studentFirstChanceMarks) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student does not have first chance marks')
+        if (!studentFirstChanceMarks) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('studentDoesNotHaveFirstChanceMarks'));
         const studentSecondChance = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 2);
-        if (studentSecondChance) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has second chance marks');
+        if (studentSecondChance) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('studentHasSecondChanceMarks'));
         const projectMarks = studentFirstChanceMarks.projectMarks || 0;
         const assignment = studentFirstChanceMarks.assignment || 0;
         const practicalWork = studentFirstChanceMarks.practicalWork || 0;
         const finalMarks = studentFirstChanceMarks.finalMarks || 0;
         const firstChanceTotalMarks = (projectMarks + assignment + finalMarks + practicalWork);
-        if (firstChanceTotalMarks >= 55) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student is pass in first chance')
+        if (firstChanceTotalMarks >= 55) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('studentHasSecondChanceMarks'))
 
         req.body.shokaId = shoka.id;
         req.body.chance = 2;
@@ -67,22 +69,22 @@ const createShokaList = catchAsync(async (req, res) => {
 
       case 3:
         const studentSecondChanceMarks = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 2);
-        if (!studentSecondChanceMarks) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student does not have second chance marks')
+        if (!studentSecondChanceMarks) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('studentDoesNotHaveSecondChanceMarks'))
         const studentThirdChance = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 3);
-        if (studentThirdChance) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has Third chance marks');
+        if (studentThirdChance) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('studentHasThirdChanceMarks'));
         const secondMidtermMarks = studentSecondChanceMarks.projectMarks || 0;
         const secondAssignment = studentSecondChanceMarks.assignment || 0;
         const secondPracticalWork = studentSecondChanceMarks.practicalWork || 0;
         const secondFinalMarks = studentSecondChanceMarks.finalMarks || 0;
         const secondChanceTotalMarks = secondMidtermMarks + secondAssignment + secondPracticalWork + secondFinalMarks;
-        if (secondChanceTotalMarks >= 55) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student is pass in second chance');
+        if (secondChanceTotalMarks >= 55) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('studentIsPassSecondChance'));
 
         req.body.shokaId = shoka.id;
         req.body.chance = 3;
         const secondChanceShokaList = await shokaListService.createShokaList(req.body);
         return res.status(httpStatus.CREATED).send(secondChanceShokaList);
       default:
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Query Parameters');
+        throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('invalidParameters'));
     }
   }
 });
@@ -90,14 +92,14 @@ const createShokaList = catchAsync(async (req, res) => {
 const getShokaList = catchAsync(async (req, res) => {
   const { subjectId } = req.params;
   const subject = await subjectService.getSubject(subjectId);
-  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('subjectNotFound'));
   const semester = await semesterService.findById(subject.semesterId);
-  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('semesterNotFound'));
   const shoka = await shokaService.findShokaBySubjectId(subjectId);
-  if (!shoka) throw new ApiError(httpStatus.NOT_FOUND, 'shoka not found');
+  if (!shoka) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('shokaNotFound'));
   const semStudents = await studentListService.findSemesterStudents(semester.id);
   if (semStudents.length <= 0) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You Do not have any student in this semester');
+    throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('studentNotListed'));
   }
   const conditions = [`shokalist.shokaId = ${shoka.id}`, `shokalist.deletedAt IS NULL`];
   conditions.push(`shokalist.chance = 1`);
@@ -212,7 +214,7 @@ const getShokaList = catchAsync(async (req, res) => {
       });
       return res.status(httpStatus.OK).send(thirdResult);
     default:
-      throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameter');
+      throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('invalidParameters'));
   };
 });
 
@@ -225,11 +227,11 @@ const updateShokaList = catchAsync(async (req, res) => {
   const totalMarks = (projectMarks + assignment + finalMarks + practicalWork);
 
   if (totalMarks > 100) {
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Total Marks are Above 100');
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('totalMarksAbove100'));
   }
   const { shokalistId } = req.params;
   const shokaList = await shokaListService.getShokaListById(shokalistId);
-  if (!shokaList) throw new ApiError(httpStatus.NOT_FOUND, 'shoka marks not found');
+  if (!shokaList) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('shokaMarksNotFound'));
   const shoka = await shokaService.findShokaById(shokaList.shokaId);
   const subject = await subjectService.getSubjectById(shoka.subjectId);
   if (req.user.role === 'admin') {
@@ -237,11 +239,11 @@ const updateShokaList = catchAsync(async (req, res) => {
     return res.status(httpStatus.ACCEPTED).send(results);
   } else {
     if (req.user.id !== subject.teacherId) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'FORBIDDEN');
+      throw new ApiError(httpStatus.FORBIDDEN,  i18n.__('forbidden'));
     }
     if (moment() >= moment(shokaList.createdAt).add(3, 'days')) {
       console.log(moment(shokaList.createdAt).add(3, 'days'));
-      throw new ApiError(httpStatus.FORBIDDEN, 'FORBIDDEN');
+      throw new ApiError(httpStatus.FORBIDDEN,  i18n.__('forbidden'));
     }
     const results = await shokaListService.updateShokaList(shokaList, req.body);
     return res.status(httpStatus.ACCEPTED).send(results);
@@ -251,18 +253,18 @@ const updateShokaList = catchAsync(async (req, res) => {
 const deleteShokaList = catchAsync(async (req, res) => {
   const { shokalistId } = req.params;
   const shokaList = await shokaListService.getShokaListById(shokalistId);
-  if (!shokaList) throw new ApiError(httpStatus.NOT_FOUND, 'shoka marks not found');
+  if (!shokaList) throw new ApiError(httpStatus.NOT_FOUND,  i18n.__('shokaMarksNotFound'));
 
   if (req.user.role === 'admin') {
     await shokaListService.deleteShokaList(shokaList);
     return res.status(httpStatus.NO_CONTENT).send();
   } else {
     if (req.user.id !== subject.teacherId) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'FORBIDDEN');
+      throw new ApiError(httpStatus.FORBIDDEN,  i18n.__('forbidden'));
     }
     if (moment() >= moment(shokaList.createdAt).add(3, 'days')) {
       console.log(moment(shokaList.createdAt).add(3, 'days'));
-      throw new ApiError(httpStatus.FORBIDDEN, 'You Can not Delete Marks After Three days');
+      throw new ApiError(httpStatus.FORBIDDEN,  i18n.__('cannotDeleteAfterThreeDays'));
     }
     await shokaListService.deleteShokaList(shokaList);
     return res.status(httpStatus.NO_CONTENT).send();
@@ -305,7 +307,7 @@ const getStudentMarks = catchAsync(async (req, res) => {
         conditions.push(`(semester.title = 7 OR semester.title = 8)`);
         break;
       default:
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Query Parameters');
+        throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('invalidParameters'));
     }
     const results = await shokaListService.getStudentMarks(conditions);
     const formatMarks = marksFormatter(results);
@@ -320,20 +322,20 @@ const getStudentMarks = catchAsync(async (req, res) => {
 const createShokaInExcel = catchAsync(async (req, res) => {
   const { subjectId } = req.params;
   const subject = await subjectService.getSubject(subjectId);
-  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND,  i18n.__('subjectNotFound'));
   const semester = await semesterService.findById(subject.semesterId);
-  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+  if (!semester) throw new ApiError(httpStatus.NOT_FOUND,  i18n.__('semesterNotFound'));
   const shoka = await shokaService.findShokaBySubjectId(subjectId);
-  if (!shoka) throw new ApiError(httpStatus.NOT_FOUND, 'shoka not found');
-  if (!subject.teacherId) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Subject Should be assign to a teacher');
+  if (!shoka) throw new ApiError(httpStatus.NOT_FOUND,  i18n.__('shokaNotFound'));
+  if (!subject.teacherId) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('subjectShouldBeAssigned'));
   const teacher = await userService.getTeacher(subject.teacherId);
-  if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, 'teacher not found');
+  if (!teacher) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('teacherNotFound'));
   const conditions = [`shokalist.shokaId = ${shoka.id}`, `shokalist.deletedAt IS NULL`];
   const year = await educationalYearService.getEducationalYear(semester.educationalYearId);
 
   const semStudents = await studentListService.findSemesterStudents(semester.id);
   if (semStudents.length <= 0) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You Do not have any student in this semester');
+    throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('studentNotListed'));
   }
   conditions.push(`shokalist.chance = 1`);
   const firstChanceMarks = await shokaListService.getSubjectMarks(conditions);
@@ -450,13 +452,13 @@ const createShokaInExcel = catchAsync(async (req, res) => {
       });
       break;
     default:
-      throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameter');
+      throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('invalidParameters'));
   }
 
 
 
   if (results.length <= 0) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'shoka is empty');
+    throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('shokaIsEmpty'));
   }
 
 

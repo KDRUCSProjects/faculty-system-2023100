@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const i18n = require('i18n');
 const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService } = require('../services');
 const ApiError = require('../utils/ApiError');
@@ -33,7 +34,7 @@ const resetPassword = catchAsync(async (req, res) => {
 
 const changePassword = catchAsync(async (req, res) => {
   const doMatch = await userService.verifyEmailAndPassword(req.user, req.body.currentPassword);
-  if (!doMatch) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'incorrect password');
+  if (!doMatch) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('incorrectPassword'));
   req.user.password = req.body.newPassword;
   const results = await userService.updateUser(req.user);
   return res.status(httpStatus.ACCEPTED).send(results);
@@ -48,7 +49,7 @@ const checkPassword = catchAsync(async (req, res) => {
   const { password } = req.body;
   const results = await userService.verifyEmailAndPassword(req.user, password);
   if (results) return res.status(httpStatus.OK).send();
-  throw new ApiError(httpStatus.UNAUTHORIZED, 'unauthorized');
+  throw new ApiError(httpStatus.unauthorized, i18n.__('unauthorized'));
 });
 
 const createTemporaryToken = catchAsync(async (req, res) => {

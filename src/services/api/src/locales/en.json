@@ -1,21 +1,156 @@
 {
-  "attendance": {},
-  "attendanceList": {},
-  "auth": {},
-  "department": {},
-  "educationalYear": {},
-  "reentry": {},
-  "semester": {},
-  "shokaList": {},
-  "shoka": {},
-  "studentList": {},
-  "student": {},
-  "subject": {},
-  "taajil": {},
-  "tabdili": {},
+  "attendance": {
+    "subjectNotFound": "Subject not found",
+    "semesterNotFound": "semester not found",
+    "studentNotFound":"Student Not Found",
+    "attendanceNotFound": "Attendance not found",
+    "cannotTakeAttendanceOnFriday": "You cannot take attendance on Friday",
+    "subjectShouldBeAssignToTeacher": "Subject Should be assign to a teacher",
+    "teacherNotFound": "Teacher not found",
+    "forbidden": "Forbidden",
+    "noStudentsInSemester": "There is not any student in the semester",
+    "invalidQueryParameters": "Invalid query parameters",
+    "cannotTakeAttendanceAfter6PM": "You cannot take attendance after 6 pm",
+    "notOngoingSemesterSubject": "it is not ongoing semester's subject",
+    "studentDoesNotExistInThisSemester":"sude"
+  },
+  "attendanceList": {
+    "studentHasAttendance": "Student has attendance",
+    "studentNotFound": "Student Not Found",
+    "studentsNeedsToAddToSemester": "Students needs to be added to this semester",
+    "attendanceNotFound": "Attendance not found",
+    "studentNotInSemester": "Student is not in this semester"
+  },
+  "auth": {
+    "incorrectPassword": "Incorrect password",
+    "unauthorized": "Unauthorized"
+  },
+  "department": {
+    "departmentNotFound": "Department not found"
+  },
+  "educationalYear": {
+    "yearAlreadyCreated": "Year already created",
+    "periodYearNotFound": "Period Year not found",
+    "yearNotFound": "Year not found",
+    "periodExists": "Period exists"
+  },
+  "reentry": {
+    "studentNotFound": "Student not found with id {{studentId}}",
+    "studentHasNoTaajil": "Student does not have any Taajil",
+    "studentNotRegisteredInSemester": "Student is not registered in any semester. Student should be registered in 1st semester of {{admissionYear}} educational year!",
+    "studentHasNoGeneralTaajil": "Student has not taken any taajil yet.",
+    "studentHasNoSpecialTaajil": "Student has not taken any special taajil yet.",
+    "studentAlreadyTookReentryGeneralTaajil": "Student already has taken reentry for common taajil",
+    "studentAlreadyTookReentrySpecialTaajil": "Student already has taken reentry for special taajil.",
+    "reentryNotAllowedSemester": "Student can only take reentry at class {{year}} and {{eligibleSemester}} semester",
+    "reentryNotFoundWithStudentId": "Reentry Not Found With Student id {{studentId}}",
+    "reentryNotFoundWithId": "Reentry Not Found with id {{reentryId}}",
+    "reentryNotFoundWithKankorId": "Reentry Not Found With Student Kankor id {{kankorId}}",
+    "educationalYearNotFound": "{{educationalYear}} educationalYear not found",
+    "reentryIdNotFound": "Reentry id of {{id}} not found"
+  },
+  "semester": {
+    "create": {
+      "yearNotFound": "Educational Year Not found with this ID",
+      "alreadyCreated": "Semester is already created"
+    },
+    "get": {
+      "notFound": "Semester Not Found",
+      "yearNotFound": "Year not found"
+    },
+    "delete": {
+      "notFound": "Semester not found",
+      "subjectsExist": "Semester has subjects"
+    }
+  },
+  "shokaList": {
+    "totalMarksAbove100": "Total Marks are Above 100",
+    "studentNotFound": "Student not found",
+    "subjectNotFound": "Subject not found",
+    "shokaNotFound": "Shoka not found",
+    "studentNotListed": "Student does not exist in this semester",
+    "invalidChanceParameter": "Invalid query parameters",
+    "studentHasFirstChanceMarks": "Student has marks in the first chance of this subject and shoka",
+    "studentDoesNotHaveFirstChanceMarks": "Student does not have first chance marks",
+    "studentHasSecondChanceMarks": "Student has second chance marks",
+    "studentDoesNotHaveSecondChanceMarks": "Student does not have second chance marks",
+    "studentHasThirdChanceMarks": "Student has third chance marks",
+    "studentIsPassFirstChance": "Student is pass in the first chance",
+    "studentIsPassSecondChance": "Student is pass in the second chance",
+    "forbidden": "Forbidden",
+    "shokaMarksNotFound": "Shoka marks not found",
+    "marksUpdateForbidden": "You do not have permission to update the marks",
+    "marksDeleteForbidden": "You do not have permission to delete the marks",
+    "cannotDeleteAfterThreeDays": "You cannot delete marks after three days",
+    "shokaIsEmpty": "Shoka is empty",
+    "semesterNotFound": "Semester not found",
+    "teacherNotFound": "Teacher not found",
+    "subjectShouldBeAssigned": "Subject should be assigned to a teacher",
+    "classNotFound": "Invalid class query parameter",
+    "studentMarksNotFound": "Student marks not found",
+    "invalidParameters": "Invalid query parameters"
+  },
+  "shoka": {
+    "get": {
+      "notFound": "Shoka not found"
+    },
+    "getBySubjectId": {
+      "subjectNotFound": "Subject not found",
+      "shokaNotFound": "Attendance not found"
+    }
+  },
+  "studentList": {
+    
+      "studentNotFound": "Student not found",
+      "studentListNotFound": "student list not found",
+      "yearNotFound": "Year not found",
+      "studentAlreadyEnrolled": "Student is Already Enrolled in a semester",
+      "semesterNotFound": "Semester not found",
+      "onlyEnrollFirstSemester": "You can only enroll the student at first semester",
+      "enrollmentNotAllowed": "Student can be only enrolled at {{studentKankorYear}}.",
+      "studentHasTabdili": "Student has got tabdili",
+      "invalidQueryParameters": "Invalid query parameters",
+      "studentDeletedMessage": "student id {{studentId}} and semester id {{semesterId}} is deleted",
+      "studentNotInSemesterMessage": "student id {{studentId}} and semester id {{semesterId}} is not Found",
+      "studentDoesNotHaveEnrollment": "student does not have enrollment in first semester"
+  },
+  "student": {
+    "studnetAlreadyTakenKankorId": "Student already created on this Kankor Id",
+    "invalidParameters": "Invalid query parameters",
+    "studentNotFound": "Student not found",
+    "tokenNotFound": "Token Not Found"
+  },
+  "subject": {
+    "subjectNotFound": "Subject not found",
+    "teacherNotFound": "Teacher not found",
+    "yearNotFound": "year not found",
+    "semesterNotFound": "semester not found"
+  },
+  "taajil": {
+    "studentNotFound": "Student not found",
+    "studentNotRegisteredInAnySemester": "Student is not registered in any semester. Student should be registered in 1st semester of {{admissionYear}} educational year",
+    "cannotGiveGeneralTaajilAgain": "Cannot give general taajil for the second time!",
+    "noSpecialTaajilAllowed": "Student can no longer get taajil. Has gotten both general and special taajils",
+    "reentryForOldTaajilMissing": "Reentry for your old taajil is still missing. Please take that reentry first.",
+    "taajilYearAndSemesterMismatch": "Student can only take taajil at class {{year}} and {{eligibleSemester}} semester",
+    "specialTaajilWithoutGeneralTaajil": "Student can get common taajil without the special one",
+    "taajilNotfoundWithStudentId": "Taajil Not Found With Student id {{studentId}}",
+    "taajilNotfoundWithId": "Taajil Not Found with id {{taajilId}}",
+    "taajilNotfoundWithKankorId": "Taajil Not Found Student With Kankor id {{kankorId}}",
+    "educationalYearNotFound": "educationalYear not found",
+    "taajilNotfound": "Taajil Not Found"
+  },
+  "tabdili": {
+    "studentAlreadyHasTabdili": "student already has tabdili",
+    "studentNotFound": "student not found",
+    "tabdiliNotFound": "tabdili not found"
+
+  },
   "teachers": {},
-  "tokens": {},
   "users": {
-    "emailAlreadyTaken": "Email is already taken"
-  }
+    "teacherHasSubjects": "Teacher Has Subjects",
+    "userNotFound": "User Not Found"
+  },
+  
+  "tokens": {}
 }

@@ -1,11 +1,12 @@
 const httpStatus = require('http-status');
+const i18n = require('i18n');
 const catchAsync = require('../utils/catchAsync');
 const { studentService, educationalYearService, taajilService, reentryService, tabdiliService, tokenService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const registerStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudentOnKankorId(req.body.kankorId);
-  if (student) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already created on this Kankor Id');
+  if (student) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('studnetAlreadyTakenKankorId'));
   const year = await educationalYearService.findEducationalYearByValue(req.body.educationalYear)
   let educationalYearId;
   if (year) {
@@ -25,20 +26,20 @@ const registerStudent = catchAsync(async (req, res) => {
 
 const updateStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudent(req.params.studentId);
-  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not found');
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('Student Not found'));
   const results = await studentService.updateStudent(student, req.body);
   return res.status(httpStatus.ACCEPTED).send(results);
 });
 
 const getStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudent(req.params.studentId);
-  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not Found');
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('studentNotFound'));
   res.status(httpStatus.OK).send(student);
 });
 
 const deleteStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudent(req.params.studentId);
-  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('studentNotFound'));
   await studentService.deleteStudent(student);
   res.status(httpStatus.NO_CONTENT).send();
 });
@@ -72,7 +73,7 @@ const getStudents = catchAsync(async (req, res) => {
         result = await tabdiliService.getTabdilis(limit, offset);
         break;
       default:
-        throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameters');
+        throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('invalidParameters'));
     }
   } else {
     const count = (await studentService.countUnregisteredStudent())[0]?.count;
@@ -95,7 +96,7 @@ const getStudents = catchAsync(async (req, res) => {
 
 const getStudentOnKankorId = catchAsync(async (req, res) => {
   const student = await studentService.getStudentOnKankorId(req.params.kankorId);
-  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not Found');
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('studentNotFound'));
   res.status(httpStatus.OK).send(student);
 });
 
@@ -111,7 +112,7 @@ const deleteStudents = catchAsync(async (req, res) => {
 const registerYourSelf = catchAsync(async (req, res, next) => {
   const { token } = req.params;
   const userToken = await tokenService.getTempToken(token);
-  if (!userToken) throw new ApiError(httpStatus.BAD_REQUEST, 'Token Not Found');
+  if (!userToken) throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('tokenNotFound'));
   req.tempToken = userToken;
   return registerStudent(req, res, next);
 });

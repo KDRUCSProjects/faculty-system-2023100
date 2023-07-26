@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const i18n = require('i18n');
 const catchAsync = require('../utils/catchAsync');
 const {
   studentService,
@@ -17,22 +18,22 @@ const createAttendance = catchAsync(async (req, res) => {
     const { studentId, attendanceId } = std;
     const isStudentHasAttendance = await attendanceListService.findAttendanceByDateAndStudentId(studentId, attendanceId);
     if (isStudentHasAttendance) {
-      messages.push({ student: std, message: 'student has attendance' });
+      messages.push({ student: std, message:  i18n.__('studentHasAttendance' )});
       continue;
     }
     const student = await studentService.getStudent(studentId);
     if (!student) {
-      messages.push({ student: std, message: 'Student Not Found' });
+      messages.push({ student: std, message:  i18n.__('studentNotFound') });
       continue;
     }
     const listStudent = await studentListService.findListedStudentByStudentId(studentId);
     if (!listStudent) {
-      messages.push({ record: std, message: 'students needs to be added to this semester' });
+      messages.push({ record: std, message:  i18n.__('studentsNeedsToAddToSemester') });
       continue;
     }
     const attendance = await attendanceService.getAttendance(attendanceId);
     if (!attendance) {
-      messages.push({ student: std, message: 'attendance not found' });
+      messages.push({ student: std, message:  i18n.__('attendanceNotFound') });
       continue;
     }
     const subject = await subjectService.getSubject(attendance.subjectId);
@@ -41,7 +42,7 @@ const createAttendance = catchAsync(async (req, res) => {
       results.push(std);
       continue;
     } else {
-      messages.push({ student: std, message: 'student is not in this semester' });
+      messages.push({ student: std, message:  i18n.__('studentNotInSemester') });
       continue;
     }
   }

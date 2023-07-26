@@ -42,17 +42,17 @@ const getTodaysAttendance = catchAsync(async (req, res) => {
   const now = moment();
   const sixPM = moment().set({ hour: 18, minute: 0, second: 0 });
   if (now.isAfter(sixPM)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You Cannot Take Attendance After 6 pm');
+    throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('cannotTakeAttendanceAfter6PM'));
   }
   const { subjectId } = req.params;
   const subject = await subjectService.getSubjectById(subjectId);
-  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
-  if (!subject.teacherId) throw new ApiError(httpStatus.BAD_REQUEST, 'Subject Should be assign to a teacher');
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('subjectNotFound'));
+  if (!subject.teacherId) throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('subjectShouldBeAssignToTeacher'));
   const teacher = await userService.getTeacher(subject.teacherId);
-  if (!teacher) throw new ApiError(httpStatus.BAD_REQUEST, 'Teacher Not Found');
+  if (!teacher) throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('teacherNotFound'));
   // check subject is related to teacher
   if (req.user.role !== 'admin' && subject.teacherId !== req.user.id) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'FORBiDDEN');
+    throw new ApiError(httpStatus.FORBIDDEN, i18n.__('forbidden'));
   }
   // const date = moment().format('YYYY-MM-DD');
   const date = moment();
@@ -60,7 +60,7 @@ const getTodaysAttendance = catchAsync(async (req, res) => {
   // const date = moment().format('MMMM Do YYYY, h:mm:ss a');
   // find attendance
   const attendance = await attendanceService.findAttendanceBySubjectId(subjectId);
-  if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, 'attendance not found');
+  if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('attendanceNotFound'));
 
   let results = await attendanceListService.getSemesterSdtAndAttendance(attendance.id);
 
@@ -68,10 +68,10 @@ const getTodaysAttendance = catchAsync(async (req, res) => {
     // get all students of the semester
     // find semester
     const semester = await semesterService.findById(subject.semesterId);
-    if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+    if (!semester) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('semesterNotFound'));
     // check if semester is on going
     const isSemesterOnGoing = await semesterService.isSemesterOnGoing(semester.id);
-    if (!isSemesterOnGoing) throw new ApiError(httpStatus.NOT_ACCEPTABLE, `it is not ongoing semester's subject`);
+    if (!isSemesterOnGoing) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__(`notOngoingSemesterSubject`));
 
     const semesterStudents = await studentListService.findSemesterStudents(semester.id);
     // take attendance for absent students
@@ -94,7 +94,7 @@ const getTodaysAttendance = catchAsync(async (req, res) => {
     results = await attendanceListService.getSemesterSdtAndAttendance(attendance.id);
   }
   if (results.length <= 0) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'There is not any student in the semester');
+    throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('noStudentsInSemester'));
   }
   const { subjectName, teacherId, teacherName } = results[0];
   const students = results.map((element) => {
@@ -121,34 +121,34 @@ const takeTodaysAttendance = catchAsync(async (req, res) => {
   const shamsiDate = moment(date).format('jYYYY-jMM-jDD HH:mm:ss');
   const day = moment().format('dddd');
   if (day === 'Friday' || day === 'friday') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You Cannot Take Attendance on Friday');
+    throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('cannotTakeAttendanceOnFriday'));
   }
 
   // prevent attendance to be not taken after six pm
   const now = moment();
   const sixPM = moment().set({ hour: 18, minute: 0, second: 0 });
   if (now.isAfter(sixPM)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You Cannot Take Attendance After 6 pm');
+    throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('cannotTakeAttendanceAfter6PM'));
   }
   const { subjectId } = req.params;
   // find subject
   const subject = await subjectService.getSubjectById(subjectId);
-  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('subjectNotFound'));
   // check subject is related to teacher
   if (req.user.role !== 'admin' && subject.teacherId !== req.user.id) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'FORBiDDEN');
+    throw new ApiError(httpStatus.FORBIDDEN, i18n.__('forbidden'));
   } // find attendance
   const attendance = await attendanceService.findAttendanceBySubjectId(subjectId);
-  if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, 'attendance not found');
+  if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('attendanceNotFound'));
   // find teacher
   const teacher = await userService.getTeacher(subject.teacherId);
-  if (!teacher) throw new ApiError(httpStatus.BAD_REQUEST, 'Teacher Not Found');
+  if (!teacher) throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('teacherNotFound'));
   // find semester
   const semester = await semesterService.findById(subject.semesterId);
-  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('semesterNotFound'));
   // check if semester is on going
   const isSemesterOnGoing = await semesterService.isSemesterOnGoing(semester.id);
-  if (!isSemesterOnGoing) throw new ApiError(httpStatus.NOT_ACCEPTABLE, `it is not ongoing semester's subject`);
+  if (!isSemesterOnGoing) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__(`notOngoingSemesterSubject`));
 
   // get all students of the semester
   const semesterStudents = await studentListService.findSemesterStudents(semester.id);
@@ -284,7 +284,7 @@ const takeTodaysAttendance = catchAsync(async (req, res) => {
       }
       return res.status(httpStatus.OK).send({ totalStudents, totalPresentStudents, totalAbsentStudents });
     default:
-      throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameters');
+      throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('invalidQueryParameters'));
   }
 });
 
@@ -297,45 +297,45 @@ const takeOneStdAttendance = catchAsync(async (req, res) => {
   const day = moment().format('dddd');
 
   if (day === 'Friday' || day === 'friday') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You Cannot Take Attendance on Friday');
+    throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('cannotTakeAttendanceOnFriday'));
   }
 
   // prevent attendance to be not taken after six pm
   const now = moment();
   const sixPM = moment().set({ hour: 18, minute: 0, second: 0 });
   if (now.isAfter(sixPM)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You Cannot Take Attendance After 6 pm');
+    throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('cannotTakeAttendanceAfter6PM'));
   }
 
   const { subjectId } = req.params;
   const { studentId, status } = req.body;
   // find subject
   const subject = await subjectService.getSubjectById(subjectId);
-  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('subjectNotFound'));
   // check subject is related to teacher
   if (req.user.role !== 'admin' && subject.teacherId !== req.user.id) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'FORBiDDEN');
+    throw new ApiError(httpStatus.FORBIDDEN, i18n.__('forbidden'));
   }
   // find attendance
   const attendance = await attendanceService.findAttendanceBySubjectId(subjectId);
-  if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, 'attendance not found');
+  if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('attendanceNotFound'));
   // find teacher
   const teacher = await userService.getTeacher(subject.teacherId);
-  if (!teacher) throw new ApiError(httpStatus.BAD_REQUEST, 'Teacher Not Found');
+  if (!teacher) throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('teacherNotFound'));
   // find semester
   const semester = await semesterService.findById(subject.semesterId);
-  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('semesterNotFound'));
   // check if semester is on going
   const isSemesterOnGoing = await semesterService.isSemesterOnGoing(semester.id);
-  if (!isSemesterOnGoing) throw new ApiError(httpStatus.NOT_ACCEPTABLE, `it is not ongoing semester's subject`);
+  if (!isSemesterOnGoing) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__(`notOngoingSemesterSubject`));
 
   const student = await studentService.getStudent(studentId);
-  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not Found');
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('studentNotFound'));
 
   // get all students of the semester
   const semesterStudents = await studentListService.findSemesterStudents(semester.id);
   const std = semesterStudents.find((element) => element.studentId === studentId);
-  if (!std) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student does not exist in this semester');
+  if (!std) throw new ApiError(httpStatus.NOT_ACCEPTABLE, i18n.__('studentDoesNotExistInThisSemester'));
 
   // let's take attendance
   switch (req.query.type) {
@@ -394,7 +394,7 @@ const takeOneStdAttendance = catchAsync(async (req, res) => {
       }
 
     default:
-      throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameters');
+      throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('invalidQueryParameters'));
   }
 });
 module.exports = {
