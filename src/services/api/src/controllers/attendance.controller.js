@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const i18n = require('i18n');
 const moment = require('moment-jalaali');
 const catchAsync = require('../utils/catchAsync');
 const {
@@ -19,22 +20,22 @@ const ApiError = require('../utils/ApiError');
 
 const getAttendance = catchAsync(async (req, res) => {
   const subject = await subjectService.getSubject(req.params.subjectId);
-  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('subjectNotFound'));
   const attendance = await attendanceService.findAttendanceBySubjectId(req.params.subjectId);
-  if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, 'attendance not found');
+  if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('attendanceNotFound'));
   return res.status(httpStatus.OK).send(attendance);
 });
 
 const getAttendanceById = catchAsync(async (req, res) => {
   const attendance = await attendanceService.getAttendance(req.params.attendanceId);
-  if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, 'attendance not found');
+  if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('attendanceNotFound'));
   return res.status(httpStatus.OK).send(attendance);
 });
 
 const getTodaysAttendance = catchAsync(async (req, res) => {
   const day = moment().format('dddd');
   if (day === 'Friday' || day === 'friday') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You Cannot Take Attendance on Friday');
+    throw new ApiError(httpStatus.BAD_REQUEST, i18n.__('cannotTakeAttendanceOnFriday'));
   }
 
   // prevent attendance to be not taken after six pm
