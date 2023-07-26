@@ -19,7 +19,7 @@ import {
   BottomNavigation,
   BottomNavigationTab,
 } from "@ui-kitten/components";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import { timing } from "react-native-reanimated";
 import Setting from "../screens/Setting";
 import Subject from "../screens/Subjects";
@@ -54,7 +54,7 @@ const authNavigation = (props) => {
   );
 };
 
-const editProfile = () => {
+const EditProfile = () => {
   const editProfileNavigator = createStackNavigator();
   return (
     <editProfileNavigator.Navigator screenOptions={{ headerShown: false }}>
@@ -98,7 +98,7 @@ const Navigation = (props) => {
       ></mainNavigation.Screen>
       <mainNavigation.Screen
         name="EditProfile"
-        component={editProfile}
+        component={EditProfile}
       ></mainNavigation.Screen>
       <mainNavigation.Screen
         name="studentScreen"
@@ -181,7 +181,11 @@ const DrawerNavigator = (props) => {
   return (
     <drawer.Navigator
       drawerContent={(props) => <MainDrawer {...props} />}
-      screenOptions={{ swipeEnabled: false, gestureEnabled: true }}
+      screenOptions={{
+        swipeEnabled: false,
+        gestureEnabled: true,
+        headerShown: false,
+      }}
     >
       <drawer.Screen
         name="Home"

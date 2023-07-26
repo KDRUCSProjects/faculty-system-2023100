@@ -52,6 +52,8 @@ import Animated, {
 import { useRef } from "react";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import * as updates from "expo-updates";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { logout } from "../store/actions/actions";
 
 export default studentIdScreen = (props) => {
   const onTeacher = () => props.navigation.navigate("Login");
@@ -124,6 +126,8 @@ export default studentIdScreen = (props) => {
       setisLoading(false);
       console.log(err.message);
       if (err.code) {
+        await dispatch(logout());
+        await AsyncStorage.clear().then().then();
         updates.reloadAsync();
       }
       Alert.alert("Error!", err.message);
