@@ -26,6 +26,14 @@ const queryUsers = () => {
 };
 
 /**
+ * get system users
+ * @returns {Promise<QueryResult>}
+ */
+const systemUsers = () => {
+  return User.findAll({ where: { role: ['execManager', 'teachingManager'] }, order: [['createdAt', 'ASC']] });
+};
+
+/**
  * Get user by id
  * @param {ObjectId} id
  * @returns {Promise<User>}
@@ -112,4 +120,5 @@ module.exports = {
   verifyEmailAndPassword,
   updateUser,
   getTeacher,
+  systemUsers,
 };
