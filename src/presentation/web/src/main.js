@@ -41,6 +41,5 @@ app.component('base-menu', BaseMenu);
 
 registerPlugins(app);
 
-app.use(i18n)
 
-app.mount('#app');
+app.use(i18n).mount('#app');

@@ -4,7 +4,7 @@
       :style="{ 'max-width': `${maxWidth}px` }"
       class="filepond"
       ref="pond"
-      label-idle="Select profile image"
+      :label-idle="$t('Select profile image')"
       v-bind:files="myFiles"
       accepted-file-types="image/jpeg, image/png"
       v-on:init="handleFilePondInit"

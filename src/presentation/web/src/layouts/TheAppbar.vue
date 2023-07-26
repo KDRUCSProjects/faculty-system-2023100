@@ -24,7 +24,6 @@
 
     <!-- Dropdown user profile menu -->
 
-    <font-awesome-icon :icon="['far', 'earth-americas']" />
     <div class="px-4" >
       <select v-model="$i18n.locale" >
         <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale"> {{ locale }}</option>

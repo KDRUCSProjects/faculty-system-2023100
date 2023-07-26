@@ -5,8 +5,8 @@
       <v-col cols="7">
         <v-card class="theShadow pa-3">
           <v-card-item>
-            <v-card-title class="text-h5 font-weight-bold">Assigned Subjects</v-card-title>
-            <v-card-subtitle>The list of all assigned subjects to this teacher</v-card-subtitle>
+            <v-card-title class="text-h5 font-weight-bold">{{ $t('Assigned Subjects') }}</v-card-title>
+            <v-card-subtitle>{{ $t('The list of all assigned subjects to this teacher') }}</v-card-subtitle>
           </v-card-item>
           <v-divider></v-divider>
           <v-card-text>
@@ -22,8 +22,8 @@
       <v-col cols="5">
         <v-card class="mx-auto pa-3 theShadow">
           <v-card-item>
-            <v-card-title class="text-h5 font-weight-bold">View Profile</v-card-title>
-            <v-card-subtitle>Biography</v-card-subtitle>
+            <v-card-title class="text-h5 font-weight-bold">{{ $t('View Profile') }}</v-card-title>
+            <v-card-subtitle>{{ $t('Biography') }}</v-card-subtitle>
           </v-card-item>
           <v-divider></v-divider>
           <v-card-text class="text-center">
@@ -43,17 +43,17 @@
           <div class="d-flex w-100 flex-column justify-items-center align-items-center px-2">
             <update-teacher v-if="id" :teacherId="id" activator-color="text">
               <v-btn variant="tonal" color="primary" class="px-6 mb-1" prepend-icon="mdi-account" block>
-                Update Biography
+                {{ $t('Update Biography') }}
               </v-btn>
             </update-teacher>
             <!-- Reset Teacher Password -->
             <reset-teacher-password v-if="id" :teacherId="id" activator-color="text">
               <v-btn variant="tonal" color="dark" class="px-6 mb-1" prepend-icon="mdi-account" block>
-                 Change Password
+                 {{ $t('Change Password') }}
                 </v-btn>
             </reset-teacher-password>
             
-            <v-btn variant="tonal" color="error" class="px-6 mb-1" prepend-icon="mdi-account" block  @click="deleteTeacher(id)"> Delete Account</v-btn>
+            <v-btn variant="tonal" color="error" class="px-6 mb-1" prepend-icon="mdi-account" block  @click="deleteTeacher(id)">{{ $t('Delete Account') }}</v-btn>
           </div>
           <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
         </v-card>
@@ -92,9 +92,9 @@ export default {
       // Show confirm dialog by access it with $ref
 
       let res = await this.$refs.baseConfirmDialog.show({
-        warningTitle: 'Warning',
-        title: 'Are you sure you want to delete this teacher?',
-        okButton: 'Yes',
+        warningTitle: this.$t('Warning'),
+        title: this.$t('Are you sure you want to delete this teacher?'),
+        okButton: this.$t('Yes'),
       });
 
       // If closed, return the function

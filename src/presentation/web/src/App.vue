@@ -1,24 +1,29 @@
 <template>
   <v-app>
-    <v-main>
-      <router-view />
+    <v-locale-provider :rtl="$i18n.locale=='pa'?true:false">
+      <v-main>
+        <router-view />
 
-      <v-container>
-        <div id="notifications">
-          <div v-for="(item, i) in toastMessages" :key="i">
-            <base-toast :type="item.type" :text="item.text" :key="i"></base-toast>
+        <v-container>
+          <div id="notifications">
+            <div v-for="(item, i) in toastMessages" :key="i">
+              <base-toast :type="item.type" :text="item.text" :key="i"></base-toast>
+            </div>
           </div>
-        </div>
-      </v-container>
-    </v-main>
+        </v-container>
+      </v-main>
+    </v-locale-provider>
   </v-app>
 </template>
 
 <script>
+
 export default {
-  data: () => ({}),
+  data: () => ({
+  }),
   methods: {},
   computed: {
+
     toastMessages() {
       return this.$store.getters['toastMessages'];
     },
