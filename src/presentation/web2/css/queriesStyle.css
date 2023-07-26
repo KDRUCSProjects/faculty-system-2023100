@@ -39,8 +39,24 @@
       //////////////////////////////////////////////////////////// */
 
   .profile-card-main-div {
+  }
+
+  .profile-card-main-div {
+    top: 75%;
     flex-wrap: wrap;
     width: 90%;
+  }
+
+  @keyframes goDown {
+    from {
+      top: 0%;
+      left: 50%;
+    }
+
+    to {
+      top: 75%;
+      left: 50%;
+    }
   }
 
   .profile-left {
@@ -139,22 +155,6 @@
 }
 
 @media screen and (max-width: 490px) {
-  .profile-card-main-div {
-    top: 75%;
-  }
-
-  @keyframes goDown {
-    from {
-      top: 0%;
-      left: 50%;
-    }
-
-    to {
-      top: 75%;
-      left: 50%;
-    }
-  }
-
   .personal-information-div {
     margin-left: 20px;
     display: flex;
@@ -229,7 +229,7 @@
 
   .profile-card-main-div {
     flex-wrap: wrap;
-    top: 75%;
+    top: 100%;
     width: 90%;
   }
 
@@ -288,7 +288,7 @@
 
 @media screen and (max-width: 350px) {
   .main-div {
-    top: 60%;
+    top: 70%;
   }
 
   /* /////////////////////////////////// */
