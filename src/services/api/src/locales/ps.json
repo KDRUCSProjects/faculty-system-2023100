@@ -1,5 +1,12 @@
 {
-    "attendance": {},
+    "attendance": {
+        "subjectNotFound": "موضوع ونه موندل شوه",
+        "cannotTakeAttendanceOnFriday": "تاسو نشئ کولی د جمعې په ورځ ګډون وکړئ",
+         "cannotTakeAttendanceAfter6pm": "  تاسو نشئ کولی د ماښام له 6 بجو وروسته ګډون وکړئ",
+        "attendanceNotFound": "حاضري ونه موندل شوه",
+
+
+    },
     "attendanceList": {},
     "auth": {},
     "department": {},
