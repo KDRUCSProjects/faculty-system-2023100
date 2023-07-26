@@ -1,0 +1,17 @@
+{
+    "Welcome":"Welcome to Vue",
+    "First":"CS Faculty",
+    "Second":"Management System",
+    "Logout":"Logout",
+    "Teachers":"Teachers",
+    "Dashboard":"Dashboard",
+    "Students":"Students",
+    "All Students":"All Students",
+    "New Student":"New Student",
+    "Student Conversion":"Student Conversion",
+    "Semesters":"Semesters",
+    "Reports":"Reports",
+    "Departments":"Departments",
+    "Settings":"Settings"
+
+}

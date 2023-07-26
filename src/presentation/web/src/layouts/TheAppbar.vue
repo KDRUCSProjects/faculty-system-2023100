@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar class="px-4" elevation="0" border>
+  <v-app-bar class="px-4" elevation="0" border >
     <!-- The Menu -->
     <!-- navigation button/collapser -->
 
@@ -23,6 +23,13 @@
     <v-spacer></v-spacer>
 
     <!-- Dropdown user profile menu -->
+
+    <font-awesome-icon :icon="['far', 'earth-americas']" />
+    <div class="px-4" >
+      <select v-model="$i18n.locale" >
+        <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale"> {{ locale }}</option>
+      </select>
+    </div>
     <div id="the-menu">
       <v-cards-title class="d-inline mx-2">{{ userFullName }}</v-cards-title>
       <v-menu min-width="200px" rounded>
@@ -119,4 +126,6 @@ export default {
   padding: 5px;
   box-sizing: content-box;
 }
+
+
 </style>

@@ -1,5 +1,5 @@
-<template>
-  <div>
+<template >
+  <div >
     <base-contents>
     <div class="card-list">
       <v-card
