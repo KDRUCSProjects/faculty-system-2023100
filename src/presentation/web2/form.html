@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="fonts/icofont/icofont.min.css" />
     <!-- <link rel="stylesheet" href="css/style.css" /> -->
     <link rel="stylesheet" href="css/form.css" />
+    <link rel="stylesheet" href="css/queries.css">
     <title>Registration Form</title>
     <script defer src="js/otp.js"></script>
   </head>
@@ -14,15 +15,29 @@
       <form action="submit" class="main-div form">
         <div class="left">
           <div class="profile-image-div">
-            <img src="image/aa.jpg" alt="" />
+            <div class="profile-image-div-pic">
+              <img
+              src=""
+              alt="Upload Your photo"
+              name="photo"
+              class="profile-Img hidden"
+              />
+              <h5 class="photo-heading">Upload Your photo</h>
+            </div>
             <h4>Select a profile image Here</h4>
-            <button class="photo-btn">Select a photo</button>
+            <label class="photo-btn" for="input-file">Select a photo</label>
+            <input
+              accept=".jpg,.png"
+              type="file"
+              placeholder="Select a photo"
+              id="input-file"
+            />
           </div>
           <div class="submit-btn-div">
-            <button type="submit" class="register-btn">Register</button>
             <!-- <input type="submit"  value="Register" /> -->
           </div>
         </div>
+        <button type="submit" class="register-btn">Register</button>
         <!-- ///////////////////////////////////////// -->
         <!-- ///////////////////////////////////////// -->
 
@@ -31,13 +46,15 @@
             Register Your <br />
             <span>Information as as Student</span>
           </h1>
-          <div class="tag-div margin-left">
-            <h6>
-              <i class="icofont-book location-icon"></i>Kankor information
-            </h6>
-          </div>
-
+          
           <div class="margin-left inputs-div">
+
+            <div class="tag-div">
+              <h6>
+                <i class="icofont-book location-icon"></i>Kankor information
+              </h6>
+            </div>
+            
             <div class="kankor-div">
               <div class="kankor-id-div inputs-divs">
                 <p>Kankor ID</p>
@@ -50,17 +67,17 @@
                 />
               </div>
 
-              <div class="dob-div inputs-divs">
+              <!-- <div class="dob-div inputs-divs">
                 <p>DOB</p>
                 <input class="input" type="date" placeholder="DOB" name="dob" />
-              </div>
+              </div> -->
 
               <div class="addmission-div inputs-divs">
                 <p>Addmission Date</p>
                 <input
                   class="input"
                   type="number"
-                  placeholder=""
+                  placeholder="Admission Year"
                   name="admissionYear"
                 />
               </div>
@@ -71,7 +88,7 @@
                   class="date-input input"
                   type="number"
                   id=""
-                  placeholder="Year"
+                  placeholder="Kankor Year"
                   name="educationalYear"
                 />
               </div>
@@ -95,6 +112,15 @@
                 />
               </div>
               <div class="lastname-div inputs-divs">
+                <div class="dob-div inputs-divs">
+                  <p>DOB</p>
+                  <input
+                    class="input"
+                    type="date"
+                    placeholder="DOB"
+                    name="dob"
+                  />
+                </div>
                 <!-- <p>Lastname</p> -->
                 <!-- <input
                   class="input"
@@ -151,7 +177,7 @@
                   class="input"
                   type="text"
                   id=""
-                  placeholder="division"
+                  placeholder="Division"
                   name="division"
                 />
               </div>
@@ -169,8 +195,8 @@
           </div>
         </div>
       </form>
-      <div class="overlay hidden"></div>
-      <div class="otp-hidden-div hidden">
+      <div class="overlay"></div>
+      <div class="otp-hidden-div">
         <div class="otp-div">
           <i class="icofont-close opt-icon"></i>
           <h6 class="otp-heading">Enter Your Registration Code</h6>
