@@ -34,7 +34,7 @@ import { logout } from "../store/actions/actions";
 import { Modal } from "@ui-kitten/components";
 import * as updates from "expo-updates";
 
-export default function attendence(props) {
+export default function Attendence(props) {
   const childRef = useRef(null);
   var [offSetX, setOffSetX] = useState(0);
   const scrollRef = useRef({});

@@ -6,11 +6,11 @@ import {
 import { Easing, ImageBackground, Text } from "react-native";
 import colors from "../constants/colors";
 import role from "../screens/roleSelection";
-import login from "../screens/login";
-import studentIdScreen from "../screens/studentIdScreen";
-import attendence from "../screens/attendence";
-import teacherScreen from "../screens/teacherScreen";
-import auth from "../screens/auth";
+import Login from "../screens/Login";
+import StudentIdScreen from "../screens/StudentIdScreen";
+import Attendence from "../screens/Attendence";
+import TeacherScreen from "../screens/TeacherScreen";
+import Auth from "../screens/Auth";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import MainDrawer from "../ui/components/MainDrawer";
 import { TransitionSpecs } from "@react-navigation/stack";
@@ -28,27 +28,27 @@ import ChangePassword from "../screens/ChangePassword";
 import CreateShoka from "../screens/CreateShoka";
 import SelectSubject from "../screens/SelectSubject";
 import SelectType from "../screens/SelectType";
-import SelectChance from "../screens/selectChance";
+import SelectChance from "../screens/SelectChance";
 
-const studentScreen = () => {
+const StudentScreen = () => {
   const stdScreen = createStackNavigator();
   return (
     <stdScreen.Navigator screenOptions={{ headerShown: false }}>
       <stdScreen.Screen
         name="Mark Checking"
-        component={studentIdScreen}
+        component={StudentIdScreen}
       ></stdScreen.Screen>
     </stdScreen.Navigator>
   );
 };
 
-const authNavigation = (props) => {
+const AuthNavigation = (props) => {
   const authNavigationNavigator = createStackNavigator();
   return (
     <authNavigationNavigator.Navigator screenOptions={{ headerShown: false }}>
       <authNavigationNavigator.Screen
-        name="authScreen"
-        component={auth}
+        name="AuthScreen"
+        component={Auth}
       ></authNavigationNavigator.Screen>
     </authNavigationNavigator.Navigator>
   );
@@ -94,15 +94,15 @@ const Navigation = (props) => {
     >
       <mainNavigation.Screen
         name="auth"
-        component={authNavigation}
+        component={AuthNavigation}
       ></mainNavigation.Screen>
       <mainNavigation.Screen
-        name="EditProfile"
+        name="editProfile"
         component={EditProfile}
       ></mainNavigation.Screen>
       <mainNavigation.Screen
         name="studentScreen"
-        component={studentScreen}
+        component={StudentScreen}
         options={{}}
       ></mainNavigation.Screen>
 
@@ -138,7 +138,7 @@ const Navigation = (props) => {
 
       <mainNavigation.Screen
         name="Login"
-        component={login}
+        component={Login}
         options={{
           headerLeft: (navData) => (
             <HeaderBackButton
@@ -152,7 +152,7 @@ const Navigation = (props) => {
 
       <mainNavigation.Screen
         name="teacherScreen"
-        component={teacherScreen}
+        component={TeacherScreen}
         options={{
           headerLeft: (navData) => (
             <HeaderBackButton
@@ -170,7 +170,7 @@ const Navigation = (props) => {
       ></mainNavigation.Screen>
       <mainNavigation.Screen
         name="attendenceScreen"
-        component={attendence}
+        component={Attendence}
       ></mainNavigation.Screen>
     </mainNavigation.Navigator>
   );
@@ -193,7 +193,7 @@ const DrawerNavigator = (props) => {
       />
       <drawer.Screen
         name="Login"
-        component={login}
+        component={Login}
       ></drawer.Screen>
       <drawer.Screen
         name="Settings"

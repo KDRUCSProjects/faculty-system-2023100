@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { Layout, TopNavigation, Divider } from "@ui-kitten/components";
 import colors from "../constants/colors";
 
-export default function teacherScreen(props) {
+export default function TeacherScreen(props) {
   const username = useSelector((state) => state.MainReducer.userName);
   const navigation = useNavigation();
   useEffect(() => {
