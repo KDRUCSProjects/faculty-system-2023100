@@ -206,7 +206,6 @@ input {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-
   align-items: flex-start;
   padding: 10px 10px;
 }
@@ -245,14 +244,8 @@ input {
   cursor: pointer;
 }
 
-/* /////////////////////////////////////////
-
-/////////////////////////////////////////////
-///////////////////////////////////////////
-//////////////////////////////////////////
-//////////////////////////////////////////*/
-
-/* ////////////////////////////////////////////////// */
+/* ////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////// */
 
 .profile-card-main-div {
   /* background-color: var(--background-color-alt); */
@@ -266,7 +259,6 @@ input {
   animation-name: goDown;
   animation-duration: 0.5s;
   animation-timing-function: ease-out;
-  /* width: 1140px; */
 }
 
 @keyframes goDown {
@@ -282,7 +274,7 @@ input {
 }
 
 .profile-left {
-  width: 60%;
+  /* width: 60%; */
   background-color: var(--background-color);
   border-radius: 5px;
   padding: 30px 0px;
@@ -294,6 +286,9 @@ input {
   justify-content: center;
   align-items: center;
   margin-top: 30px;
+  /* background-color: #1e1f26; */
+  width: 18em;
+  margin: 30px 30px 0px 30px;
 }
 
 .profile-img-div img {
@@ -326,6 +321,7 @@ input {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  /* background-color: #1e1f26; */
 }
 
 .profiel-left-information-divs {
@@ -348,10 +344,9 @@ input {
   background-color: var(--background-color);
   display: flex;
   flex-direction: column;
-  padding: 10px;
   margin-left: 10px;
   border-radius: 5px;
-  padding: 30px 50px 30px 10px;
+  padding: 30px 50px;
 }
 
 .icon-close {
@@ -364,8 +359,10 @@ input {
 
 .biography-heading-div {
   margin-left: 20px;
+  margin-right: 0px;
   margin-top: 10px;
   border-bottom: 1px lightgray solid;
+  width: 15em;
 }
 
 .biography-heading-div h2 {
@@ -404,7 +401,7 @@ input {
 
 .personal-information-div {
   margin-left: 20px;
-  padding: 0px 0px 20px 0px;
+  /* padding: 0px 0px 20px 0px; */
 }
 
 .personal-information-divs {

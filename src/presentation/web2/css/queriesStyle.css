@@ -1,0 +1,192 @@
+@media screen and (max-width: 750px) {
+  .main-div {
+    top: 50%;
+    background-color: #278aff;
+  }
+
+  /* /////////////////////////////////// */
+
+  .main-heading-div {
+    width: 30rem;
+    top: 15%;
+    background-color: #8ac185;
+  }
+
+  .main-heading-div h1 {
+    line-height: 40px;
+    font-size: 30px;
+  }
+
+  input {
+    width: 30rem;
+    height: 50px;
+    font-size: 18px;
+  }
+
+  .bubble-icon {
+    font-size: 35px;
+    top: 18px;
+  }
+
+  .spinner {
+    top: 20px;
+  }
+
+  /* ////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////// */
+
+  .profile-card-main-div {
+    flex-wrap: wrap;
+    width: 90%;
+  }
+
+  .profile-left {
+    width: 100%;
+    padding: 30px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .profile-img-div {
+    width: 18em;
+    margin: 10px 0px 0px 0px;
+  }
+
+  .profile-right {
+    width: 100%;
+    margin-left: 0px;
+    padding: 30px 30px;
+  }
+
+  .personal-information-div {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .personal-information-divs {
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: 10px;
+    margin: 10px;
+    padding: 10px;
+    width: 8em;
+  }
+
+  .round-div {
+    margin: 0px 0px 15px 0px;
+  }
+
+  .info-name {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .info-name-lable {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .main-div {
+    background-color: ;
+  }
+
+  /* /////////////////////////////////// */
+
+  .main-heading-div {
+    width: 25rem;
+    top: 10%;
+  }
+
+  .main-heading-div h1 {
+    font-size: 28px;
+  }
+
+  input {
+    width: 25rem;
+    font-size: 16px;
+  }
+
+  }
+
+  #top-box {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .information-box {
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* ////////////////////////////////////////////////////////
+          //////////////////////////////////////////////////////////// */
+
+  @keyframes goDown {
+    from {
+      top: 0%;
+      left: 50%;
+    }
+
+    to {
+      top: 40%;
+      left: 50%;
+    }
+  }
+
+  .profile-left {
+    width: 100%;
+    padding: 30px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .profile-img-div {
+    width: 18em;
+    margin: 10px 0px 0px 0px;
+  }
+
+  .profile-right {
+    width: 100%;
+    margin-left: 0px;
+    padding: 30px 30px;
+  }
+
+  .personal-information-div {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .personal-information-divs {
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: 10px;
+    margin: 10px;
+    background-color: #278aff;
+    padding: 10px;
+    width: 10em;
+  }
+
+  .round-div {
+    margin: 0px 0px 15px 0px;
+  }
+
+  .info-name {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .info-name-lable {
+    text-align: center;
+  }
+}
