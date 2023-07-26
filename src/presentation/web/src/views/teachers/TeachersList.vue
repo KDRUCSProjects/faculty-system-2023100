@@ -1,6 +1,6 @@
 <template>
   <v-toolbar color="dark">
-    <v-toolbar-title> All Teachers </v-toolbar-title>
+    <v-toolbar-title> {{$t('All Teachers')}} </v-toolbar-title>
     <v-divider inset vertical></v-divider>
     <v-spacer></v-spacer>
 

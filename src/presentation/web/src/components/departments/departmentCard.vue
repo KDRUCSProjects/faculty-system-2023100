@@ -13,7 +13,7 @@
       <v-card-actions class="mt-3" >
 
         <update-department :departmentId="id"  activator-color="primary"></update-department> 
-        <v-btn prepend-icon="mdi-delete" color="error" variant="text" @click="deleteDepartment(id)">Delete</v-btn>
+        <v-btn prepend-icon="mdi-delete" color="error" variant="text" @click="deleteDepartment(id)">{{ $t('Delete') }}</v-btn>
 
       </v-card-actions>
   
@@ -50,10 +50,10 @@
       async deleteDepartment(id) {
         console.log(id)
         let res = await this.$refs.baseConfirmDialog.show({
-        warningTitle: 'Warning',
-        title: 'Are you sure you want to delete this Department?',
+        warningTitle: this.$t('Warning'),
+        title: this.$t('Are you sure you want to delete this Department?'),
         subtitle: id,
-        okButton: 'Yes',
+        okButton: this.$t('Yes'),
       });
 
       // If closed, return the function

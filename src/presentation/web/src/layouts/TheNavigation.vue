@@ -1,10 +1,10 @@
-<template>
+<template >
   <v-navigation-drawer v-model="drawer" app width="220" color="primary" permanent>
     <!-- App/Drawer name -->
     <v-list-item class="my-4">
       <v-list-item-content>
-        <v-list-item-title class="text-center text-h6 font-weight-bold"> CS Faculty </v-list-item-title>
-        <v-list-item-subtitle class="text-center"> Management System </v-list-item-subtitle>
+        <v-list-item-title class="text-center text-h6 font-weight-bold"> {{ $t('First') }} </v-list-item-title>
+        <v-list-item-subtitle class="text-center"> {{ $t('Second') }} </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
@@ -12,16 +12,16 @@
     <v-divider></v-divider>
 
     <!-- Menu Items -->
-    <v-list nav dense class="menu-items">
+    <v-list nav dense class="menu-items" >
       <div v-for="item in items" :key="item.title">
         <div v-if="!item.children">
           <v-list-item link :to="item.to">
             <v-list-item-icon>
-              <v-icon color="light">{{ item.icon }}</v-icon>
+              <v-icon color="light" >{{ item.icon }}</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
+              <v-list-item-title class="ma-2">{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </div>
@@ -30,7 +30,7 @@
             <template v-slot:activator="{ props }">
               <v-list-item v-bind="props">
                 <v-icon>{{ item.icon }}</v-icon>
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
+                <v-list-item-title class="ma-2">{{ item.title }}</v-list-item-title>
               </v-list-item>
             </template>
 
@@ -46,7 +46,7 @@
     <template v-slot:append>
       <div class="pa-5">
         <v-btn block color="dark" @click="logout" class="font-weight-bold" prepend-icon="mdi-exit-to-app">
-          Logout
+          {{ $t('Logout') }}
           <template v-slot:prepend>
             <v-icon color="primary"></v-icon>
           </template>
@@ -62,31 +62,31 @@ export default {
     return {
       items: [
         {
-          title: 'Dashboard',
+          title: this.$t('Dashboard'),
           icon: 'mdi-poll',
           to: '/dashboard',
         },
         {
-          title: 'Teachers',
+          title: this.$t('Teachers'),
           icon: 'mdi-human-male-board',
           to: '/teachers',
         },
         {
-          title: 'Students',
+          title: this.$t('Students'),
           icon: 'mdi-account-school',
           children: [
             {
-              title: 'All Students',
+              title: this.$t('All Students'),
               icon: 'mdi-account-school',
               to: '/students/all',
             },
             {
-              title: 'New Student',
+              title: this.$t('New Student'),
               icon: 'mdi-account-school',
               to: '/students/new',
             },
             {
-              title: 'Student Conversion',
+              title: this.$t('Student Conversion'),
               icon: 'mdi-swap-horizontal',
               to: '/students/status-change',
             },
@@ -94,7 +94,7 @@ export default {
           ],
         },
         {
-          title: 'Semesters',
+          title: this.$t('Semesters'),
           icon: 'mdi-google-classroom',
           to: '/semesters/all',
         },
@@ -104,17 +104,17 @@ export default {
         //   to: '/subjects',
         // },
         {
-          title: 'Reports',
+          title: this.$t('Reports'),
           icon: 'mdi-chart-bar',
           to: '/reports',
         },
         {
-          title: 'Departments',
+          title: this.$t('Departments'),
           icon: 'mdi-home-city-outline',
           to: '/departments',
         },
         {
-          title: 'Settings',
+          title: this.$t('Settings'),
           icon: 'mdi-cog-outline',
           to: '/settings',
         },

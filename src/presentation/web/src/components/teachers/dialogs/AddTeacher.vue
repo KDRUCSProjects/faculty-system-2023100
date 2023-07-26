@@ -2,11 +2,11 @@
   <div>
     <!-- Default Btn/Slot -->
     <v-btn color="primary" variant="flat">
-      Add Teacher
+      {{ $t('Add Teacher') }}
 
       <v-dialog max-width="550" activator="parent" v-model="dialog" transition="slide-y-transition">
         <v-toolbar :color="'dark'" class="mb-2">
-          <v-toolbar-title class=""> Add New Teacher Account </v-toolbar-title>
+          <v-toolbar-title class=""> {{ $t('Add New Teacher Account') }} </v-toolbar-title>
         </v-toolbar>
 
         <v-card class="" :loading="isLoading">
@@ -20,14 +20,14 @@
               <div style="max-width: 220px" class="text-align-center mx-auto">
                 <base-photo-uploader @photo="getPhoto" @photo-size-change="handlePhotoSize"></base-photo-uploader>
               </div>
-              <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Full Name"></v-text-field>
-              <v-text-field v-model="lastName" variant="outlined" label="Nick Name"></v-text-field>
+              <v-text-field :rules="rules.name" v-model="name" variant="outlined" :label="$t('Full Name')"></v-text-field>
+              <v-text-field v-model="lastName" variant="outlined" :label="$t('Nick Name')"></v-text-field>
               <v-text-field
                 type="email"
                 :rules="rules.email"
                 v-model="email"
                 variant="outlined"
-                label="Email"
+                :label="$t('Email')"
               ></v-text-field>
               <v-text-field
                 :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -36,15 +36,15 @@
                 :rules="rules.password"
                 v-model="password"
                 variant="outlined"
-                label="Password"
+                :label="$t('Password')"
               ></v-text-field>
             </v-form>
 
             <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
           </v-card-text>
           <v-card-actions class="mx-4">
-            <v-btn @click="submitForm" variant="flat" :loading="isLoading">Add Account</v-btn>
-            <v-btn @click="closeDialog" color="error">Cancel</v-btn>
+            <v-btn @click="submitForm" variant="flat" :loading="isLoading">{{ $t('Add Account') }}</v-btn>
+            <v-btn @click="closeDialog" color="error">{{ $t('Cancel') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -71,21 +71,21 @@ export default {
   computed: {
     rules() {
       return {
-        name: [(v) => !!v || 'Please enter teacher name'],
+        name: [(v) => !!v || this.$t('Please enter full name')],
         // email validation
         email: [
-          (v) => !!v || 'Please enter teacher email address',
-          (v) => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+          (v) => !!v || this.$t('Please enter email address'),
+          (v) => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || this.$t('E-mail must be valid'),
         ],
 
         // password validation
         password: [
-          (v) => !!v || 'Please enter teacher account password',
-          (v) => /[A-Z]/.test(v) || 'Password must contain 1 uppercase letter',
-          (v) => /[a-z]/.test(v) || 'Password must contain 1 lowercase letter',
-          (v) => /[0-9]/.test(v) || 'Password must contain 1 number ',
-          (v) => /[#?!@$_+:"{'`~,.<>'};%^&*(-)]/.test(v) || 'Password must contain 1 symbol',
-          (v) => v.length >= 8 || 'Password length must be greater than 8 characters',
+          (v) => !!v ||  this.$t('Please enter password'),
+          (v) => /[A-Z]/.test(v) || this.$t('Password must contain 1 uppercase letter'),
+          (v) => /[a-z]/.test(v) || this.$t('Password must contain 1 lowercase letter'),
+          (v) => /[0-9]/.test(v) || this.$t('Password must contain 1 number'),
+          (v) => /[#?!@$_+:"{'`~,.<>'};%^&*(-)]/.test(v) || this.$t('Password must contain 1 symbol'),
+          (v) => v.length >= 8 || this.$t('Password length must be greater than 8 characters'),
         ],
       };
     },
@@ -131,6 +131,7 @@ export default {
         this.closeDialog();
 
       } catch (e) {
+        context.commit('setToast', [0, 'Photo size should be less than 2 mb'], { root: true });
         // Show error message if happened
         this.errorMessage = e;
       } finally {

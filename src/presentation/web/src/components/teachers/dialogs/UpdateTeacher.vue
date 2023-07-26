@@ -13,23 +13,23 @@
 
       <v-card :loading="isLoading" class="pb-5">
         <v-toolbar :color="'dark'">
-          <v-toolbar-title class=""> Update Teacher Account </v-toolbar-title>
+          <v-toolbar-title class=""> {{ $t('Update Teacher Account') }} </v-toolbar-title>
         </v-toolbar>
 
         <v-card-text>
           <v-form @submit.prevent="submitForm" ref="updateTeacherForm">
             <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo"></base-photo-uploader>
 
-            <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Full Name"></v-text-field>
-            <v-text-field v-model="lastName" variant="outlined" label="Nick Name"></v-text-field>
-            <v-text-field type="email" :rules="rules.email" v-model="email" variant="outlined" label="Email"></v-text-field>
+            <v-text-field :rules="rules.name" v-model="name" variant="outlined" :label="$t('Full Name')"></v-text-field>
+            <v-text-field v-model="lastName" variant="outlined" :label="$t('Nick Name')"></v-text-field>
+            <v-text-field type="email" :rules="rules.email" v-model="email" variant="outlined" :label="$t('Email')"></v-text-field>
           </v-form>
 
           <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
         </v-card-text>
         <v-card-actions class="mx-4">
-          <v-btn @click="submitForm" variant="flat" :loading="isLoading">Update Account</v-btn>
-          <v-btn @click="closeDialog" color="error">Cancel</v-btn>
+          <v-btn @click="submitForm" variant="flat" :loading="isLoading">{{ $t('Update Account') }}</v-btn>
+          <v-btn @click="closeDialog" color="error">{{ $t('Cancel') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
