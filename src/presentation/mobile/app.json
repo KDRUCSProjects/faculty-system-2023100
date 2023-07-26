@@ -11,20 +11,37 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "updates":{
+      "fallbackToCacheTimeout":0,
+      "useClassicUpdates":true
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.MalikSamimi7.fms",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.MalikSamimi7.fms",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon1.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2ada25eb-f4f9-41e0-bb48-a8d0ed4ac7a8"
+      }
     }
   }
 }

@@ -34,7 +34,7 @@ import {
 } from "@ui-kitten/components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback } from "react";
-import { useBackHandler } from "@react-native-community/hooks";
+
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
