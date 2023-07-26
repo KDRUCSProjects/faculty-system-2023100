@@ -23,7 +23,7 @@ const i18n = require('i18n');
  */
 i18n.configure({
   locales: ['en', 'ps'],
-  defaultLocale: 'ps',
+  defaultLocale: 'en',
   directory: path.join(__dirname, '/locales'),
   objectNotation: true,
 });

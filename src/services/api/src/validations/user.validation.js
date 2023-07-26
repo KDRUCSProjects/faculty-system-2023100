@@ -19,6 +19,7 @@ const getUsers = {
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
+    assistants: Joi.number().integer(),
   }),
 };
 

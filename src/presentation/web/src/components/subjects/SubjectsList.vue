@@ -61,6 +61,11 @@ export default {
     actions() {
       let actions = [
         {
+          icon: 'mdi-note-edit-outline',
+          title: 'View Shoka',
+          onClick: 'viewShoka',
+        },
+        {
           icon: 'mdi-passport-biometric',
           title: this.$t('Download Attendance'),
           onClick: 'downloadAttendance ',
@@ -100,7 +105,15 @@ export default {
         this.viewTeacher(subject.teacherId);
       } else if (action === 'delete') {
         await this.deleteSubject(subject);
+      } else if (action === 'viewShoka') {
+        console.log(subject);
+        this.showShoka(subject.id);
+      } else if (action === 'downloadAttendance') {
+        console.log('downloading..');
       }
+    },
+    showShoka(subjectId) {
+      this.$router.push(`/subjects/shoka/${subjectId}`);
     },
     viewTeacher(teacherId) {
       this.$router.push(`/teachers/view/${teacherId}`);
