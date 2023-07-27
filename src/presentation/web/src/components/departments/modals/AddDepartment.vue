@@ -2,14 +2,14 @@
     <div>
       <!-- Default Btn/Slot -->
       <v-btn color="primary" variant="flat">
-        Add Department
+        {{ $t('Add Department') }}
   
         <v-dialog max-width="550" activator="parent" v-model="dialog" transition="slide-y-transition">
           <v-card class="pa-1" :loading="isLoading">
             <v-card-item>
-              <v-card-title>Add Department</v-card-title>
+              <v-card-title>{{ $t('Add Department') }}</v-card-title>
               <v-card-subtitle>
-                Fill in the blank to add department
+                {{ $t('Fill in the blank to add department') }}
               </v-card-subtitle>
             </v-card-item>
             <v-card-text> 
@@ -19,8 +19,8 @@
               <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
             </v-card-text>
             <v-card-actions class="mx-4">
-              <v-btn @click="submitForm" variant="flat" :loading="isLoading">Add Department</v-btn>
-              <v-btn @click="closeDialog" color="error">Cancel</v-btn>
+              <v-btn @click="submitForm" variant="flat" :loading="isLoading">{{ $t('Add Department') }}</v-btn>
+              <v-btn @click="closeDialog" color="error">{{ $t('Cancel') }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -42,7 +42,7 @@
     computed: {
       rules() {
         return {
-          name: [(v) => !!v || 'Please enter Department  Name'],
+          name: [(v) => !!v || this.$t('Please enter Department Name')],
         };
       },
     },

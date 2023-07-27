@@ -36,16 +36,13 @@ export const authenticate = (userName, password) => {
         5000
       );
 
-      if (response.status == 401) {
-        throw new Error("UserName or Password Is Wong!");
-      }
+      const data = await response.json();
 
       if (!response.ok) {
-        console.log(response.status);
-        throw new Error("something went wrong");
+        const error = new Error(data.message);
+        error.code = data.code;
+        throw error;
       }
-
-      const data = await response.json();
 
       console.log(data.user.id);
       console.log(data.tokens.access.token);
@@ -64,7 +61,7 @@ export const authenticate = (userName, password) => {
       );
 
       const subjectsresp = await FetchWithTimeout(
-        "http://" + base_ip + ":4000/subjects/teachers/" + userid,
+        "http://" + base_ip + ":4000/subjects/teachers/" + userid + "?all=0",
         {
           method: "GET",
           headers: {
@@ -466,7 +463,7 @@ export const getStudentInfo = (id) => {
 export const createShoka = (
   subjectId,
   studentId,
-  midtermMarks,
+  projectMarks,
   assignmentsMarks,
   finalMarks,
   practicalMarks,
@@ -476,9 +473,10 @@ export const createShoka = (
     console.log(
       subjectId,
       studentId,
-      midtermMarks,
+      projectMarks,
       assignmentsMarks,
       finalMarks,
+      practicalMarks,
       status
     );
     const userData = await AsyncStorage.getItem("userData");
@@ -501,7 +499,7 @@ export const createShoka = (
           body: JSON.stringify({
             subjectId: subjectId,
             studentId: studentId,
-            midtermMarks: midtermMarks,
+            projectMarks: projectMarks,
             assignment: assignmentsMarks,
             finalMarks: finalMarks,
             practicalWork: practicalMarks,
@@ -521,7 +519,7 @@ export const createShoka = (
           body: JSON.stringify({
             subjectId: subjectId,
             studentId: studentId,
-            midtermMarks: midtermMarks,
+            projectMarks: projectMarks,
             assignment: assignmentsMarks,
             finalMarks: finalMarks,
             practicalWork: practicalMarks,
@@ -541,7 +539,7 @@ export const createShoka = (
           body: JSON.stringify({
             subjectId: subjectId,
             studentId: studentId,
-            midtermMarks: midtermMarks,
+            projectMarks: projectMarks,
             assignment: assignmentsMarks,
             finalMarks: finalMarks,
             practicalWork: practicalMarks,
@@ -619,7 +617,7 @@ export const getAttendence = (id) => {
   };
 };
 
-export const getStudentBySubject = (subjectId) => {
+export const getStudentBySubject = (subjectId, chance) => {
   return async (dispatch) => {
     const userData = await AsyncStorage.getItem("userData");
 
@@ -628,7 +626,12 @@ export const getStudentBySubject = (subjectId) => {
       transformedData;
 
     const updateResp = await FetchWithTimeout(
-      "http://" + base_ip + ":4000/subjects/students/" + subjectId,
+      "http://" +
+        base_ip +
+        ":4000/shokaList/" +
+        subjectId +
+        "?chance=" +
+        chance,
       {
         method: "GET",
         headers: {
@@ -650,16 +653,10 @@ export const getStudentBySubject = (subjectId) => {
     const studentData = new Array();
     data.forEach((element) => {
       studentData.push({
-        studentId: element.Student.id,
-        studentName: element.Student.fullName,
-        nickName: element.Student.nickName,
-        fatherName: element.Student.fatherName,
+        studentId: element.studentId,
+        studentName: element.fullName,
 
-        grandFatherName: element.Student.grandFatherName,
-        date: element.Student.date,
-        shamsiDate: element.Student.shamsiDate,
-        isPresentOne: 0,
-        isPresentTwo: 0,
+        fatherName: element.fatherName,
       });
     });
 

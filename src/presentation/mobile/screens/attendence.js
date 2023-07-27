@@ -34,7 +34,7 @@ import { logout } from "../store/actions/actions";
 import { Modal } from "@ui-kitten/components";
 import * as updates from "expo-updates";
 
-export default function attendence(props) {
+export default function Attendence(props) {
   const childRef = useRef(null);
   var [offSetX, setOffSetX] = useState(0);
   const scrollRef = useRef({});
@@ -88,7 +88,7 @@ export default function attendence(props) {
 
     Toast.BOTTOM;
     Toast.show("Attendence updated", 2);
-    props.navigation.navigate("teacherScreen");
+    props.navigation.navigate("selectSemister");
   };
 
   return (
@@ -111,23 +111,26 @@ export default function attendence(props) {
           }}
         >
           <View style={{ width: "20%" }}>
-            <HeaderBackButton
-              onPress={() => props.navigation.toggleDrawer()}
-              backImage={() => (
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/menu.png")}
-                ></ImageBackground>
-              )}
-            ></HeaderBackButton>
+            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+              <ImageBackground
+                style={{ height: 25, width: 32 }}
+                source={require("../assets/images/menu.png")}
+              ></ImageBackground>
+            </TouchableOpacity>
           </View>
           <View style={{ width: "60%" }}>
             <Text style={{ color: "white", fontSize: 23 }}>
               FCS for University
             </Text>
           </View>
-          <View style={{ width: "15%" }}>
-            <HeaderBackButton
+          <View
+            style={{
+              width: "15%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TouchableOpacity
               onPress={() =>
                 Alert.alert("Save?", "Do you want save attendence?", [
                   {
@@ -142,13 +145,12 @@ export default function attendence(props) {
                   },
                 ])
               }
-              backImage={() => (
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/save.png")}
-                ></ImageBackground>
-              )}
-            ></HeaderBackButton>
+            >
+              <ImageBackground
+                style={{ height: 25, width: 32 }}
+                source={require("../assets/images/save.png")}
+              ></ImageBackground>
+            </TouchableOpacity>
           </View>
         </View>
 

@@ -14,9 +14,9 @@
           
           <v-card class="pa-1" :loading="isLoading">
             <v-card-item>
-              <v-card-title>Change Teacher Password</v-card-title>
+              <v-card-title>{{ $t('Change Teacher Password') }}</v-card-title>
               <v-card-subtitle>
-                Fill in the blank to change teacher password
+                {{ $t('Fill in the blank to change teacher password') }}
               </v-card-subtitle>
             </v-card-item>
             <v-card-text>
@@ -28,15 +28,15 @@
                 :rules="rules.password"
                 v-model="password"
                 variant="outlined"
-                label="New Password"
+                :label="$t('New Password')"
               ></v-text-field>
               </v-form>
   
               <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
             </v-card-text>
             <v-card-actions class="mx-4">
-              <v-btn @click="submitForm" variant="flat" :loading="isLoading">Change Password</v-btn>
-              <v-btn @click="closeDialog" color="error">Cancel</v-btn>
+              <v-btn @click="submitForm" variant="flat" :loading="isLoading">{{ $t('Change Password') }}</v-btn>
+              <v-btn @click="closeDialog" color="error">{{ $t('Cancel') }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -74,15 +74,15 @@
     computed: {
       rules() {
         return {
-          // password validation
-            password: [
-            (v) => !!v || 'Please enter teacher account password',
-            (v) => /[A-Z]/.test(v) || 'Password must contain 1 uppercase letter',
-            (v) => /[a-z]/.test(v) || 'Password must contain 1 lowercase letter',
-            (v) => /[0-9]/.test(v) || 'Password must contain 1 number ',
-            (v) => /[#?!@$_+:"{'`~,.<>'};%^&*(-)]/.test(v) || 'Password must contain 1 symbol',
-            (v) => v.length >= 8 || 'Password length must be greater than 8 characters',
-            ],
+            // password validation
+          password: [
+            (v) => !!v ||  this.$t('Please enter password'),
+            (v) => /[A-Z]/.test(v) || this.$t('Password must contain 1 uppercase letter'),
+            (v) => /[a-z]/.test(v) || this.$t('Password must contain 1 lowercase letter'),
+            (v) => /[0-9]/.test(v) || this.$t('Password must contain 1 number'),
+            (v) => /[#?!@$_+:"{'`~,.<>'};%^&*(-)]/.test(v) || this.$t('Password must contain 1 symbol'),
+            (v) => v.length >= 8 || this.$t('Password length must be greater than 8 characters'),
+          ],
         };
       },
     },

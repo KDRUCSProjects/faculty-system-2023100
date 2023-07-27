@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-contents>
-      <template v-slot:bar>
+      <!-- <template v-slot:bar>
         <v-text-field
           clearable=""
           :loading="loading"
@@ -15,9 +15,9 @@
           @click:append-inner="onClick"
         ></v-text-field>
         <div class="mx-1"></div>
-      </template>
+      </template> -->
       <v-toolbar :color="'dark'">
-        <v-toolbar-title> All Departments </v-toolbar-title>
+        <v-toolbar-title> {{ $t('All Departments') }} </v-toolbar-title>
         <v-divider inset vertical></v-divider>
         <v-spacer></v-spacer>
 

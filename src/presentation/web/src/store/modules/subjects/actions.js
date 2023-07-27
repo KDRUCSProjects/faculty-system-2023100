@@ -79,7 +79,6 @@ export default {
 
       context.commit('updateSubject', response.data);
       context.commit('setToast', 'Subject data successfully updated', { root: true });
-
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message || 'Failed updating Subject data'], { root: true });
       throw e.response.data.message;
@@ -99,6 +98,42 @@ export default {
       // context.commit();
 
       return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async loadShokaBySubjectId(context, { subjectId, chance }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/shokaList/${subjectId}?chance=${chance}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setShoka', response.data);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async updateShokaBySubjectId(context, { subjectId, chance }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/shokaList/${subjectId}?chance=${chance}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setShoka', response.data);
     } catch (e) {
       throw e.response.data.message;
     }

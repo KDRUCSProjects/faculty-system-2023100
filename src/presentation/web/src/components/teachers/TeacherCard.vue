@@ -23,7 +23,7 @@
         :to="`/teachers/view/${teacherId}`"
         block
       >
-        View Profile
+        {{ $t('View Profile') }}
       </v-btn>
     </v-card-actions>
   </v-card>

@@ -23,7 +23,7 @@
           {{ okButton }}
         </v-btn>
 
-        <v-btn class="ma-1" color="secondary" @click="cancel"> Cancel </v-btn>
+        <v-btn class="ma-1" color="secondary" @click="cancel"> {{ $t('No') }} </v-btn>
       </v-sheet>
     </div>
   </v-dialog>

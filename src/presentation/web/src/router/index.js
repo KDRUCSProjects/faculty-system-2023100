@@ -101,13 +101,24 @@ const routes = [
   //     },
   //   ],
   // },
-  // {
-  //   path: '/subjects',
-  //   meta: {
-  //     requiresAuth: true,
-  //   },
-  //   component: () => import('@/views/subjects/SubjectsList.vue'),
-  // },
+  {
+    path: '/subjects',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/subjects/Subject.vue'),
+    children: [
+      {
+        path: 'shoka/:subjectId',
+        name: 'view-shoka',
+        meta: {
+          requiresAuth: true,
+        },
+        component: () => import('@/views/subjects/shoka/ViewUpdateShoka.vue'),
+        props: true,
+      },
+    ],
+  },
   {
     path: '/semesters',
     meta: {

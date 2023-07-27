@@ -24,7 +24,6 @@ export default {
       });
 
       context.commit('setStudents', response.data.results);
-      context.commit('setToast', 'All Student successfully loaded', { root: true });
       context.commit('setCounts', {
         total: response.data.total,
         totalPages: response.data.totalPages,
@@ -36,9 +35,7 @@ export default {
     }
   },
   // load all the Students
-  async loadAllStudent(context) {
-    
-  },
+  async loadAllStudent(context) {},
   async loadStudentById(context, studentId) {
     try {
       const token = context.rootGetters.token;

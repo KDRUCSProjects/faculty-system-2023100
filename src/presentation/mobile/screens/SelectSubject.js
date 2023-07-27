@@ -24,7 +24,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../store/actions/actions";
 
 export default function SelectSubject(props) {
-  const subjects = useSelector((state) => state.MainReducer.subjects);
+  const semisterId = props.route.params.semisterId;
+  let subjects = useSelector((state) => state.MainReducer.subjects);
+  subjects = subjects?.filter((subject) => subject.semesterId == semisterId);
+
+  subjects = subjects[0]?.subjects;
+  console.log(subjects);
   const choice = props.route.params.choice;
   const dispatch = useDispatch();
   const [selected, setselected] = useState(null);
@@ -39,16 +44,13 @@ export default function SelectSubject(props) {
         setisLoading(false);
         props.navigation.navigate("selectType", { subjectId: id });
       } else {
-        setisLoading(true);
-        await dispatch(getStudentBySubject(id));
-        setisLoading(false);
         props.navigation.navigate("SelectChance", { subjectId: id });
       }
     } catch (error) {
       setisLoading(false);
       //props.navigation.navigate("selectType", { subjectId: selected });
       Alert.alert("Error", error.message);
-      if (error.code == 400) {
+      if (error.code == 401) {
         // props.navigation.replace("Login");
         await dispatch(logout());
         await AsyncStorage.clear().then().then();
@@ -88,15 +90,12 @@ export default function SelectSubject(props) {
           }}
         >
           <View style={{ width: "20%" }}>
-            <HeaderBackButton
-              onPress={() => props.navigation.toggleDrawer()}
-              backImage={() => (
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/menu.png")}
-                ></ImageBackground>
-              )}
-            ></HeaderBackButton>
+            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+              <ImageBackground
+                style={{ height: 25, width: 32 }}
+                source={require("../assets/images/menu.png")}
+              ></ImageBackground>
+            </TouchableOpacity>
           </View>
           <View style={{ width: "70%" }}>
             <Text style={{ color: "white", fontSize: 23 }}>
@@ -127,12 +126,11 @@ export default function SelectSubject(props) {
           >
             {subjects?.map((subject, index) => (
               <SelectSubjectItem
-                key={subject.id}
+                key={subject.subjectId}
                 onClick={onclick}
-                selected={selected == subject.id ? true : false}
-                subjectId={subject.id}
-                subject={subject.name}
-                semester={subjects[index]["Semester.title"]}
+                selected={selected == subject.subjectId ? true : false}
+                subjectId={subject.subjectId}
+                subject={subject.subjectName}
               ></SelectSubjectItem>
             ))}
 

@@ -2,19 +2,19 @@
     <div>
       <!-- Default Btn/Slot -->
       <v-btn :color="activatorColor" @click="getDepartment" :variant="activatorVariant" :prepend-icon="activatorIcon">
-        Edit
+        {{ $t('Edit') }}
         <v-dialog max-width="550" activator="parent" v-model="dialog" transition="slide-y-transition">
           <v-card class="pa-1" :loading="isLoading">
             <v-card-text>
               <v-form @submit.prevent="submitForm" ref="updateDepartmentForm">
-                <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Department Name"></v-text-field>
+                <v-text-field :rules="rules.name" v-model="name" variant="outlined" :label="$t('Department Name')"></v-text-field>
               </v-form>
   
               <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
             </v-card-text>
             <v-card-actions class="mx-4">
-              <v-btn @click="submitForm" variant="flat" :loading="isLoading">Update Department</v-btn>
-              <v-btn @click="closeDialog" color="error">Cancel</v-btn>
+              <v-btn @click="submitForm" variant="flat" :loading="isLoading">{{ $t('Update Department') }}</v-btn>
+              <v-btn @click="closeDialog" color="error">{{ $t('Cancel') }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -53,7 +53,7 @@ import { resolveComponent } from 'vue';
     computed: {
       rules() {
         return {
-          name: [(v) => !!v || 'Please enter Department name'],
+          name: [(v) => !!v || this.$t('Please enter Department name')],
         };
       },
     },
@@ -62,7 +62,6 @@ import { resolveComponent } from 'vue';
         console.log(this.departmentId)
         const response = await this.$store.dispatch('departments/loadDepartmentById', this.departmentId);
   
-        console.log('responses coming from update Department load department by ID',response)
         if (!response.data) return false;
   
         console.log(response.data.name)

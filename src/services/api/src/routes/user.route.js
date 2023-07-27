@@ -49,7 +49,7 @@ module.exports = router;
  *         name: name
  *         schema:
  *           type: string
- *         description: User name
+ *         description: Username
  *       - in: query
  *         name: role
  *         schema:
@@ -166,10 +166,16 @@ module.exports = router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
+ *         name: assistants
+ *         schema:
+ *           type: number
+ *           enum: [0,1]
+ *         description: get system assistants (rest query will be ignored)
+ *       - in: query
  *         name: name
  *         schema:
  *           type: string
- *         description: User name
+ *         description: Username
  *       - in: query
  *         name: role
  *         schema:

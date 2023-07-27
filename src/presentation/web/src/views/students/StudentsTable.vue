@@ -8,7 +8,7 @@
       class="elevation-0 border-bottom"
       :headers="headers"
       :items="students"
-      no-data-text="No students available"
+      :no-data-text="$t('No students available')"
       hide-default-footer
     >
       <template v-slot:[`item.actions`]="{ item }">
@@ -17,7 +17,7 @@
 
       <template v-slot:top>
         <v-toolbar color="dark">
-          <v-toolbar-title> Students Table </v-toolbar-title>
+          <v-toolbar-title> {{ $t('Students') }} </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
@@ -27,7 +27,7 @@
             color="light"
             variant="outlined"
             v-model="search"
-            label="Kankor ID"
+            :label="$t('Kankor ID')"
             append-inner-icon="mdi-magnify"
             @click:append-inner="findStudent"
             :loading="loading"
@@ -36,7 +36,7 @@
           <!-- Status Filter menu -->
           <v-menu>
             <template v-slot:activator="{ props }">
-              <v-btn color="cyan" variant="flat" v-bind="props"> Status </v-btn>
+              <v-btn color="cyan" variant="flat" v-bind="props"> {{ $t('Status') }} </v-btn>
             </template>
             <v-list>
               <v-list-item v-for="(item, index) in studentStatus" :key="index" :value="index">
@@ -45,7 +45,7 @@
             </v-list>
           </v-menu>
 
-          <v-btn color="primary" class="ml-1" variant="flat" link to="/students/new"> New Student </v-btn>
+          <v-btn color="primary" class="ml-1" variant="flat" link to="/students/new"> {{ $t('New Student') }} </v-btn>
         </v-toolbar>
       </template>
 
@@ -99,52 +99,56 @@ export default {
       search: '',
       headers: [
         {
-          title: 'No',
+          title: this.$t('Number'),
           sortable: false,
           key: 'no',
         },
         {
-          title: 'Photo',
+          title: this.$t('Photo'),
           key: 'photo',
           sortable: false,
         },
         {
-          title: 'Kankor ID',
+          title: this.$t('Kankor ID'),
           align: 'start',
           key: 'kankorId',
         },
         {
-          title: 'Name',
+          title: this.$t('Full Name'),
           align: 'start',
           sortable: true,
           key: 'fullName',
         },
         {
-          title: 'Father Name',
+          title: this.$t('Father Name'),
           align: 'start',
           sortable: true,
           key: 'fatherName',
         },
         {
-          title: 'Province',
+          title: this.$t('Province'),
           align: 'start',
           sortable: true,
           key: 'province',
         },
         {
-          title: 'Addition Date',
+          title: this.$t('Addition Date'),
           align: 'start',
           sortable: true,
           key: 'createdAt',
         },
         {
-          title: 'Status',
+          title: this.$t('Status'),
           sortable: false,
           key: 'status',
         },
-        { title: 'Actions', key: 'actions', sortable: false },
+        { 
+          title: this.$t('Actions'),
+          key: 'actions',
+          sortable: false 
+        },
       ],
-      studentStatus: ['reserve', 'present', 'taajil', 'tabdili', 'graduate'],
+      studentStatus: [this.$t('Reserve'), this.$t('Present'), this.$t('Taajil'), this.$t('Tabdili'), this.$t('Graduate')],
     };
   },
   computed: {

@@ -67,7 +67,7 @@ function submitFun(e) {
       getApiFun(inputValue);
       loader.classList.add('hidden');
       bubbleIcon.classList.remove('hidden');
-      // resultContainer.classList.remove('hidden');
+      resultContainer.classList.remove('hidden');
 
       setTimeout(() => {
         errorDiv.style.display = 'none';

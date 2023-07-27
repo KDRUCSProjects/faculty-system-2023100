@@ -13,7 +13,6 @@
     activator="parent"
   >
     <v-card>
-      
       <v-card-item>
         <v-card-title class="font-weight-bold">{{ title }}</v-card-title>
         <v-card-subtitle>{{ subtitle }}.</v-card-subtitle>
@@ -21,12 +20,19 @@
       <v-card-text>
         <v-form @submit.prevent="update">
           <v-text-field v-if="!photo" ref="theField" variant="outlined" :label="fieldLabel" v-model="field"></v-text-field>
-          <base-photo-uploader :modalWidth="modalWidth" @photo="setPhoto" @photo-size-change="handlePhotoSize" v-else></base-photo-uploader>
+          <base-photo-uploader
+            :modalWidth="modalWidth"
+            @photo="setPhoto"
+            @photo-size-change="handlePhotoSize"
+            v-else
+          ></base-photo-uploader>
         </v-form>
         <v-alert v-if="errorMessage" type="error" variant="outlined" :text="errorMessage"></v-alert>
       </v-card-text>
       <v-card-actions class="mx-2">
-        <v-btn variant="elevated" class="ma-1 px-10" color="primary" @click="update" :disabled="disableUpdateButton"> Update </v-btn>
+        <v-btn variant="elevated" class="ma-1 px-10" color="primary" @click="update" :disabled="disableUpdateButton">
+          Update
+        </v-btn>
         <v-btn variant="tonal" class="ma-1" color="error" @click="cancel"> Cancel </v-btn>
       </v-card-actions>
     </v-card>
@@ -40,7 +46,7 @@ const initialState = () => ({
   title: 'Update field name',
   subtitle: 'Click update to continue updating...',
   fieldLabel: 'Field name',
-  maxPhotoSize: false
+  maxPhotoSize: false,
 });
 export default {
   props: {
@@ -81,7 +87,7 @@ export default {
   computed: {
     disableUpdateButton() {
       return this.maxPhotoSize;
-    }
+    },
   },
   methods: {
     setPhoto(photo) {
@@ -97,12 +103,11 @@ export default {
       this.cancel();
     },
     handlePhotoSize: function (photoSize) {
-      this.maxPhotoSize = photoSize
-      console.log(this.maxPhotoSize)
-        if (this.maxPhotoSize) {
-          return this.$store.commit('setToast', [0, 'Maximum 2mb photo size allowed']) 
-        }
-      
+      this.maxPhotoSize = photoSize;
+      console.log(this.maxPhotoSize);
+      if (this.maxPhotoSize) {
+        return this.$store.commit('setToast', [0, 'Maximum 2mb photo size allowed']);
+      }
     },
     cancel() {
       this.dialog = false;
@@ -114,7 +119,7 @@ export default {
     },
   },
   emits: ['update'],
-  created() {
+  mounted() {
     if (this.fieldValue) {
       this.field = this.fieldValue;
     }

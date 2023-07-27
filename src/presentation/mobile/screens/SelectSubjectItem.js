@@ -23,7 +23,7 @@ const SelectSubjectItem = (props) => {
           {props.subject}
         </Text>
         <Text style={{ fontSize: 13, height: "30%" }}>
-          Semister: {props.semester}
+          Id: {props.subjectId}
         </Text>
       </Card.Content>
 
@@ -35,7 +35,7 @@ const SelectSubjectItem = (props) => {
   );
 };
 const styles = StyleSheet.create({
-  normal: { margin: 20, width: width / 2.5, height: height / 3.5 },
+  normal: { margin: 20, width: width / 2.7, height: height / 3.5 },
   selected: {
     margin: 20,
     width: width / 2.5,

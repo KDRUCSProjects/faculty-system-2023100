@@ -6,6 +6,7 @@ import {
   BackHandler,
   Alert,
   Text,
+  TouchableOpacity,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -15,29 +16,23 @@ import { useEffect } from "react";
 
 import { Layout, TopNavigation, Divider } from "@ui-kitten/components";
 import colors from "../constants/colors";
+import { StatusBar } from "expo-status-bar";
 
-export default function teacherScreen(props) {
+export default function TeacherScreen(props) {
   const username = useSelector((state) => state.MainReducer.userName);
-  const navigation = useNavigation();
-  useEffect(() => {
-    navigation.addListener("beforeRemove", (event) => {
-      event.preventDefault();
-      Alert.alert("Exit", "Do you want Exit?", [
-        { text: "No", onPress: () => {} },
-        {
-          text: "Yes",
-          onPress: () => {
-            BackHandler.exitApp();
-          },
-        },
-      ]);
-    });
-  }, [navigation]);
+  const semisterId = props.route.params.semisterId;
+
   const onTakeAttendence = () => {
-    props.navigation.navigate("selectSubject", { choice: "takeAttendence" });
+    props.navigation.navigate("selectSubject", {
+      choice: "takeAttendence",
+      semisterId: semisterId,
+    });
   };
   const onCreateShoka = () => {
-    props.navigation.navigate("selectSubject", { choice: "createShoka" });
+    props.navigation.navigate("selectSubject", {
+      choice: "createShoka",
+      semisterId: semisterId,
+    });
   };
   return (
     <Layout
@@ -47,6 +42,7 @@ export default function teacherScreen(props) {
         width: "100%",
       }}
     >
+      <StatusBar hidden={false}></StatusBar>
       <View
         style={{
           height: "9%",
@@ -58,15 +54,12 @@ export default function teacherScreen(props) {
         }}
       >
         <View style={{ width: "20%" }}>
-          <HeaderBackButton
-            onPress={() => props.navigation.toggleDrawer()}
-            backImage={() => (
-              <ImageBackground
-                style={{ height: 25, width: 32 }}
-                source={require("../assets/images/menu.png")}
-              ></ImageBackground>
-            )}
-          ></HeaderBackButton>
+          <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+            <ImageBackground
+              style={{ height: 25, width: 32 }}
+              source={require("../assets/images/menu.png")}
+            ></ImageBackground>
+          </TouchableOpacity>
         </View>
         <View style={{ width: "70%" }}>
           <Text style={{ color: "white", fontSize: 23 }}>

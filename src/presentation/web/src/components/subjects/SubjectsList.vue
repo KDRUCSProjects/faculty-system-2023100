@@ -61,18 +61,23 @@ export default {
     actions() {
       let actions = [
         {
+          icon: 'mdi-note-edit-outline',
+          title: 'View Shoka',
+          onClick: 'viewShoka',
+        },
+        {
           icon: 'mdi-passport-biometric',
-          title: 'Download Attendance',
+          title: this.$t('Download Attendance'),
           onClick: 'downloadAttendance ',
         },
         {
           icon: 'mdi-note-text-outline',
-          title: 'Download Shoka',
+          title: this.$t('Download Shoka'),
           onClick: 'downloadAttendance ',
         },
         {
           icon: 'mdi-delete',
-          title: 'Delete ',
+          title: this.$t('Delete'),
           onClick: 'delete',
         },
       ];
@@ -100,7 +105,15 @@ export default {
         this.viewTeacher(subject.teacherId);
       } else if (action === 'delete') {
         await this.deleteSubject(subject);
+      } else if (action === 'viewShoka') {
+        console.log(subject);
+        this.showShoka(subject.id);
+      } else if (action === 'downloadAttendance') {
+        console.log('downloading..');
       }
+    },
+    showShoka(subjectId) {
+      this.$router.push(`/subjects/shoka/${subjectId}`);
     },
     viewTeacher(teacherId) {
       this.$router.push(`/teachers/view/${teacherId}`);
@@ -108,10 +121,10 @@ export default {
     async deleteSubject(subject) {
       // Show confirm dialog by access it with $ref
       let res = await this.$refs.baseConfirmDialog.show({
-        warningTitle: 'Warning',
-        title: 'Are you sure you want to delete this subject?',
+        warningTitle: this.$t('Warning'),
+        title: this.$t('Are you sure you want to delete this subject?'),
         subtitle: `${subject.name}`,
-        okButton: 'Yes',
+        okButton: this.$t('Yes'),
       });
       // If closed, return the function
       if (!res) {

@@ -1,0 +1,21 @@
+{
+  "attendance": {},
+  "attendanceList": {},
+  "auth": {},
+  "department": {},
+  "educationalYear": {},
+  "reentry": {},
+  "semester": {},
+  "shokaList": {},
+  "shoka": {},
+  "studentList": {},
+  "student": {},
+  "subject": {},
+  "taajil": {},
+  "tabdili": {},
+  "teachers": {},
+  "tokens": {},
+  "users": {
+    "emailAlreadyTaken": "Email is already taken"
+  }
+}

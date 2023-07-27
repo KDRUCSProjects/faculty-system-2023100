@@ -18,4 +18,7 @@ export default {
   removeSubject(state, subjectId) {
     state.subjects = state.subjects.filter((subject) => subject.id !== subjectId);
   },
+  setShoka(state, payload) {
+    state.currentShoka = payload;
+  },
 };
