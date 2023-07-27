@@ -20,6 +20,7 @@ const getUsers = {
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
     assistants: Joi.number().integer(),
+    all: Joi.number().integer(),
   }),
 };
 

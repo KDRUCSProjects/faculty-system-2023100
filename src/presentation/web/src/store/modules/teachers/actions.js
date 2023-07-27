@@ -6,7 +6,7 @@ export default {
       const token = context.rootGetters.token;
 
       const response = await axios({
-        url: '/api/users',
+        url: '/api/users?all=1',
         method: 'get',
         headers: {
           'Content-Type': 'application/json',

@@ -31,13 +31,17 @@ export default {
   data: () => ({
     // Default year. This will be later on changed to latest onGoing year form API.
     selectedYear: null,
-    currentHalf: '1st',
+    currentHalf: 'All Semesters',
     halfs: ['1st Semester', '2nd Semester', 'All Semesters'],
+    onGoingHalf: false,
   }),
   components: {
     SemesterCard,
   },
   computed: {
+    ongoingHalf() {
+      return this.$store.getters[''];
+    },
     semesters() {
       return this.$store.getters['semesters/currentYearSemesters'].filter((semester) => {
         if (this.currentHalf == this.halfs[1]) {
@@ -71,7 +75,9 @@ export default {
     this.selectedYear = this.$store.getters['years/onGoingYear']?.year;
 
     // Set default half
-    this.currentHalf = this.$store.getters['years/onGoingYear']?.firstHalf == true ? this.halfs[0] : this.halfs[1];
+    // this.currentHalf = this.$store.getters['years/onGoingYear']?.firstHalf == true ? this.halfs[0] : this.halfs[1];
+
+    this.onGoingHalf = this.$store.getters['years/onGoingYear']?.firstHalf == true ? this.halfs[0] : this.halfs[1];
 
     // Probably the onGoing year
     await this.loadSemesters(this.selectedYear);

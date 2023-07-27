@@ -1,8 +1,6 @@
 <template>
   <div>
     <v-card class="theShadow py-5 pa-3">
-
-      
       <span class="pro" v-if="!studentRegistration"> {{ studentStatus }} </span>
 
       <!-- <span class="pro" v-if="!studentRegistration"> {{ studentStatus }} </span> -->
