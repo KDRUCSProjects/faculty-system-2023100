@@ -11,10 +11,10 @@
         </div>
       </template>
 
-      <v-card :loading="isLoading" class="pb-5">
-        <v-toolbar :color="'dark'">
+      <v-card :loading="isLoading" class="pb-5 pt-3">
+        <!-- <v-toolbar :color="'dark'">
           <v-toolbar-title class=""> {{ $t('Update Teacher Account') }} </v-toolbar-title>
-        </v-toolbar>
+        </v-toolbar> -->
 
         <v-card-text>
           <v-form @submit.prevent="submitForm" ref="updateTeacherForm">
