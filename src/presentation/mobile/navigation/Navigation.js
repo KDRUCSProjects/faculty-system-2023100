@@ -29,6 +29,7 @@ import CreateShoka from "../screens/CreateShoka";
 import SelectSubject from "../screens/SelectSubject";
 import SelectType from "../screens/SelectType";
 import SelectChance from "../screens/SelectChance";
+import SelectSemister from "../screens/SelectSemister";
 
 const StudentScreen = () => {
   const stdScreen = createStackNavigator();
@@ -97,7 +98,7 @@ const Navigation = (props) => {
         component={AuthNavigation}
       ></mainNavigation.Screen>
       <mainNavigation.Screen
-        name="editProfile"
+        name="EditProfile"
         component={EditProfile}
       ></mainNavigation.Screen>
       <mainNavigation.Screen
@@ -171,6 +172,11 @@ const Navigation = (props) => {
       <mainNavigation.Screen
         name="attendenceScreen"
         component={Attendence}
+      ></mainNavigation.Screen>
+
+      <mainNavigation.Screen
+        name="selectSemister"
+        component={SelectSemister}
       ></mainNavigation.Screen>
     </mainNavigation.Navigator>
   );

@@ -128,15 +128,12 @@ export default function ChangePassword(props) {
           }}
         >
           <View style={{ width: "20%" }}>
-            <HeaderBackButton
-              onPress={() => props.navigation.goBack()}
-              backImage={() => (
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/lessthan.png")}
-                ></ImageBackground>
-              )}
-            ></HeaderBackButton>
+            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+              <ImageBackground
+                style={{ height: 25, width: 32 }}
+                source={require("../assets/images/menu.png")}
+              ></ImageBackground>
+            </TouchableOpacity>
           </View>
           <View style={{ width: "60%", alignItems: "center" }}>
             <Text style={{ color: "white", fontSize: 23 }}>

@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
   },
   trackText: {
     color: "white",
-    fontSize: 15,
+    fontSize: 14,
     textTransform: "capitalize",
   },
 });

@@ -19,6 +19,7 @@ import SelectSubjectItem from "./SelectSubjectItem";
 import { useState } from "react";
 import { getStudentBySubject } from "../store/actions/actions";
 import { Modal } from "@ui-kitten/components";
+import { StatusBar } from "expo-status-bar";
 
 export default function Subjects(props) {
   const subjects = useSelector((state) => state.MainReducer.subjects);
@@ -59,6 +60,7 @@ export default function Subjects(props) {
           width: "100%",
         }}
       >
+        <StatusBar hidden={false}></StatusBar>
         <View
           style={{
             height: "9%",
@@ -70,15 +72,12 @@ export default function Subjects(props) {
           }}
         >
           <View style={{ width: "20%" }}>
-            <HeaderBackButton
-              onPress={() => props.navigation.toggleDrawer()}
-              backImage={() => (
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/menu.png")}
-                ></ImageBackground>
-              )}
-            ></HeaderBackButton>
+            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+              <ImageBackground
+                style={{ height: 25, width: 32 }}
+                source={require("../assets/images/menu.png")}
+              ></ImageBackground>
+            </TouchableOpacity>
           </View>
           <View style={{ width: "70%" }}>
             <Text style={{ color: "white", fontSize: 23 }}>

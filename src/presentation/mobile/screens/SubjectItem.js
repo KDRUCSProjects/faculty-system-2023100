@@ -35,7 +35,7 @@ const SubjectItem = (props) => {
   );
 };
 const styles = StyleSheet.create({
-  normal: { margin: 20, width: width / 2.5, height: height / 3.5 },
+  normal: { margin: 20, width: width / 2.7, height: height / 3.5 },
   selected: {
     margin: 20,
     width: width / 2.5,

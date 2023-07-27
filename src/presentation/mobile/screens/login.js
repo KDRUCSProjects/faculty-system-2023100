@@ -45,6 +45,7 @@ import Animated, {
   runOnUI,
 } from "react-native-reanimated";
 import { useRef } from "react";
+import { StatusBar } from "expo-status-bar";
 
 export default Login = (props) => {
   const [email, setEmail] = useState("");
@@ -57,26 +58,47 @@ export default Login = (props) => {
   const [emailError, setemailError] = useState(false);
   const [passwordError, setpasswordError] = useState(false);
 
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
+  // useEffect(() => {
+  //   navigation.addListener("beforeRemove", (event) => {
+  //     event.preventDefault();
+  //     Alert.alert("Exit!", "Do you want Exit?", [
+  //       {
+  //         text: "No",
+  //         onPress: () => {
+  //           return;
+  //         },
+  //       },
+  //       {
+  //         text: "Yes",
+  //         onPress: () => {
+  //           BackHandler.exitApp();
+  //         },
+  //       },
+  //     ]);
+  //   });
+  // }, [navigation]);
+
   useEffect(() => {
-    navigation.addListener("beforeRemove", (event) => {
-      event.preventDefault();
-      Alert.alert("Exit!", "Do you want Exit?", [
+    const backAction = () => {
+      Alert.alert("Exit!", "Are you sure you want to Exit?", [
         {
           text: "No",
-          onPress: () => {
-            return;
-          },
+          onPress: () => null,
+          style: "cancel",
         },
-        {
-          text: "Yes",
-          onPress: () => {
-            BackHandler.exitApp();
-          },
-        },
+        { text: "YES", onPress: () => BackHandler.exitApp() },
       ]);
-    });
-  }, [navigation]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   var translateX = useSharedValue(0);
   const lenght = useRef(144);
@@ -123,7 +145,7 @@ export default Login = (props) => {
       return;
     }
 
-    props.navigation.navigate("teacherScreen");
+    props.navigation.navigate("selectSemister");
     setEmail("");
     setPassword("");
   };
@@ -173,6 +195,7 @@ export default Login = (props) => {
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
     >
+      <StatusBar hidden={true}></StatusBar>
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{
