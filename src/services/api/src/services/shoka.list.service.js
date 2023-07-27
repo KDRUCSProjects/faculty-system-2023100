@@ -192,6 +192,9 @@ const getSubjectMarks = (conditions) => {
     shokalist.practicalWork as practicalWork,
     shokalist.projectMarks as projectMarks,
     student.fullName as fullName, 
+    student.kankorId as kankorId,
+    student.grandFatherName as grandFatherName,
+    student.photo as photo,
     student.fatherName as fatherName,
     student.id as studentId
     from shokalists as shokalist 
