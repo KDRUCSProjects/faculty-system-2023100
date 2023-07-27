@@ -6,6 +6,8 @@ import {
   ScrollView,
   Alert,
   Switch,
+  ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getAttendence, loadSubjects } from "../store/actions/actions";
@@ -15,7 +17,11 @@ import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
 import SubjectItem from "./SubjectItem";
 import SelectSubjectItem from "./SelectSubjectItem";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { logout } from "../store/actions/actions";
+
+import { Modal } from "@ui-kitten/components";
+import * as updates from "expo-updates";
+import { getStudentBySubject } from "../store/actions/actions";
 
 export default function SelectChance(props) {
   const subjects = useSelector((state) => state.MainReducer.subjects);
@@ -25,6 +31,8 @@ export default function SelectChance(props) {
   const [isError, setisError] = useState(false);
   const id = props.route.params.subjectId;
 
+  const [isLoading, setisLoading] = useState(false);
+
   const dispatch = useDispatch();
 
   const onclick = async () => {
@@ -32,23 +40,49 @@ export default function SelectChance(props) {
       setisError(true);
       return;
     }
-    if (isFirst) {
-      props.navigation.navigate("CreateShoka", {
-        subjectId: id,
-        status: "first",
-      });
-    }
-    if (isSecond) {
-      props.navigation.navigate("CreateShoka", {
-        subjectId: id,
-        status: "second",
-      });
-    }
-    if (isThird) {
-      props.navigation.navigate("CreateShoka", {
-        subjectId: id,
-        status: "third",
-      });
+    try {
+      if (isFirst) {
+        setisLoading(true);
+        await dispatch(getStudentBySubject(id, 1));
+        setisLoading(false);
+
+        props.navigation.navigate("CreateShoka", {
+          subjectId: id,
+          status: "first",
+        });
+        console.log("first");
+      }
+      if (isSecond) {
+        setisLoading(true);
+        await dispatch(getStudentBySubject(id, 2));
+        setisLoading(false);
+        props.navigation.navigate("CreateShoka", {
+          subjectId: id,
+          status: "second",
+        });
+      }
+      if (isThird) {
+        setisLoading(true);
+        await dispatch(getStudentBySubject(id, 3));
+        setisLoading(false);
+        props.navigation.navigate("CreateShoka", {
+          subjectId: id,
+          status: "third",
+        });
+      }
+    } catch (err) {
+      console.log(err.message);
+      setisLoading(false);
+      //props.navigation.navigate("selectType", { subjectId: selected });
+      Alert.alert("Error", err.message);
+      if (err.code == 401) {
+        // props.navigation.replace("Login");
+        await dispatch(logout());
+        await AsyncStorage.clear().then().then();
+        updates.reloadAsync();
+
+        return;
+      }
     }
   };
 
@@ -72,15 +106,12 @@ export default function SelectChance(props) {
           }}
         >
           <View style={{ width: "20%" }}>
-            <HeaderBackButton
-              onPress={() => props.navigation.toggleDrawer()}
-              backImage={() => (
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/menu.png")}
-                ></ImageBackground>
-              )}
-            ></HeaderBackButton>
+            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+              <ImageBackground
+                style={{ height: 25, width: 32 }}
+                source={require("../assets/images/menu.png")}
+              ></ImageBackground>
+            </TouchableOpacity>
           </View>
           <View style={{ width: "70%" }}>
             <Text style={{ color: "white", fontSize: 23 }}>
@@ -309,6 +340,12 @@ export default function SelectChance(props) {
             </Text>
           </TouchableOpacity>
         </View>
+        <Modal
+          visible={isLoading}
+          backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <ActivityIndicator size={60}></ActivityIndicator>
+        </Modal>
       </View>
     </View>
   );

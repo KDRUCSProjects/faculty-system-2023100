@@ -8,6 +8,7 @@ import {
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
 import { Divider } from "@ui-kitten/components";
+import { StatusBar } from "expo-status-bar";
 
 export default function Setting(props) {
   return (
@@ -19,6 +20,7 @@ export default function Setting(props) {
           width: "100%",
         }}
       >
+        <StatusBar hidden={false}></StatusBar>
         <View
           style={{
             height: "9%",
@@ -30,15 +32,12 @@ export default function Setting(props) {
           }}
         >
           <View style={{ width: "20%" }}>
-            <HeaderBackButton
-              onPress={() => props.navigation.toggleDrawer()}
-              backImage={() => (
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/menu.png")}
-                ></ImageBackground>
-              )}
-            ></HeaderBackButton>
+            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+              <ImageBackground
+                style={{ height: 25, width: 32 }}
+                source={require("../assets/images/menu.png")}
+              ></ImageBackground>
+            </TouchableOpacity>
           </View>
           <View style={{ width: "70%" }}>
             <Text style={{ color: "white", fontSize: 23 }}>Edit profile</Text>

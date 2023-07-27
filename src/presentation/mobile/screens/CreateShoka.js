@@ -28,6 +28,7 @@ import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import { useEffect } from "react";
 import { Modal } from "@ui-kitten/components/ui";
 import * as updates from "expo-updates";
+import { List } from "react-native-paper";
 
 export default function CreateShoka(props) {
   const subjectIdParam = props.route.params.subjectId;
@@ -44,12 +45,12 @@ export default function CreateShoka(props) {
 
   const [selectedStudent, setselectedStudent] = useState(null);
 
-  const [midTerm, setmidTerm] = useState("");
+  const [ProjectMarks, setProjectMarks] = useState("");
   const [assignments, setassignments] = useState("");
   const [finals, setfinals] = useState("");
   const [practicalMarks, setpracticalMarks] = useState("");
 
-  const [midTermError, setmidTermError] = useState(false);
+  const [ProjectMarksError, setProjectMarksError] = useState(false);
   const [assignmentsError, setassignmentsError] = useState(false);
   const [finalsError, setfinalsError] = useState(false);
   const [marksError, setmarksError] = useState(false);
@@ -66,9 +67,9 @@ export default function CreateShoka(props) {
 
   const [isLoading, setisLoading] = useState(false);
 
-  useEffect(() => {
-    ref.current.scrollToEnd();
-  }, [marksError]);
+  // useEffect(() => {
+  //   ref.current.scrollToEnd();
+  // }, [marksError]);
 
   const onSave = async () => {
     const numRegEx = /\b([0-9]|[1-9][0-9]|100)\b/;
@@ -78,13 +79,13 @@ export default function CreateShoka(props) {
       return;
     }
 
-    if (midTerm == "") {
-      setmidTermError("This field is required!");
+    if (ProjectMarks == "") {
+      setProjectMarksError("This field is required!");
       return;
     }
 
-    if (parseInt(midTerm) > 20) {
-      setmidTermError("midTerm marks should be between 0-20");
+    if (parseInt(ProjectMarks) > 20) {
+      setProjectMarksError("ProjectMarks marks should be between 0-20");
       return;
     }
 
@@ -117,7 +118,7 @@ export default function CreateShoka(props) {
       parseInt(practicalMarks) +
         parseInt(finals) +
         parseInt(assignments) +
-        parseInt(midTerm) >
+        parseInt(ProjectMarks) >
       100
     ) {
       setmarksError("Whole marks shouldn't be greater than 100");
@@ -128,8 +129,8 @@ export default function CreateShoka(props) {
       await dispatch(
         createShoka(
           subjectIdParam,
-          studentId,
-          midTerm,
+          selectedStudent,
+          ProjectMarks,
           assignments,
           finals,
           practicalMarks,
@@ -152,14 +153,16 @@ export default function CreateShoka(props) {
     setSelectedIndex(null);
     setselectedStudent(null);
     setselectedStudentIndex(null);
-    setmidTerm(null);
+    setProjectMarks(null);
     setassignments(null);
     setfinals(null);
     Toast.BOTTOM;
     Toast.show("Shoka Created", 2);
     props.navigation.goBack();
   };
+  const [expanded, setExpanded] = useState(true);
 
+  const handlePress = () => setExpanded(!expanded);
   return (
     <View style={styles.container}>
       <View
@@ -168,6 +171,7 @@ export default function CreateShoka(props) {
           height: "100%",
           width: "100%",
           justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
         <View
@@ -178,18 +182,16 @@ export default function CreateShoka(props) {
             flexDirection: "row",
             justifyContent: "flex-start",
             alignItems: "center",
+            width: "100%",
           }}
         >
           <View style={{ width: "20%" }}>
-            <HeaderBackButton
-              onPress={() => props.navigation.goBack()}
-              backImage={() => (
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/lessthan.png")}
-                ></ImageBackground>
-              )}
-            ></HeaderBackButton>
+            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+              <ImageBackground
+                style={{ height: 25, width: 32 }}
+                source={require("../assets/images/menu.png")}
+              ></ImageBackground>
+            </TouchableOpacity>
           </View>
           <View style={{ width: "60%", alignItems: "center" }}>
             <Text style={{ color: "white", fontSize: 23 }}>Create Shoka</Text>
@@ -243,33 +245,37 @@ export default function CreateShoka(props) {
                     justifyContent: "center",
                   }}
                 >
-                  <Select
+                  <ScrollView
+                    horizontal={true}
                     style={{
                       borderWidth: 1,
                       borderRadius: 4,
                       borderColor: "black",
                     }}
-                    placeholder="Choose Student"
-                    status={!selectedStudentErr ? "basic" : "danger"}
-                    size="large"
-                    value={selectedStudent}
-                    selectedIndex={selectedStudentIndex}
-                    onSelect={(index) => {
-                      setselectedStudent(students[index.row].studentName);
-                      setstudentId(students[index.row].studentId);
-                      setselectedStudentErr(false);
-                      return setselectedStudentIndex(index);
-                    }}
+                    showsHorizontalScrollIndicator={false}
                   >
-                    {students.map((student) => {
+                    {students?.map((student) => {
                       return (
-                        <SelectItem
+                        <TouchableOpacity
+                          style={{
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            borderColor: "black",
+                            margin: 5,
+                          }}
                           key={student.studentId}
-                          title={student.studentName}
-                        ></SelectItem>
+                          onPress={() => {
+                            console.log(student.studentId);
+                            setselectedStudentErr(false);
+                            setselectedStudent(student.studentId);
+                          }}
+                        >
+                          <Text> {student.studentId} </Text>
+                          <Text>{student.studentName}</Text>
+                        </TouchableOpacity>
                       );
                     })}
-                  </Select>
+                  </ScrollView>
                   {selectedStudentErr ? (
                     <Text style={{ color: "red" }}>{selectedStudentErr}</Text>
                   ) : (
@@ -294,7 +300,7 @@ export default function CreateShoka(props) {
                     justifyContent: "center",
                   }}
                 >
-                  <Text style={{ fontSize: 17 }}>Midterm Marks</Text>
+                  <Text style={{ fontSize: 17 }}>Project Marks</Text>
                 </View>
 
                 <View
@@ -306,7 +312,7 @@ export default function CreateShoka(props) {
                 >
                   <TextInput
                     style={{ height: 50 }}
-                    label={"Midterm Marks"}
+                    label={"Project Marks"}
                     mode="outlined"
                     textColor="black"
                     outlineColor="black"
@@ -316,16 +322,16 @@ export default function CreateShoka(props) {
                     keyboardType="number-pad"
                     inputMode="numeric"
                     maxLength={2}
-                    error={midTermError}
-                    value={midTerm}
+                    error={ProjectMarksError}
+                    value={ProjectMarks}
                     onChangeText={(text) => {
                       setmarksError(false);
-                      setmidTermError(false);
-                      setmidTerm(text);
+                      setProjectMarksError(false);
+                      setProjectMarks(text);
                     }}
                   ></TextInput>
-                  {midTermError ? (
-                    <Text style={{ color: "red" }}>{midTermError}</Text>
+                  {ProjectMarksError ? (
+                    <Text style={{ color: "red" }}>{ProjectMarksError}</Text>
                   ) : (
                     <View></View>
                   )}
@@ -517,34 +523,34 @@ export default function CreateShoka(props) {
             </View>
           </View>
         </ScrollView>
-      </View>
 
-      <Modal
-        visible={isLoading}
-        backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-      >
-        <ActivityIndicator size={60}></ActivityIndicator>
-      </Modal>
+        <Modal
+          visible={isLoading}
+          backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <ActivityIndicator size={60}></ActivityIndicator>
+        </Modal>
 
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() =>
-          Alert.alert("Save?", "Do you want save?", [
-            {
-              text: "No",
-              onPress: () => {
-                return;
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() =>
+            Alert.alert("Save?", "Do you want save?", [
+              {
+                text: "No",
+                onPress: () => {
+                  return;
+                },
               },
-            },
-            {
-              text: "Yes",
-              onPress: onSave,
-            },
-          ])
-        }
-      >
-        <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
-      </TouchableOpacity>
+              {
+                text: "Yes",
+                onPress: onSave,
+              },
+            ])
+          }
+        >
+          <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

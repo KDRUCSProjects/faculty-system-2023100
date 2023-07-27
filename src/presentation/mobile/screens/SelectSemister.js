@@ -22,46 +22,40 @@ import { getStudentBySubject } from "../store/actions/actions";
 import * as updates from "expo-updates";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../store/actions/actions";
+import SemisterItem from "./SemisterItem";
+import { useNavigation } from "@react-navigation/native";
 
-export default function SelectSubject(props) {
-  const semisterId = props.route.params.semisterId;
-  let subjects = useSelector((state) => state.MainReducer.subjects);
-  subjects = subjects?.filter((subject) => subject.semesterId == semisterId);
+const SelectSemister = (props) => {
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (event) => {
+      event.preventDefault();
+      Alert.alert("Exit", "Do you want Exit?", [
+        { text: "No", onPress: () => {} },
+        {
+          text: "Yes",
+          onPress: () => {
+            BackHandler.exitApp();
+          },
+        },
+      ]);
+    });
+  }, [navigation]);
 
-  subjects = subjects[0]?.subjects;
-  console.log(subjects);
-  const choice = props.route.params.choice;
+  const semisters = useSelector((state) => state.MainReducer.subjects);
+
   const dispatch = useDispatch();
   const [selected, setselected] = useState(null);
   const [isLoading, setisLoading] = useState(false);
 
   const onclick = async (id) => {
     console.log(id);
-    try {
-      if (choice == "takeAttendence") {
-        setisLoading(true);
-        await dispatch(getAttendence(id));
-        setisLoading(false);
-        props.navigation.navigate("selectType", { subjectId: id });
-      } else {
-        props.navigation.navigate("SelectChance", { subjectId: id });
-      }
-    } catch (error) {
-      setisLoading(false);
-      //props.navigation.navigate("selectType", { subjectId: selected });
-      Alert.alert("Error", error.message);
-      if (error.code == 401) {
-        // props.navigation.replace("Login");
-        await dispatch(logout());
-        await AsyncStorage.clear().then().then();
-        updates.reloadAsync();
 
-        return;
-      }
+    props.navigation.navigate("teacherScreen", { semisterId: id });
 
-      // return;
-    }
+    // return;
   };
+
   // const onNext = async () => {
   //   if (!selected) {
   //     Alert.alert("Error!", "One Subject should be selected");
@@ -89,7 +83,11 @@ export default function SelectSubject(props) {
             alignItems: "center",
           }}
         >
-          <View style={{ width: "20%" }}>
+          <View
+            style={{
+              width: "20%",
+            }}
+          >
             <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
               <ImageBackground
                 style={{ height: 25, width: 32 }}
@@ -103,6 +101,7 @@ export default function SelectSubject(props) {
             </Text>
           </View>
         </View>
+
         <Text
           style={{
             fontSize: 25,
@@ -111,9 +110,9 @@ export default function SelectSubject(props) {
             fontStyle: "italic",
           }}
         >
-          Choose a subject
+          Choose a Semister
         </Text>
-        <View style={{ height: "80%" }}>
+        <View style={{ height: "80%", width: "100%" }}>
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
@@ -124,14 +123,14 @@ export default function SelectSubject(props) {
             }}
             style={{}}
           >
-            {subjects?.map((subject, index) => (
-              <SelectSubjectItem
-                key={subject.subjectId}
+            {semisters?.map((semister, index) => (
+              <SemisterItem
+                key={semister.semesterId}
                 onClick={onclick}
-                selected={selected == subject.subjectId ? true : false}
-                subjectId={subject.subjectId}
-                subject={subject.subjectName}
-              ></SelectSubjectItem>
+                selected={selected == semister.semesterId ? true : false}
+                semisterId={semister.semesterId}
+                semisterName={semister.title}
+              ></SemisterItem>
             ))}
 
             <Modal
@@ -142,70 +141,10 @@ export default function SelectSubject(props) {
             </Modal>
           </ScrollView>
         </View>
-
-        {/* <View
-          style={{
-            height: "30%",
-            width: "90%",
-            flexDirection: "row",
-            alignItems: "flex-start",
-            marginTop: "10%",
-            justifyContent: "space-between",
-            marginHorizontal: 10,
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              backgroundColor: "blue",
-              height: 45,
-              width: 80,
-              borderRadius: 8,
-              padding: 10,
-              marginLeft: 15,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onPress={() => props.navigation.goBack()}
-          >
-            <Text
-              style={{
-                color: "white",
-                fontSize: 18,
-                textAlign: "center",
-                textAlignVertical: "center",
-              }}
-            >
-              Back
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: colors.primary,
-              height: 45,
-              width: 80,
-              borderRadius: 8,
-              padding: 10,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onPress={onNext}
-          >
-            <Text
-              style={{
-                color: "white",
-                fontSize: 18,
-                textAlign: "center",
-                textAlignVertical: "center",
-              }}
-            >
-              Next
-            </Text>
-          </TouchableOpacity>
-        </View> */}
       </View>
     </View>
   );
-}
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -215,3 +154,5 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 });
+
+export default SelectSemister;

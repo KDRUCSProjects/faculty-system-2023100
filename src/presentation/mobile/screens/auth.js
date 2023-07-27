@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Spinner } from "@ui-kitten/components";
+import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -50,12 +51,13 @@ export default function Auth(props) {
           token
         )
       );
-      props.navigation.navigate("teacherScreen");
+      props.navigation.navigate("selectSemister");
     };
     tryLogin();
   }, []);
   return (
     <View style={styles.container}>
+      <StatusBar hidden={true}></StatusBar>
       <Image
         source={require("../assets/images/university_student.png")}
         style={{ height: 500, width: 141, overflow: "hidden", margin: 10 }}

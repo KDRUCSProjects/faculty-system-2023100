@@ -87,7 +87,7 @@ export default MainDrawer = (props) => {
       onSelect={async (index) => {
         if (index.row === 0) {
           setselectedItem(0);
-          props.navigation.navigate("teacherScreen");
+          props.navigation.navigate("selectSemister");
         }
 
         if (index.row === 1) {
