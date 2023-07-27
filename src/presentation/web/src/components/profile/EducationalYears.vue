@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-auto pa-1 theShadow" max-width="500" :loading="loader">
     <add-educational-year>
-      <v-btn size="large" variant="tonal" color="dark" block prepend-icon="mdi-plus"> New Educational Year </v-btn>
+      <v-btn size="large" variant="tonal" color="dark" block prepend-icon="mdi-plus"> {{ $t('New Educational Year') }} </v-btn>
     </add-educational-year>
     <v-list>
       <div v-for="year in items" :key="year">
@@ -9,7 +9,7 @@
           <v-list-item-title class="font-weight-bold text-primary">
             {{ year.year }}
           </v-list-item-title>
-          <v-list-item-subtitle style="font-size: 13px"> Addition Date: {{ year.createdAt }} </v-list-item-subtitle>
+          <v-list-item-subtitle style="font-size: 13px"> {{ $t('Addition Date') }} : {{ year.createdAt }} </v-list-item-subtitle>
           <template v-slot:append>
             <!-- <v-btn color="error" icon="mdi-delete-outline" variant="text"></v-btn> -->
             <v-btn color="grey-lighten-1" icon="mdi-select" variant="text" @click="setOnGoingYear(0, year.year)"></v-btn>
@@ -19,7 +19,7 @@
           <v-list-item-title class="font-weight-bold">
             {{ year.year }}
           </v-list-item-title>
-          <v-list-item-subtitle style="font-size: 13px"> Addition Date: {{ year.createdAt }} </v-list-item-subtitle>
+          <v-list-item-subtitle style="font-size: 13px"> {{ $t('Addition Date') }} : {{ year.createdAt }} </v-list-item-subtitle>
           <template v-slot:append>
             <!-- <v-btn color="grey-lighten-1" icon="mdi-select-remove" variant="text" v-if="year"></v-btn> -->
 
@@ -72,21 +72,21 @@ export default {
 
       this.loader = false;
     },
-    async deleteYear(yearId) {
-      let res = await this.$refs.baseConfirmDialog.show({
-        warningTitle: 'Warning',
-        title: 'Are you sure you want to delete this Year?',
-        subtitle: yearId,
-        okButton: 'Yes',
-      });
+    // async deleteYear(yearId) {
+    //   let res = await this.$refs.baseConfirmDialog.show({
+    //     warningTitle: 'Warning',
+    //     title: 'Are you sure you want to delete this Year?',
+    //     subtitle: yearId,
+    //     okButton: 'Yes',
+    //   });
 
-      // If closed, return the function
-      if (!res) {
-        return false;
-      }
+    //   // If closed, return the function
+    //   if (!res) {
+    //     return false;
+    //   }
 
-      await this.$store.dispatch('years/deleteEducationalYearById', yearId);
-    },
+    //   await this.$store.dispatch('years/deleteEducationalYearById', yearId);
+    // },
   },
   computed: {
     items() {
