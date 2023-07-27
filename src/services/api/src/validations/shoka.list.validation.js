@@ -24,7 +24,6 @@ const updateShokaList = {
       assignment: Joi.number().min(0),
       finalMarks: Joi.number().min(0),
       practicalWork: Joi.number().min(0),
-      chance: Joi.number().integer().min(1).max(3),
     })
     .min(1),
 };

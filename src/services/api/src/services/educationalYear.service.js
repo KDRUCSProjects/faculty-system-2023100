@@ -86,7 +86,7 @@ const getEducationalYearByValue = (year) => {
  * @returns {Promise<EducationalYear>}
  */
 const getYearByPeriod = (period) => {
-  return EducationalYear.findOne({ where: { period: period } });
+  return EducationalYear.findOne({ where: { period } });
 };
 
 /**

@@ -20,6 +20,8 @@ const studentListRoutes = require('./student.list.routes');
 const teacherRoutes = require('./teachers.routes');
 const tabdiliRoutes = require('./tabdili.routes');
 const shokaRoutes = require('./shoka.routes');
+const badliAshaRoutes = require('./badli.asha.routes');
+const monfaqiRoutes = require('./monfaqi.routes');
 
 const router = express.Router();
 
@@ -95,6 +97,14 @@ const defaultRoutes = [
   {
     path: '/shoka',
     route: shokaRoutes,
+  },
+  {
+    path: '/badliAsha',
+    route: badliAshaRoutes,
+  },
+  {
+    path: '/monfaqi',
+    route: monfaqiRoutes,
   },
 ];
 

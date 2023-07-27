@@ -502,7 +502,7 @@ const createShokaInExcel = catchAsync(async (req, res) => {
   }
 
   const headerText = `د کمپيوټر ساينس پوهنځي د ${className} ټولګی د ${semesterName} سمسټر د (${subject.name})  مضمون استاد (${teacher.name})   مميز (      )  د ${chance} چانس ازموينی نمري`
-  const footerText = `په پورته شرح د (   ${className}     ) ټولګی د ${semesterName} سمسټر ۱۴۰۲ تحصیلي کال دنمرو شقه بدون د قلم وهنی او تراش څخه تر تيب او صحت لري.`;
+  const footerText = `په پورته شرح د (   ${className}     ) ټولګی د ${semesterName} سمسټر ${year.year} تحصیلي کال دنمرو شقه بدون د قلم وهنی او تراش څخه تر تيب او صحت لري.`;
 
   const filePath = path.join(__dirname, '../', 'storage', 'exportable', 'templates', 'shoka.xlsx');
 

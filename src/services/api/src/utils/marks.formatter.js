@@ -52,7 +52,7 @@ const marksFormatter = (arr) => {
           semester: Number(key),
           semesterCredits,
           semesterMarks: Number(semesterMarks.toFixed(3)),
-          percentage: String(Number((semesterMarks / semesterCredits).toFixed(3))) + '%',
+          percentage: Number((semesterMarks / semesterCredits).toFixed(3)),
           GPA: Number((semesterMarks / semesterPoints).toFixed(1)),
         });
       }
