@@ -262,6 +262,29 @@ components:
         attachment: file
         notes: 'Some Economics Problems'
 
+    Monfaqi:
+      type: object
+      properties:
+        id:
+          type: number
+        studentId: 
+          type: number
+        educationalYearId: 
+          type: number
+        regNumber: 
+          type: number
+        attachment: 
+          type: string
+        notes: 
+          type: string
+      example:
+        id: 1
+        studentId: 1
+        educationalYearId: 12
+        regNumber: 20
+        attachment: file
+        notes: 'Some Economics Problems'
+
     StudentList:
       type: object
       properties:

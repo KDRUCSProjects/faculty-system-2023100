@@ -13,7 +13,7 @@ function insertUsersIntoDatabase(userArray) {
 // Function to create educational years
 function createEducationalYears(currentYear) {
   for (let i = 0; i < 4; i++) {
-    educationalYearControler.createEducationalYear(currentYear + i)
+    educationalYearControler.createEducationalYear(currentYear + i);
   }
   console.log('Educational years created:', educationalYears);
 }
@@ -22,15 +22,15 @@ function createEducationalYears(currentYear) {
 function createUser(req, res) {
   const { currentEducationalYear } = req.body;
   const { accounts } = req.body;
-  createEducationalYears(createEducationalYears)
+  createEducationalYears(createEducationalYears);
   // const { error } = validateUser(req.body);
 
   // if (error) {
   //   return res.status(400).json({ error: error.details[0].message });
   // }
-  for (account in accounts){
-    console.log(account)
-    userControler.createUser(account)
+  for (account in accounts) {
+    console.log(account);
+    userControler.createUser(account);
   }
   // Assuming you have a function to insert the users into the database, you can do something like this:
   // insertUsersIntoDatabase(req.body);
@@ -40,7 +40,7 @@ function createUser(req, res) {
 
   // Assuming you have a function to create the educational years, you can do something like this:
 
-console.log("yesaer")
+  console.log('yesaer');
 
   res.status(200).json({ message: 'Users created successfully.' });
 }

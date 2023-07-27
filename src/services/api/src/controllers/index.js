@@ -14,3 +14,5 @@ module.exports.taajilController = require('./taajil.controller');
 module.exports.teacherController = require('./teacher.controller');
 module.exports.tabdiliController = require('./tabdili.controller');
 module.exports.shokaController = require('./shoka.controller');
+module.exports.badliAshaController = require('./badli.asha.controller');
+module.exports.monfaqiController = require('./monfaqi.controller');

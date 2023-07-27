@@ -131,14 +131,11 @@ module.exports = router;
  *                 type: number
  *               practicalWork:
  *                 type: number
- *               chance:
- *                 type: number
  *             example:
  *               projectMarks: 16
  *               assignment: 11
  *               finalMarks: 45
  *               practicalWork: 8
- *               chance: 2
  *     responses:
  *       "201":
  *         description: Created

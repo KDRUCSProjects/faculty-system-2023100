@@ -15,3 +15,4 @@ module.exports.studentListService = require('./student.list.service');
 module.exports.attendanceListService = require('./attendance.list.service');
 module.exports.teacherService = require('./teacher.service');
 module.exports.tabdiliService = require('./tabdili.service');
+module.exports.monfaqiService = require('./monfaqi.service');
