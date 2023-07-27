@@ -104,7 +104,7 @@ module.exports = router;
  *                 type: string
  *                 format: password
  *             example:
- *               email: fake@example.com
+ *               email: admin@example.com
  *               password: password1
  *     responses:
  *       "200":

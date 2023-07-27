@@ -172,6 +172,12 @@ module.exports = router;
  *           enum: [0,1]
  *         description: get system assistants (rest query will be ignored)
  *       - in: query
+ *         name: all
+ *         schema:
+ *           type: number
+ *           enum: [0,1]
+ *         description: get system assistants (rest query will be ignored)
+ *       - in: query
  *         name: name
  *         schema:
  *           type: string
