@@ -1,9 +1,8 @@
 <template>
   <v-toolbar color="dark">
-    <v-toolbar-title> {{$t('All Teachers')}} </v-toolbar-title>
-    <v-divider inset vertical></v-divider>
-    <v-spacer></v-spacer>
+    <v-toolbar-title> {{ $t('All Teachers') }} </v-toolbar-title>
 
+    <v-btn color="secondary" :variant="showAssistants ? 'flat' : 'tonal'" @click="toggleAssistants">Assistants</v-btn>
     <div class="mx-4">
       <add-teacher></add-teacher>
     </div>
@@ -17,6 +16,7 @@
           :lastName="teacher.lastName"
           :teacherId="teacher.id"
           :photo="teacher.photo"
+          :role="teacher.role"
         >
         </teacher-card>
       </v-sheet>
@@ -30,17 +30,27 @@
 import TeacherCard from '@/components/teachers/TeacherCard.vue';
 import AddTeacher from '@/components/teachers/dialogs/AddTeacher.vue';
 export default {
-  data: () => ({}),
+  data: () => ({
+    showAssistants: false,
+  }),
   components: {
     TeacherCard,
     AddTeacher,
   },
   computed: {
     teachers() {
+      if (this.showAssistants) {
+        return this.$store.getters['teachers/teachersAndAssistants'];
+      }
+
       return this.$store.getters['teachers/teachers'];
     },
   },
-  methods: {},
+  methods: {
+    toggleAssistants() {
+      this.showAssistants = !this.showAssistants;
+    },
+  },
   async mounted() {
     // Load teachers at app mount
     await this.$store.dispatch('teachers/loadTeachers');
