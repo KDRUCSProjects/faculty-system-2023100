@@ -1,8 +1,11 @@
 <template>
-  <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
+  <v-card
+    class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded"
+    :class="{ semesterCard: isOnGoing }"
+  >
     <!-- <span class="pro"> 120 Students </span> -->
     <span class="pro" v-if="isOnGoing">
-      <v-icon color="indigo-darken-2" size="x-large">mdi-check-circle</v-icon>
+      <v-icon color="indigo-darken-2" size="x-large">mdi-check-circle-outline</v-icon>
     </span>
 
     <v-card-title class="pb-0"
@@ -49,6 +52,8 @@ export default {
     isOnGoing() {
       const firstHalf = this.$store.getters['years/onGoingYear']?.firstHalf == true ? true : false;
 
+      // First check if currentSemesterYear matches this semesters year
+      if (this.year !== this.$store.getters['years/onGoingYear']?.year) return false;
       if (firstHalf) {
         return this.title % 2 !== 0 ? true : false;
       } else {
@@ -81,5 +86,9 @@ export default {
   position: absolute;
   top: 15px;
   left: 15px;
+}
+
+.semesterCard {
+  border: 1px dotted rgb(var(--v-theme-primary));
 }
 </style>
