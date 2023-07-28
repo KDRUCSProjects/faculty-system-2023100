@@ -6,25 +6,25 @@
       <template v-slot:activator="{ props }">
         <div v-bind="props">
           <slot>
-            <v-btn color="primary"> Update Subject </v-btn>
+            <v-btn color="primary"> {{ $t('Update Subject') }} </v-btn>
           </slot>
         </div>
       </template>
       <v-card class="pa-1" :loading="isLoading">
         <v-card-text>
           <v-form @submit.prevent="submitForm" ref="updateSubjectForm">
-            <v-text-field :rules="rules.name" v-model="name" variant="outlined" label="Subject Name"></v-text-field>
+            <v-text-field :rules="rules.name" v-model="name" variant="outlined" :label="$t('Subject Name')"></v-text-field>
             <v-text-field
               :rules="rules.credit"
               v-model="credit"
               type="number"
               variant="outlined"
-              label="Subject Credit"
+              :label="$t('Subject Credit')"
             ></v-text-field>
             <v-autocomplete
               v-model="teacherId"
               clearable
-              label="Select Teacher"
+              :label="$t('Select Teacher')"
               :items="teachers"
               variant="outlined"
               item-title="name"
@@ -35,8 +35,8 @@
           <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
         </v-card-text>
         <v-card-actions class="mx-4">
-          <v-btn @click="submitForm" variant="flat" :loading="isLoading">Update Subject</v-btn>
-          <v-btn @click="closeDialog" color="error">Cancel</v-btn>
+          <v-btn @click="submitForm" variant="flat" :loading="isLoading">{{ $t('Update Subject') }}</v-btn>
+          <v-btn @click="closeDialog" color="error">{{ $t('Cancel') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -79,8 +79,8 @@ export default {
     },
     rules() {
       return {
-        name: [(v) => !!v || 'Please enter Subject name'],
-        credit: [(v) => !!v || 'Please enter Credit Number'],
+        name: [(v) => !!v || this.$t('Please enter subject name')],
+        credit: [(v) => !!v || this.$t('Please enter subject credits')],
       };
     },
   },

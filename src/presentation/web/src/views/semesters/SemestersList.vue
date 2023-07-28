@@ -1,13 +1,13 @@
 <template>
   <v-toolbar color="dark">
-    <v-toolbar-title> Semesters </v-toolbar-title>
+    <v-toolbar-title> {{ $t('Semesters') }} </v-toolbar-title>
     <v-divider class="mx-4" inset vertical></v-divider>
     <v-spacer></v-spacer>
 
     <base-menu :items="halfs" @selected="setHalf" :theDefault="currentHalf"></base-menu>
 
     <base-select-year-dialog @select-year="setYear" :defaultYear="selectedYear">
-      {{ selectedYear ? `Year: ${selectedYear}` : 'Select Year' }}
+      {{ $t('Year') }}  {{ selectedYear ? selectedYear : $t('Select') }}
     </base-select-year-dialog>
   </v-toolbar>
   <v-row no-gutters>

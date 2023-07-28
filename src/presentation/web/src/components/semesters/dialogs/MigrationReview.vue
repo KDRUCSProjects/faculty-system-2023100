@@ -6,7 +6,7 @@
       <template v-slot:activator="{ props }">
         <div v-bind="props">
           <slot>
-            <v-btn color="primary"> Start Migration </v-btn>
+            <v-btn color="primary"> {{ $t('Start Migration') }} </v-btn>
           </slot>
         </div>
       </template>
@@ -19,13 +19,12 @@
                 <v-card-text class="d-flex justify-center align-center" style="height: 100vh">
                   <v-card-item class="text-center mx-auto">
                     <v-card-title class="text-h4 pb-2 text-uppercase font-weight-bold">
-                      Welcome to students migration
+                      {{ $t('Welcome to students migration') }}
                     </v-card-title>
-                    <v-card-title class="text-h4 pb-2 text-uppercase text-secondary font-weight-bold">Overview</v-card-title>
+                    <v-card-title class="text-h4 pb-2 text-uppercase text-secondary font-weight-bold">{{ $t('Overview') }}</v-card-title>
                     <v-card-subtitle class="mt-4">
-                      Please review your migration before submitting the process. <br />Here you will see which students are
-                      eligible for the next semester.<br />
-                      Take some time and review all students
+                      {{ $t('Please review your migration before submitting the process.') }} <br />{{ $t('Here you will see which students are eligible for the next semester.') }}<br />
+                      {{ $t('Take some time and review all students') }}
                     </v-card-subtitle>
                     <v-btn
                       @click="reviewStudentsEligibility"
@@ -33,7 +32,7 @@
                       class="mt-5 px-12"
                       append-icon="mdi-arrow-right-circle"
                       :loading="loading"
-                      >Begin Review</v-btn
+                      >{{ $t('Begin Review') }}</v-btn
                     >
                     <br />
                     <v-btn
@@ -64,14 +63,14 @@
               <v-card class="theShadow pa-5">
                 <v-card-text>
                   <v-card-item>
-                    <v-card-title class="text-h5 text-uppercase">All students</v-card-title>
+                    <v-card-title class="text-h5 text-uppercase">{{ $t('All Students') }}</v-card-title>
                     <v-card-subtitle
-                      >Review all the student of this semester and then hit the migrate button</v-card-subtitle
+                      >{{ $t('Review all the student of this semester and then hit the migrate button') }}</v-card-subtitle
                     >
                   </v-card-item>
                   <v-data-table-virtual
                     :loading="loading"
-                    loading-text="Loading students please wait"
+                    :loading-text="$t('Loading students please wait')"
                     height="500"
                     :headers="headers"
                     :items="students"
@@ -133,9 +132,9 @@
                 </v-card-text>
                 <v-card-actions class="mx-2">
                   <v-spacer></v-spacer>
-                  <v-btn variant="outlined" color="error" @click="cancelMigration">Cancel</v-btn>
+                  <v-btn variant="outlined" color="error" @click="cancelMigration">{{ $t('Cancel') }}</v-btn>
                   <v-btn variant="flat" @click="promoteSemesterStudents" :loading="migrateLoader"
-                    >Proceed with Migration</v-btn
+                    >{{ $t('Proceed with Migration') }}</v-btn
                   >
                 </v-card-actions>
               </v-card>
@@ -226,9 +225,9 @@ export default {
     },
     async promoteSemesterStudents() {
       let res = await this.$refs.baseConfirmDialog.show({
-        warningTitle: 'Warning',
-        title: 'Are you sure you want to continue migration?',
-        okButton: 'Yes, continue',
+        warningTitle: this.$t('Warning'),
+        title: this.$t('Are you sure you want to continue migration?'),
+        okButton: this.$t('Yes, continue'),
       });
 
       // If closed, return the function

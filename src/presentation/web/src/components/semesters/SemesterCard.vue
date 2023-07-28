@@ -6,15 +6,15 @@
     </span>
 
     <v-card-title class="pb-0"
-      ><span class="text-secondary">{{ rankSemester(title) }}</span> Semester</v-card-title
+      ><span class="text-secondary">{{ rankSemester(title) }}</span> {{ $t('Semester') }}</v-card-title
     >
-    <v-card-subtitle class="py-0 my-0" style="font-family: monospace"> {{ subjectsCount }} subjects </v-card-subtitle>
+    <v-card-subtitle class="py-0 my-0" style="font-family: monospace"> {{ subjectsCount }} {{ $t('Subjects') }} </v-card-subtitle>
     <v-divider></v-divider>
-    <v-card-subtitle class="text-primary">{{ year }} year</v-card-subtitle>
+    <v-card-subtitle class="text-primary">{{ year }} {{ $t('Year') }}</v-card-subtitle>
 
     <v-card-actions class="mt-3 px-2">
       <!-- <v-btn color="primary" variant="elevated">Profile</v-btn> -->
-      <v-btn color="primary" block variant="tonal" @click="viewSemester(semesterId)"> View Semester</v-btn>
+      <v-btn color="primary" block variant="tonal" @click="viewSemester(semesterId)"> {{ $t('View Semester') }}</v-btn>
     </v-card-actions>
 
     <!-- All Dialogs -->
