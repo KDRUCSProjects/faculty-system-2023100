@@ -34,9 +34,3 @@ export default createVuetify({
     },
   },
 });
-
-// Some best hex colors to choose from
-// 1. #231E39
-// 2. #3F51B5
-// 3. #FF5722 (Deep Orange)
-// 5E2BFF
