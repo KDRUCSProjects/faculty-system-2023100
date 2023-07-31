@@ -87,6 +87,7 @@ const getStudentMarks = (conditions) => {
     shokalist.projectMarks,
     shokalist.assignment,
     shokalist.practicalWork,
+    shokalist.chance,
     shokalist.finalMarks,
     shokalist.createdAt,
     shokalist.deletedAt,
@@ -108,7 +109,6 @@ const getStudentMarks = (conditions) => {
     { type: QueryTypes.SELECT }
   );
 };
-
 
 /**
  * get subject marks
@@ -142,7 +142,7 @@ const findFailStudents = (shokaId, chance) => {
    `,
     { type: QueryTypes.SELECT }
   );
-}
+};
 
 /**
  * get subject marks
@@ -163,7 +163,7 @@ const getShokaMarks = (semesterId, shokaId) => {
     AND  student.id NOT IN (select studentId from shokalists where shokaId = ${shokaId});
     `,
     { type: QueryTypes.SELECT }
-  )
+  );
   return ShokaList.findAll({
     where: { shokaId, chance },
     include: [
@@ -185,11 +185,16 @@ const getShokaMarks = (semesterId, shokaId) => {
 const getSubjectMarks = (conditions) => {
   return sequelize.query(
     `
-    select shokalist.finalMarks as finalMarks,
+    select 
+    shokalist.id as shokaListId,
+    shokalist.finalMarks as finalMarks,
     shokalist.assignment as assignment, 
     shokalist.practicalWork as practicalWork,
     shokalist.projectMarks as projectMarks,
     student.fullName as fullName, 
+    student.kankorId as kankorId,
+    student.grandFatherName as grandFatherName,
+    student.photo as photo,
     student.fatherName as fatherName,
     student.id as studentId
     from shokalists as shokalist 

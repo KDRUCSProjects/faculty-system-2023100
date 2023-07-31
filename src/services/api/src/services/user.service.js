@@ -18,11 +18,19 @@ const createUser = async (userBody) => {
 };
 
 /**
- * get all users
+ * get all users(teachers)
  * @returns {Promise<QueryResult>}
  */
 const queryUsers = () => {
   return User.findAll({ where: { role: 'user' }, order: [['createdAt', 'ASC']] });
+};
+
+/**
+ * get all users teachers + assistants
+ * @returns {Promise<QueryResult>}
+ */
+const allUsers = () => {
+  return User.findAll({ where: { role: ['user', 'execManager', 'teachingManager'] }, order: [['createdAt', 'ASC']] });
 };
 
 /**
@@ -121,4 +129,5 @@ module.exports = {
   updateUser,
   getTeacher,
   systemUsers,
+  allUsers,
 };

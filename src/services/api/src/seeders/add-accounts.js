@@ -32,15 +32,6 @@ module.exports = {
           createdAt: toMysqlFormat(),
           updatedAt: toMysqlFormat(),
         },
-        {
-          name: 'TheTeacher',
-          email: 'teacher@example.com',
-          password: '$2a$08$Kf7rr0FazlKmp1Xr5SJ3SOAgafLae821r38VrV9tLJyObZ1zapBny',
-          // Password: password1 (Only for development)
-          role: 'teacher',
-          createdAt: toMysqlFormat(),
-          updatedAt: toMysqlFormat(),
-        },
       ],
       {}
     );

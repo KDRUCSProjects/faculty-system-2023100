@@ -1,5 +1,12 @@
 <template>
-  <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
+  <v-card
+    class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded"
+    :class="{ border: role !== 'user' }"
+  >
+    <span class="pro" v-if="role !== 'user'">
+      <v-icon color="success" size="x-large">mdi-check-decagram</v-icon>
+    </span>
+
     <!-- <span class="pro">  </span> -->
     <v-avatar class="my-3" size="150" color="secondary" variant="tonal">
       <v-img v-if="photo" :src="`${imagesResource}/${photo}`" alt="user" />
@@ -8,14 +15,21 @@
       </div>
     </v-avatar>
     <v-card-title class="pb-0">{{ fullName }}</v-card-title>
-    <v-card-subtitle class="py-0 my-0" style="font-family: monospace">
-      {{ lastName || 'Teacher' }}
+    <v-card-subtitle class="py-0 my-0" style="font-family: monospace" v-if="role === 'teachingManager'">
+      {{ 'Teaching Manager' }}
+    </v-card-subtitle>
+    <v-card-subtitle class="py-0 my-0" style="font-family: monospace" v-else-if="role === 'execManager'">
+      {{ 'Executive Manager' }}
+    </v-card-subtitle>
+    <v-card-subtitle class="py-0 my-0" style="font-family: monospace" v-else>
+      {{ lastName || 'N/A' }}
     </v-card-subtitle>
     <v-divider></v-divider>
     <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle>
 
     <v-card-actions class="mt-1 px-1">
       <v-btn
+        v-if="role === 'user'"
         append-icon="mdi-location-enter"
         color="primary"
         variant="tonal"
@@ -25,12 +39,26 @@
       >
         {{ $t('View Profile') }}
       </v-btn>
+      <update-teacher v-if="role === 'execManager'" :isAssistant="true" :teacherId="teacherId" activator-color="text">
+        <v-btn variant="tonal" color="primary" class="px-6 mb-1" prepend-icon="mdi-account" block>
+          {{ $t('Update Account') }}
+        </v-btn>
+      </update-teacher>
+      <update-teacher v-if="role === 'teachingManager'" :isAssistant="true" :teacherId="teacherId" activator-color="text">
+        <v-btn variant="tonal" color="primary" class="px-6 mb-1" prepend-icon="mdi-account" block>
+          {{ $t('Update Account') }}
+        </v-btn>
+      </update-teacher>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
+import UpdateTeacher from './dialogs/UpdateTeacher.vue';
 export default {
+  components: {
+    UpdateTeacher,
+  },
   props: {
     teacherId: {
       type: Number,
@@ -50,6 +78,9 @@ export default {
       type: String,
       default: 'm@example.com',
     },
+    role: {
+      type: String,
+    },
   },
   computed: {
     abbreviation() {
@@ -63,15 +94,9 @@ export default {
 
 <style scoped>
 .pro {
-  color: #231e39;
-  background-color: #febb0b;
-  border-radius: 3px;
-  font-size: 14px;
-  font-weight: bold;
-  padding: 3px 7px;
   position: absolute;
-  top: 30px;
-  left: 30px;
+  top: 20px;
+  left: 20px;
 }
 
 .theShadow {

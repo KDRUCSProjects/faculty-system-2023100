@@ -16,3 +16,5 @@ module.exports.teacherValidation = require('./teachers.validation');
 module.exports.tabdiliValidation = require('./tabdili.validation');
 module.exports.shokaValidation = require('./shoka.validation');
 // module.exports.firstUserValidation = require('./firstUser.Validation');
+module.exports.badliAshaValidation = require('./badli.asha.validation');
+module.exports.monfaqiValidation = require('./monfaqi.validation');

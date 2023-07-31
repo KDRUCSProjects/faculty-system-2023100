@@ -9,11 +9,15 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const getUsers = catchAsync(async (req, res) => {
+  if (req.query.all) {
+    let result = await userService.allUsers();
+    return res.status(httpStatus.OK).send(result);
+  }
   if (req.query.assistants) {
-    console.log('binto');
     let result = await userService.systemUsers();
     return res.status(httpStatus.OK).send(result);
   }
+  // Default teachers only
   const result = await userService.queryUsers();
   res.status(httpStatus.OK).send(result);
 });

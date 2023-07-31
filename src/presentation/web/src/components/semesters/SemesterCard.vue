@@ -1,6 +1,9 @@
 <template>
   <v-card class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded">
     <!-- <span class="pro"> 120 Students </span> -->
+    <span class="pro" v-if="isOnGoing">
+      <v-icon color="indigo-darken-2" size="x-large">mdi-check-circle</v-icon>
+    </span>
 
     <v-card-title class="pb-0"
       ><span class="text-secondary">{{ rankSemester(title) }}</span> Semester</v-card-title
@@ -42,6 +45,17 @@ export default {
       type: Number,
     },
   },
+  computed: {
+    isOnGoing() {
+      const firstHalf = this.$store.getters['years/onGoingYear']?.firstHalf == true ? true : false;
+
+      if (firstHalf) {
+        return this.title % 2 !== 0 ? true : false;
+      } else {
+        return this.title % 2 === 0 ? true : false;
+      }
+    },
+  },
   methods: {
     viewSemester(semesterId) {
       this.$router.push({
@@ -62,4 +76,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.pro {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+</style>

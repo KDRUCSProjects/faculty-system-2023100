@@ -137,7 +137,7 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- * 
+ *
  *   patch:
  *     summary: set new fields of EducationalYear by id or value.
  *     description: set new fields of EducationalYear by id or value.
