@@ -20,7 +20,7 @@ import {
   checkPassword,
   updateAccount,
 } from "../store/actions/actions";
-import Toast from "react-native-simple-toast";
+import Toast from "react-native-root-toast";
 import { Modal } from "@ui-kitten/components";
 import * as updates from "expo-updates";
 
@@ -102,8 +102,13 @@ export default function ChangePassword(props) {
       Alert.alert("Sorry!", e.message);
       return;
     }
-    Toast.BOTTOM;
-    Toast.show("Password updated", 2);
+    let toast = Toast.show("Password updated!", {
+      duration: Toast.durations.LONG,
+    });
+
+    setTimeout(function hideToast() {
+      Toast.hide(toast);
+    }, 2000);
     props.navigation.goBack();
   };
 

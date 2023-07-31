@@ -24,6 +24,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../store/actions/actions";
 import SemisterItem from "./SemisterItem";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 const SelectSemister = (props) => {
   const navigation = useNavigation();
@@ -73,9 +74,10 @@ const SelectSemister = (props) => {
           width: "100%",
         }}
       >
+        <StatusBar hidden={false}></StatusBar>
         <View
           style={{
-            height: "9%",
+            height: 60,
             marginTop: "7%",
             backgroundColor: colors.primary,
             flexDirection: "row",

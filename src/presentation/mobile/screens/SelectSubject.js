@@ -81,7 +81,7 @@ export default function SelectSubject(props) {
       >
         <View
           style={{
-            height: "9%",
+            height: 60,
             marginTop: "7%",
             backgroundColor: colors.primary,
             flexDirection: "row",

@@ -97,7 +97,7 @@ export default function SelectChance(props) {
       >
         <View
           style={{
-            height: "9%",
+            height: 60,
             marginTop: "7%",
             backgroundColor: colors.primary,
             flexDirection: "row",

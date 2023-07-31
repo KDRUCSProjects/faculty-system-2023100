@@ -18,7 +18,7 @@ import { useState } from "react";
 import { updateAccount } from "../store/actions/actions";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import Toast from "react-native-simple-toast";
+import Toast from "react-native-root-toast";
 import { Modal } from "@ui-kitten/components/ui";
 import * as FileSystem from "expo-file-system";
 import * as updates from "expo-updates";
@@ -64,6 +64,7 @@ export default function AccountInfo(props) {
   const onGallerry = async () => {
     const hasPermission = await askPermission();
     if (!hasPermission) {
+      Alert.alert("Error!", "files read Permission required");
       return;
     }
 
@@ -72,7 +73,7 @@ export default function AccountInfo(props) {
       aspect: [16, 12],
       quality: 0.7,
     });
-    if (!image.cancelled) {
+    if (!image.canceled) {
       const getFileSize = async (uri) => {
         let fileInfo = await FileSystem.getInfoAsync(uri);
         console.log(fileInfo);
@@ -106,11 +107,11 @@ export default function AccountInfo(props) {
       aspect: [16, 12],
       quality: 0.7,
     });
-    if (!image.cancelled) {
+    if (!image.canceled) {
       const getFileSize = async (uri) => {
         let fileInfo = await FileSystem.getInfoAsync(uri);
         console.log(fileInfo);
-        if (fileInfo.size / 1024 / 1024 > 2097152) {
+        if (fileInfo.size > 2097152) {
           return false;
         } else {
           return true;
@@ -156,9 +157,13 @@ export default function AccountInfo(props) {
       }
       Alert.alert("Sorry!", e.message);
     }
+    let toast = Toast.show("Account updated!", {
+      duration: Toast.durations.LONG,
+    });
 
-    Toast.BOTTOM;
-    Toast.show("Account info updated", 2);
+    setTimeout(function hideToast() {
+      Toast.hide(toast);
+    }, 2000);
     props.navigation.goBack();
   };
 
