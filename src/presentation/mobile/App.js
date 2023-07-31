@@ -18,6 +18,7 @@ import GetInfo from "./store/reducers/getInfo";
 import * as fonts from "expo-font";
 import studentsBySubject from "./store/reducers/studentsBySubject";
 import { LogBox } from "react-native";
+import { RootSiblingParent } from "react-native-root-siblings";
 LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
 
@@ -42,7 +43,9 @@ export default function App() {
       >
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Provider store={store}>
-            <NavWrapper></NavWrapper>
+            <RootSiblingParent>
+              <NavWrapper></NavWrapper>
+            </RootSiblingParent>
           </Provider>
         </GestureHandlerRootView>
       </ApplicationProvider>

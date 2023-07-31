@@ -45,7 +45,7 @@ export default function TeacherScreen(props) {
       <StatusBar hidden={false}></StatusBar>
       <View
         style={{
-          height: "9%",
+          height: 60,
           marginTop: "7%",
           backgroundColor: colors.primary,
           flexDirection: "row",

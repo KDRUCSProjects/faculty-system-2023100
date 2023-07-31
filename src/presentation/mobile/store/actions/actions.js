@@ -273,7 +273,7 @@ export const updateAccount = (userName, lastName, email, photo) => {
     const data = await updateResp.json();
     console.log(data);
 
-    if (updateResp.status != 202) {
+    if (!updateResp.ok) {
       const error = new Error(data.message);
       error.code = data.code;
       throw error;

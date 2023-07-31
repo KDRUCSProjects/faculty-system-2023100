@@ -29,7 +29,7 @@ import { HeaderBackButton } from "@react-navigation/stack";
 import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { saveAttendence } from "../store/actions/actions";
-import Toast from "react-native-simple-toast";
+import Toast from "react-native-root-toast";
 import { logout } from "../store/actions/actions";
 import { Modal } from "@ui-kitten/components";
 import * as updates from "expo-updates";
@@ -86,8 +86,13 @@ export default function Attendence(props) {
       }
     }
 
-    Toast.BOTTOM;
-    Toast.show("Attendence updated", 2);
+    let toast = Toast.show("Attendence updated!", {
+      duration: Toast.durations.LONG,
+    });
+
+    setTimeout(function hideToast() {
+      Toast.hide(toast);
+    }, 2000);
     props.navigation.navigate("selectSemister");
   };
 
@@ -102,7 +107,7 @@ export default function Attendence(props) {
       >
         <View
           style={{
-            height: "9%",
+            height: 60,
             marginTop: "7%",
             backgroundColor: colors.primary,
             flexDirection: "row",
