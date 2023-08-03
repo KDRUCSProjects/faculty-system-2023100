@@ -12,21 +12,29 @@ import { Divider } from "react-native-paper";
 export default function role(props) {
   const [role, setrole] = useState("Teacher");
 
-  const navigation = useNavigation();
   useEffect(() => {
-    navigation.addListener("beforeRemove", (event) => {
-      event.preventDefault();
-      Alert.alert("Exit", "Do you want Exit?", [
-        { text: "No", onPress: () => {} },
-        {
-          text: "Yes",
-          onPress: () => {
-            BackHandler.exitApp();
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        Alert.alert("Exit!", "Do you want Exit?", [
+          {
+            text: "No",
+            onPress: () => {
+              return;
+            },
           },
-        },
-      ]);
-    });
-  }, [navigation]);
+          {
+            text: "Yes",
+            onPress: () => {
+              BackHandler.exitApp();
+            },
+          },
+        ]);
+        return true;
+      }
+    );
+    return () => backHandler.remove();
+  }, []);
 
   const onTeacher = () => {
     props.navigation.navigate("Login");
@@ -47,14 +55,20 @@ export default function role(props) {
         <Text style={styles.text}>Please select your role in University</Text>
 
         <View style={styles.roleContainer}>
-          <TouchableWithoutFeedback onPress={onTeacher} style={styles.roleItem}>
+          <TouchableWithoutFeedback
+            onPress={onTeacher}
+            style={styles.roleItem}
+          >
             <ImageBackground
               style={{ height: 150, width: 150 }}
               source={require("../assets/images/teacher.png")}
             ></ImageBackground>
             <Text style={styles.text}>Teacher</Text>
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={onStudent} style={styles.roleItem}>
+          <TouchableWithoutFeedback
+            onPress={onStudent}
+            style={styles.roleItem}
+          >
             <ImageBackground
               style={{ height: 150, width: 150 }}
               source={require("../assets/images/student.png")}

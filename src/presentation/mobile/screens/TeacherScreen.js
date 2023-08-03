@@ -17,8 +17,10 @@ import { useEffect } from "react";
 import { Layout, TopNavigation, Divider } from "@ui-kitten/components";
 import colors from "../constants/colors";
 import { StatusBar } from "expo-status-bar";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function TeacherScreen(props) {
+  BackHandlerChild();
   const username = useSelector((state) => state.MainReducer.userName);
   const semisterId = props.route.params.semisterId;
 

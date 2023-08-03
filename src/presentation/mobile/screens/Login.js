@@ -24,7 +24,7 @@ import { useTogglePasswordVisibility } from "../hooks/useTogglePasswordVisibilit
 import colors from "../constants/colors";
 import { useEffect } from "react";
 import { ActivityIndicator, shadow } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import {
   Layout,
   TopNavigation,
@@ -61,45 +61,29 @@ export default Login = (props) => {
   const [emailError, setemailError] = useState(false);
   const [passwordError, setpasswordError] = useState(false);
 
-  // const navigation = useNavigation();
-  // useEffect(() => {
-  //   navigation.addListener("beforeRemove", (event) => {
-  //     event.preventDefault();
-  //     Alert.alert("Exit!", "Do you want Exit?", [
-  //       {
-  //         text: "No",
-  //         onPress: () => {
-  //           return;
-  //         },
-  //       },
-  //       {
-  //         text: "Yes",
-  //         onPress: () => {
-  //           BackHandler.exitApp();
-  //         },
-  //       },
-  //     ]);
-  //   });
-  // }, [navigation]);
-
   useEffect(() => {
-    const backAction = () => {
-      Alert.alert("Exit!", "Are you sure you want to Exit?", [
-        {
-          text: "No",
-          onPress: () => null,
-          style: "cancel",
-        },
-        { text: "YES", onPress: () => BackHandler.exitApp() },
-      ]);
-      return true;
-    };
-
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
-      backAction
+      () => {
+        if (props.navigation.isFocused()) {
+          Alert.alert("Exit!", "Do you want Exit?", [
+            {
+              text: "No",
+              onPress: () => {
+                return;
+              },
+            },
+            {
+              text: "Yes",
+              onPress: () => {
+                BackHandler.exitApp();
+              },
+            },
+          ]);
+        }
+        return true;
+      }
     );
-
     return () => backHandler.remove();
   }, []);
 
@@ -148,7 +132,9 @@ export default Login = (props) => {
       return;
     }
 
-    props.navigation.navigate("selectSemister");
+    props.navigation.dispatch(
+      CommonActions.reset({ index: 0, routes: [{ name: "selectSemister" }] })
+    ); // navigate("selectSemister");
     setEmail("");
     setPassword("");
   };
@@ -237,101 +223,95 @@ export default Login = (props) => {
           <StatusBar hidden={true}></StatusBar>
 
           <View style={{ height: 250 }}>
-            <ScrollView
-              contentContainerStyle={{
-                flexGrow: 1,
+            <View
+              style={{
+                width: "100%",
+                height: 250,
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <View
-                style={{
-                  width: "100%",
-                  height: 200,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <View style={styles.inputFieldsContainer}>
-                  <View
-                    style={[
-                      styles.inputContainer,
-                      {
-                        borderColor: emailError ? "red" : "white",
-                        borderWidth: emailError ? 1.8 : 0,
-                      },
-                    ]}
-                  >
-                    <TextInput
-                      style={styles.inputField}
-                      placeholder="Email"
-                      autoCapitalize="none"
-                      onChangeText={(email) => {
-                        setEmail(email);
-                        setemailError(false);
-                      }}
-                      value={email}
-                    />
+              <View style={styles.inputFieldsContainer}>
+                <View
+                  style={[
+                    styles.inputContainer,
+                    {
+                      borderColor: emailError ? "red" : "white",
+                      borderWidth: emailError ? 1.8 : 0,
+                    },
+                  ]}
+                >
+                  <TextInput
+                    style={styles.inputField}
+                    placeholder="Email"
+                    autoCapitalize="none"
+                    onChangeText={(email) => {
+                      setEmail(email);
+                      setemailError(false);
+                    }}
+                    value={email}
+                  />
 
+                  <MaterialCommunityIcons
+                    style={{ marginRight: "2%" }}
+                    name={"account"}
+                    size={25}
+                    color="#232323"
+                  />
+                </View>
+                <View style={{ width: "90%" }}>
+                  {emailError ? (
+                    <Text style={styles.errorText}>{emailError}</Text>
+                  ) : (
+                    <></>
+                  )}
+                </View>
+                <View
+                  style={[
+                    styles.inputContainer,
+                    {
+                      borderColor: passwordError ? "red" : "white",
+                      borderWidth: passwordError ? 1.8 : 0,
+                    },
+                  ]}
+                >
+                  <TextInput
+                    style={styles.inputField}
+                    name="password"
+                    placeholder="Password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    textContentType="newPassword"
+                    secureTextEntry={passwordVisibility}
+                    value={password}
+                    onSubmitEditing={onLogin}
+                    returnKeyType={"send"}
+                    enablesReturnKeyAutomatically
+                    onChangeText={(text) => {
+                      setPassword(text);
+                      setpasswordError(false);
+                    }}
+                  />
+                  <Pressable
+                    onPress={handlePasswordVisibility}
+                    style={{ marginRight: "2%" }}
+                  >
                     <MaterialCommunityIcons
-                      style={{ marginRight: "2%" }}
-                      name={"account"}
+                      name={rightIcon}
                       size={25}
                       color="#232323"
                     />
-                  </View>
-                  <View style={{ width: "90%" }}>
-                    {emailError ? (
-                      <Text style={styles.errorText}>{emailError}</Text>
-                    ) : (
-                      <></>
-                    )}
-                  </View>
-                  <View
-                    style={[
-                      styles.inputContainer,
-                      {
-                        borderColor: passwordError ? "red" : "white",
-                        borderWidth: passwordError ? 1.8 : 0,
-                      },
-                    ]}
-                  >
-                    <TextInput
-                      style={styles.inputField}
-                      name="password"
-                      placeholder="Password"
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      textContentType="newPassword"
-                      secureTextEntry={passwordVisibility}
-                      value={password}
-                      onSubmitEditing={onLogin}
-                      returnKeyType={"send"}
-                      enablesReturnKeyAutomatically
-                      onChangeText={(text) => {
-                        setPassword(text);
-                        setpasswordError(false);
-                      }}
-                    />
-                    <Pressable
-                      onPress={handlePasswordVisibility}
-                      style={{ marginRight: "2%" }}
-                    >
-                      <MaterialCommunityIcons
-                        name={rightIcon}
-                        size={25}
-                        color="#232323"
-                      />
-                    </Pressable>
-                  </View>
-                  <View style={{ width: "90%" }}>
-                    {passwordError ? (
-                      <Text style={styles.errorText}>{passwordError}</Text>
-                    ) : (
-                      <></>
-                    )}
-                  </View>
+                  </Pressable>
+                </View>
+                <View style={{ width: "90%" }}>
+                  {passwordError ? (
+                    <Text style={styles.errorText}>{passwordError}</Text>
+                  ) : (
+                    <></>
+                  )}
                 </View>
               </View>
-            </ScrollView>
+            </View>
           </View>
         </View>
 

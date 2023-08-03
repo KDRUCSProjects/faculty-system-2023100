@@ -13,8 +13,7 @@ import { getAttendence, loadSubjects } from "../store/actions/actions";
 import { useEffect } from "react";
 import { Button } from "react-native-paper";
 import colors from "../constants/colors";
-import { HeaderBackButton } from "@react-navigation/stack";
-import SubjectItem from "./SubjectItem";
+
 import SelectSubjectItem from "./SelectSubjectItem";
 import { useState } from "react";
 import { Modal } from "@ui-kitten/components";
@@ -22,14 +21,17 @@ import { getStudentBySubject } from "../store/actions/actions";
 import * as updates from "expo-updates";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../store/actions/actions";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function SelectSubject(props) {
   const semisterId = props.route.params.semisterId;
   let subjects = useSelector((state) => state.MainReducer.subjects);
-  subjects = subjects?.filter((subject) => subject.semesterId == semisterId);
+  if (subjects) {
+    subjects = subjects?.filter((subject) => subject.semesterId == semisterId);
 
-  subjects = subjects[0]?.subjects;
-  console.log(subjects);
+    subjects = subjects[0]?.subjects;
+  }
+
   const choice = props.route.params.choice;
   const dispatch = useDispatch();
   const [selected, setselected] = useState(null);
@@ -43,8 +45,10 @@ export default function SelectSubject(props) {
         await dispatch(getAttendence(id));
         setisLoading(false);
         props.navigation.navigate("selectType", { subjectId: id });
-      } else {
+      } else if (choice == "createShoka") {
         props.navigation.navigate("SelectChance", { subjectId: id });
+      } else {
+        return;
       }
     } catch (error) {
       setisLoading(false);

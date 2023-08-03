@@ -33,8 +33,10 @@ import Toast from "react-native-root-toast";
 import { logout } from "../store/actions/actions";
 import { Modal } from "@ui-kitten/components";
 import * as updates from "expo-updates";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function Attendence(props) {
+  BackHandlerChild();
   const childRef = useRef(null);
   var [offSetX, setOffSetX] = useState(0);
   const scrollRef = useRef({});

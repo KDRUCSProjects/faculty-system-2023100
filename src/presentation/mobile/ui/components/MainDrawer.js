@@ -101,6 +101,7 @@ export default MainDrawer = (props) => {
         }
 
         if (index.row === 3) {
+          setselectedItem(0);
           props.navigation.navigate("Login");
           await dispatch(logout());
           await AsyncStorage.clear().then().then();

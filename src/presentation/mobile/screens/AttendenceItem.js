@@ -26,10 +26,12 @@ import * as updates from "expo-updates";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { logout } from "../store/actions/actions";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 const { height, width } = Dimensions.get("window");
 
 const AttendenceItem = (props, ref) => {
+  BackHandlerChild();
   const indexprop = props.index;
   const students = useSelector((state) => state.studentReducer.students);
   const type = props.type;
