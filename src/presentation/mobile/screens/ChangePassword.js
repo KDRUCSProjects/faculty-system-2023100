@@ -25,8 +25,10 @@ import { Modal } from "@ui-kitten/components";
 import * as updates from "expo-updates";
 
 import { logout } from "../store/actions/actions";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function ChangePassword(props) {
+  BackHandlerChild();
   const username = useSelector((state) => state.MainReducer.userName);
   const lastname = useSelector((state) => state.MainReducer.lastName);
   const prevEmail = useSelector((state) => state.MainReducer.email);

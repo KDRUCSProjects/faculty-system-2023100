@@ -17,7 +17,10 @@ import SubjectItem from "./SubjectItem";
 import SelectSubjectItem from "./SelectSubjectItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+import BackHandlerChild from "../optimization/BackHandlerChild";
+
 export default function SelectType(props) {
+  BackHandlerChild();
   const subjects = useSelector((state) => state.MainReducer.subjects);
   const [isOne, setisOne] = useState(false);
   const [isTwo, setisTwo] = useState(false);

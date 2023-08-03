@@ -9,6 +9,7 @@ import {
   Alert,
   Dimensions,
   ActivityIndicator,
+  BackHandler,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -23,10 +24,14 @@ import { Modal } from "@ui-kitten/components/ui";
 import * as FileSystem from "expo-file-system";
 import * as updates from "expo-updates";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
 
 import { logout } from "../store/actions/actions";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function AccountInfo(props) {
+  BackHandlerChild();
+
   const username = useSelector((state) => state.MainReducer.userName);
 
   const lastname = useSelector((state) => state.MainReducer.lastName);
@@ -243,7 +248,7 @@ export default function AccountInfo(props) {
                         }}
                         resizeMode="center"
                         source={
-                          teacherPhoto.includes("null")
+                          teacherPhoto?.includes("null")
                             ? require("../assets/images/avatar.png")
                             : {
                                 uri: teacherPhoto,

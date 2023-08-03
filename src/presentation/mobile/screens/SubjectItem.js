@@ -11,7 +11,7 @@ const SubjectItem = (props) => {
     <Card
       style={props.selected ? styles.selected : styles.normal}
       onPress={() => {
-        props.onClick(props.subjectId);
+        props.onClick(props.semisterId);
         // setselectedIndex(props.subjectId);
         // if (props.selected == props.subject) {
         //   setselected(!selected);
@@ -20,10 +20,10 @@ const SubjectItem = (props) => {
     >
       <Card.Content style={{ height: "40%" }}>
         <Text style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}>
-          {props.subject}
+          SemisterId: {props.semisterId}
         </Text>
         <Text style={{ fontSize: 13, height: "30%" }}>
-          Semister: {props.semester}
+          Semister: {props.semisterName}
         </Text>
       </Card.Content>
 

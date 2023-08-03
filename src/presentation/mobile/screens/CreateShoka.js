@@ -29,8 +29,10 @@ import { useEffect } from "react";
 import { Modal } from "@ui-kitten/components/ui";
 import * as updates from "expo-updates";
 import { List } from "react-native-paper";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function CreateShoka(props) {
+  BackHandlerChild();
   const subjectIdParam = props.route.params.subjectId;
   const status = props.route.params.status;
 
