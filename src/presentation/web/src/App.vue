@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-locale-provider :rtl="$i18n.locale=='pa'?true:false">
+    <v-locale-provider :rtl="$i18n.locale == 'pa' ? true : false" :class="{ pashtoFont: $i18n.locale === 'pa' }">
       <v-main>
         <router-view />
 
@@ -17,13 +17,10 @@
 </template>
 
 <script>
-
 export default {
-  data: () => ({
-  }),
+  data: () => ({}),
   methods: {},
   computed: {
-
     toastMessages() {
       return this.$store.getters['toastMessages'];
     },
@@ -44,5 +41,19 @@ export default {
   -webkit-box-shadow: 0 0 37px rgb(8 21 66 / 5%);
   box-shadow: 0 0 37px rgb(8 21 66 / 5%) !important;
   border-radius: 10px;
+}
+
+@font-face {
+  font-family: 'Bahij Nassim';
+  src: local('Bahij Nassim'), url(./assets/fonts/BahijNassim/BahijNassim.ttf) format('truetype');
+}
+
+.pashtoFont {
+  font-family: 'Bahij Nassim' !important;
+}
+
+.pashtoFontBold {
+  font-family: 'Bahij Nassim' !important;
+  font-weight: bold !important;
 }
 </style>
