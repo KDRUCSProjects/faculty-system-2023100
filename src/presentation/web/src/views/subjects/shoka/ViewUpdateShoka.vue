@@ -34,6 +34,8 @@
                 :fieldLabel="'Marks'"
                 :fieldValue="item.columns.assignment"
                 :fieldName="'assignment'"
+                :rowId="item?.raw?.shokaListId"
+                :data="item?.raw"
               >
                 <v-btn color="dark" text variant="outlined">
                   {{ item.columns.assignment }}
@@ -190,7 +192,7 @@ export default {
       { title: 'Practical', key: 'practicalWork', sortable: false },
       { title: 'Mid-Exam', key: 'projectMarks', sortable: false },
       { title: 'Final-Exam', key: 'finalMarks', sortable: false },
-      { title: 'Total', key: 'total', sortable: true },
+      { title: 'Total', key: 'total' },
       // { title: 'Success', key: 'eligibility', sortable: false },
     ],
   }),
@@ -208,8 +210,33 @@ export default {
 
       await this.$store.dispatch('subjects/loadShokaBySubjectId', { subjectId: this.subjectId, chance: this.chance });
     },
-    async updateMarks({ field, fieldValue }) {
-      console.log(field, fieldValue);
+    async updateMarks({ field, fieldValue, rowId, data }) {
+      if (!data.shokaListId) {
+        let res = await this.$refs.baseConfirmDialog.show({
+          warningTitle: this.$t('Warning'),
+          title: this.$t('You are adding marks of a student that has not been added by the teacher? Continue'),
+          okButton: this.$t('Yes'),
+        });
+
+        // If closed, return the function
+        if (!res) {
+          return false;
+        }
+      }
+
+      const type = data.shokaListId ? 'updateShokaByShokaListId' : 'addStudentMarksToShokaBySubjectId';
+
+      await this.$store.dispatch(`subjects/${type}`, {
+        chance: parseInt(this.chance),
+        subjectId: this.subjectId,
+        studentId: data.studentId,
+        shokaListId: rowId,
+        marks: {
+          [field]: parseInt(fieldValue),
+        },
+      });
+
+      await this.loadShokaBySubject();
     },
   },
   async created() {
