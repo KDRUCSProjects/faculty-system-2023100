@@ -17,10 +17,10 @@
         <v-virtual-scroll :items="items" height="300" item-height="50" class="my-1">
           <template v-slot:default="{ item }">
             <v-list-item>
-              <v-btn v-if="item !== selectedYear" color="secondary" variant="tonal" block @click="selectYear(item)">
+              <v-btn v-if="item !== selectedYear" color="primary" variant="tonal" block @click="selectYear(item)">
                 {{ item }}
               </v-btn>
-              <v-btn v-else color="secondary" variant="flat" block @click="selectYear(item)"> {{ item }} </v-btn>
+              <v-btn v-else color="primary" variant="flat" block @click="selectYear(item)"> {{ item }} </v-btn>
             </v-list-item>
           </template>
         </v-virtual-scroll>
