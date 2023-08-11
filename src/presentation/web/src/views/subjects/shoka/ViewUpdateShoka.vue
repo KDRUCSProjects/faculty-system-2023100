@@ -10,9 +10,13 @@
           color="primary"
           variant="tonal"
           download
+          :loading="downloadLoading"
         >
           Download Excel
         </v-btn>
+        <div class="float-right d-flex">
+          <base-menu :displayPreText="'Chance:'" theme="dark" :items="chanceItems" @selected="setChance"></base-menu>
+        </div>
         <v-card-title class="mt-1">Total Credits: {{ subject?.credit }}</v-card-title>
         <v-card-subtitle class="mt-1">Subject Database ID: {{ subject?.id }}</v-card-subtitle>
       </v-card-item>
@@ -193,6 +197,8 @@ export default {
   data: () => ({
     chance: 1,
     subject: null,
+    downloadLoading: false,
+    chanceItems: [1, 2, 3, 4],
     headers: [
       {
         title: 'No',
@@ -242,21 +248,30 @@ export default {
     },
   },
   methods: {
-    async downloadShoka(chance) {
+    setChance(value) {
+      this.chance = value;
+    },
+    async downloadShoka() {
+      this.downloadLoading = true;
       const file = await this.$store.dispatch('subjects/downloadSubjectShokaBySubjectId', {
         subjectId: this.subjectId,
-        chance: 1,
+        chance: this.chance,
       });
 
       this.downloadFile(file.data, 'Shoka');
+
+      // Make it a little stylish ;)
+      setTimeout(() => {
+        this.downloadLoading = false;
+      }, 500);
     },
-    async loadShokaBySubject() {
+    async loadShokaBySubject(chance = this.chance) {
       if (!this.subjectId) return false;
       // first, load the subject
       const subject = await this.$store.dispatch('subjects/loadSubjectById', this.subjectId);
       this.subject = subject.data;
 
-      await this.$store.dispatch('subjects/loadShokaBySubjectId', { subjectId: this.subjectId, chance: this.chance });
+      await this.$store.dispatch('subjects/loadShokaBySubjectId', { subjectId: this.subjectId, chance });
     },
     async updateMarks({ field, fieldValue, rowId, data }) {
       if (!data.shokaListId) {
@@ -287,8 +302,13 @@ export default {
       await this.loadShokaBySubject();
     },
   },
+  watch: {
+    async chance(newValue) {
+      await this.loadShokaBySubject(this.chance);
+    },
+  },
   async created() {
-    this.loadShokaBySubject(this);
+    this.loadShokaBySubject(this.chance);
   },
 };
 </script>
