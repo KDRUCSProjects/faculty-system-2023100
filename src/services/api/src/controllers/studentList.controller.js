@@ -129,7 +129,7 @@ const getStudentLists = catchAsync(async (req, res) => {
 
 const deleteStudentList = catchAsync(async (req, res) => {
   const studentList = await studentListService.findStudentListById(req.params.studentListId);
-  if (!studentList) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('student list not found'));
+  if (!studentList) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('studentList.studentListNotFound'));
   await studentListService.deleteStudentList(studentList);
   return res.status(httpStatus.NO_CONTENT).send();
 });
