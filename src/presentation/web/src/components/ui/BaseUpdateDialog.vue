@@ -82,6 +82,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    rowId: {
+      type: Number,
+      default: null,
+    },
+    data: {
+      default: null,
+    },
   },
   data: () => initialState(),
   computed: {
@@ -94,10 +101,14 @@ export default {
       this.field = photo;
     },
     update() {
-      this.$emit('update', {
+      const data = {
         field: this.fieldName,
         fieldValue: this.field,
-      });
+      };
+
+      if (this.data) data.data = this.data;
+      if (this.rowId) data.rowId = this.rowId;
+      this.$emit('update', data);
 
       // Now close the dialog
       this.cancel();
