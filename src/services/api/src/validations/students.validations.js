@@ -19,6 +19,15 @@ const registerStudent = {
     photo: Joi.string().allow(null),
     dob: Joi.date(),
     gender: Joi.string().valid('male', 'female'),
+    tazkeraNumber: Joi.number().integer().positive(),
+    birthCity: Joi.string(),
+    birthCountry: Joi.string(),
+    phoneNumber: Joi.number().integer().positive(),
+    kankorMarks: Joi.number().positive(),
+    kankorType: Joi.string(),
+    birthCityEnglish: Joi.string(),
+    birthCountryEnglish: Joi.string(),
+    bankAccount: Joi.string(),
   }),
 };
 
@@ -45,6 +54,15 @@ const updateStudent = {
       photo: Joi.string().allow(null),
       dob: Joi.date(),
       gender: Joi.string().valid('male', 'female'),
+      tazkeraNumber: Joi.number().integer().positive(),
+      birthCity: Joi.string(),
+      birthCountry: Joi.string(),
+      phoneNumber: Joi.number().integer().positive(),
+      kankorMarks: Joi.number().positive(),
+      kankorType: Joi.string(),
+      birthCityEnglish: Joi.string(),
+      birthCountryEnglish: Joi.string(),
+      bankAccount: Joi.string(),
     })
     .min(1)
     .required(),
@@ -97,10 +115,43 @@ const tempToken = {
       photo: Joi.string().allow(null),
       dob: Joi.date(),
       gender: Joi.string().valid('male', 'female'),
+      tazkeraNumber: Joi.number().integer().positive(),
+      birthCity: Joi.string(),
+      birthCountry: Joi.string(),
+      phoneNumber: Joi.number().integer().positive(),
+      kankorMarks: Joi.number().positive(),
+      kankorType: Joi.string(),
+      birthCityEnglish: Joi.string(),
+      birthCountryEnglish: Joi.string(),
+      bankAccount: Joi.string(),
     })
     .min(1)
     .required(),
 };
+
+
+
+const createStudentSchool = {
+  params: Joi.object().keys({
+    studentId: Joi.number().integer().positive().required(),
+  }),
+  body: Joi.object().keys({
+    name: Joi.string().required(),
+    graduationDate: Joi.date().iso().required(),
+  }),
+};
+
+
+const createStudentMonograph = {
+  params: Joi.object().keys({
+    studentId: Joi.number().integer().positive().required(),
+  }),
+  body: Joi.object().keys({
+    researchTitle: Joi.string().required(),
+    defenseDate: Joi.date().iso().required(),
+  }),
+};
+
 
 module.exports = {
   kankor,
@@ -109,4 +160,6 @@ module.exports = {
   updateStudent,
   deleteStudents,
   registerStudent,
+  createStudentSchool,
+  createStudentMonograph,
 };

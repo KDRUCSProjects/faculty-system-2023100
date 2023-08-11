@@ -56,6 +56,33 @@ module.exports = {
       dob: {
         type: Sequelize.DATE,
       },
+      tazkeraNumber: {
+        type: Sequelize.INTEGER,
+      },
+      birthCity: {
+        type: Sequelize.STRING,
+      },
+      birthCountry: {
+        type: Sequelize.STRING,
+      },
+      phoneNumber: {
+        type: Sequelize.INTEGER,
+      },
+      kankorMarks: {
+        type: Sequelize.DOUBLE,
+      },
+      kankorType: {
+        type: Sequelize.STRING,
+      },
+      birthCityEnglish: {
+        type: Sequelize.STRING,
+      },
+      birthCountryEnglish: {
+        type: Sequelize.STRING,
+      },
+      bankAccount: {
+        type: Sequelize.STRING,
+      },
       educationalYearId: {
         type: Sequelize.INTEGER,
         required: true,

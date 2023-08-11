@@ -1,7 +1,7 @@
 // Sequelize Models
 const { QueryTypes, Op } = require('sequelize');
 const httpStatus = require('http-status');
-const { Student, EducationalYear, sequelize } = require('../models');
+const { Student, EducationalYear, sequelize, School, Monograph } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -64,7 +64,7 @@ const updateStudent = (oldStudent, newStudent) => {
 };
 
 /**
- * Create a Student
+ * delete a Student
  * @param {Object} student
  * @returns {Promise<Student>}
  */
@@ -164,6 +164,98 @@ const countUnregisteredStudent = () => {
   );
 };
 
+
+/**
+ * get Student school By student id
+ * @param {ObjectId} studentId
+ * @returns {Promise<School>}
+ */
+const getStudentSchool = (studentId) => {
+  return School.findOne({
+    where: { studentId },
+    include: [
+      {
+        model: Student, as: 'Student'
+      }
+    ]
+  });
+};
+
+
+/**
+ * get Student Monograph By student id
+ * @param {ObjectId} studentId
+ * @returns {Promise<Monograph>}
+ */
+const getStudentMonograph = (studentId) => {
+  return Monograph.findOne({
+    where: { studentId },
+    include: [
+      {
+        model: Student, as: 'Student'
+      }
+    ]
+  });
+};
+
+/**
+ * create Student school
+ * @param {Object} schoolBody
+ * @returns {Promise<School>}
+ */
+const createStudentSchool = (schoolBody) => {
+  return School.create(schoolBody);
+};
+
+/**
+ * create Student Monograph
+ * @param {Object} monographBody
+ * @returns {Promise<Monograph>}
+ */
+const createStudentMonograph = (monographBody) => {
+  return Monograph.create(monographBody);
+};
+
+
+/**
+ * find School By id
+ * @param {ObjectId} schoolId
+ * @returns {Promise<School>}
+ */
+const getSchoolById = (schoolId) => {
+  return School.findOne({ where: { id: schoolId } });
+};
+
+/**
+ * find Monograph By id
+ * @param {ObjectId} schoolId
+ * @returns {Promise<Monograph>}
+ */
+const getMonographById = (schoolId) => {
+  return Monograph.findOne({ where: { id: schoolId } });
+};
+
+/**
+ * delete a school
+ * @param {Object} school
+ * @returns {Promise<School>}
+ */
+const deleteStudentSchool = (school) => {
+  if (school instanceof School) return school.destroy();
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'some thing went wrong');
+};
+
+/**
+ * delete a monograph
+ * @param {Object} monograph
+ * @returns {Promise<School>}
+ */
+const deleteStudentMonograph = (monograph) => {
+  if (monograph instanceof Monograph) return monograph.destroy();
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'some thing went wrong');
+};
+
+
 module.exports = {
   getStudent,
   getStudents,
@@ -175,4 +267,12 @@ module.exports = {
   getStudentOnKankorId,
   getUnRegisteredStudents,
   countUnregisteredStudent,
+  getStudentSchool,
+  getStudentMonograph,
+  createStudentSchool,
+  createStudentMonograph,
+  getSchoolById,
+  getMonographById,
+  deleteStudentSchool,
+  deleteStudentMonograph,
 };
