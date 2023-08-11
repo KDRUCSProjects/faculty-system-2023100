@@ -117,6 +117,73 @@ const registerYourSelf = catchAsync(async (req, res, next) => {
 });
 
 
+const getStudentSchool = catchAsync(async (req, res, next) => {
+  const { studentId } = req.params;
+  const student = await studentService.getStudent(studentId);
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  const school = await studentService.getStudentSchool(studentId);
+  if (!school) throw new ApiError(httpStatus.NOT_FOUND, 'school not found');
+  return res.status(httpStatus.CREATED).send(school);
+});
+
+
+const createStudentSchool = catchAsync(async (req, res, next) => {
+  const { studentId } = req.params;
+  const student = await studentService.getStudent(studentId);
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  const school = await studentService.getStudentSchool(studentId);
+  if (school) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has school');
+  req.body.studentId = studentId;
+  const results = await studentService.createStudentSchool(req.body);
+  return res.status(httpStatus.CREATED).send(results);
+});
+
+
+const deleteStudentSchool = catchAsync(async (req, res, next) => {
+  const { studentId } = req.params;
+  const student = await studentService.getStudent(studentId);
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  const school = await studentService.getStudentSchool(studentId);
+  if (!school) throw new ApiError(httpStatus.NOT_FOUND, 'school not found');
+  const onlySchool = await studentService.getSchoolById(school.id);
+  await studentService.deleteStudentSchool(onlySchool);
+  return res.status(httpStatus.NO_CONTENT).send();
+});
+
+const getStudentMonograph = catchAsync(async (req, res, next) => {
+  const { studentId } = req.params;
+  const student = await studentService.getStudent(studentId);
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  const monograph = await studentService.getStudentMonograph(studentId);
+  if (!monograph) throw new ApiError(httpStatus.NOT_FOUND, 'Monograph not found');
+  return res.status(httpStatus.CREATED).send(monograph);
+});
+
+
+const createStudentMonograph = catchAsync(async (req, res, next) => {
+  const { studentId } = req.params;
+  const student = await studentService.getStudent(studentId);
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  const monograph = await studentService.getStudentMonograph(studentId);
+  if (monograph) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has monograph');
+  req.body.studentId = studentId;
+  const results = await studentService.createStudentMonograph(req.body);
+  return res.status(httpStatus.CREATED).send(results);
+});
+
+const deleteStudentMonograph = catchAsync(async (req, res, next) => {
+  const { studentId } = req.params;
+  const student = await studentService.getStudent(studentId);
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  const monograph = await studentService.getStudentMonograph(studentId);
+  if (!monograph) throw new ApiError(httpStatus.NOT_FOUND, 'monograph not found');
+  const onlyMonograph = await studentService.getMonographById(monograph.id);
+  await studentService.deleteStudentMonograph(onlyMonograph);
+  return res.status(httpStatus.NO_CONTENT).send();
+});
+
+
+
 
 module.exports = {
   getStudent,
@@ -127,4 +194,10 @@ module.exports = {
   registerStudent,
   registerYourSelf,
   getStudentOnKankorId,
+  getStudentSchool,
+  createStudentSchool,
+  deleteStudentSchool,
+  getStudentMonograph,
+  createStudentMonograph,
+  deleteStudentMonograph,
 };
