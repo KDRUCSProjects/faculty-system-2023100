@@ -46,25 +46,55 @@
 
           <template v-slot:item.finalMarks="{ item }">
             <div class="text-center">
-              <v-btn color="dark" text variant="outlined">
-                {{ item.columns.finalMarks }}
-              </v-btn>
+              <base-update-dialog
+                :title="'Final Marks'"
+                @update="updateMarks"
+                :fieldLabel="'Marks'"
+                :fieldValue="item.columns.finalMarks"
+                :fieldName="'finalMarks'"
+                :rowId="item?.raw?.shokaListId"
+                :data="item?.raw"
+              >
+                <v-btn color="dark" text variant="outlined">
+                  {{ item.columns.finalMarks }}
+                </v-btn>
+              </base-update-dialog>
             </div>
           </template>
 
           <template v-slot:item.projectMarks="{ item }">
             <div class="text-center">
-              <v-btn color="dark" text variant="outlined">
-                {{ item.columns.projectMarks }}
-              </v-btn>
+              <base-update-dialog
+                :title="'Project Marks'"
+                @update="updateMarks"
+                :fieldLabel="'Marks'"
+                :fieldValue="item.columns.projectMarks"
+                :fieldName="'projectMarks'"
+                :rowId="item?.raw?.shokaListId"
+                :data="item?.raw"
+              >
+                <v-btn color="dark" text variant="outlined">
+                  {{ item.columns.projectMarks }}
+                </v-btn>
+              </base-update-dialog>
             </div>
           </template>
 
           <template v-slot:item.practicalWork="{ item }">
             <div class="text-center">
-              <v-btn color="dark" text variant="outlined">
-                {{ item.columns.practicalWork }}
-              </v-btn>
+              <base-update-dialog
+                :title="'Practical Work Marks'"
+                @update="updateMarks"
+                :fieldLabel="'Marks'"
+                :fieldValue="item.columns.practicalWork"
+                :fieldName="'practicalWork'"
+                :rowId="item?.raw?.shokaListId"
+                :data="item?.raw"
+              >
+                <v-btn color="dark" text variant="outlined">
+                  {{ item.columns.practicalWork }}
+                </v-btn>
+              </base-update-dialog>
             </div>
           </template>
 
@@ -173,7 +203,7 @@ export default {
       {
         title: 'Name',
         align: 'start',
-        sortable: true,
+        sortable: false,
         key: 'fullName',
       },
       {
@@ -192,7 +222,7 @@ export default {
       { title: 'Practical', key: 'practicalWork', sortable: false },
       { title: 'Mid-Exam', key: 'projectMarks', sortable: false },
       { title: 'Final-Exam', key: 'finalMarks', sortable: false },
-      { title: 'Total', key: 'total' },
+      { title: 'Total', key: 'total', sortable: false },
       // { title: 'Success', key: 'eligibility', sortable: false },
     ],
   }),

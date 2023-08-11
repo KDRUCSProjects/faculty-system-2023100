@@ -122,7 +122,7 @@ export default {
     },
     cancel() {
       this.dialog = false;
-      this.resetForm();
+      // this.resetForm();
     },
     resetForm() {
       Object.assign(this.$data, initialState());
