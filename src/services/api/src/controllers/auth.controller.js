@@ -49,7 +49,7 @@ const checkPassword = catchAsync(async (req, res) => {
   const { password } = req.body;
   const results = await userService.verifyEmailAndPassword(req.user, password);
   if (results) return res.status(httpStatus.OK).send();
-  throw new ApiError(httpStatus.unauthorized, i18n.__('unauthorized'));
+  throw new ApiError(httpStatus.UNAUTHORIZED, i18n.__('unauthorized'));
 });
 
 const createTemporaryToken = catchAsync(async (req, res) => {
