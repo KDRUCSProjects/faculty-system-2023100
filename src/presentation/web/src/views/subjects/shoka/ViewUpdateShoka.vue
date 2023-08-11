@@ -3,6 +3,16 @@
     <v-card class="theShadow">
       <v-card-item class="mt-4">
         <v-card-title class="text-h5 text-primary text-uppercase font-weight-bold">{{ subject?.name }}</v-card-title>
+        <v-btn
+          @click="downloadShoka"
+          class="float-right"
+          prepend-icon="mdi-download-circle"
+          color="primary"
+          variant="tonal"
+          download
+        >
+          Download Excel
+        </v-btn>
         <v-card-title class="mt-1">Total Credits: {{ subject?.credit }}</v-card-title>
         <v-card-subtitle class="mt-1">Subject Database ID: {{ subject?.id }}</v-card-subtitle>
       </v-card-item>
@@ -232,6 +242,14 @@ export default {
     },
   },
   methods: {
+    async downloadShoka(chance) {
+      const file = await this.$store.dispatch('subjects/downloadSubjectShokaBySubjectId', {
+        subjectId: this.subjectId,
+        chance: 1,
+      });
+
+      this.downloadFile(file.data, 'Shoka');
+    },
     async loadShokaBySubject() {
       if (!this.subjectId) return false;
       // first, load the subject
