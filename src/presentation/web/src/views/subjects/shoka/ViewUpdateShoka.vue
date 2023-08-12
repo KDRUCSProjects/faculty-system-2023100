@@ -3,6 +3,20 @@
     <v-card class="theShadow">
       <v-card-item class="mt-4">
         <v-card-title class="text-h5 text-primary text-uppercase font-weight-bold">{{ subject?.name }}</v-card-title>
+        <v-btn
+          @click="downloadShoka"
+          class="float-right"
+          prepend-icon="mdi-download-circle"
+          color="primary"
+          variant="tonal"
+          download
+          :loading="downloadLoading"
+        >
+          Download Excel
+        </v-btn>
+        <div class="float-right d-flex">
+          <base-menu :displayPreText="'Chance:'" theme="dark" :items="chanceItems" @selected="setChance"></base-menu>
+        </div>
         <v-card-title class="mt-1">Total Credits: {{ subject?.credit }}</v-card-title>
         <v-card-subtitle class="mt-1">Subject Database ID: {{ subject?.id }}</v-card-subtitle>
       </v-card-item>
@@ -34,6 +48,8 @@
                 :fieldLabel="'Marks'"
                 :fieldValue="item.columns.assignment"
                 :fieldName="'assignment'"
+                :rowId="item?.raw?.shokaListId"
+                :data="item?.raw"
               >
                 <v-btn color="dark" text variant="outlined">
                   {{ item.columns.assignment }}
@@ -44,25 +60,55 @@
 
           <template v-slot:item.finalMarks="{ item }">
             <div class="text-center">
-              <v-btn color="dark" text variant="outlined">
-                {{ item.columns.finalMarks }}
-              </v-btn>
+              <base-update-dialog
+                :title="'Final Marks'"
+                @update="updateMarks"
+                :fieldLabel="'Marks'"
+                :fieldName="'finalMarks'"
+                :fieldValue="item.columns.finalMarks"
+                :rowId="item?.raw?.shokaListId"
+                :data="item?.raw"
+              >
+                <v-btn color="dark" text variant="outlined">
+                  {{ item.columns.finalMarks }}
+                </v-btn>
+              </base-update-dialog>
             </div>
           </template>
 
           <template v-slot:item.projectMarks="{ item }">
-            <div class="text-center">
-              <v-btn color="dark" text variant="outlined">
-                {{ item.columns.projectMarks }}
-              </v-btn>
+            <div class="text-center" v-if="item">
+              <base-update-dialog
+                :title="'Project Marks'"
+                @update="updateMarks"
+                :fieldLabel="'Marks'"
+                :fieldName="'projectMarks'"
+                :rowId="item?.raw?.shokaListId"
+                :fieldValue="item.columns.projectMarks"
+                :data="item?.raw"
+              >
+                <v-btn color="dark" text variant="outlined">
+                  {{ item.columns.projectMarks }}
+                </v-btn>
+              </base-update-dialog>
             </div>
           </template>
 
           <template v-slot:item.practicalWork="{ item }">
             <div class="text-center">
-              <v-btn color="dark" text variant="outlined">
-                {{ item.columns.practicalWork }}
-              </v-btn>
+              <base-update-dialog
+                :title="'Practical Work Marks'"
+                @update="updateMarks"
+                :fieldLabel="'Marks'"
+                :fieldName="'practicalWork'"
+                :rowId="item?.raw?.shokaListId"
+                :fieldValue="item.columns.practicalWork"
+                :data="item?.raw"
+              >
+                <v-btn color="dark" text variant="outlined">
+                  {{ item.columns.practicalWork }}
+                </v-btn>
+              </base-update-dialog>
             </div>
           </template>
 
@@ -138,7 +184,60 @@
 <script>
 import { VDataTableVirtual } from 'vuetify/labs/VDataTable';
 
+const initialState = () => ({
+  chance: 1,
+  subject: null,
+  downloadLoading: false,
+  chanceItems: [1, 2, 3, 4],
+  headers: [
+    {
+      title: 'No',
+      sortable: false,
+      key: 'no',
+    },
+    {
+      title: 'Photo',
+      key: 'photo',
+      sortable: false,
+    },
+    {
+      title: 'Kankor ID',
+      align: 'start',
+      key: 'kankorId',
+      sortable: false,
+    },
+    {
+      title: 'Name',
+      align: 'start',
+      sortable: false,
+      key: 'fullName',
+    },
+    {
+      title: 'Father Name',
+      align: 'start',
+      sortable: false,
+      key: 'fatherName',
+    },
+    {
+      title: 'Grand Father Name',
+      align: 'start',
+      sortable: false,
+      key: 'grandFatherName',
+    },
+    { title: 'Assignment', key: 'assignment', sortable: false },
+    { title: 'Practical', key: 'practicalWork', sortable: false },
+    { title: 'Mid-Exam', key: 'projectMarks', sortable: false },
+    { title: 'Final-Exam', key: 'finalMarks', sortable: false },
+    { title: 'Total', key: 'total', sortable: false },
+    // { title: 'Success', key: 'eligibility', sortable: false },
+  ],
+});
+
 export default {
+  beforeUnmount() {
+    // Reset currentShoka
+    this.$store.commit('subjects/setShoka', []);
+  },
   props: {
     subjectId: {
       type: Number,
@@ -148,72 +247,74 @@ export default {
   components: {
     VDataTableVirtual,
   },
-  data: () => ({
-    chance: 1,
-    subject: null,
-    headers: [
-      {
-        title: 'No',
-        sortable: false,
-        key: 'no',
-      },
-      {
-        title: 'Photo',
-        key: 'photo',
-        sortable: false,
-      },
-      {
-        title: 'Kankor ID',
-        align: 'start',
-        key: 'kankorId',
-        sortable: false,
-      },
-      {
-        title: 'Name',
-        align: 'start',
-        sortable: true,
-        key: 'fullName',
-      },
-      {
-        title: 'Father Name',
-        align: 'start',
-        sortable: false,
-        key: 'fatherName',
-      },
-      {
-        title: 'Grand Father Name',
-        align: 'start',
-        sortable: false,
-        key: 'grandFatherName',
-      },
-      { title: 'Assignment', key: 'assignment', sortable: false },
-      { title: 'Practical', key: 'practicalWork', sortable: false },
-      { title: 'Mid-Exam', key: 'projectMarks', sortable: false },
-      { title: 'Final-Exam', key: 'finalMarks', sortable: false },
-      { title: 'Total', key: 'total', sortable: true },
-      // { title: 'Success', key: 'eligibility', sortable: false },
-    ],
-  }),
+  data: () => initialState(),
   computed: {
     students() {
       return this.$store.getters['subjects/currentShoka'];
     },
   },
   methods: {
-    async loadShokaBySubject() {
+    setChance(value) {
+      this.chance = value;
+    },
+    async downloadShoka() {
+      this.downloadLoading = true;
+      const file = await this.$store.dispatch('subjects/downloadSubjectShokaBySubjectId', {
+        subjectId: this.subjectId,
+        chance: this.chance,
+      });
+
+      this.downloadFile(file.data, 'Shoka');
+
+      // Make it a little stylish ;)
+      setTimeout(() => {
+        this.downloadLoading = false;
+      }, 500);
+    },
+    async loadShokaBySubject(chance = this.chance) {
       if (!this.subjectId) return false;
       // first, load the subject
       const subject = await this.$store.dispatch('subjects/loadSubjectById', this.subjectId);
       this.subject = subject.data;
 
-      await this.$store.dispatch('subjects/loadShokaBySubjectId', { subjectId: this.subjectId, chance: this.chance });
+      await this.$store.dispatch('subjects/loadShokaBySubjectId', { subjectId: this.subjectId, chance });
     },
-    async updateMarks({ field, fieldValue }) {
-      console.log(field, fieldValue);
+    async updateMarks({ field, fieldValue, rowId, data }) {
+      if (!data.shokaListId) {
+        let res = await this.$refs.baseConfirmDialog.show({
+          warningTitle: this.$t('Warning'),
+          title: this.$t('You are adding marks of a student that has not been added by the teacher? Continue'),
+          okButton: this.$t('Yes'),
+        });
+
+        // If closed, return the function
+        if (!res) {
+          return false;
+        }
+      }
+
+      const type = data.shokaListId ? 'updateShokaByShokaListId' : 'addStudentMarksToShokaBySubjectId';
+
+      await this.$store.dispatch(`subjects/${type}`, {
+        chance: parseInt(this.chance),
+        subjectId: this.subjectId,
+        studentId: data.studentId,
+        shokaListId: rowId,
+        marks: {
+          [field]: parseInt(fieldValue),
+        },
+      });
+
+      await this.loadShokaBySubject();
+    },
+  },
+  watch: {
+    async chance() {
+      await this.loadShokaBySubject(this.chance);
     },
   },
   async created() {
-    this.loadShokaBySubject(this);
+    this.loadShokaBySubject(this.chance);
   },
 };
 </script>

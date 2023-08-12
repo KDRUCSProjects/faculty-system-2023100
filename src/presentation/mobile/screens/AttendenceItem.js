@@ -24,12 +24,18 @@ import { useEffect } from "react";
 import { Modal } from "@ui-kitten/components";
 import * as updates from "expo-updates";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Entypo } from "@expo/vector-icons";
 
 import { logout } from "../store/actions/actions";
+import BackHandlerChild from "../optimization/BackHandlerChild";
+import { useNavigation } from "@react-navigation/native";
 
 const { height, width } = Dimensions.get("window");
 
 const AttendenceItem = (props, ref) => {
+  BackHandlerChild();
+
+  const navigation = useNavigation();
   const indexprop = props.index;
   const students = useSelector((state) => state.studentReducer.students);
   const type = props.type;
@@ -56,7 +62,8 @@ const AttendenceItem = (props, ref) => {
         if (err.code == 401) {
           await dispatch(logout());
           await AsyncStorage.clear().then().then();
-          updates.reloadAsync();
+          navigation.navigate("Login");
+          //updates.reloadAsync();
         }
       }
     }
@@ -75,7 +82,8 @@ const AttendenceItem = (props, ref) => {
       if (err.code == 401) {
         await dispatch(logout());
         await AsyncStorage.clear().then().then();
-        updates.reloadAsync();
+        // updates.reloadAsync();
+        navigation.navigate("Login");
       }
     }
   };
@@ -125,11 +133,11 @@ const AttendenceItem = (props, ref) => {
           </View>
           <View style={styles.imageContainer}>
             <View style={styles.image}>
-              <ImageBackground
-                style={{ width: "100%", height: "100%", flex: 1 }}
-                source={require("./../assets/images/studentProfile.jpg")}
-                resizeMode="cover"
-              ></ImageBackground>
+              <Entypo
+                name="user"
+                size={85}
+                color="white"
+              />
             </View>
           </View>
         </View>
@@ -334,9 +342,9 @@ const styles = StyleSheet.create({
     height: width / 3,
     borderRadius: width / 1.5,
     overflow: "hidden",
-    elevation: 30,
-    shadowColor: "yellow",
 
+    justifyContent: "center",
+    alignItems: "center",
     width: width / 3,
   },
   imageContainer: {

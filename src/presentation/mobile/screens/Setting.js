@@ -2,17 +2,26 @@ import {
   StyleSheet,
   View,
   Text,
+  Alert,
+  BackHandler,
   ImageBackground,
   TouchableOpacity,
+  Platform,
+  SafeAreaView,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
 import { Divider } from "@ui-kitten/components";
 import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
+import BackHandlerParent from "../optimization/BackHanlderParent";
 
 export default function Setting(props) {
+  BackHandlerParent();
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View
         style={{
           flex: 1,
@@ -23,8 +32,8 @@ export default function Setting(props) {
         <StatusBar hidden={false}></StatusBar>
         <View
           style={{
-            height: "9%",
-            marginTop: "7%",
+            height: 60,
+            marginTop: Platform.OS == "android" ? "7%" : 0,
             backgroundColor: colors.primary,
             flexDirection: "row",
             justifyContent: "space-between",
@@ -160,7 +169,7 @@ export default function Setting(props) {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

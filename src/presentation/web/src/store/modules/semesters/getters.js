@@ -2,6 +2,9 @@ export default {
   currentYearSemesters(state) {
     return state.currentYearSemesters;
   },
+  currentPeriodSemesters(state) {
+    return state.currentPeriodSemesters;
+  },
   currentYear(state) {
     return state.currentYear;
   },

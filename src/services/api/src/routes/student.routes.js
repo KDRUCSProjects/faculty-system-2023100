@@ -43,6 +43,19 @@ router
 
 router.route('/kankor/:kankorId').get(validate(studentValidation.kankor), studentController.getStudentOnKankorId);
 
+router
+  .route('/:studentId/school')
+  .get(auth('manageUsers'), validate(studentValidation.getStudent), studentController.getStudentSchool)
+  .post(auth('manageUsers'), validate(studentValidation.createStudentSchool), studentController.createStudentSchool)
+  .delete(auth('manageUsers'), validate(studentValidation.getStudent), studentController.deleteStudentSchool);
+
+
+router
+  .route('/:studentId/monograph')
+  .get(auth('manageUsers'), validate(studentValidation.getStudent), studentController.getStudentMonograph)
+  .post(auth('manageUsers'), validate(studentValidation.createStudentMonograph), studentController.createStudentMonograph)
+  .delete(auth('manageUsers'), validate(studentValidation.getStudent), studentController.deleteStudentMonograph);
+
 module.exports = router;
 
 /**
@@ -290,6 +303,24 @@ module.exports = router;
  *               gender:
  *                 type: string
  *                 enum: [male, female]
+ *               tazkeraNumber:
+ *                 type: string
+ *               birthCity:
+ *                 type: string
+ *               birthCountry:
+ *                 type: string
+ *               phoneNumber:
+ *                 type: number
+ *               kankorMarks:
+ *                 type: number
+ *               kankorType:
+ *                 type: string
+ *               birthCityEnglish:
+ *                 type: string
+ *               birthCountryEnglish:
+ *                 type: string
+ *               bankAccount:
+ *                 type: string
  *     responses:
  *       "201":
  *         description: ACCEPtED
@@ -439,6 +470,24 @@ module.exports = router;
  *               gender:
  *                 type: string
  *                 enum: [male, female]
+ *               tazkeraNumber:
+ *                 type: string
+ *               birthCity:
+ *                 type: string
+ *               birthCountry:
+ *                 type: string
+ *               phoneNumber:
+ *                 type: number
+ *               kankorMarks:
+ *                 type: number
+ *               kankorType:
+ *                 type: string
+ *               birthCityEnglish:
+ *                 type: string
+ *               birthCountryEnglish:
+ *                 type: string
+ *               bankAccount:
+ *                 type: string
  *     responses:
  *       "200":
  *         description: OK
@@ -450,4 +499,197 @@ module.exports = router;
  *         $ref: '#/components/responses/TokenNotFound'
  *       "406":
  *         $ref: '#/components/responses/TokenExpired'
+ */
+
+
+
+/**
+ * @swagger
+ * /students/{studentId}/school:
+ *   get:
+ *     summary: Get a student school
+ *     description: get single student based on Id to view his information.
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: student id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/School'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ * 
+ *   post:
+ *     summary: create student school
+ *     description: create student school.
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: student id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               graduationDate:
+ *                 type: date
+ *             example:
+ *               name: Ahmad Shah Baba High School
+ *               graduationDate: 2023-07-29
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/School'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ * 
+ *   delete:
+ *     summary: delete a student school
+ *     description: delete a student school.
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: student id
+ *     responses:
+ *       "200":
+ *         description: NO CONTENT
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+
+/**
+ * @swagger
+ * /students/{studentId}/monograph:
+ *   get:
+ *     summary: Get a student monograph
+ *     description: get a student monograph.
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: student id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Monograph'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ * 
+ *   post:
+ *     summary: create student Monograph
+ *     description: create student Monograph.
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: student id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               researchTitle:
+ *                 type: string
+ *               defenseDate:
+ *                 type: date
+ *             example:
+ *               researchTitle: Afghanistan Internet
+ *               defenseDate: 2023-07-29
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Monograph'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ * 
+ *   delete:
+ *     summary: delete a student Monograph
+ *     description: delete a student Monograph.
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: student id
+ *     responses:
+ *       "200":
+ *         description: NO CONTENT
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  */

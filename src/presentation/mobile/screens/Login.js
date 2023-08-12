@@ -24,7 +24,7 @@ import { useTogglePasswordVisibility } from "../hooks/useTogglePasswordVisibilit
 import colors from "../constants/colors";
 import { useEffect } from "react";
 import { ActivityIndicator, shadow } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import {
   Layout,
   TopNavigation,
@@ -46,8 +46,11 @@ import Animated, {
 } from "react-native-reanimated";
 import { useRef } from "react";
 import { StatusBar } from "expo-status-bar";
+import { Dimensions, Platform, KeyboardAvoidingView } from "react-native";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 export default Login = (props) => {
+  const { height, width } = Dimensions.get("window");
   const [email, setEmail] = useState("");
   const [isLoading, setisLoading] = useState(false);
   const [error, seterror] = useState(null);
@@ -58,45 +61,29 @@ export default Login = (props) => {
   const [emailError, setemailError] = useState(false);
   const [passwordError, setpasswordError] = useState(false);
 
-  // const navigation = useNavigation();
-  // useEffect(() => {
-  //   navigation.addListener("beforeRemove", (event) => {
-  //     event.preventDefault();
-  //     Alert.alert("Exit!", "Do you want Exit?", [
-  //       {
-  //         text: "No",
-  //         onPress: () => {
-  //           return;
-  //         },
-  //       },
-  //       {
-  //         text: "Yes",
-  //         onPress: () => {
-  //           BackHandler.exitApp();
-  //         },
-  //       },
-  //     ]);
-  //   });
-  // }, [navigation]);
-
   useEffect(() => {
-    const backAction = () => {
-      Alert.alert("Exit!", "Are you sure you want to Exit?", [
-        {
-          text: "No",
-          onPress: () => null,
-          style: "cancel",
-        },
-        { text: "YES", onPress: () => BackHandler.exitApp() },
-      ]);
-      return true;
-    };
-
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
-      backAction
+      () => {
+        if (props.navigation.isFocused()) {
+          Alert.alert("Exit!", "Do you want Exit?", [
+            {
+              text: "No",
+              onPress: () => {
+                return;
+              },
+            },
+            {
+              text: "Yes",
+              onPress: () => {
+                BackHandler.exitApp();
+              },
+            },
+          ]);
+        }
+        return true;
+      }
     );
-
     return () => backHandler.remove();
   }, []);
 
@@ -145,6 +132,9 @@ export default Login = (props) => {
       return;
     }
 
+    props.navigation.dispatch(
+      CommonActions.reset({ index: 0, routes: [{ name: "selectSemister" }] })
+    );
     props.navigation.navigate("selectSemister");
     setEmail("");
     setPassword("");
@@ -188,29 +178,25 @@ export default Login = (props) => {
     return { transform: [{ translateX: translateX.value }], zIndex: 1 };
   });
 
+  const headerHeight = useHeaderHeight();
+
   return (
-    <LinearGradient
-      colors={["#5DA3FF", "#00157D"]}
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={headerHeight}
       style={styles.container}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <StatusBar hidden={true}></StatusBar>
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          height: "80%",
-          width: "100%",
-          justifyContent: "space-around",
-          alignItems: "center",
-        }}
+      <LinearGradient
+        colors={["#5DA3FF", "#00157D"]}
+        style={{ height: "100%", width: "100%", flex: 1 }}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
       >
         <View
           style={{
+            height: "20%",
             alignContent: "center",
             justifyContent: "center",
-            height: "30%",
           }}
         >
           <View
@@ -230,113 +216,127 @@ export default Login = (props) => {
 
         <View
           style={{
+            height: "60%",
             width: "100%",
-            height: "70%",
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: "space-around",
           }}
         >
-          <View style={styles.inputFieldsContainer}>
-            <View
-              style={[
-                styles.inputContainer,
-                {
-                  borderColor: emailError ? "red" : "white",
-                  borderWidth: emailError ? 1.8 : 0,
-                },
-              ]}
-            >
-              <TextInput
-                style={styles.inputField}
-                placeholder="Email"
-                autoCapitalize="none"
-                onChangeText={(email) => {
-                  setEmail(email);
-                  setemailError(false);
-                }}
-                value={email}
-              />
+          <StatusBar hidden={true}></StatusBar>
 
-              <MaterialCommunityIcons
-                style={{ marginRight: "2%" }}
-                name={"account"}
-                size={25}
-                color="#232323"
-              />
-            </View>
-            <View style={{ width: "90%" }}>
-              {emailError ? (
-                <Text style={styles.errorText}>{emailError}</Text>
-              ) : (
-                <></>
-              )}
-            </View>
+          <View style={{ height: 250 }}>
             <View
-              style={[
-                styles.inputContainer,
-                {
-                  borderColor: passwordError ? "red" : "white",
-                  borderWidth: passwordError ? 1.8 : 0,
-                },
-              ]}
+              style={{
+                width: "100%",
+                height: 250,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
-              <TextInput
-                style={styles.inputField}
-                name="password"
-                placeholder="Password"
-                autoCapitalize="none"
-                autoCorrect={false}
-                textContentType="newPassword"
-                secureTextEntry={passwordVisibility}
-                value={password}
-                enablesReturnKeyAutomatically
-                onChangeText={(text) => {
-                  setPassword(text);
-                  setpasswordError(false);
-                }}
-              />
-              <Pressable
-                onPress={handlePasswordVisibility}
-                style={{ marginRight: "2%" }}
-              >
-                <MaterialCommunityIcons
-                  name={rightIcon}
-                  size={25}
-                  color="#232323"
-                />
-              </Pressable>
-            </View>
-            <View style={{ width: "90%" }}>
-              {passwordError ? (
-                <Text style={styles.errorText}>{passwordError}</Text>
-              ) : (
-                <></>
-              )}
+              <View style={styles.inputFieldsContainer}>
+                <View
+                  style={[
+                    styles.inputContainer,
+                    {
+                      borderColor: emailError ? "red" : "white",
+                      borderWidth: emailError ? 1.8 : 0,
+                    },
+                  ]}
+                >
+                  <TextInput
+                    style={styles.inputField}
+                    placeholder="Email"
+                    autoCapitalize="none"
+                    onChangeText={(email) => {
+                      setEmail(email);
+                      setemailError(false);
+                    }}
+                    value={email}
+                  />
+
+                  <MaterialCommunityIcons
+                    style={{ marginRight: "2%" }}
+                    name={"account"}
+                    size={25}
+                    color="#232323"
+                  />
+                </View>
+                <View style={{ width: "90%" }}>
+                  {emailError ? (
+                    <Text style={styles.errorText}>{emailError}</Text>
+                  ) : (
+                    <></>
+                  )}
+                </View>
+                <View
+                  style={[
+                    styles.inputContainer,
+                    {
+                      borderColor: passwordError ? "red" : "white",
+                      borderWidth: passwordError ? 1.8 : 0,
+                    },
+                  ]}
+                >
+                  <TextInput
+                    style={styles.inputField}
+                    name="password"
+                    placeholder="Password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    textContentType="newPassword"
+                    secureTextEntry={passwordVisibility}
+                    value={password}
+                    onSubmitEditing={onLogin}
+                    returnKeyType={"send"}
+                    enablesReturnKeyAutomatically
+                    onChangeText={(text) => {
+                      setPassword(text);
+                      setpasswordError(false);
+                    }}
+                  />
+                  <Pressable
+                    onPress={handlePasswordVisibility}
+                    style={{ marginRight: "2%" }}
+                  >
+                    <MaterialCommunityIcons
+                      name={rightIcon}
+                      size={25}
+                      color="#232323"
+                    />
+                  </Pressable>
+                </View>
+                <View style={{ width: "90%" }}>
+                  {passwordError ? (
+                    <Text style={styles.errorText}>{passwordError}</Text>
+                  ) : (
+                    <></>
+                  )}
+                </View>
+              </View>
             </View>
           </View>
         </View>
-      </ScrollView>
 
-      <View
-        style={{
-          height: "20%",
-          width: "100%",
-          justifyContent: "flex-start",
-          alignItems: "center",
-        }}
-      >
-        <TouchableOpacity
-          style={styles.loginBtn}
-          onPress={onLogin}
+        <View
+          style={{
+            height: "20%",
+            width: "100%",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
         >
-          {isLoading ? (
-            <ActivityIndicator size={"small"}></ActivityIndicator>
-          ) : (
-            <Text style={{ fontSize: 18, color: "white" }}>LOGIN</Text>
-          )}
-        </TouchableOpacity>
-      </View>
-      {/* <View
+          <TouchableOpacity
+            style={styles.loginBtn}
+            onPress={onLogin}
+          >
+            {isLoading ? (
+              <ActivityIndicator size={"small"}></ActivityIndicator>
+            ) : (
+              <Text style={{ fontSize: 18, color: "white" }}>LOGIN</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+
+        {/* <View
           style={{
             height: 50,
             width: "70%",
@@ -414,16 +414,18 @@ export default Login = (props) => {
             </Text>
           </TouchableOpacity>
         </View> */}
-    </LinearGradient>
+      </LinearGradient>
+    </KeyboardAvoidingView>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "space-around",
-    width: "100%",
-    height: "100%",
     flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
+    backgroundColor: "white",
   },
   scroll: {
     flex: 1,

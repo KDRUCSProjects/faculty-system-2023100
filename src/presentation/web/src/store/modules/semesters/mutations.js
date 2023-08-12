@@ -2,6 +2,9 @@ export default {
   setCurrentYearSemesters(state, payload) {
     state.currentYearSemesters = payload;
   },
+  setCurrentPeriodSemesters(state, payload) {
+    state.currentPeriodSemesters = payload;
+  },
   setCurrentYear(state, payload) {
     state.currentYear = payload;
   },

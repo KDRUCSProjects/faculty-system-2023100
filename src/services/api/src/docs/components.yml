@@ -285,6 +285,41 @@ components:
         attachment: file
         notes: 'Some Economics Problems'
 
+    School:
+      type: object
+      properties:
+        id:
+          type: number
+        studentId: 
+          type: number
+        name: 
+          type: string
+        graduationDate: 
+          type: date
+      example:
+        id: 1
+        studentId: 1
+        name: 12
+        graduationDate: '2023-07-29'
+
+    Monograph:
+      type: object
+      properties:
+        id:
+          type: number
+        studentId: 
+          type: number
+        researchTitle: 
+          type: string
+        defenseDate: 
+          type: date
+      example:
+        id: 1
+        studentId: 1
+        name: 'Afghanistan Internet'
+        graduationDate: '2023-07-29'
+
+
     StudentList:
       type: object
       properties:

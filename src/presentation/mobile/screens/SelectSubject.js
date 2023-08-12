@@ -7,14 +7,15 @@ import {
   Alert,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
+  SafeAreaView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getAttendence, loadSubjects } from "../store/actions/actions";
 import { useEffect } from "react";
 import { Button } from "react-native-paper";
 import colors from "../constants/colors";
-import { HeaderBackButton } from "@react-navigation/stack";
-import SubjectItem from "./SubjectItem";
+
 import SelectSubjectItem from "./SelectSubjectItem";
 import { useState } from "react";
 import { Modal } from "@ui-kitten/components";
@@ -22,14 +23,17 @@ import { getStudentBySubject } from "../store/actions/actions";
 import * as updates from "expo-updates";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../store/actions/actions";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function SelectSubject(props) {
   const semisterId = props.route.params.semisterId;
   let subjects = useSelector((state) => state.MainReducer.subjects);
-  subjects = subjects?.filter((subject) => subject.semesterId == semisterId);
+  if (subjects) {
+    subjects = subjects?.filter((subject) => subject.semesterId == semisterId);
 
-  subjects = subjects[0]?.subjects;
-  console.log(subjects);
+    subjects = subjects[0]?.subjects;
+  }
+
   const choice = props.route.params.choice;
   const dispatch = useDispatch();
   const [selected, setselected] = useState(null);
@@ -43,8 +47,10 @@ export default function SelectSubject(props) {
         await dispatch(getAttendence(id));
         setisLoading(false);
         props.navigation.navigate("selectType", { subjectId: id });
-      } else {
+      } else if (choice == "createShoka") {
         props.navigation.navigate("SelectChance", { subjectId: id });
+      } else {
+        return;
       }
     } catch (error) {
       setisLoading(false);
@@ -54,8 +60,8 @@ export default function SelectSubject(props) {
         // props.navigation.replace("Login");
         await dispatch(logout());
         await AsyncStorage.clear().then().then();
-        updates.reloadAsync();
-
+        // updates.reloadAsync();
+        props.navigation.navigate("Login");
         return;
       }
 
@@ -71,79 +77,80 @@ export default function SelectSubject(props) {
   //};
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flex: 1,
-          height: "100%",
-          width: "100%",
-        }}
-      >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <View
           style={{
-            height: "9%",
-            marginTop: "7%",
-            backgroundColor: colors.primary,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flex: 1,
+            height: "100%",
+            width: "100%",
           }}
         >
-          <View style={{ width: "20%" }}>
-            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
-              <ImageBackground
-                style={{ height: 25, width: 32 }}
-                source={require("../assets/images/menu.png")}
-              ></ImageBackground>
-            </TouchableOpacity>
-          </View>
-          <View style={{ width: "70%" }}>
-            <Text style={{ color: "white", fontSize: 23 }}>
-              FCS for University
-            </Text>
-          </View>
-        </View>
-        <Text
-          style={{
-            fontSize: 25,
-            margin: 10,
-            fontWeight: "bold",
-            fontStyle: "italic",
-          }}
-        >
-          Choose a subject
-        </Text>
-        <View style={{ height: "80%" }}>
-          <ScrollView
-            contentContainerStyle={{
-              flexGrow: 1,
+          <View
+            style={{
+              height: 60,
+              marginTop: Platform.OS == "android" ? "7%" : 0,
+              backgroundColor: colors.primary,
               flexDirection: "row",
-              flexWrap: "wrap",
-              justifyContent: "center",
+              justifyContent: "space-between",
               alignItems: "center",
             }}
-            style={{}}
           >
-            {subjects?.map((subject, index) => (
-              <SelectSubjectItem
-                key={subject.subjectId}
-                onClick={onclick}
-                selected={selected == subject.subjectId ? true : false}
-                subjectId={subject.subjectId}
-                subject={subject.subjectName}
-              ></SelectSubjectItem>
-            ))}
-
-            <Modal
-              visible={isLoading}
-              backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+            <View style={{ width: "20%" }}>
+              <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                <ImageBackground
+                  style={{ height: 25, width: 32 }}
+                  source={require("../assets/images/lessthan.png")}
+                ></ImageBackground>
+              </TouchableOpacity>
+            </View>
+            <View style={{ width: "70%" }}>
+              <Text style={{ color: "white", fontSize: 23 }}>
+                FCS for University
+              </Text>
+            </View>
+          </View>
+          <Text
+            style={{
+              fontSize: 25,
+              margin: 10,
+              fontWeight: "bold",
+              fontStyle: "italic",
+            }}
+          >
+            Choose a subject
+          </Text>
+          <View style={{ height: "80%" }}>
+            <ScrollView
+              contentContainerStyle={{
+                flexGrow: 1,
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              style={{}}
             >
-              <ActivityIndicator size={60}></ActivityIndicator>
-            </Modal>
-          </ScrollView>
-        </View>
+              {subjects?.map((subject, index) => (
+                <SelectSubjectItem
+                  key={subject.subjectId}
+                  onClick={onclick}
+                  selected={selected == subject.subjectId ? true : false}
+                  subjectId={subject.subjectId}
+                  subject={subject.subjectName}
+                ></SelectSubjectItem>
+              ))}
 
-        {/* <View
+              <Modal
+                visible={isLoading}
+                backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+              >
+                <ActivityIndicator size={60}></ActivityIndicator>
+              </Modal>
+            </ScrollView>
+          </View>
+
+          {/* <View
           style={{
             height: "30%",
             width: "90%",
@@ -202,8 +209,9 @@ export default function SelectSubject(props) {
             </Text>
           </TouchableOpacity>
         </View> */}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

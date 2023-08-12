@@ -9,6 +9,8 @@ import {
   Alert,
   Dimensions,
   ActivityIndicator,
+  BackHandler,
+  Platform,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -18,15 +20,19 @@ import { useState } from "react";
 import { updateAccount } from "../store/actions/actions";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import Toast from "react-native-simple-toast";
+import Toast from "react-native-root-toast";
 import { Modal } from "@ui-kitten/components/ui";
 import * as FileSystem from "expo-file-system";
 import * as updates from "expo-updates";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
 
 import { logout } from "../store/actions/actions";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function AccountInfo(props) {
+  BackHandlerChild();
+
   const username = useSelector((state) => state.MainReducer.userName);
 
   const lastname = useSelector((state) => state.MainReducer.lastName);
@@ -64,6 +70,7 @@ export default function AccountInfo(props) {
   const onGallerry = async () => {
     const hasPermission = await askPermission();
     if (!hasPermission) {
+      Alert.alert("Error!", "files read Permission required");
       return;
     }
 
@@ -72,7 +79,7 @@ export default function AccountInfo(props) {
       aspect: [16, 12],
       quality: 0.7,
     });
-    if (!image.cancelled) {
+    if (!image.canceled) {
       const getFileSize = async (uri) => {
         let fileInfo = await FileSystem.getInfoAsync(uri);
         console.log(fileInfo);
@@ -106,11 +113,11 @@ export default function AccountInfo(props) {
       aspect: [16, 12],
       quality: 0.7,
     });
-    if (!image.cancelled) {
+    if (!image.canceled) {
       const getFileSize = async (uri) => {
         let fileInfo = await FileSystem.getInfoAsync(uri);
         console.log(fileInfo);
-        if (fileInfo.size / 1024 / 1024 > 2097152) {
+        if (fileInfo.size > 2097152) {
           return false;
         } else {
           return true;
@@ -152,13 +159,18 @@ export default function AccountInfo(props) {
       if (e.code == 401) {
         await dispatch(logout());
         await AsyncStorage.clear().then().then();
-        updates.reloadAsync();
+        props.navigation.navigate("Login");
+        // updates.reloadAsync();
       }
       Alert.alert("Sorry!", e.message);
     }
+    let toast = Toast.show("Account updated!", {
+      duration: Toast.durations.LONG,
+    });
 
-    Toast.BOTTOM;
-    Toast.show("Account info updated", 2);
+    setTimeout(function hideToast() {
+      Toast.hide(toast);
+    }, 2000);
     props.navigation.goBack();
   };
 
@@ -176,7 +188,7 @@ export default function AccountInfo(props) {
           <View
             style={{
               height: 60,
-              marginTop: "7%",
+              marginTop: Platform.OS == "android" ? "7%" : 0,
               backgroundColor: colors.primary,
               flexDirection: "row",
               justifyContent: "flex-start",
@@ -184,10 +196,10 @@ export default function AccountInfo(props) {
             }}
           >
             <View style={{ width: "20%" }}>
-              <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+              <TouchableOpacity onPress={() => props.navigation.goBack()}>
                 <ImageBackground
                   style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/menu.png")}
+                  source={require("../assets/images/lessthan.png")}
                 ></ImageBackground>
               </TouchableOpacity>
             </View>
@@ -238,7 +250,7 @@ export default function AccountInfo(props) {
                         }}
                         resizeMode="center"
                         source={
-                          teacherPhoto.includes("null")
+                          teacherPhoto?.includes("null")
                             ? require("../assets/images/avatar.png")
                             : {
                                 uri: teacherPhoto,

@@ -8,6 +8,7 @@ export default {
     return {
       currentYear: null,
       currentYearSemesters: [],
+      currentPeriodSemesters: [],
       semester: null,
       reviewStudents: [],
     };

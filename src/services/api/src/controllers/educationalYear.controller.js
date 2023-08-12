@@ -17,15 +17,18 @@ const getEducationalYears = catchAsync(async (req, res) => {
   }
   if (req.query.period) {
     const semesters = [];
+    const theSemesters = [];
     const periodYear = await educationalYearService.getYearByPeriod(req.query.period);
     if (!periodYear) throw new ApiError(httpStatus.NOT_FOUND, 'Period Year Not Found');
     const firstSemester = await semesterService.findSemesterByYearIdAndTitle(periodYear.id, 1);
     const secondSemester = await semesterService.findSemesterByYearIdAndTitle(periodYear.id, 2);
+    theSemesters[0] = firstSemester;
+    theSemesters[1] = secondSemester;
     semesters.push({
       [periodYear.year]: {
         1: firstSemester,
         2: secondSemester,
-      }
+      },
     });
     const secondYearOfPeriod = await educationalYearService.findNextYear(periodYear.year);
     if (secondYearOfPeriod) {
@@ -37,6 +40,8 @@ const getEducationalYears = catchAsync(async (req, res) => {
           4: fourthSemester,
         },
       });
+      theSemesters[2] = thirdSemester;
+      theSemesters[3] = fourthSemester;
       const thirdYearOfPeriod = await educationalYearService.findNextYear(secondYearOfPeriod.year);
       if (thirdYearOfPeriod) {
         const fifthSemester = await semesterService.findSemesterByYearIdAndTitle(thirdYearOfPeriod.id, 5);
@@ -45,8 +50,10 @@ const getEducationalYears = catchAsync(async (req, res) => {
           [thirdYearOfPeriod.year]: {
             5: fifthSemester,
             6: sixthSemester,
-          }
-        })
+          },
+        });
+        theSemesters[4] = fifthSemester;
+        theSemesters[5] = sixthSemester;
         const fourthYearOfPeriod = await educationalYearService.findNextYear(thirdYearOfPeriod.year);
         if (fourthYearOfPeriod) {
           const seventhSemester = await semesterService.findSemesterByYearIdAndTitle(fourthYearOfPeriod.id, 7);
@@ -55,12 +62,23 @@ const getEducationalYears = catchAsync(async (req, res) => {
             [fourthYearOfPeriod.year]: {
               7: seventhSemester,
               8: eighthSemester,
-            }
-          })
+            },
+          });
+          theSemesters[6] = seventhSemester;
+          theSemesters[7] = eighthSemester;
         }
-      };
-    };
-    return res.status(httpStatus.OK).send(semesters);
+      }
+    }
+
+    const semestersWithEducationalYear = [];
+    for await (let semester of theSemesters) {
+      const theYear = await educationalYearService.getEducationalYear(semester.educationalYearId);
+      semester.year = theYear.year;
+      semestersWithEducationalYear.push(semester);
+    }
+
+    console.log(semestersWithEducationalYear);
+    return res.status(httpStatus.OK).send({ orderedSemesters: semesters, unorderedSemesters: theSemesters });
   }
   const results = await educationalYearService.getEducationalYears();
   res.status(httpStatus.OK).send(results);
@@ -78,7 +96,6 @@ const getEducationalYear = catchAsync(async (req, res) => {
   if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
   res.status(httpStatus.OK).send(year);
 });
-
 
 const setDate = catchAsync(async (req, res) => {
   let year = undefined;
@@ -108,7 +125,7 @@ const setCurrentYear = catchAsync(async (req, res) => {
   const year = await educationalYearService.getEducationalYearByValue(req.body.year);
   if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
   const currentYear = await educationalYearService.getCurrentEducationalYear();
-  if (currentYear && (currentYear?.year !== year.year)) {
+  if (currentYear && currentYear?.year !== year.year) {
     await educationalYearService.updateYear(currentYear, { onGoing: false });
   }
   if (req.body.firstHalf) {
@@ -121,7 +138,6 @@ const setCurrentYear = catchAsync(async (req, res) => {
     return res.status(httpStatus.ACCEPTED).send(results);
   }
 });
-
 
 module.exports = {
   setDate,

@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import NavWrapper from "./navigation/NavWrapper";
 import { createStore, legacy_createStore } from "redux";
 import { Provider } from "react-redux";
@@ -18,6 +18,7 @@ import GetInfo from "./store/reducers/getInfo";
 import * as fonts from "expo-font";
 import studentsBySubject from "./store/reducers/studentsBySubject";
 import { LogBox } from "react-native";
+import { RootSiblingParent } from "react-native-root-siblings";
 LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
 
@@ -42,7 +43,11 @@ export default function App() {
       >
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Provider store={store}>
-            <NavWrapper></NavWrapper>
+            <RootSiblingParent>
+              <SafeAreaProvider>
+                <NavWrapper></NavWrapper>
+              </SafeAreaProvider>
+            </RootSiblingParent>
           </Provider>
         </GestureHandlerRootView>
       </ApplicationProvider>

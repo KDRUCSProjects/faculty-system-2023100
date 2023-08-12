@@ -143,6 +143,29 @@ const routes = [
     ],
   },
   {
+    path: '/periods',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/periods/Periods.vue'),
+    children: [
+      {
+        path: '',
+        name: 'periods-list',
+        component: () => import('@/views/periods/PeriodsList.vue'),
+      },
+      {
+        path: 'view/:id',
+        name: 'view-period',
+        meta: {
+          requiresAuth: true,
+        },
+        component: () => import('@/views/periods/PeriodView.vue'),
+        props: true,
+      },
+    ],
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/auth',
   },

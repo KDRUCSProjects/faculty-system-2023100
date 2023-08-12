@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -20,13 +21,15 @@ import {
   checkPassword,
   updateAccount,
 } from "../store/actions/actions";
-import Toast from "react-native-simple-toast";
+import Toast from "react-native-root-toast";
 import { Modal } from "@ui-kitten/components";
 import * as updates from "expo-updates";
 
 import { logout } from "../store/actions/actions";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function ChangePassword(props) {
+  BackHandlerChild();
   const username = useSelector((state) => state.MainReducer.userName);
   const lastname = useSelector((state) => state.MainReducer.lastName);
   const prevEmail = useSelector((state) => state.MainReducer.email);
@@ -97,208 +100,216 @@ export default function ChangePassword(props) {
         // props.navigation.navigate("Login");
         await dispatch(logout());
         await AsyncStorage.clear().then().then();
-        updates.reloadAsync();
+        props.navigation.navigate("Login");
+        // updates.reloadAsync();
       }
       Alert.alert("Sorry!", e.message);
       return;
     }
-    Toast.BOTTOM;
-    Toast.show("Password updated", 2);
+    let toast = Toast.show("Password updated!", {
+      duration: Toast.durations.LONG,
+    });
+
+    setTimeout(function hideToast() {
+      Toast.hide(toast);
+    }, 2000);
     props.navigation.goBack();
   };
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flex: 1,
-          height: "100%",
-          width: "100%",
-          justifyContent: "space-between",
-        }}
-      >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <View
           style={{
-            height: 60,
-            marginTop: "7%",
-            backgroundColor: colors.primary,
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <View style={{ width: "20%" }}>
-            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
-              <ImageBackground
-                style={{ height: 25, width: 32 }}
-                source={require("../assets/images/menu.png")}
-              ></ImageBackground>
-            </TouchableOpacity>
-          </View>
-          <View style={{ width: "60%", alignItems: "center" }}>
-            <Text style={{ color: "white", fontSize: 23 }}>
-              Change password
-            </Text>
-          </View>
-        </View>
-
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
+            flex: 1,
+            height: "100%",
+            width: "100%",
+            justifyContent: "space-between",
           }}
         >
           <View
             style={{
-              height: "40%",
-              width: "100%",
+              height: 60,
+              marginTop: Platform.OS == "android" ? "7%" : 0,
+              backgroundColor: colors.primary,
+              flexDirection: "row",
+              justifyContent: "flex-start",
               alignItems: "center",
-              justifyContent: "space-around",
             }}
           >
-            <View style={{ height: 180, width: 180, margin: 10 }}>
-              <ImageBackground
-                style={{ width: "100%", height: "100%" }}
-                source={require("../assets/images/reset-password.png")}
-              ></ImageBackground>
+            <View style={{ width: "20%" }}>
+              <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                <ImageBackground
+                  style={{ height: 25, width: 32 }}
+                  source={require("../assets/images/lessthan.png")}
+                ></ImageBackground>
+              </TouchableOpacity>
             </View>
-            <Text style={{ fontWeight: "bold", fontSize: 30 }}>
-              Change Password
-            </Text>
-            <Text style={{ fontWeight: "bold", fontSize: 13, marginTop: 3 }}>
-              Please enter your Password
-            </Text>
+            <View style={{ width: "60%", alignItems: "center" }}>
+              <Text style={{ color: "white", fontSize: 23 }}>
+                Change password
+              </Text>
+            </View>
           </View>
 
-          <View
-            style={{
-              height: "50%",
-
-              justifyContent: "space-between",
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
             }}
           >
             <View
               style={{
-                height: "70%",
-                marginTop: "5%",
-                justifyContent: "flex-start",
+                height: "40%",
+                width: "100%",
                 alignItems: "center",
+                justifyContent: "space-around",
               }}
             >
-              <View style={{ width: "90%", height: 120 }}>
-                <TextInput
-                  style={{ height: 60 }}
-                  label={"Current password"}
-                  mode="outlined"
-                  autoCapitalize="none"
-                  textColor="gray"
-                  contentStyle={{ fontSize: 15 }}
-                  error={passwordError}
-                  value={currentPassword}
-                  onChangeText={(text) => {
-                    setpasswordError(false);
-                    setcurrentPassword(text);
-                  }}
-                  right={
-                    <TextInput.Icon
-                      icon={showPass ? "eye" : "eye-off"}
-                      onPress={() => setshowPass((prev) => !prev)}
-                    />
-                  }
-                  secureTextEntry={showPass}
-                ></TextInput>
-                {passwordError ? (
-                  <Text style={{ color: "red" }}>{passwordError}</Text>
-                ) : (
-                  <View></View>
-                )}
+              <View style={{ height: 180, width: 180, margin: 10 }}>
+                <ImageBackground
+                  style={{ width: "100%", height: "100%" }}
+                  source={require("../assets/images/reset-password.png")}
+                ></ImageBackground>
               </View>
+              <Text style={{ fontWeight: "bold", fontSize: 30 }}>
+                Change Password
+              </Text>
+              <Text style={{ fontWeight: "bold", fontSize: 13, marginTop: 3 }}>
+                Please enter your Password
+              </Text>
+            </View>
 
-              <View style={{ width: "90%", height: 120 }}>
-                <TextInput
-                  style={{ height: 60 }}
-                  label={"New password"}
-                  mode="outlined"
-                  autoCapitalize="none"
-                  contentStyle={{ fontSize: 15 }}
-                  textColor="gray"
-                  error={newPassError}
-                  value={newPassword}
-                  onChangeText={(text) => {
-                    setnewPassError(false);
-                    setnewPassword(text);
-                  }}
-                  right={
-                    <TextInput.Icon
-                      icon={showNewPass ? "eye" : "eye-off"}
-                      onPress={() => setshowNewPass((prev) => !prev)}
-                    />
-                  }
-                  secureTextEntry={showNewPass}
-                ></TextInput>
-                {newPassError ? (
-                  <Text style={{ color: "red" }}>{newPassError}</Text>
-                ) : (
-                  <View></View>
-                )}
-              </View>
-              <View style={{ width: "90%", height: 120 }}>
-                <TextInput
-                  style={{ height: 60 }}
-                  label={"Confirm password"}
-                  mode="outlined"
-                  textColor="gray"
-                  autoCapitalize="none"
-                  contentStyle={{ fontSize: 15 }}
-                  error={confirmPassError}
-                  value={confirmPassword}
-                  onChangeText={(text) => {
-                    setconfirmPassError(false);
-                    setconfirmPassword(text);
-                  }}
-                  right={
-                    <TextInput.Icon
-                      icon={showConfirmPass ? "eye" : "eye-off"}
-                      onPress={() => setshowConfirmPass((prev) => !prev)}
-                    />
-                  }
-                  secureTextEntry={showConfirmPass}
-                ></TextInput>
-                {confirmPassError ? (
-                  <Text style={{ color: "red" }}>{confirmPassError}</Text>
-                ) : (
-                  <View></View>
-                )}
+            <View
+              style={{
+                height: "50%",
+
+                justifyContent: "space-between",
+              }}
+            >
+              <View
+                style={{
+                  height: "70%",
+                  marginTop: "5%",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <View style={{ width: "90%", height: 120 }}>
+                  <TextInput
+                    style={{ height: 60 }}
+                    label={"Current password"}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    textColor="gray"
+                    contentStyle={{ fontSize: 15 }}
+                    error={passwordError}
+                    value={currentPassword}
+                    onChangeText={(text) => {
+                      setpasswordError(false);
+                      setcurrentPassword(text);
+                    }}
+                    right={
+                      <TextInput.Icon
+                        icon={showPass ? "eye" : "eye-off"}
+                        onPress={() => setshowPass((prev) => !prev)}
+                      />
+                    }
+                    secureTextEntry={showPass}
+                  ></TextInput>
+                  {passwordError ? (
+                    <Text style={{ color: "red" }}>{passwordError}</Text>
+                  ) : (
+                    <View></View>
+                  )}
+                </View>
+
+                <View style={{ width: "90%", height: 120 }}>
+                  <TextInput
+                    style={{ height: 60 }}
+                    label={"New password"}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    contentStyle={{ fontSize: 15 }}
+                    textColor="gray"
+                    error={newPassError}
+                    value={newPassword}
+                    onChangeText={(text) => {
+                      setnewPassError(false);
+                      setnewPassword(text);
+                    }}
+                    right={
+                      <TextInput.Icon
+                        icon={showNewPass ? "eye" : "eye-off"}
+                        onPress={() => setshowNewPass((prev) => !prev)}
+                      />
+                    }
+                    secureTextEntry={showNewPass}
+                  ></TextInput>
+                  {newPassError ? (
+                    <Text style={{ color: "red" }}>{newPassError}</Text>
+                  ) : (
+                    <View></View>
+                  )}
+                </View>
+                <View style={{ width: "90%", height: 120 }}>
+                  <TextInput
+                    style={{ height: 60 }}
+                    label={"Confirm password"}
+                    mode="outlined"
+                    textColor="gray"
+                    autoCapitalize="none"
+                    contentStyle={{ fontSize: 15 }}
+                    error={confirmPassError}
+                    value={confirmPassword}
+                    onChangeText={(text) => {
+                      setconfirmPassError(false);
+                      setconfirmPassword(text);
+                    }}
+                    right={
+                      <TextInput.Icon
+                        icon={showConfirmPass ? "eye" : "eye-off"}
+                        onPress={() => setshowConfirmPass((prev) => !prev)}
+                      />
+                    }
+                    secureTextEntry={showConfirmPass}
+                  ></TextInput>
+                  {confirmPassError ? (
+                    <Text style={{ color: "red" }}>{confirmPassError}</Text>
+                  ) : (
+                    <View></View>
+                  )}
+                </View>
               </View>
             </View>
-          </View>
-        </ScrollView>
-        <Modal
-          visible={isLoading}
-          backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-        >
-          <ActivityIndicator size={60}></ActivityIndicator>
-        </Modal>
-      </View>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() =>
-          Alert.alert("Save?", "Do you want save?", [
-            {
-              text: "No",
-              onPress: () => {
-                return;
+          </ScrollView>
+          <Modal
+            visible={isLoading}
+            backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          >
+            <ActivityIndicator size={60}></ActivityIndicator>
+          </Modal>
+        </View>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() =>
+            Alert.alert("Save?", "Do you want save?", [
+              {
+                text: "No",
+                onPress: () => {
+                  return;
+                },
               },
-            },
-            {
-              text: "Yes",
-              onPress: onChangePassword,
-            },
-          ])
-        }
-      >
-        <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
-      </TouchableOpacity>
-    </View>
+              {
+                text: "Yes",
+                onPress: onChangePassword,
+              },
+            ])
+          }
+        >
+          <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
