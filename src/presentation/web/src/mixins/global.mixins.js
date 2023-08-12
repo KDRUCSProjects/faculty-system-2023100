@@ -50,5 +50,13 @@ export default {
       aElement.click();
       URL.revokeObjectURL(href);
     },
+    resetData(data, state) {
+      Object.assign(data, state());
+    },
+    async loadInitialData(data, loadDataInCallback) {
+      data.initLoader = true;
+      await loadDataInCallback();
+      data.initLoader = false;
+    },
   },
 };

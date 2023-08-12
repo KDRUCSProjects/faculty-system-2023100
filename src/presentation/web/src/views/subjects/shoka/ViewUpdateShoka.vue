@@ -64,8 +64,8 @@
                 :title="'Final Marks'"
                 @update="updateMarks"
                 :fieldLabel="'Marks'"
-                :fieldValue="item.columns.finalMarks"
                 :fieldName="'finalMarks'"
+                :fieldValue="item.columns.finalMarks"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
               >
@@ -77,14 +77,14 @@
           </template>
 
           <template v-slot:item.projectMarks="{ item }">
-            <div class="text-center">
+            <div class="text-center" v-if="item">
               <base-update-dialog
                 :title="'Project Marks'"
                 @update="updateMarks"
                 :fieldLabel="'Marks'"
-                :fieldValue="item.columns.projectMarks"
                 :fieldName="'projectMarks'"
                 :rowId="item?.raw?.shokaListId"
+                :fieldValue="item.columns.projectMarks"
                 :data="item?.raw"
               >
                 <v-btn color="dark" text variant="outlined">
@@ -100,9 +100,9 @@
                 :title="'Practical Work Marks'"
                 @update="updateMarks"
                 :fieldLabel="'Marks'"
-                :fieldValue="item.columns.practicalWork"
                 :fieldName="'practicalWork'"
                 :rowId="item?.raw?.shokaListId"
+                :fieldValue="item.columns.practicalWork"
                 :data="item?.raw"
               >
                 <v-btn color="dark" text variant="outlined">
@@ -184,7 +184,60 @@
 <script>
 import { VDataTableVirtual } from 'vuetify/labs/VDataTable';
 
+const initialState = () => ({
+  chance: 1,
+  subject: null,
+  downloadLoading: false,
+  chanceItems: [1, 2, 3, 4],
+  headers: [
+    {
+      title: 'No',
+      sortable: false,
+      key: 'no',
+    },
+    {
+      title: 'Photo',
+      key: 'photo',
+      sortable: false,
+    },
+    {
+      title: 'Kankor ID',
+      align: 'start',
+      key: 'kankorId',
+      sortable: false,
+    },
+    {
+      title: 'Name',
+      align: 'start',
+      sortable: false,
+      key: 'fullName',
+    },
+    {
+      title: 'Father Name',
+      align: 'start',
+      sortable: false,
+      key: 'fatherName',
+    },
+    {
+      title: 'Grand Father Name',
+      align: 'start',
+      sortable: false,
+      key: 'grandFatherName',
+    },
+    { title: 'Assignment', key: 'assignment', sortable: false },
+    { title: 'Practical', key: 'practicalWork', sortable: false },
+    { title: 'Mid-Exam', key: 'projectMarks', sortable: false },
+    { title: 'Final-Exam', key: 'finalMarks', sortable: false },
+    { title: 'Total', key: 'total', sortable: false },
+    // { title: 'Success', key: 'eligibility', sortable: false },
+  ],
+});
+
 export default {
+  beforeUnmount() {
+    // Reset currentShoka
+    this.$store.commit('subjects/setShoka', []);
+  },
   props: {
     subjectId: {
       type: Number,
@@ -194,54 +247,7 @@ export default {
   components: {
     VDataTableVirtual,
   },
-  data: () => ({
-    chance: 1,
-    subject: null,
-    downloadLoading: false,
-    chanceItems: [1, 2, 3, 4],
-    headers: [
-      {
-        title: 'No',
-        sortable: false,
-        key: 'no',
-      },
-      {
-        title: 'Photo',
-        key: 'photo',
-        sortable: false,
-      },
-      {
-        title: 'Kankor ID',
-        align: 'start',
-        key: 'kankorId',
-        sortable: false,
-      },
-      {
-        title: 'Name',
-        align: 'start',
-        sortable: false,
-        key: 'fullName',
-      },
-      {
-        title: 'Father Name',
-        align: 'start',
-        sortable: false,
-        key: 'fatherName',
-      },
-      {
-        title: 'Grand Father Name',
-        align: 'start',
-        sortable: false,
-        key: 'grandFatherName',
-      },
-      { title: 'Assignment', key: 'assignment', sortable: false },
-      { title: 'Practical', key: 'practicalWork', sortable: false },
-      { title: 'Mid-Exam', key: 'projectMarks', sortable: false },
-      { title: 'Final-Exam', key: 'finalMarks', sortable: false },
-      { title: 'Total', key: 'total', sortable: false },
-      // { title: 'Success', key: 'eligibility', sortable: false },
-    ],
-  }),
+  data: () => initialState(),
   computed: {
     students() {
       return this.$store.getters['subjects/currentShoka'];
@@ -303,7 +309,7 @@ export default {
     },
   },
   watch: {
-    async chance(newValue) {
+    async chance() {
       await this.loadShokaBySubject(this.chance);
     },
   },

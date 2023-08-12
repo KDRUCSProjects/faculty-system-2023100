@@ -26,11 +26,15 @@
 import StudentDetails from '@/components/students/StudentDetails.vue';
 import StudentPhoto from '@/components/students/StudentPhoto.vue';
 export default {
+  beforeUnmount() {
+    this.$store.commit('students/setStudent', null);
+  },
   components: {
     StudentDetails,
     StudentPhoto,
   },
   data: () => ({
+    initLoader: false,
     photo: null,
   }),
   props: {
@@ -40,7 +44,6 @@ export default {
   },
   methods: {
     async updatePhoto(photo) {
-      console.log(photo);
       await this.$store.dispatch('students/updateStudent', { ['photo']: photo.fieldValue, studentId: this.id });
     },
     async loadStudent(studentId) {
@@ -70,7 +73,9 @@ export default {
     },
   },
   async created() {
-    await this.loadStudent(this.id);
+    this.loadInitialData(this, async () => {
+      await this.loadStudent(this.id);
+    });
   },
 };
 </script>
