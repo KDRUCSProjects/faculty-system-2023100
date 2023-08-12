@@ -1,4 +1,4 @@
-<template >
+<template>
   <v-navigation-drawer v-model="drawer" app width="220" color="primary" permanent>
     <!-- App/Drawer name -->
     <v-list-item class="my-4">
@@ -12,12 +12,12 @@
     <v-divider></v-divider>
 
     <!-- Menu Items -->
-    <v-list nav dense class="menu-items" >
+    <v-list nav dense class="menu-items">
       <div v-for="item in items" :key="item.title">
         <div v-if="!item.children">
           <v-list-item link :to="item.to">
             <v-list-item-icon>
-              <v-icon color="light" >{{ item.icon }}</v-icon>
+              <v-icon color="light">{{ item.icon }}</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -104,9 +104,9 @@ export default {
         //   to: '/subjects',
         // },
         {
-          title: this.$t('Reports'),
-          icon: 'mdi-chart-bar',
-          to: '/reports',
+          title: this.$t('Periods'),
+          icon: 'mdi-school',
+          to: '/periods',
         },
         {
           title: this.$t('Departments'),

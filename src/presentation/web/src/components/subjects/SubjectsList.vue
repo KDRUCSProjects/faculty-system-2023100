@@ -71,11 +71,6 @@ export default {
           onClick: 'downloadAttendance ',
         },
         {
-          icon: 'mdi-note-text-outline',
-          title: this.$t('Download Shoka'),
-          onClick: 'downloadAttendance ',
-        },
-        {
           icon: 'mdi-delete',
           title: this.$t('Delete'),
           onClick: 'delete',
