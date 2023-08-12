@@ -20,7 +20,7 @@
         :variant="type === 'success' ? 'text' : 'flat'"
         @click="toast = false"
       >
-        Close
+        {{ $t('Close') }}
       </v-btn>
     </template>
   </v-snackbar>

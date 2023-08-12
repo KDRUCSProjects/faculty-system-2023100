@@ -16,7 +16,7 @@
 
       <template v-slot:top>
         <v-toolbar color="dark" class="py-2">
-          <v-toolbar-title> {{ statusTypes[type] }} students table </v-toolbar-title>
+          <v-toolbar-title> {{ statusTypes[type] }} {{ $t('Students') }} </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
@@ -42,7 +42,7 @@
       </template>
 
       <template v-slot:item.studentId="{ item }">
-        <router-link :to="`/students/view/${item.columns.studentId}`">View</router-link>
+        <router-link :to="`/students/view/${item.columns.studentId}`">{{ $t('View') }}</router-link>
       </template>
 
       <template v-slot:item.kankorId="{ item }">
@@ -111,7 +111,7 @@ export default {
       loading: false,
       errorMessage: null,
       search: '',
-      statusTypes: ['taajil', 'reentry', 'tabdili'],
+      statusTypes: [this.$t('Taajil'), this.$t('Reentry'), this.$t('Tabdili')],
       type: null,
     };
   },

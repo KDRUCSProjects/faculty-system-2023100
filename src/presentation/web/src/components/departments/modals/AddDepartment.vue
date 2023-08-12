@@ -14,7 +14,7 @@
             </v-card-item>
             <v-card-text> 
               <v-form  @submit.prevent="submitForm" ref="addDepartmentForm">
-                <v-text-field :rules="rules.name" v-model="name" type="text" variant="outlined" label="Department Name"></v-text-field>                
+                <v-text-field :rules="rules.name" v-model="name" type="text" variant="outlined" :label="$t('Department Name')"></v-text-field>                
               </v-form>
               <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
             </v-card-text>

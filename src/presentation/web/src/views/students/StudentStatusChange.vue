@@ -3,8 +3,8 @@
     <v-col cols="5">
       <v-card class="h-100 theShadow py-0 my-0">
         <v-card-item class="text-center bg-primary">
-          <v-card-title class="text-h5"> {{ type }} form </v-card-title>
-          <v-card-subtitle>Create student {{ type }} form for student </v-card-subtitle>
+          <v-card-title class="text-h5"> {{ type }} {{ $t('form') }} </v-card-title>
+          <v-card-subtitle>{{ $t('For conversion blew instruction is important') }}</v-card-subtitle>
         </v-card-item>
 
         <v-divider class="mt-3"></v-divider>
@@ -14,7 +14,7 @@
               <v-list-title>{{ student?.fullName }}</v-list-title>
             </template>
             <template v-slot:subtitle>
-              <v-list-item-subtitle> Kankor ID: {{ student?.kankorId }} </v-list-item-subtitle>
+              <v-list-item-subtitle> {{ $t('Kankor ID') }} : {{ student?.kankorId }} </v-list-item-subtitle>
             </template>
             <template v-slot:prepend>
               <v-avatar color="secondary" variant="tonal">
@@ -38,7 +38,7 @@
               <v-col>
                 <v-text-field
                   variant="outlined"
-                  label="Registration Number"
+                  :label="$t('Registration Number')"
                   v-model="regNumber"
                   :rules="rules.regNumber"
                   prepend-inner-icon="mdi-numeric"
@@ -51,7 +51,7 @@
 
             <v-autocomplete
               v-if="type === 'reentry'"
-              label="Reentry Type"
+              :label="$t('Reentry Type')"
               variant="outlined"
               v-model="reentrySelectedType"
               :items="reentryTypes"
@@ -59,7 +59,7 @@
 
             <v-file-input
               prepend-icon=""
-              label="Form Attachment"
+              :label="$t('Form Attachment')"
               clearable
               chips
               counter
@@ -68,12 +68,12 @@
               prepend-inner-icon="mdi-file-document-outline"
             ></v-file-input>
 
-            <v-textarea variant="outlined" label="Notes" v-model="notes"></v-textarea>
+            <v-textarea variant="outlined" :label="$t('Notes')" v-model="notes"></v-textarea>
 
             <v-checkbox
               v-if="type === 'taajil'"
               v-model="specialTaajil"
-              label="Speccial Taajil"
+              :label="$t('Special Taajil')"
               color="dark"
               :value="true"
             ></v-checkbox>
@@ -81,7 +81,7 @@
             <!-- <v-text-field label="Educational Year" v-model="attachment"></v-text-field> -->
             <v-alert v-if="erorrMessage" type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
 
-            <v-btn type="submit" block color="dark"> Submit </v-btn>
+            <v-btn type="submit" block color="dark"> {{ $t('Submit') }} </v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -91,7 +91,7 @@
         <students-data-table
           :students="students"
           :headers="headers"
-          studentsTypeText="Students Type"
+          :studentsTypeText="$t('Students Type')"
           @status="setType"
         ></students-data-table>
       </router-view>
@@ -108,7 +108,7 @@ export default {
     StudentSearch,
   },
   data: () => ({
-    type: 'taajil',
+    type: null,
     reentrySelectedType: null,
     reentryTypes: ['taajil', 'mahrom', 'special_taajil', 'repeat'],
     specialTaajil: false,
@@ -144,12 +144,12 @@ export default {
     rules() {
       return {
         // More validations will come later
-        studentId: [(v) => !!v || 'Please enter student database Id'],
-        educationalYear: [(v) => !!v || 'Please enter educational year name'],
-        regNumber: [(v) => !!v || 'Please enter reg number of form'],
+        studentId: [(v) => !!v || this.$t('Please enter student database Id')],
+        educationalYear: [(v) => !!v || this.$t('Please enter educational year name')],
+        regNumber: [(v) => !!v || this.$t('Please enter reg number of form')],
         attachment: [
           (value) => {
-            return !value || !value.length || value[0].size < 2000000 || 'Avatar size should be lesser than 2 MB!';
+            return !value || !value.length || value[0].size < 2000000 || this.$t('Photo size should be lesser than 2 MB!');
           },
         ],
       };
@@ -174,11 +174,11 @@ export default {
       if (!valid) return false;
 
       if (!this.educationalYear) {
-        return this.$store.commit('setToast', [0, 'Please select educational year first']);
+        return this.$store.commit('setToast', [0, this.$t('Please select educational year first')]);
       }
 
       if (this.type === 'reentry' && !this.reentrySelectedType) {
-        return this.$store.commit('setToast', [0, 'Please select re-entry type']);
+        return this.$store.commit('setToast', [0, this.$t('Please select re-entry type')]);
       }
 
       try {
