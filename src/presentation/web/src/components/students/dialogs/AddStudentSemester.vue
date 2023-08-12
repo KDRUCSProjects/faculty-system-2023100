@@ -3,7 +3,7 @@
     <v-card class="theShadow border py-4 mt-2">
       <v-card-item>
         <!-- <v-card-title>Enroll Student</v-card-title> -->
-        <v-card-subtitle>Find student and then add to semester</v-card-subtitle>
+        <v-card-subtitle>{{ $t('Find student and then add to semester') }}</v-card-subtitle>
       </v-card-item>
 
       <v-card-text>
@@ -11,7 +11,7 @@
           <v-text-field
             variant="solo"
             v-model="kankorId"
-            label="Kankor ID"
+            :label="$t('Kankor ID')"
             append-inner-icon="mdi-magnify"
             @click:append-inner="findStudent"
             :loading="loading"
@@ -56,7 +56,7 @@ export default {
   computed: {
     rules() {
       return {
-        kankorId: [(v) => !!v || 'Please enter student kankor id'],
+        kankorId: [(v) => !!v || this.$t('Please enter student kankor id')],
       };
     },
   },

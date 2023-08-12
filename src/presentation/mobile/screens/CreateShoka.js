@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -32,7 +33,7 @@ import { List } from "react-native-paper";
 import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function CreateShoka(props) {
-  BackHandlerChild();
+  // d();
   const subjectIdParam = props.route.params.subjectId;
   const status = props.route.params.status;
 
@@ -145,7 +146,8 @@ export default function CreateShoka(props) {
         // props.navigation.navigate("Login");
         await dispatch(logout());
         await AsyncStorage.clear().then().then();
-        updates.reloadAsync();
+        props.navigation.navigate("Login");
+        //updates.reloadAsync();
       }
       Alert.alert("Sorry!", e.message);
       return;
@@ -171,346 +173,62 @@ export default function CreateShoka(props) {
 
   const handlePress = () => setExpanded(!expanded);
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flex: 1,
-          height: "100%",
-          width: "100%",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <View
           style={{
-            height: 60,
-            marginTop: "7%",
-            backgroundColor: colors.primary,
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            alignItems: "center",
+            flex: 1,
+            height: "100%",
             width: "100%",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
-        >
-          <View style={{ width: "20%" }}>
-            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
-              <ImageBackground
-                style={{ height: 25, width: 32 }}
-                source={require("../assets/images/menu.png")}
-              ></ImageBackground>
-            </TouchableOpacity>
-          </View>
-          <View style={{ width: "60%", alignItems: "center" }}>
-            <Text style={{ color: "white", fontSize: 23 }}>Create Shoka</Text>
-          </View>
-        </View>
-
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-          }}
-          ref={ref}
         >
           <View
             style={{
-              height: "100%",
-
-              justifyContent: "space-between",
+              height: 60,
+              marginTop: Platform.OS == "android" ? "7%" : 0,
+              backgroundColor: colors.primary,
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              width: "100%",
             }}
+          >
+            <View style={{ width: "20%" }}>
+              <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                <ImageBackground
+                  style={{ height: 25, width: 32 }}
+                  source={require("../assets/images/lessthan.png")}
+                ></ImageBackground>
+              </TouchableOpacity>
+            </View>
+            <View style={{ width: "60%", alignItems: "center" }}>
+              <Text style={{ color: "white", fontSize: 23 }}>Create Shoka</Text>
+            </View>
+          </View>
+
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+            }}
+            ref={ref}
           >
             <View
               style={{
-                height: "70%",
-                marginTop: "5%",
-                justifyContent: "flex-start",
-                alignItems: "center",
+                height: "100%",
+
+                justifyContent: "space-between",
               }}
             >
               <View
                 style={{
-                  width: "90%",
-                  height: 90,
-                  flexDirection: "row",
-                  justifyContent: "space-around",
+                  height: "70%",
+                  marginTop: "5%",
+                  justifyContent: "flex-start",
                   alignItems: "center",
                 }}
               >
-                <View
-                  style={{
-                    width: "40%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text style={{ fontSize: 17 }}>Student</Text>
-                </View>
-
-                <View
-                  style={{
-                    width: "60%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
-                  <ScrollView
-                    horizontal={true}
-                    style={{
-                      borderWidth: 1,
-                      borderRadius: 4,
-                      borderColor: "black",
-                    }}
-                    showsHorizontalScrollIndicator={false}
-                  >
-                    {students?.map((student) => {
-                      return (
-                        <TouchableOpacity
-                          style={{
-                            borderWidth: 1,
-                            borderRadius: 4,
-                            borderColor: "black",
-                            margin: 5,
-                          }}
-                          key={student.studentId}
-                          onPress={() => {
-                            console.log(student.studentId);
-                            setselectedStudentErr(false);
-                            setselectedStudent(student.studentId);
-                          }}
-                        >
-                          <Text> {student.studentId} </Text>
-                          <Text>{student.studentName}</Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </ScrollView>
-                  {selectedStudentErr ? (
-                    <Text style={{ color: "red" }}>{selectedStudentErr}</Text>
-                  ) : (
-                    <View></View>
-                  )}
-                </View>
-              </View>
-
-              <View
-                style={{
-                  width: "90%",
-                  height: 90,
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
-              >
-                <View
-                  style={{
-                    width: "40%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text style={{ fontSize: 17 }}>Project Marks</Text>
-                </View>
-
-                <View
-                  style={{
-                    width: "60%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
-                  <TextInput
-                    style={{ height: 50 }}
-                    label={"Project Marks"}
-                    mode="outlined"
-                    textColor="black"
-                    outlineColor="black"
-                    contentStyle={{
-                      fontSize: 13,
-                    }}
-                    keyboardType="number-pad"
-                    inputMode="numeric"
-                    maxLength={2}
-                    error={ProjectMarksError}
-                    value={ProjectMarks}
-                    onChangeText={(text) => {
-                      setmarksError(false);
-                      setProjectMarksError(false);
-                      setProjectMarks(text);
-                    }}
-                  ></TextInput>
-                  {ProjectMarksError ? (
-                    <Text style={{ color: "red" }}>{ProjectMarksError}</Text>
-                  ) : (
-                    <View></View>
-                  )}
-                </View>
-              </View>
-
-              <View
-                style={{
-                  width: "90%",
-                  height: 90,
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
-              >
-                <View
-                  style={{
-                    width: "40%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text style={{ fontSize: 17 }}>
-                    Assignments & Project Marks
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    width: "60%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
-                  <TextInput
-                    style={{ height: 50 }}
-                    label={"A & P Marks"}
-                    mode="outlined"
-                    textColor="black"
-                    outlineColor="black"
-                    contentStyle={{
-                      fontSize: 13,
-                    }}
-                    keyboardType="number-pad"
-                    inputMode="numeric"
-                    maxLength={2}
-                    error={assignmentsError}
-                    value={assignments}
-                    onChangeText={(text) => {
-                      setmarksError(false);
-                      setassignmentsError(false);
-                      setassignments(text);
-                    }}
-                  ></TextInput>
-                  {assignmentsError ? (
-                    <Text style={{ color: "red" }}>{assignmentsError}</Text>
-                  ) : (
-                    <View></View>
-                  )}
-                </View>
-              </View>
-
-              <View
-                style={{
-                  width: "90%",
-                  height: 90,
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
-              >
-                <View
-                  style={{
-                    width: "40%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text style={{ fontSize: 17 }}>Final Marks</Text>
-                </View>
-
-                <View
-                  style={{
-                    width: "60%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
-                  <TextInput
-                    style={{ height: 50 }}
-                    label={"Final Marks"}
-                    mode="outlined"
-                    textColor="black"
-                    outlineColor="black"
-                    contentStyle={{
-                      fontSize: 13,
-                    }}
-                    keyboardType="number-pad"
-                    inputMode="numeric"
-                    maxLength={2}
-                    error={finalsError}
-                    value={finals}
-                    onChangeText={(text) => {
-                      setmarksError(false);
-                      setfinalsError(false);
-                      setfinals(text);
-                    }}
-                  ></TextInput>
-                  {finalsError ? (
-                    <Text style={{ color: "red" }}>{finalsError}</Text>
-                  ) : (
-                    <View></View>
-                  )}
-                </View>
-              </View>
-
-              <View
-                style={{
-                  width: "90%",
-                  height: 90,
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
-              >
-                <View
-                  style={{
-                    width: "40%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text style={{ fontSize: 17 }}>Practical work Marks</Text>
-                </View>
-
-                <View
-                  style={{
-                    width: "60%",
-                    height: 60,
-                    justifyContent: "center",
-                  }}
-                >
-                  <TextInput
-                    style={{ height: 50 }}
-                    label={"Final Marks"}
-                    mode="outlined"
-                    textColor="black"
-                    outlineColor="black"
-                    contentStyle={{
-                      fontSize: 13,
-                    }}
-                    keyboardType="number-pad"
-                    inputMode="numeric"
-                    maxLength={2}
-                    error={practicalMarksErr}
-                    value={practicalMarks}
-                    onChangeText={(text) => {
-                      setmarksError(false);
-                      setfinalsError(false);
-                      setpracticalMarksErr(false);
-                      setpracticalMarks(text);
-                    }}
-                  ></TextInput>
-                  {practicalMarksErr ? (
-                    <Text style={{ color: "red" }}>{practicalMarksErr}</Text>
-                  ) : (
-                    <View></View>
-                  )}
-                </View>
-              </View>
-
-              {marksError ? (
                 <View
                   style={{
                     width: "90%",
@@ -520,45 +238,331 @@ export default function CreateShoka(props) {
                     alignItems: "center",
                   }}
                 >
-                  <Text style={{ fontSize: 20, color: "red" }}>
-                    {marksError}
-                  </Text>
+                  <View
+                    style={{
+                      width: "40%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 17 }}>Student</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      width: "60%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <ScrollView
+                      horizontal={true}
+                      style={{
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        borderColor: "black",
+                      }}
+                      showsHorizontalScrollIndicator={false}
+                    >
+                      {students?.map((student) => {
+                        return (
+                          <TouchableOpacity
+                            style={{
+                              borderWidth: 1,
+                              borderRadius: 4,
+                              borderColor: "black",
+                              margin: 5,
+                            }}
+                            key={student.studentId}
+                            onPress={() => {
+                              console.log(student.studentId);
+                              setselectedStudentErr(false);
+                              setselectedStudent(student.studentId);
+                            }}
+                          >
+                            <Text> {student.studentId} </Text>
+                            <Text>{student.studentName}</Text>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </ScrollView>
+                    {selectedStudentErr ? (
+                      <Text style={{ color: "red" }}>{selectedStudentErr}</Text>
+                    ) : (
+                      <View></View>
+                    )}
+                  </View>
                 </View>
-              ) : (
-                <View></View>
-              )}
+
+                <View
+                  style={{
+                    width: "90%",
+                    height: 90,
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: "40%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 17 }}>Project Marks</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      width: "60%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TextInput
+                      style={{ height: 50 }}
+                      label={"Project Marks"}
+                      mode="outlined"
+                      textColor="black"
+                      outlineColor="black"
+                      contentStyle={{
+                        fontSize: 13,
+                      }}
+                      keyboardType="number-pad"
+                      inputMode="numeric"
+                      maxLength={2}
+                      error={ProjectMarksError}
+                      value={ProjectMarks}
+                      onChangeText={(text) => {
+                        setmarksError(false);
+                        setProjectMarksError(false);
+                        setProjectMarks(text);
+                      }}
+                    ></TextInput>
+                    {ProjectMarksError ? (
+                      <Text style={{ color: "red" }}>{ProjectMarksError}</Text>
+                    ) : (
+                      <View></View>
+                    )}
+                  </View>
+                </View>
+
+                <View
+                  style={{
+                    width: "90%",
+                    height: 90,
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: "40%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 17 }}>
+                      Assignments & Project Marks
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      width: "60%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TextInput
+                      style={{ height: 50 }}
+                      label={"A & P Marks"}
+                      mode="outlined"
+                      textColor="black"
+                      outlineColor="black"
+                      contentStyle={{
+                        fontSize: 13,
+                      }}
+                      keyboardType="number-pad"
+                      inputMode="numeric"
+                      maxLength={2}
+                      error={assignmentsError}
+                      value={assignments}
+                      onChangeText={(text) => {
+                        setmarksError(false);
+                        setassignmentsError(false);
+                        setassignments(text);
+                      }}
+                    ></TextInput>
+                    {assignmentsError ? (
+                      <Text style={{ color: "red" }}>{assignmentsError}</Text>
+                    ) : (
+                      <View></View>
+                    )}
+                  </View>
+                </View>
+
+                <View
+                  style={{
+                    width: "90%",
+                    height: 90,
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: "40%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 17 }}>Final Marks</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      width: "60%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TextInput
+                      style={{ height: 50 }}
+                      label={"Final Marks"}
+                      mode="outlined"
+                      textColor="black"
+                      outlineColor="black"
+                      contentStyle={{
+                        fontSize: 13,
+                      }}
+                      keyboardType="number-pad"
+                      inputMode="numeric"
+                      maxLength={2}
+                      error={finalsError}
+                      value={finals}
+                      onChangeText={(text) => {
+                        setmarksError(false);
+                        setfinalsError(false);
+                        setfinals(text);
+                      }}
+                    ></TextInput>
+                    {finalsError ? (
+                      <Text style={{ color: "red" }}>{finalsError}</Text>
+                    ) : (
+                      <View></View>
+                    )}
+                  </View>
+                </View>
+
+                <View
+                  style={{
+                    width: "90%",
+                    height: 90,
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: "40%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 17 }}>Practical work Marks</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      width: "60%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TextInput
+                      style={{ height: 50 }}
+                      label={"Final Marks"}
+                      mode="outlined"
+                      textColor="black"
+                      outlineColor="black"
+                      contentStyle={{
+                        fontSize: 13,
+                      }}
+                      keyboardType="number-pad"
+                      inputMode="numeric"
+                      maxLength={2}
+                      error={practicalMarksErr}
+                      value={practicalMarks}
+                      onChangeText={(text) => {
+                        setmarksError(false);
+                        setfinalsError(false);
+                        setpracticalMarksErr(false);
+                        setpracticalMarks(text);
+                      }}
+                    ></TextInput>
+                    {practicalMarksErr ? (
+                      <Text style={{ color: "red" }}>{practicalMarksErr}</Text>
+                    ) : (
+                      <View></View>
+                    )}
+                  </View>
+                </View>
+
+                {marksError ? (
+                  <View
+                    style={{
+                      width: "90%",
+                      height: 90,
+                      flexDirection: "row",
+                      justifyContent: "space-around",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 20, color: "red" }}>
+                      {marksError}
+                    </Text>
+                  </View>
+                ) : (
+                  <View></View>
+                )}
+              </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
 
-        <Modal
-          visible={isLoading}
-          backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-        >
-          <ActivityIndicator size={60}></ActivityIndicator>
-        </Modal>
+          <Modal
+            visible={isLoading}
+            backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          >
+            <ActivityIndicator size={60}></ActivityIndicator>
+          </Modal>
 
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() =>
-            Alert.alert("Save?", "Do you want save?", [
-              {
-                text: "No",
-                onPress: () => {
-                  return;
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() =>
+              Alert.alert("Save?", "Do you want save?", [
+                {
+                  text: "No",
+                  onPress: () => {
+                    return;
+                  },
                 },
-              },
-              {
-                text: "Yes",
-                onPress: onSave,
-              },
-            ])
-          }
-        >
-          <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
-        </TouchableOpacity>
+                {
+                  text: "Yes",
+                  onPress: onSave,
+                },
+              ])
+            }
+          >
+            <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

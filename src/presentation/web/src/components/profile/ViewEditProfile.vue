@@ -5,14 +5,14 @@
         <v-form @submit.prevent="submitForm" ref="editProfileForm">
           <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo" :defaultPhotoName="photo"  @photo-size-change="handlePhotoSize"></base-photo-uploader>
 
-          <v-text-field :rules="rules.name" v-model="name" label="Name" variant="outlined"></v-text-field>
-          <v-text-field v-model="lastName" label="Last Name" variant="outlined"></v-text-field>
+          <v-text-field :rules="rules.name" v-model="name" :label="$t('Full Name')" variant="outlined"></v-text-field>
+          <v-text-field v-model="lastName" :label="$t('Last Name')" variant="outlined"></v-text-field>
           <!-- <v-text-field v-model="email" label="Email" variant="outlined"></v-text-field> -->
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn @click="toggleView" variant="outlined" prepend-icon="mdi-arrow-left">Back to Profile</v-btn>
-        <v-btn @click="submitForm" variant="flat" :disabled="!newChanges">Save Changes</v-btn>
+        <v-btn @click="toggleView" variant="outlined" prepend-icon="mdi-arrow-left">{{ $t('Back to Profile') }}</v-btn>
+        <v-btn @click="submitForm" variant="flat" :disabled="!newChanges">{{ $t('Save Changes') }}</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -38,7 +38,7 @@
         <v-card-subtitle class="text-primary">{{ email }}</v-card-subtitle>
       </v-card-text>
       <v-card-actions>
-        <v-btn @click="toggleView" variant="flat" class="px-6" prepend-icon="mdi-account"> Edit Profile</v-btn>
+        <v-btn @click="toggleView" variant="flat" class="px-6" prepend-icon="mdi-account"> {{ $t('Edit Profile') }}</v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -91,7 +91,7 @@ export default {
         }
 
         if(this.maxPhotoSize) {
-          return this.$store.commit('setToast', [0, 'Maximum 2mb photo size allowed']) 
+          return this.$store.commit('setToast', [0, this.$t('Photo size should be lesser than 2 MB!')]) 
         }
         else{
           await this.$store.dispatch('updateProfile', data);
@@ -122,7 +122,7 @@ export default {
     },
     rules() {
       return {
-        name: [(v) => !!v || 'Name is required'],
+        name: [(v) => !!v || this.$t('Please enter full name')],
       };
     },
   },

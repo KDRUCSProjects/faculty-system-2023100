@@ -4,9 +4,9 @@
       <v-col cols="4">
         <student-photo :student="student" @upload-photo="updatePhoto">
           <div id="actions" class="ma-4">
-            <v-btn variant="flat" block color="dark"> Actions </v-btn>
+            <v-btn variant="flat" block color="dark"> {{ $t('Actions') }} </v-btn>
             <div class="my-1"></div>
-            <v-btn variant="flat" block color="red" @click="deleteStudent(student.id)"> Delete </v-btn>
+            <v-btn variant="flat" block color="red" @click="deleteStudent(student.id)"> {{ $t('Delete') }} </v-btn>
           </div>
         </student-photo>
       </v-col>
@@ -51,10 +51,10 @@ export default {
     },
     async deleteStudent(studentId) {
       let res = await this.$refs.baseConfirmDialog.show({
-        warningTitle: 'Warning',
-        title: 'Are you sure you want to delete this student?',
+        warningTitle: this.$t('Warning'),
+        title: this.$t('Are you sure you want to delete this student?'),
         subtitle: this.student?.fullName,
-        okButton: 'Yes',
+        okButton: this.$t('Yes'),
       });
 
       // If closed, return the function

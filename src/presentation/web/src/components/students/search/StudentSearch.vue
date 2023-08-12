@@ -5,12 +5,12 @@
     :loading="loading"
     :items="items"
     v-model:search="search"
-    :no-data-text="'No data avaialble'"
+    :no-data-text="$t('No students available')"
     item-title="kankorId"
     :item-value="(item) => item"
     clearable
     hide-details
-    :label="'Search by kankor id'"
+    :label="$t('Search by kankor id')"
     :error="emptyInput"
     :customFilter="customFilter"
     variant="outlined"
@@ -22,7 +22,7 @@
           <v-list-title>{{ item?.raw?.fullName }}</v-list-title>
         </template>
         <template v-slot:subtitle>
-          <v-list-item-subtitle> Kankor ID: {{ item.raw.kankorId }} </v-list-item-subtitle>
+          <v-list-item-subtitle>{{ $t(' Kankor ID') }}: {{ item.raw.kankorId }} </v-list-item-subtitle>
         </template>
         <template v-slot:prepend>
           <v-avatar color="secondary" variant="tonal">

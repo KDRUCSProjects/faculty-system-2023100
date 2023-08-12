@@ -10,6 +10,7 @@ import {
   Dimensions,
   ActivityIndicator,
   BackHandler,
+  Platform,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -158,7 +159,8 @@ export default function AccountInfo(props) {
       if (e.code == 401) {
         await dispatch(logout());
         await AsyncStorage.clear().then().then();
-        updates.reloadAsync();
+        props.navigation.navigate("Login");
+        // updates.reloadAsync();
       }
       Alert.alert("Sorry!", e.message);
     }
@@ -186,7 +188,7 @@ export default function AccountInfo(props) {
           <View
             style={{
               height: 60,
-              marginTop: "7%",
+              marginTop: Platform.OS == "android" ? "7%" : 0,
               backgroundColor: colors.primary,
               flexDirection: "row",
               justifyContent: "flex-start",
@@ -194,10 +196,10 @@ export default function AccountInfo(props) {
             }}
           >
             <View style={{ width: "20%" }}>
-              <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+              <TouchableOpacity onPress={() => props.navigation.goBack()}>
                 <ImageBackground
                   style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/menu.png")}
+                  source={require("../assets/images/lessthan.png")}
                 ></ImageBackground>
               </TouchableOpacity>
             </View>

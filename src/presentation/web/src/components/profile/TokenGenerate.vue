@@ -7,12 +7,12 @@
     <br />
     <v-card-text>
       <h3>
-        {{ tokenNeed ? 'Expires ' : 'Click the button to generate the token' }} {{ tokenNeed ? tokenExpiresFromNow(tokens.expiresIn)+' from now' : '' }}
+        {{ tokenNeed ? $t('Expires ') : $t('Click the button to generate the token') }} {{ tokenNeed ? tokenExpiresFromNow(tokens.expiresIn)+' from now' : '' }}
       </h3>
     </v-card-text>
 
     <v-card-actions>
-      <v-btn @click="fetchToken" variant="flat" class="px-6" prepend-icon="mdi-key">Generate Token</v-btn>
+      <v-btn @click="fetchToken" variant="flat" class="px-6" prepend-icon="mdi-key">{{ $t('Generate Token') }}</v-btn>
       <!-- <v-btn @click="tokenNeed = false" variant="text" color="error" class="px-2">Cancel</v-btn> -->
     </v-card-actions>
   </v-card>

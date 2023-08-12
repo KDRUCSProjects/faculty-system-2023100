@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import NavWrapper from "./navigation/NavWrapper";
 import { createStore, legacy_createStore } from "redux";
 import { Provider } from "react-redux";
@@ -44,7 +44,9 @@ export default function App() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Provider store={store}>
             <RootSiblingParent>
-              <NavWrapper></NavWrapper>
+              <SafeAreaProvider>
+                <NavWrapper></NavWrapper>
+              </SafeAreaProvider>
             </RootSiblingParent>
           </Provider>
         </GestureHandlerRootView>

@@ -5,7 +5,7 @@
       variant="outlined"
       prepend-inner-icon="mdi-calendar-month"
       :items="years"
-      label="Select year"
+      :label="$t('Select year')"
     ></v-autocomplete>
   </div>
 </template>

@@ -1,15 +1,15 @@
 <template>
     <v-stepper v-model="e1">
       <v-stepper-header>
-        <v-stepper-step :complete="e1 > 1" step="1">Name of step 1</v-stepper-step>
+        <v-stepper-step :complete="e1 > 1" step="1">{{ $t('First Step') }}</v-stepper-step>
   
         <v-divider></v-divider>
   
-        <v-stepper-step :complete="e1 > 2" step="2">Name of step 2</v-stepper-step>
+        <v-stepper-step :complete="e1 > 2" step="2">{{ $t('Second Step') }}</v-stepper-step>
   
         <v-divider></v-divider>
   
-        <v-stepper-step step="3">Name of step 3</v-stepper-step>
+        <v-stepper-step step="3">{{ $t('Third Step') }}</v-stepper-step>
       </v-stepper-header>
   
       <v-stepper-items>
@@ -24,10 +24,10 @@
             color="primary"
             @click="e1 = 2"
           >
-            Continue
+            {{ $t('Continue') }}
           </v-btn>
   
-          <v-btn flat>Cancel</v-btn>
+          <v-btn flat>{{ $t('Cancel') }}</v-btn>
         </v-stepper-content>
   
         <v-stepper-content step="2">
@@ -41,10 +41,10 @@
             color="primary"
             @click="e1 = 3"
           >
-            Continue
+            {{ $t('Continue') }}
           </v-btn>
   
-          <v-btn flat>Cancel</v-btn>
+          <v-btn flat>{{ $t('Cancel') }}</v-btn>
         </v-stepper-content>
   
         <v-stepper-content step="3">
@@ -58,10 +58,10 @@
             color="primary"
             @click="e1 = 1"
           >
-            Continue
+            {{ $t('Continue') }}
           </v-btn>
   
-          <v-btn flat>Cancel</v-btn>
+          <v-btn flat>{{ $t('Cancel') }}</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
