@@ -7,6 +7,7 @@ import { ActivityIndicator } from "react-native-paper";
 
 import { useDispatch, useSelector } from "react-redux";
 import { localAuth } from "../store/actions/actions";
+import { CommonActions } from "@react-navigation/native";
 
 export default function Auth(props) {
   const dispatch = useDispatch();
@@ -50,6 +51,9 @@ export default function Auth(props) {
           subjects,
           token
         )
+      );
+      props.navigation.dispatch(
+        CommonActions.reset({ index: 0, routes: [{ name: "selectSemister" }] })
       );
       props.navigation.navigate("selectSemister");
     };
