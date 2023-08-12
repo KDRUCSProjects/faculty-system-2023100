@@ -15,6 +15,31 @@ export default {
       throw e.response.data.message;
     }
   },
+  async updateEducationalYear(context, { yearId, data }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/years/${yearId}`,
+        method: 'patch',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data,
+      });
+
+      // Just reload all years
+      context.dispatch('loadEducationalYears');
+      context.commit('setToast', [1, response.data.message || 'Year information has been updated successfully'], {
+        root: true,
+      });
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed load of all Educational year'], { root: true });
+
+      throw e.response.data.message;
+    }
+  },
   // async deleteEducationalYearById(context, yearId) {
   //   try {
   //     const token = context.rootGetters.token;
@@ -85,8 +110,6 @@ export default {
         year: payload.year,
         [payload.half === 0 ? 'firstHalf' : 'secondHalf']: true,
       };
-
-      console.log(data);
 
       const response = await axios({
         url: '/api/years/setCurrentYear',

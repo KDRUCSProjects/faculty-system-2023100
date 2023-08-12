@@ -1,6 +1,6 @@
 <template>
-      <base-contents>
-      <!-- AppBar Slot -->
+  <base-contents>
+    <!-- AppBar Slot -->
     <template v-slot:bar>
       <v-text-field
         clearable=""
@@ -13,10 +13,10 @@
         @click:append-inner="onClick"
       ></v-text-field>
       <div class="mx-1"></div>
-      <add-subject ></add-subject >
+      <add-subject></add-subject>
     </template>
     <v-row no-gutters>
-      <v-col  v-for="(subject, index) in subjects" :key="index" cols="3">
+      <v-col v-for="(subject, index) in subjects" :key="index" cols="3">
         <v-sheet class="ma-2 pa-2">
           <subject-card
             :subjectName="subject.name"
@@ -24,17 +24,16 @@
             :teacherName="subject.teacherName"
             :subjectId="subject.id"
             :subjectCredit="subject.credit"
-
           ></subject-card>
         </v-sheet>
       </v-col>
     </v-row>
-      </base-contents>
-  </template>
-  
-  <script>
-    import SubjectCard from '@/components/subjects/SubjectCard.vue';
-    import AddSubject from '@/components/subjects/dialogs/AddSubject.vue';
+  </base-contents>
+</template>
+
+<script>
+import SubjectCard from '@/components/subjects/SubjectCard.vue';
+import AddSubject from '@/components/subjects/dialogs/AddSubject.vue';
 export default {
   data: () => ({}),
   components: {
@@ -51,8 +50,7 @@ export default {
     // Load subjects at app mount
     await this.$store.dispatch('subjects/loadSubjects');
   },
-
 };
-  </script>
-  
-  <style scoped></style>
+</script>
+
+<style scoped></style>

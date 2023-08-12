@@ -30,8 +30,26 @@
                 {{ half }}
               </v-chip>
             </v-chip-group>
+
             <v-btn color="light" icon="mdi-select-remove" variant="text"></v-btn>
           </template>
+        </v-list-item>
+        <v-list-item class="mt-2" v-if="year.onGoing">
+          <v-form @submit.prevent="setTimes(year.id)">
+            <v-row>
+              <v-col cols="6"
+                ><v-text-field class="mt-2" variant="outlined" v-model.number="startDate" label="Semester Start Date">
+                </v-text-field
+              ></v-col>
+              <v-col cols="6"
+                ><v-text-field class="mt-2" variant="outlined" v-model.number="endDate" label="Semester End Date">
+                </v-text-field
+              ></v-col>
+            </v-row>
+            <v-btn block size="large" color="primary" variant="tonal" @click="setTimes(year.id)"
+              >Update Interval Dates</v-btn
+            >
+          </v-form>
         </v-list-item>
       </div>
     </v-list>
@@ -53,6 +71,8 @@ export default {
     yearHalfs: ['1st Half', '2nd Half'],
     currentHalf: 0,
     loader: false,
+    startDate: null,
+    endDate: null,
   }),
   methods: {
     async updateYearHalf(v) {
@@ -68,6 +88,26 @@ export default {
       await this.$store.dispatch('years/setCurrentOnGoingYear', {
         year: theYear || this.$store.getters['years/onGoingYear'].year,
         half: year,
+      });
+
+      this.updateTimes();
+
+      this.loader = false;
+    },
+    async setTimes(yearId) {
+      // Setting current ongoing year
+      this.loader = true;
+      let prefix = 'first';
+      if (this.currentHalf !== 0) {
+        prefix = 'Second';
+      }
+
+      await this.$store.dispatch('years/updateEducationalYear', {
+        yearId,
+        data: {
+          [prefix + 'HalfStart']: this.startDate,
+          [prefix + 'HalfEnd']: this.endDate,
+        },
       });
 
       this.loader = false;
@@ -87,6 +127,15 @@ export default {
 
       await this.$store.dispatch('years/deleteEducationalYearById', yearId);
     },
+    updateTimes() {
+      const yearData = this.$store.getters['years/onGoingYearData'];
+      let prefix = 'first';
+      if (this.currentHalf !== 0) {
+        prefix = 'Second';
+      }
+      this.startDate = yearData[prefix + 'HalfStart'];
+      this.endDate = yearData[prefix + 'HalfEnd'];
+    },
   },
   computed: {
     items() {
@@ -97,6 +146,9 @@ export default {
     // Set current year half
     // But first, let's load current year
     this.currentHalf = this.$store.getters['years/onGoingYear']?.firstHalf ? 0 : 1;
+
+    // Set starting and ending dates
+    this.updateTimes();
   },
 };
 </script>
