@@ -19,7 +19,6 @@
     "@ui-kitten/components": "^5.3.1",
     "@ui-kitten/eva-icons": "^5.3.1",
     "expo": "^49.0.0",
-    "expo-file-system": "~15.4.2",
     "expo-font": "~11.4.0",
     "expo-image-picker": "~14.3.2",
     "expo-linear-gradient": "~12.3.0",
@@ -43,7 +42,8 @@
     "react-native-web": "~0.19.6",
     "react-redux": "^8.1.1",
     "redux": "^4.2.1",
-    "redux-thunk": "^2.4.2"
+    "redux-thunk": "^2.4.2",
+    "expo-file-system": "~15.4.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   BackHandler,
+  SafeAreaView,
+  Platform,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -24,6 +26,7 @@ import BackHandlerParent from "../optimization/BackHanlderParent";
 
 const SelectSemister = (props) => {
   BackHandlerParent();
+
   const semisters = useSelector((state) => state.MainReducer.subjects);
   console.log(semisters);
 
@@ -48,85 +51,87 @@ const SelectSemister = (props) => {
   //};
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flex: 1,
-          height: "100%",
-          width: "100%",
-        }}
-      >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <View
           style={{
-            height: 60,
-            marginTop: "7%",
-            backgroundColor: colors.primary,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flex: 1,
+            height: "100%",
+            width: "100%",
           }}
         >
-          <StatusBar hidden={false}></StatusBar>
           <View
             style={{
-              width: "20%",
-            }}
-          >
-            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
-              <ImageBackground
-                style={{ height: 25, width: 32 }}
-                source={require("../assets/images/menu.png")}
-              ></ImageBackground>
-            </TouchableOpacity>
-          </View>
-          <View style={{ width: "70%" }}>
-            <Text style={{ color: "white", fontSize: 23 }}>
-              FCS for University
-            </Text>
-          </View>
-        </View>
-
-        <Text
-          style={{
-            fontSize: 25,
-            margin: 10,
-            fontWeight: "bold",
-            fontStyle: "italic",
-          }}
-        >
-          Choose a Semister
-        </Text>
-        <View style={{ height: "80%", width: "100%" }}>
-          <ScrollView
-            contentContainerStyle={{
-              flexGrow: 1,
+              height: 60,
+              marginTop: Platform.OS == "android" ? "7%" : 0,
+              backgroundColor: colors.primary,
               flexDirection: "row",
-              flexWrap: "wrap",
-              justifyContent: "center",
+              justifyContent: "space-between",
               alignItems: "center",
             }}
-            style={{}}
           >
-            {semisters?.map((semister, index) => (
-              <SemisterItem
-                key={semister.semesterId}
-                onClick={onclick}
-                selected={selected == semister.semesterId ? true : false}
-                semisterId={semister.semesterId}
-                semisterName={semister.title}
-              ></SemisterItem>
-            ))}
-
-            <Modal
-              visible={isLoading}
-              backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+            <StatusBar hidden={false}></StatusBar>
+            <View
+              style={{
+                width: "20%",
+              }}
             >
-              <ActivityIndicator size={60}></ActivityIndicator>
-            </Modal>
-          </ScrollView>
+              <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+                <ImageBackground
+                  style={{ height: 25, width: 32 }}
+                  source={require("../assets/images/menu.png")}
+                ></ImageBackground>
+              </TouchableOpacity>
+            </View>
+            <View style={{ width: "70%" }}>
+              <Text style={{ color: "white", fontSize: 23 }}>
+                FCS for University
+              </Text>
+            </View>
+          </View>
+
+          <Text
+            style={{
+              fontSize: 25,
+              margin: 10,
+              fontWeight: "bold",
+              fontStyle: "italic",
+            }}
+          >
+            Choose a Semister
+          </Text>
+          <View style={{ height: "80%", width: "100%" }}>
+            <ScrollView
+              contentContainerStyle={{
+                flexGrow: 1,
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              style={{}}
+            >
+              {semisters?.map((semister, index) => (
+                <SemisterItem
+                  key={semister.semesterId}
+                  onClick={onclick}
+                  selected={selected == semister.semesterId ? true : false}
+                  semisterId={semister.semesterId}
+                  semisterName={semister.title}
+                ></SemisterItem>
+              ))}
+
+              <Modal
+                visible={isLoading}
+                backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+              >
+                <ActivityIndicator size={60}></ActivityIndicator>
+              </Modal>
+            </ScrollView>
+          </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

@@ -6,6 +6,8 @@ import {
   BackHandler,
   ImageBackground,
   TouchableOpacity,
+  Platform,
+  SafeAreaView,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -19,7 +21,7 @@ export default function Setting(props) {
   BackHandlerParent();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View
         style={{
           flex: 1,
@@ -31,7 +33,7 @@ export default function Setting(props) {
         <View
           style={{
             height: 60,
-            marginTop: "7%",
+            marginTop: Platform.OS == "android" ? "7%" : 0,
             backgroundColor: colors.primary,
             flexDirection: "row",
             justifyContent: "space-between",
@@ -167,7 +169,7 @@ export default function Setting(props) {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

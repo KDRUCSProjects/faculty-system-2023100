@@ -152,6 +152,12 @@ export const isPresent = (subjectId, studentId, type) => {
       5000
     );
     console.log(updateResp.status);
+    if (updateResp.status == 401) {
+      const error = new Error("please reauthenticate");
+      error.code = 401;
+      throw error;
+    }
+
     const data = await updateResp.json();
 
     if (!updateResp.ok) {
@@ -186,7 +192,12 @@ export const isAbsent = (subjectId, studentId, type) => {
       },
       5000
     );
-    const code = await updateResp.status;
+
+    if (updateResp.status == 401) {
+      const error = new Error("please reauthenticate");
+      error.code = 401;
+      throw error;
+    }
 
     const data = await updateResp.json();
     console.log(data);
@@ -225,6 +236,12 @@ export const saveAttendence = (subjectId, students, type) => {
       5000
     );
     console.log(updateResp.status);
+    if (updateResp.status == 401) {
+      const error = new Error("please reauthenticate");
+      error.code = 401;
+      throw error;
+    }
+
     const data = await updateResp.json();
 
     if (!updateResp.ok) {
@@ -269,6 +286,11 @@ export const updateAccount = (userName, lastName, email, photo) => {
       },
       5000
     );
+    if (updateResp.status == 401) {
+      const error = new Error("please reauthenticate");
+      error.code = 401;
+      throw error;
+    }
 
     const data = await updateResp.json();
     console.log(data);
@@ -330,6 +352,11 @@ export const checkPassword = (password) => {
       5000
     );
     console.log(updateResp.status);
+    if (updateResp.status == 401) {
+      const error = new Error("please reauthenticate");
+      error.code = 401;
+      throw error;
+    }
 
     // const data = await updateResp.json();
     // const code = await updateResp.status;
@@ -367,6 +394,12 @@ export const changePassword = (
       },
       5000
     );
+    if (updateResp.status == 401) {
+      const error = new Error("please reauthenticate");
+      error.code = 401;
+      throw error;
+    }
+
     const data = await updateResp.json();
     console.log(data);
     if (updateResp.status == 401) {
@@ -394,6 +427,12 @@ export const getStudentInfo = (id) => {
       )
         .then((response) => {
           if (!response.ok) {
+            if (response.status == 401) {
+              const error = new Error("please reauthenticate");
+              error.code = 401;
+              throw error;
+            }
+
             if (response.status == "404") {
               throw new Error("Student not found");
             }
@@ -548,6 +587,11 @@ export const createShoka = (
         5000
       );
     }
+    if (updateResp.status == 401) {
+      const error = new Error("please reauthenticate");
+      error.code = 401;
+      throw error;
+    }
 
     const data = await updateResp.json();
 
@@ -577,6 +621,12 @@ export const getAttendence = (id) => {
       5000
     );
     console.log(updateResp.status);
+
+    if (updateResp.status == 401) {
+      const error = new Error("please reauthenticate");
+      error.code = 401;
+      throw error;
+    }
 
     let data = await updateResp.json();
 
@@ -641,6 +691,12 @@ export const getStudentBySubject = (subjectId, chance) => {
       },
       5000
     );
+    if (updateResp.status == 401) {
+      const error = new Error("please reauthenticate");
+      error.code = 401;
+      throw error;
+    }
+
     let data = await updateResp.json();
 
     const code = await updateResp.status;
