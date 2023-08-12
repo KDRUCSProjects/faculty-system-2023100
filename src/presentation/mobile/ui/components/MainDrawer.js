@@ -23,6 +23,7 @@ import { logout } from "../../store/actions/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import * as updates from "expo-updates";
 
 export default MainDrawer = (props) => {
   const teacherName = useSelector((state) => state.MainReducer.userName);
@@ -100,6 +101,7 @@ export default MainDrawer = (props) => {
         }
 
         if (index.row === 3) {
+          setselectedItem(0);
           props.navigation.navigate("Login");
           await dispatch(logout());
           await AsyncStorage.clear().then().then();

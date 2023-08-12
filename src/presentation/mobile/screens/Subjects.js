@@ -7,29 +7,35 @@ import {
   Alert,
   TouchableOpacity,
   ActivityIndicator,
+  BackHandler,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getAttendence, loadSubjects } from "../store/actions/actions";
-import { useEffect } from "react";
-import { Button } from "react-native-paper";
+
 import colors from "../constants/colors";
-import { HeaderBackButton } from "@react-navigation/stack";
+
 import SubjectItem from "./SubjectItem";
-import SelectSubjectItem from "./SelectSubjectItem";
-import { useState } from "react";
-import { getStudentBySubject } from "../store/actions/actions";
+
+import { useCallback, useState, useEffect } from "react";
+
 import { Modal } from "@ui-kitten/components";
 import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "@react-navigation/native";
+import BackHandlerParent from "../optimization/BackHanlderParent";
 
 export default function Subjects(props) {
-  const subjects = useSelector((state) => state.MainReducer.subjects);
+  const semisters = useSelector((state) => state.MainReducer.subjects);
+  console.log(semisters);
 
   const dispatch = useDispatch();
   const [selected, setselected] = useState(null);
   const [isLoading, setisLoading] = useState(false);
 
   const onclick = async (id) => {
-    setselected(id);
+    console.log(id);
+    props.navigation.navigate("selectSubject", {
+      choise: "showSubjects",
+      semisterId: id,
+    });
 
     // if (!selected) {
     //   Alert.alert("Error!", "One Subject should be selected");
@@ -63,7 +69,7 @@ export default function Subjects(props) {
         <StatusBar hidden={false}></StatusBar>
         <View
           style={{
-            height: "9%",
+            height: 60,
             marginTop: "7%",
             backgroundColor: colors.primary,
             flexDirection: "row",
@@ -93,7 +99,7 @@ export default function Subjects(props) {
             fontStyle: "italic",
           }}
         >
-          Choose a subject
+          Choose a Semister
         </Text>
         <View style={{ height: "80%" }}>
           <ScrollView
@@ -106,20 +112,14 @@ export default function Subjects(props) {
             }}
             style={{}}
           >
-            {subjects ? (
-              subjects.map((subject, index) => (
-                <SubjectItem
-                  key={subject.id}
-                  onClick={onclick}
-                  selected={selected == subject.id ? true : false}
-                  subjectId={subject.id}
-                  subject={subject.name}
-                  semester={subjects[index]["Semester.title"]}
-                ></SubjectItem>
-              ))
-            ) : (
-              <View></View>
-            )}
+            {semisters?.map((semister, index) => (
+              <SubjectItem
+                key={semister.semesterId}
+                onClick={onclick}
+                semisterId={semister.semesterId}
+                semisterName={semister.title}
+              ></SubjectItem>
+            ))}
           </ScrollView>
           <Modal
             visible={isLoading}

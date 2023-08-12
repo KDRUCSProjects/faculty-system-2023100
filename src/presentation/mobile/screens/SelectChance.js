@@ -22,8 +22,10 @@ import { logout } from "../store/actions/actions";
 import { Modal } from "@ui-kitten/components";
 import * as updates from "expo-updates";
 import { getStudentBySubject } from "../store/actions/actions";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function SelectChance(props) {
+  BackHandlerChild();
   const subjects = useSelector((state) => state.MainReducer.subjects);
   const [isFirst, setisFirst] = useState(true);
   const [isSecond, setisSecond] = useState(false);
@@ -97,7 +99,7 @@ export default function SelectChance(props) {
       >
         <View
           style={{
-            height: "9%",
+            height: 60,
             marginTop: "7%",
             backgroundColor: colors.primary,
             flexDirection: "row",

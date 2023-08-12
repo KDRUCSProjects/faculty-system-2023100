@@ -7,42 +7,25 @@ import {
   Alert,
   TouchableOpacity,
   ActivityIndicator,
+  BackHandler,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getAttendence, loadSubjects } from "../store/actions/actions";
 import { useEffect } from "react";
-import { Button } from "react-native-paper";
+
 import colors from "../constants/colors";
-import { HeaderBackButton } from "@react-navigation/stack";
-import SubjectItem from "./SubjectItem";
-import SelectSubjectItem from "./SelectSubjectItem";
+
 import { useState } from "react";
 import { Modal } from "@ui-kitten/components";
-import { getStudentBySubject } from "../store/actions/actions";
-import * as updates from "expo-updates";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { logout } from "../store/actions/actions";
+
 import SemisterItem from "./SemisterItem";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
+import BackHandlerParent from "../optimization/BackHanlderParent";
 
 const SelectSemister = (props) => {
-  const navigation = useNavigation();
-  useEffect(() => {
-    navigation.addListener("beforeRemove", (event) => {
-      event.preventDefault();
-      Alert.alert("Exit", "Do you want Exit?", [
-        { text: "No", onPress: () => {} },
-        {
-          text: "Yes",
-          onPress: () => {
-            BackHandler.exitApp();
-          },
-        },
-      ]);
-    });
-  }, [navigation]);
-
+  BackHandlerParent();
   const semisters = useSelector((state) => state.MainReducer.subjects);
+  console.log(semisters);
 
   const dispatch = useDispatch();
   const [selected, setselected] = useState(null);
@@ -75,7 +58,7 @@ const SelectSemister = (props) => {
       >
         <View
           style={{
-            height: "9%",
+            height: 60,
             marginTop: "7%",
             backgroundColor: colors.primary,
             flexDirection: "row",
@@ -83,6 +66,7 @@ const SelectSemister = (props) => {
             alignItems: "center",
           }}
         >
+          <StatusBar hidden={false}></StatusBar>
           <View
             style={{
               width: "20%",

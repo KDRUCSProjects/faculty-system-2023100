@@ -23,14 +23,16 @@ import {
   logout,
   updateAccount,
 } from "../store/actions/actions";
-import Toast from "react-native-simple-toast";
+import Toast from "react-native-root-toast";
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import { useEffect } from "react";
 import { Modal } from "@ui-kitten/components/ui";
 import * as updates from "expo-updates";
 import { List } from "react-native-paper";
+import BackHandlerChild from "../optimization/BackHandlerChild";
 
 export default function CreateShoka(props) {
+  BackHandlerChild();
   const subjectIdParam = props.route.params.subjectId;
   const status = props.route.params.status;
 
@@ -156,8 +158,13 @@ export default function CreateShoka(props) {
     setProjectMarks(null);
     setassignments(null);
     setfinals(null);
-    Toast.BOTTOM;
-    Toast.show("Shoka Created", 2);
+    let toast = Toast.show("Shoka Created!", {
+      duration: Toast.durations.LONG,
+    });
+
+    setTimeout(function hideToast() {
+      Toast.hide(toast);
+    }, 2000);
     props.navigation.goBack();
   };
   const [expanded, setExpanded] = useState(true);
