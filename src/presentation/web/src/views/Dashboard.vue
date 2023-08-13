@@ -7,8 +7,8 @@
             <v-card class="pa-3 theShadow">
               <v-card-title class="">
                 <v-icon color="primary">{{ item.icon }}</v-icon>
-                <span class="mx-2 font-weight-bold" style="font-family: 'Calibri'">{{ item.title }}</span>
-                <span class="text-dark float-right">
+                <span class="mx-4 med-size">{{ item.title }}</span>
+                <span class="text-dark float-right med-size">
                   {{ item.value }}
                 </span>
               </v-card-title>
@@ -211,18 +211,8 @@ export default {
 </script>
 
 <style scoped>
-.card-list {
-  width: 100%;
-  display: flex;
-}
-
-.chart-section {
-  width: 100%;
-  margin-top: 3rem;
-}
-
-.chart-section {
-  width: 100%;
-  display: flex;
+.med-size {
+  font-size: 18px;
+  font-family: 'Calibri';
 }
 </style>
