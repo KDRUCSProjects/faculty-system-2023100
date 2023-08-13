@@ -14,4 +14,10 @@ export default {
   setReviewStudents(state, payload) {
     state.reviewStudents = payload;
   },
+  setSelectedPeriodByUser(state, payload) {
+    state.selectedPeriodByUser = payload;
+  },
+  setSelectedYearByUser(state, payload) {
+    state.selectedYearByUser = payload;
+  },
 };

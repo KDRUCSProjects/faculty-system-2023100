@@ -43,8 +43,12 @@ export default {
       return student.student;
     });
 
-    console.log(theStudents);
-
     return theStudents;
+  },
+  selectedPeriodByUser(state) {
+    return state.selectedPeriodByUser;
+  },
+  selectedYearByUser(state) {
+    return state.selectedYearByUser;
   },
 };
