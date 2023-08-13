@@ -31,6 +31,8 @@ const bubbleIcon = document.querySelector('.bubble-icon');
 const iconTheme = document.querySelector('.icon__theme');
 const iconSwap = document.querySelector('.swap-icon');
 const body = document.querySelector('body');
+const imgName = document.querySelector('.img-name');
+const imgNickName = document.querySelector('.img-nick-Name');
 
 //////////////////////////////////////////////
 
@@ -92,7 +94,11 @@ const getApiFun = id => {
         const date = new Date(data.createdAt);
         idID.textContent = data.id;
         kankorId.textContent = kankorInputvalue.textContent = data.kankorId;
-        nameValue.textContent = fullName.textContent = data.fullName;
+        nameValue.textContent =
+          fullName.textContent =
+          imgName.textContent =
+            data.fullName;
+        imgNickName.textContent = data.nickName;
         fatherNameP.textContent = fatherNameValue.textContent = data.fatherName;
         grandFNameValue.textContent = grandFatherName.textContent =
           data.grandFatherName;
