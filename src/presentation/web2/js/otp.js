@@ -17,7 +17,7 @@ const inputFile = document.getElementById('input-file');
 const photoHeadin = document.querySelector('.photo-heading');
 
 ////////////////////////////////////////////////////////////
-
+//////////  Closing Window Functions  /////////////////////
 function closeWindow() {
   otp.classList.add('hidden');
   overlay.classList.add('hidden');
@@ -25,8 +25,6 @@ function closeWindow() {
 
 iconClose.addEventListener('click', closeWindow);
 overlay.addEventListener('click', closeWindow);
-
-codes[0].focus();
 
 ////////////////////////////////////////
 //////////////////////////////////////////////////////////
@@ -82,8 +80,6 @@ codes.forEach((input, index1) => {
   });
 });
 
-// window.addEventListener('load', () => );
-
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 
@@ -93,30 +89,22 @@ let formData;
 form.addEventListener('submit', e => {
   e.preventDefault();
   const file = document.querySelector('#input-file').files[0];
-  codes[0].focus();
 
   formData = new FormData(form);
+  const data = Object.fromEntries(formData);
+  console.log(data);
   formData.append('photo', file);
-  // data = Object.fromEntries(formData);
 
-  // console.log(data);
-
-  // mainDiv.classList.add('hidden');
   overlay.classList.remove('hidden');
   otp.classList.remove('hidden');
-
   /////////////////////////////////////////////////////////////////
 });
 
-function registerationFun(e) {
+function registerationFun() {
   fetch(`http://localhost:4000/students/students/${finalValue}`, {
     method: 'POST',
-    // headers: {
-    //   'Content-Type': 'multipart/form-data',
-    // },
     body: formData,
   })
-    // body: JSON.stringify(data),
     .then(res => {
       console.log(res);
       if (!res.ok) {
@@ -162,7 +150,8 @@ errorClose.addEventListener('click', function () {
   errorDiv.style.display = 'none';
 });
 
-otpBtn.addEventListener('click', function () {
+otpBtn.addEventListener('click', function (e) {
+  e.preventDefault();
   spinnerDiv.classList.remove('hidden');
   verify.classList.add('hidden');
   setTimeout(() => {
