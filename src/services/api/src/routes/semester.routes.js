@@ -40,6 +40,12 @@ module.exports = router;
  *         schema:
  *           type: integer
  *         description: Year to get all semesters
+ *       - in: query
+ *         name: statistics
+ *         schema:
+ *           type: boolean
+ *           enum: [true, false]
+ *         description: Year to get all semesters
  *     responses:
  *       "200":
  *         description: OK

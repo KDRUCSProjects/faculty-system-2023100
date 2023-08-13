@@ -51,6 +51,12 @@
         </v-chip>
       </template>
 
+      <template v-slot:item.Student.kankorId="{ item }">
+        <v-chip class="" variant="flat">
+          {{ item.raw.Student.kankorId }}
+        </v-chip>
+      </template>
+
       <!-- Number Slot -->
       <!-- <template v-slot:item.no="{ index }">
           <v-chip class="" variant="flat">
@@ -69,6 +75,15 @@
           <v-img v-if="item.columns?.photo" :src="`${imagesResource}/${item.columns?.photo}`" alt="user" />
           <div v-else>
             <span>{{ buildAbbreviation(item.columns?.fullName) }}</span>
+          </div>
+        </v-avatar>
+      </template>
+
+      <template v-slot:item.Student.photo="{ item }">
+        <v-avatar class="my-2" color="primary" variant="tonal">
+          <v-img v-if="item.raw?.Student?.photo" :src="`${imagesResource}/${item.raw.Student?.photo}`" alt="user" />
+          <div v-else>
+            <span>{{ buildAbbreviation(item.raw.Student?.fullName) }}</span>
           </div>
         </v-avatar>
       </template>

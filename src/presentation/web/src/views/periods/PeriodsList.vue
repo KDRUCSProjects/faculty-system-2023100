@@ -5,7 +5,7 @@
     <v-spacer></v-spacer>
 
     <base-select-period-dialog @select-period="setPeriod" :defaultPeriod="selectedPeriod">
-      {{ selectedPeriod ? `Period: ${selectedPeriod}` : 'Select Period' }}
+      {{ selectedPeriod ? `Period ${selectedPeriod}` : 'Select Period' }}
     </base-select-period-dialog>
   </v-toolbar>
   <v-row no-gutters>
@@ -29,7 +29,7 @@
 import SemesterCard from '@/components/semesters/SemesterCard.vue';
 export default {
   data: () => ({
-    selectedPeriod: 6,
+    selectedPeriod: null,
   }),
   components: {
     SemesterCard,
@@ -38,11 +38,14 @@ export default {
     semesters() {
       return this.$store.getters['semesters/currentPeriodSemesters'];
     },
+    selectedPeriodByUser() {
+      return this.$store.getters['semesters/selectedPeriod'];
+    },
   },
   methods: {
     async setPeriod(value) {
       this.selectedPeriod = value;
-      // this.$store.commit('setCurrentYear', year);
+      this.$store.commit('semesters/setSelectedPeriodByUser', value);
 
       // Also, load it's semesters
       await this.loadSemesters(value);
@@ -57,7 +60,15 @@ export default {
     const periods = this.$store.getters['years/years']?.filter((year) => year.period)?.map((p) => p.period);
 
     // Select the latest period as default
-    this.selectedPeriod = periods[0];
+    const period = this.$store.getters['semesters/selectedPeriodByUser'];
+    if (!period) {
+      this.selectedPeriod = periods[0];
+      this.$store.commit('semesters/setSelectedPeriodByUser', this.selectedPeriod);
+    }
+
+    if (period) {
+      this.selectedPeriod = period;
+    }
 
     // Probably the onGoing year
     await this.loadSemesters(this.selectedPeriod);

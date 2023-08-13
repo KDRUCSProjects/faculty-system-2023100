@@ -58,5 +58,9 @@ export default {
       await loadDataInCallback();
       data.initLoader = false;
     },
+    capitalizeFirstLetter(word) {
+      let string = word;
+      return string[0].toUpperCase() + string.slice(1);
+    },
   },
 };

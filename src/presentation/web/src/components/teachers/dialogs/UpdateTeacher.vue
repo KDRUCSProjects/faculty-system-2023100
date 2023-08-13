@@ -76,22 +76,26 @@ export default {
   }),
   computed: {
     rules() {
-      return {
+      const passwordValidation = [
+        (v) => !!v || this.$t('Please enter password'),
+        (v) => /[A-Z]/.test(v) || this.$t('Password must contain 1 uppercase letter'),
+        (v) => /[a-z]/.test(v) || this.$t('Password must contain 1 lowercase letter'),
+        (v) => /[0-9]/.test(v) || this.$t('Password must contain 1 number'),
+        (v) => /[#?!@$_+:"{'`~,.<>'};%^&*(-)]/.test(v) || this.$t('Password must contain 1 symbol'),
+        (v) => v.length >= 8 || this.$t('Password length must be greater than 8 characters'),
+      ];
+
+      let validations = {
         name: [(v) => !!v || 'Please enter teacher name'],
         // email validation
         email: [
           (v) => !!v || 'Please enter teacher email address',
           (v) => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
         ],
-        password: [
-          (v) => !!v || this.$t('Please enter password'),
-          (v) => /[A-Z]/.test(v) || this.$t('Password must contain 1 uppercase letter'),
-          (v) => /[a-z]/.test(v) || this.$t('Password must contain 1 lowercase letter'),
-          (v) => /[0-9]/.test(v) || this.$t('Password must contain 1 number'),
-          (v) => /[#?!@$_+:"{'`~,.<>'};%^&*(-)]/.test(v) || this.$t('Password must contain 1 symbol'),
-          (v) => v.length >= 8 || this.$t('Password length must be greater than 8 characters'),
-        ],
       };
+
+      if (this.password) validations.password = passwordValidation;
+      return validations;
     },
     teacher() {
       return this.$store.getters['teachers/currentTeacher'];
@@ -104,8 +108,6 @@ export default {
     async setTeacher() {
       if (!this.dialog) return;
       await this.$store.dispatch('teachers/loadTeacherById', this.teacherId);
-
-      console.log(this.teacherId);
 
       this.name = this.teacher.name;
       this.lastName = this.teacher.lastName;
@@ -136,10 +138,8 @@ export default {
           data['photo'] = this.newPhoto;
         }
 
-        if (this.isAssistant) {
-          if (this.password) {
-            data.password = this.password;
-          }
+        if (this.password) {
+          data.password = this.password;
         }
 
         await this.$store.dispatch('teachers/updateTeacher', data);

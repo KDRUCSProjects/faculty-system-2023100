@@ -16,6 +16,7 @@ const getSemester = {
 const getSemesters = {
   query: Joi.object().keys({
     year: Joi.number(),
+    statistics: Joi.boolean(),
   }),
 };
 module.exports = {

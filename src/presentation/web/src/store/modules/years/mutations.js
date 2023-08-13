@@ -11,8 +11,10 @@ export default {
   setSelectedYear(state, year) {
     state.selectedYear = year;
   },
-  setOnGoingYearAndFirstHalf(state, { year, firstHalf }) {
-    state.onGoingYear = year;
-    state.firstHalf = firstHalf;
+  setOnGoingYearAndFirstHalf(state, data) {
+    state.onGoingYear = data.year;
+    state.firstHalf = data.firstHalf;
+
+    state.onGoingYearData = data;
   },
 };

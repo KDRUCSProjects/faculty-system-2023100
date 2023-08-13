@@ -32,6 +32,9 @@ export default {
     await this.$store.dispatch('years/loadCurrentOnGoingYear');
     // Load all teachers
     await this.$store.dispatch('teachers/loadTeachers');
+
+    // Load statistics of current year
+    await this.$store.dispatch('semesters/loadStatistics', this.$store.getters['years/onGoingYear']?.year);
   },
 };
 </script>

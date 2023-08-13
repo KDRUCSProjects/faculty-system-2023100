@@ -3,7 +3,7 @@
     <v-col cols="5">
       <v-card class="h-100 theShadow py-0 my-0">
         <v-card-item class="text-center bg-primary">
-          <v-card-title class="text-h5"> {{ type }} {{ $t('form') }} </v-card-title>
+          <v-card-title class="text-h5"> {{ capitalizeFirstLetter(type) }} {{ $t('form') }} </v-card-title>
           <v-card-subtitle>{{ $t('For conversion blew instruction is important') }}</v-card-subtitle>
         </v-card-item>
 
@@ -57,7 +57,7 @@
               :items="reentryTypes"
             ></v-autocomplete>
 
-            <v-file-input
+            <!-- <v-file-input
               prepend-icon=""
               :label="$t('Form Attachment')"
               clearable
@@ -66,7 +66,7 @@
               show-size
               variant="outlined"
               prepend-inner-icon="mdi-file-document-outline"
-            ></v-file-input>
+            ></v-file-input> -->
 
             <v-textarea variant="outlined" :label="$t('Notes')" v-model="notes"></v-textarea>
 
@@ -81,7 +81,7 @@
             <!-- <v-text-field label="Educational Year" v-model="attachment"></v-text-field> -->
             <v-alert v-if="erorrMessage" type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
 
-            <v-btn type="submit" block color="dark"> {{ $t('Submit') }} </v-btn>
+            <v-btn type="submit" block color="dark" size="large"> {{ $t('Submit') }} </v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -108,7 +108,7 @@ export default {
     StudentSearch,
   },
   data: () => ({
-    type: null,
+    type: 'taajil',
     reentrySelectedType: null,
     reentryTypes: ['taajil', 'mahrom', 'special_taajil', 'repeat'],
     specialTaajil: false,
@@ -119,19 +119,34 @@ export default {
     errorMessage: null,
     headers: [
       {
-        title: 'Record ID',
+        title: 'ID#',
         key: 'id',
         sortable: false,
       },
       {
-        title: 'Student ID',
-        key: 'studentId',
+        title: 'Photo',
+        key: 'Student.photo',
+        sortable: false,
+      },
+      {
+        title: 'Kankor ID',
+        key: 'Student.kankorId',
+        sortable: false,
+      },
+      {
+        title: 'Name',
+        key: 'Student.fullName',
+        sortable: false,
+      },
+      {
+        title: 'F Name',
+        key: 'Student.fatherName',
         sortable: false,
       },
       {
         title: 'Notes',
         align: 'start',
-        sortable: true,
+        sortable: false,
         key: 'notes',
       },
       { title: 'Actions', key: 'actions', sortable: false },
@@ -158,12 +173,12 @@ export default {
       return `Student ${this.type} form`;
     },
     formType() {
-      if (this.type === 'taajil') {
-        return 'taajils';
+      if (this.type === 'tabdili') {
+        return 'tabdili';
       } else if (this.type === 'reentry') {
         return 'reentries';
       } else {
-        return 'tabdili';
+        return 'taajils';
       }
     },
   },
@@ -218,7 +233,7 @@ export default {
       window.open(routeData.href, '_blank');
     },
     setType(type) {
-      this.type = type;
+      this.type = type.toLowerCase();
     },
     setYear(year) {
       this.educationalYear = year;
