@@ -43,11 +43,14 @@
         <v-list-item class="mt-2" v-if="year.onGoing">
           <v-form @submit.prevent="setTimes(year.id)">
             <v-row>
-              <v-col cols="6"
+              <v-col cols="4"
+                ><v-text-field class="mt-2" variant="outlined" v-model.number="period" label="Period"> </v-text-field
+              ></v-col>
+              <v-col cols="4"
                 ><v-text-field class="mt-2" variant="outlined" v-model.number="startDate" label="Semester Start Date">
                 </v-text-field
               ></v-col>
-              <v-col cols="6"
+              <v-col cols="4"
                 ><v-text-field class="mt-2" variant="outlined" v-model.number="endDate" label="Semester End Date">
                 </v-text-field
               ></v-col>
@@ -79,6 +82,7 @@ export default {
     loader: false,
     startDate: null,
     endDate: null,
+    period: null,
   }),
   methods: {
     async updateYearHalf(v) {
@@ -108,15 +112,25 @@ export default {
         prefix = 'Second';
       }
 
+      // get on on-going year
+      const yearData = this.$store.getters['years/onGoingYearData'];
+      const data = {
+        [prefix + 'HalfStart']: this.startDate,
+        [prefix + 'HalfEnd']: this.endDate,
+      };
+
+      if (yearData.period != this.period) {
+        data.period = this.period;
+      }
+
       await this.$store.dispatch('years/updateEducationalYear', {
         yearId,
-        data: {
-          [prefix + 'HalfStart']: this.startDate,
-          [prefix + 'HalfEnd']: this.endDate,
-        },
+        data,
       });
 
       this.loader = false;
+
+      // Update times now
     },
     // async deleteYear(yearId) {
     //   let res = await this.$refs.baseConfirmDialog.show({
@@ -141,6 +155,7 @@ export default {
       }
       this.startDate = yearData[prefix + 'HalfStart'];
       this.endDate = yearData[prefix + 'HalfEnd'];
+      this.period = yearData.period;
     },
   },
   computed: {

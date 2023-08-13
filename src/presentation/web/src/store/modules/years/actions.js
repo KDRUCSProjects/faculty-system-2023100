@@ -31,6 +31,7 @@ export default {
 
       // Just reload all years
       context.dispatch('loadEducationalYears');
+      context.dispatch('loadCurrentOnGoingYear');
       context.commit('setToast', [1, response.data.message || 'Year information has been updated successfully'], {
         root: true,
       });
