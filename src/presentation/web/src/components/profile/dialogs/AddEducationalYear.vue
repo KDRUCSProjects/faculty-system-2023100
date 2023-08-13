@@ -11,20 +11,20 @@
       </template>
       <v-card class="pa-1" :loading="isLoading">
         <v-card-item>
-          <v-card-title>{{ $t('Add Educational Year') }}</v-card-title>
+          <v-card-title class="font-weight-bold">{{ $t('Add Educational Year') }}</v-card-title>
           <v-card-subtitle> {{ $t('Click the button to add new educational year') }} </v-card-subtitle>
         </v-card-item>
         <v-card-text>
           <v-form @submit.prevent="submitForm" ref="addYearForm">
-            <br>
-            <h1 style="text-align: center;">{{ newYear = items[0].year + 1}}</h1>
-            <br>
+            <br />
+            <h1 class="text-h3 font-weight-bold pa-3" style="text-align: center">{{ (newYear = items[0].year + 1) }}</h1>
+            <br />
           </v-form>
           <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
         </v-card-text>
-        <v-card-actions class=" mx-4">
-          <v-btn class="mx-auto mb-2"   @click="submitForm" variant="flat"  :loading="isLoading">{{ $t('Add Year') }}</v-btn>
-          <!-- <v-btn @click="closeDialog" color="error">{{ $t('Cancel') }}</v-btn> -->
+        <v-card-actions class="mx-4 mx-auto mb-2">
+          <v-btn class="px-7" @click="submitForm" variant="flat" :loading="isLoading">{{ $t('Add Year') }}</v-btn>
+          <v-btn class="px-7" @click="closeDialog" variant="tonal" color="error">{{ $t('Cancel') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
