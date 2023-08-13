@@ -19,11 +19,17 @@ const getSemester = catchAsync(async (req, res) => {
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'Semester Not Found');
 
   const maleStats = await getStatsBySemesterId(req.params.semesterId, 'male');
+  const maleStatsReport = await getStatsBySemesterId(req.params.semesterId, 'male', false);
   const femaleStats = await getStatsBySemesterId(req.params.semesterId, 'female');
+  const femaleStatsReport = await getStatsBySemesterId(req.params.semesterId, 'female', false);
 
   semester.dataValues.statistics = {
     male: maleStats,
     female: femaleStats,
+    report: {
+      male: maleStatsReport,
+      female: femaleStatsReport,
+    },
   };
 
   return res.status(httpStatus.OK).send(semester);
