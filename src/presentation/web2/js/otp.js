@@ -18,7 +18,8 @@ const photoHeadin = document.querySelector('.photo-heading');
 
 ////////////////////////////////////////////////////////////
 //////////  Closing Window Functions  /////////////////////
-function closeWindow() {
+function closeWindow(e) {
+  e.preventDefault();
   otp.classList.add('hidden');
   overlay.classList.add('hidden');
 }
@@ -27,6 +28,14 @@ iconClose.addEventListener('click', closeWindow);
 overlay.addEventListener('click', closeWindow);
 
 ////////////////////////////////////////
+
+inputFile.onchange = function (e) {
+  e.preventDefault();
+  profileImg.src = URL.createObjectURL(inputFile.files[0]);
+  profileImg.classList.remove('hidden');
+  photoHeadin.classList.add('hidden');
+};
+
 //////////////////////////////////////////////////////////
 
 const pin = [];
@@ -83,17 +92,17 @@ codes.forEach((input, index1) => {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 
-const form = document.querySelector('.form');
+const form = document.querySelector('form');
 let formData;
 
 form.addEventListener('submit', e => {
   e.preventDefault();
-  const file = document.querySelector('#input-file').files[0];
 
   formData = new FormData(form);
-  const data = Object.fromEntries(formData);
-  console.log(data);
-  formData.append('photo', file);
+  // const file = document.querySelector('#input-file').files[0];
+  // const data = Object.fromEntries(formData);
+  // console.log(data);
+  // formData.append('photo', file);
 
   overlay.classList.remove('hidden');
   otp.classList.remove('hidden');
@@ -146,7 +155,8 @@ function registerationFun() {
     });
 }
 
-errorClose.addEventListener('click', function () {
+errorClose.addEventListener('click', function (e) {
+  e.preventDefault();
   errorDiv.style.display = 'none';
 });
 
@@ -162,10 +172,3 @@ otpBtn.addEventListener('click', function (e) {
 });
 
 /////////////////////////////////////////////////////////////////
-
-inputFile.onchange = function (e) {
-  e.preventDefault();
-  profileImg.src = URL.createObjectURL(inputFile.files[0]);
-  profileImg.classList.remove('hidden');
-  photoHeadin.classList.add('hidden');
-};
