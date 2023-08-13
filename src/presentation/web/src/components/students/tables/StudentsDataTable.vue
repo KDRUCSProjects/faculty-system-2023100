@@ -15,7 +15,7 @@
       </template>
 
       <template v-slot:top>
-        <v-toolbar color="dark" class="py-2">
+        <v-toolbar color="dark" class="py-2" v-if="!noHeader">
           <v-toolbar-title> {{ statusTypes[type] }} {{ $t('Students') }} </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
@@ -58,11 +58,11 @@
       </template>
 
       <!-- Number Slot -->
-      <!-- <template v-slot:item.no="{ index }">
-          <v-chip class="" variant="flat">
-            {{ index + 1 + (this.page - 1) * this.itemsPerPage }}
-          </v-chip>
-        </template> -->
+      <template v-slot:item.no="{ index }" v-if="showNumbers">
+        <v-chip class="" variant="flat">
+          {{ index + 1 + (this.page - 1) * this.itemsPerPage }}
+        </v-chip>
+      </template>
 
       <!-- <template v-slot:item.status="{ item }">
           <v-chip color="red">
@@ -112,6 +112,18 @@ export default {
     studentsTypeText: {
       type: String,
       default: 'Type',
+    },
+    noHeader: {
+      type: Boolean,
+      default: false,
+    },
+    showNumbers: {
+      type: Boolean,
+      default: false,
+    },
+    defaultItemsPerPage: {
+      type: Number,
+      default: 8,
     },
   },
   components: {
@@ -167,7 +179,11 @@ export default {
     },
   },
   emits: ['selected-student-id', 'view-student', 'delete-student'],
-  async created() {},
+  async created() {
+    if (this.defaultItemsPerPage) {
+      this.itemsPerPage = this.defaultItemsPerPage;
+    }
+  },
 };
 </script>
 

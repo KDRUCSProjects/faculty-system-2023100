@@ -19,7 +19,8 @@
             <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="bg-teal-lighten-4">
               <v-tab :value="1"> {{ $t('Subjects') }} </v-tab>
               <v-tab :value="2"> {{ $t('Statistics') }} </v-tab>
-              <v-tab :value="3"> {{ $t('Migration') }} </v-tab>
+              <v-tab :value="3"> {{ $t('Report') }} </v-tab>
+              <v-tab :value="4"> {{ $t('Migration') }} </v-tab>
             </v-tabs>
             <v-window v-model="tab">
               <v-window-item :value="1">
@@ -37,14 +38,62 @@
                   </v-card-text>
                 </v-card>
               </v-window-item>
+
               <v-window-item :value="3">
+                <v-card class="mt-3">
+                  <v-card-item>
+                    <v-row class="pa-0 ma-0 d-flex">
+                      <v-col cols="6" class="pa-0 ma-0">
+                        <base-menu
+                          :items="reportItems"
+                          @selected="setReport"
+                          :block="true"
+                          display-pre-text="Report Type:  "
+                          theme="dark"
+                          :variant="'tonal'"
+                        >
+                        </base-menu>
+                      </v-col>
+                      <v-col cols="6" class="pa-0 ma-0">
+                        <v-btn
+                          @click="downloadShoka"
+                          class="float-right"
+                          prepend-icon="mdi-download-circle"
+                          color="primary"
+                          variant="tonal"
+                          download
+                          block="true"
+                          :loading="downloadLoading"
+                        >
+                          Download Excel
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-card-item>
+                  <v-card-text>
+                    <students-data-table
+                      :headers="headersReport"
+                      :students="students"
+                      :no-header="true"
+                      :show-numbers="true"
+                      :default-items-per-page="4"
+                    ></students-data-table>
+                  </v-card-text>
+                  <v-card-actions class="mx-2"> </v-card-actions>
+                </v-card>
+              </v-window-item>
+              <v-window-item :value="4">
                 <v-card class="mt-7">
                   <v-card-item>
                     <v-card-title class="text-dark font-weight-bold text-h5">{{ $t('Students Migration') }}</v-card-title>
                   </v-card-item>
                   <v-card-text>
                     <p>
-                      {{ $t('Migrate your currently enrolled students in this semester to the upcoming semester. This will not migrate students who has taajil, tabdili or students who has not completed the requires marks for the next semester.') }}
+                      {{
+                        $t(
+                          'Migrate your currently enrolled students in this semester to the upcoming semester. This will not migrate students who has taajil, tabdili or students who has not completed the requires marks for the next semester.'
+                        )
+                      }}
                     </p>
 
                     <v-alert
@@ -113,6 +162,7 @@
 
 <script>
 import StudentsTable from '@/components/students/tables/StudentsTable.vue';
+import StudentsDataTable from '@/components/students/tables/StudentsDataTable.vue';
 import SubjectsList from '@/components/subjects/SubjectsList.vue';
 import { rankSemester } from '@/utils/global';
 import AddSubject from '@/components/subjects/dialogs/AddSubject.vue';
@@ -137,14 +187,40 @@ export default {
     AddSubject,
     MigrationReview,
     BaseBars,
+    StudentsDataTable,
   },
   data: () => ({
     tab: 1,
     page: 1,
     itemsPerPage: 8,
+    reportItems: ['Total', 'Present', 'Taajil', 'Reentry', 'Monfaq', 'Tabdili'],
     selectedStudentId: null,
     forceMigrate: false,
     mode: 'semester-students',
+    headersReport: [
+      // {
+      //   title: 'No',
+      //   sortable: false,
+      //   key: 'no',
+      // },
+      {
+        title: 'Kankor ID',
+        align: 'start',
+        key: 'kankorId',
+      },
+      {
+        title: 'Name',
+        align: 'start',
+        sortable: true,
+        key: 'fullName',
+      },
+      {
+        title: 'Father Name',
+        align: 'start',
+        sortable: true,
+        key: 'fatherName',
+      },
+    ],
     headers: [
       // {
       //   title: 'No',
