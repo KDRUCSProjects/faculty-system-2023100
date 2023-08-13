@@ -20,4 +20,7 @@ export default {
   setSelectedYearByUser(state, payload) {
     state.selectedYearByUser = payload;
   },
+  setStatistics(state, payload) {
+    state.statistics = payload;
+  },
 };

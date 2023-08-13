@@ -51,4 +51,7 @@ export default {
   selectedYearByUser(state) {
     return state.selectedYearByUser;
   },
+  statistics(state) {
+    return state.statistics;
+  },
 };

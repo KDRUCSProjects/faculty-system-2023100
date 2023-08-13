@@ -13,6 +13,7 @@ export default {
       reviewStudents: [],
       selectedPeriodByUser: null,
       selectedYearByUser: null,
+      statistics: null,
     };
   },
   getters,
