@@ -51,6 +51,7 @@
                           display-pre-text="Report Type:  "
                           theme="dark"
                           :variant="'tonal'"
+                          :the-default="'taajil'"
                         >
                         </base-menu>
                       </v-col>
@@ -73,7 +74,7 @@
                   <v-card-text>
                     <students-data-table
                       :headers="headersReport"
-                      :students="students"
+                      :students="reportStudents"
                       :no-header="true"
                       :show-numbers="true"
                       :default-items-per-page="4"
@@ -193,7 +194,8 @@ export default {
     tab: 1,
     page: 1,
     itemsPerPage: 8,
-    reportItems: ['Total', 'Present', 'Taajil', 'Reentry', 'Monfaq', 'Tabdili'],
+    reportItems: ['present', 'taajil', 'reentry', 'monfaq', 'tabdili'],
+    selectedReport: 'taajil',
     selectedStudentId: null,
     forceMigrate: false,
     mode: 'semester-students',
@@ -266,6 +268,11 @@ export default {
       }
       return this.$store.getters['students/studentsList'];
     },
+    reportStudents() {
+      const students = this.$store.getters['semesters/semester']?.statistics?.report;
+      const totalStudents = [...students?.male[this.selectedReport], ...students?.female[this.selectedReport]];
+      return totalStudents;
+    },
     subjects() {
       return this.$store.getters['semesters/semesterSubjects'];
     },
@@ -315,6 +322,9 @@ export default {
     },
   },
   methods: {
+    setReport(value) {
+      this.selectedReport = value;
+    },
     async getPageNumber(number) {
       this.page = number;
       // Also, now let's load students
