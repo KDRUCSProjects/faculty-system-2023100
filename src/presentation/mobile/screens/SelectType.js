@@ -8,11 +8,12 @@ import {
   Switch,
   Platform,
   SafeAreaView,
+  Dimensions,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getAttendence, loadSubjects } from "../store/actions/actions";
 import { useEffect, useState } from "react";
-import { Button } from "react-native-paper";
+import { Button, Card } from "react-native-paper";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
 import SubjectItem from "./SubjectItem";
@@ -20,6 +21,9 @@ import SelectSubjectItem from "./SelectSubjectItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import BackHandlerChild from "../optimization/BackHandlerChild";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+const { width, height } = Dimensions.get("window");
 
 export default function SelectType(props) {
   BackHandlerChild();
@@ -103,11 +107,116 @@ export default function SelectType(props) {
           </Text>
           <View
             style={{
-              height: "40%",
-              justifyContent: "space-around",
+              height: "90%",
+              justifyContent: "space-evenly",
               alignItems: "center",
             }}
           >
+            <View
+              style={{
+                width: "90%",
+                height: 150,
+                flexDirection: "row",
+                justifyContent: "space-around",
+              }}
+            >
+              <Card
+                style={{ width: 120, height: 140 }}
+                onPress={() => {
+                  props.navigation.navigate("attendenceScreen", {
+                    subjectId: id,
+                    status: "one",
+                  });
+                }}
+              >
+                <Card.Content style={{ height: "40%" }}>
+                  <Text
+                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                  >
+                    First Cell
+                  </Text>
+                </Card.Content>
+
+                <View
+                  style={{
+                    height: "60%",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="sticker-check-outline"
+                    size={80}
+                    color="black"
+                  />
+                </View>
+              </Card>
+
+              <Card
+                style={{ width: 120, height: 140 }}
+                onPress={() => {
+                  props.navigation.navigate("attendenceScreen", {
+                    subjectId: id,
+                    status: "two",
+                  });
+                }}
+              >
+                <Card.Content style={{ height: "40%" }}>
+                  <Text
+                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                  >
+                    Second Cell
+                  </Text>
+                </Card.Content>
+
+                <View
+                  style={{
+                    height: "60%",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="sticker-check-outline"
+                    size={80}
+                    color="black"
+                  />
+                </View>
+              </Card>
+            </View>
+
+            <Card
+              style={{ width: 120, height: 140 }}
+              onPress={() => {
+                props.navigation.navigate("attendenceScreen", {
+                  subjectId: id,
+                  status: "both",
+                });
+              }}
+            >
+              <Card.Content style={{ height: "40%" }}>
+                <Text
+                  style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                >
+                  Both Cells
+                </Text>
+              </Card.Content>
+
+              <View
+                style={{
+                  height: "60%",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <FontAwesome5
+                  name="check-double"
+                  size={70}
+                  color="black"
+                />
+              </View>
+            </Card>
+            {/*           
             <View
               style={{
                 width: "80%",
@@ -244,7 +353,7 @@ export default function SelectType(props) {
                   }}
                 />
               </View>
-            </View>
+            {/* </View> */}
             {isError ? (
               <Text style={{ height: 30, fontSize: 18, color: "red" }}>
                 One option Should be selected!
@@ -252,65 +361,6 @@ export default function SelectType(props) {
             ) : (
               <View style={{ height: 30 }}></View>
             )}
-          </View>
-          <View
-            style={{
-              height: "35%",
-              width: "90%",
-              marginTop: "3%",
-              flexDirection: "row",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
-              marginHorizontal: 10,
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                backgroundColor: "blue",
-                height: 45,
-                width: 80,
-                borderRadius: 8,
-                padding: 10,
-                marginLeft: 15,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={() => props.navigation.goBack()}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 18,
-                  textAlign: "center",
-                  textAlignVertical: "center",
-                }}
-              >
-                Back
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.primary,
-                height: 45,
-                width: 80,
-                borderRadius: 8,
-                padding: 10,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={onclick}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 18,
-                  textAlign: "center",
-                  textAlignVertical: "center",
-                }}
-              >
-                Next
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
       </View>

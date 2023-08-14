@@ -101,7 +101,7 @@ export default function Subjects(props) {
             fontStyle: "italic",
           }}
         >
-          Choose a Semister
+          My Subjects in Semisters
         </Text>
         <View style={{ height: "80%" }}>
           <ScrollView

@@ -132,83 +132,83 @@ export const localAuth = (
 };
 export const isPresent = (subjectId, studentId, type) => {
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
+    // const userData = await AsyncStorage.getItem("userData");
 
-    const transformedData = JSON.parse(userData);
-    const { token } = transformedData;
-    const updateResp = await FetchWithTimeout(
-      "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({
-          studentId: studentId,
-          status: true,
-        }),
-      },
-      5000
-    );
-    console.log(updateResp.status);
-    if (updateResp.status == 401) {
-      const error = new Error("please reauthenticate");
-      error.code = 401;
-      throw error;
-    }
+    // const transformedData = JSON.parse(userData);
+    // const { token } = transformedData;
+    // const updateResp = await FetchWithTimeout(
+    //   "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: "Bearer " + token,
+    //     },
+    //     body: JSON.stringify({
+    //       studentId: studentId,
+    //       status: true,
+    //     }),
+    //   },
+    //   5000
+    // );
+    // console.log(updateResp.status);
+    // if (updateResp.status == 401) {
+    //   const error = new Error("please reauthenticate");
+    //   error.code = 401;
+    //   throw error;
+    // }
 
-    const data = await updateResp.json();
+    // const data = await updateResp.json();
 
-    if (!updateResp.ok) {
-      const error = new Error(data.message);
-      error.code = data.code;
-      throw error;
-    }
+    // if (!updateResp.ok) {
+    //   const error = new Error(data.message);
+    //   error.code = data.code;
+    //   throw error;
+    // }
 
-    console.log(studentId);
-    dispatch({ type: ISPRESENT, id: studentId });
+    console.log(type);
+    dispatch({ type: ISPRESENT, id: studentId, cell: type });
   };
 };
 
 export const isAbsent = (subjectId, studentId, type) => {
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
+    // const userData = await AsyncStorage.getItem("userData");
 
-    const transformedData = JSON.parse(userData);
-    const { token } = transformedData;
-    const updateResp = await FetchWithTimeout(
-      "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({
-          studentId: studentId,
-          status: false,
-        }),
-      },
-      5000
-    );
+    // const transformedData = JSON.parse(userData);
+    // const { token } = transformedData;
+    // const updateResp = await FetchWithTimeout(
+    //   "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: "Bearer " + token,
+    //     },
+    //     body: JSON.stringify({
+    //       studentId: studentId,
+    //       status: false,
+    //     }),
+    //   },
+    //   5000
+    // );
 
-    if (updateResp.status == 401) {
-      const error = new Error("please reauthenticate");
-      error.code = 401;
-      throw error;
-    }
+    // if (updateResp.status == 401) {
+    //   const error = new Error("please reauthenticate");
+    //   error.code = 401;
+    //   throw error;
+    // }
 
-    const data = await updateResp.json();
-    console.log(data);
+    // const data = await updateResp.json();
+    // console.log(data);
 
-    if (!updateResp.ok) {
-      const error = new Error(data.message);
-      error.code = data.code;
-      throw error;
-    }
-
-    dispatch({ type: ISABSENT, id: studentId });
+    // if (!updateResp.ok) {
+    //   const error = new Error(data.message);
+    //   error.code = data.code;
+    //   throw error;
+    // }
+    console.log(type);
+    dispatch({ type: ISABSENT, id: studentId, cell: type });
   };
 };
 

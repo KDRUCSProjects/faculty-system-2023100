@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -31,6 +32,7 @@ import { Modal } from "@ui-kitten/components/ui";
 import * as updates from "expo-updates";
 import { List } from "react-native-paper";
 import BackHandlerChild from "../optimization/BackHandlerChild";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 export default function CreateShoka(props) {
   // d();
@@ -172,9 +174,15 @@ export default function CreateShoka(props) {
   const [expanded, setExpanded] = useState(true);
 
   const handlePress = () => setExpanded(!expanded);
+
+  const headerHeight = useHeaderHeight();
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={headerHeight}
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <View
           style={{
             flex: 1,
@@ -561,7 +569,7 @@ export default function CreateShoka(props) {
             <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -27,6 +28,7 @@ import * as updates from "expo-updates";
 
 import { logout } from "../store/actions/actions";
 import BackHandlerChild from "../optimization/BackHandlerChild";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 export default function ChangePassword(props) {
   BackHandlerChild();
@@ -116,9 +118,14 @@ export default function ChangePassword(props) {
     props.navigation.goBack();
   };
 
+  const headerHeight = useHeaderHeight();
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={headerHeight}
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <View
           style={{
             flex: 1,
@@ -308,7 +315,7 @@ export default function ChangePassword(props) {
         >
           <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

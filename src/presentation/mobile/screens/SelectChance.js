@@ -14,7 +14,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getAttendence, loadSubjects } from "../store/actions/actions";
 import { useEffect, useState } from "react";
-import { Button } from "react-native-paper";
+import { Button, Card } from "react-native-paper";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
 import SubjectItem from "./SubjectItem";
@@ -25,6 +25,7 @@ import { Modal } from "@ui-kitten/components";
 import * as updates from "expo-updates";
 import { getStudentBySubject } from "../store/actions/actions";
 import BackHandlerChild from "../optimization/BackHandlerChild";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function SelectChance(props) {
   BackHandlerChild();
@@ -137,12 +138,12 @@ export default function SelectChance(props) {
           </Text>
           <View
             style={{
-              height: "40%",
-              justifyContent: "space-around",
+              height: "80%",
+              justifyContent: "space-evenly",
               alignItems: "center",
             }}
           >
-            <View
+            {/* <View
               style={{
                 width: "80%",
                 height: "10%",
@@ -285,67 +286,207 @@ export default function SelectChance(props) {
               </Text>
             ) : (
               <View style={{ height: 30 }}></View>
-            )}
-          </View>
-          <View
-            style={{
-              height: "35%",
-              width: "90%",
-              marginTop: "3%",
-              flexDirection: "row",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
-              marginHorizontal: 10,
-            }}
-          >
-            <TouchableOpacity
+            )} */}
+            <View
               style={{
-                backgroundColor: "blue",
-                height: 45,
-                width: 80,
-                borderRadius: 8,
-                padding: 10,
-                marginLeft: 15,
-                justifyContent: "center",
-                alignItems: "center",
+                width: "90%",
+                height: 150,
+                flexDirection: "row",
+                justifyContent: "space-around",
               }}
-              onPress={() => props.navigation.goBack()}
             >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 18,
-                  textAlign: "center",
-                  textAlignVertical: "center",
+              <Card
+                style={{ width: 120, height: 140 }}
+                onPress={async () => {
+                  try {
+                    setisLoading(true);
+                    await dispatch(getStudentBySubject(id, 1));
+                    setisLoading(false);
+
+                    props.navigation.navigate("CreateShoka", {
+                      subjectId: id,
+                      status: "first",
+                    });
+                  } catch (err) {
+                    console.log(err.message);
+                    setisLoading(false);
+                    //props.navigation.navigate("selectType", { subjectId: selected });
+                    Alert.alert("Error", err.message);
+                    if (err.code == 401) {
+                      // props.navigation.replace("Login");
+                      await dispatch(logout());
+                      await AsyncStorage.clear().then().then();
+                      props.navigation.navigate("Login");
+                      // updates.reloadAsync();
+
+                      return;
+                    }
+                  }
                 }}
               >
-                Back
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.primary,
-                height: 45,
-                width: 80,
-                borderRadius: 8,
-                padding: 10,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={onclick}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 18,
-                  textAlign: "center",
-                  textAlignVertical: "center",
+                <Card.Content style={{ height: "40%" }}>
+                  <Text
+                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                  >
+                    First Chance
+                  </Text>
+                </Card.Content>
+
+                <View
+                  style={{
+                    height: "60%",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons
+                    name="looks-one"
+                    size={80}
+                    color="black"
+                  />
+                </View>
+              </Card>
+
+              <Card
+                style={{ width: 120, height: 140 }}
+                onPress={async () => {
+                  try {
+                    setisLoading(true);
+                    await dispatch(getStudentBySubject(id, 2));
+                    setisLoading(false);
+                    props.navigation.navigate("CreateShoka", {
+                      subjectId: id,
+                      status: "second",
+                    });
+                  } catch (err) {
+                    console.log(err.message);
+                    setisLoading(false);
+                    //props.navigation.navigate("selectType", { subjectId: selected });
+                    Alert.alert("Error", err.message);
+                    if (err.code == 401) {
+                      // props.navigation.replace("Login");
+                      await dispatch(logout());
+                      await AsyncStorage.clear().then().then();
+                      props.navigation.navigate("Login");
+                      // updates.reloadAsync();
+
+                      return;
+                    }
+                  }
                 }}
               >
-                Next
-              </Text>
-            </TouchableOpacity>
+                <Card.Content style={{ height: "40%" }}>
+                  <Text
+                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                  >
+                    Second Chance
+                  </Text>
+                </Card.Content>
+
+                <View
+                  style={{
+                    height: "60%",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons
+                    name="looks-two"
+                    size={80}
+                    color="black"
+                  />
+                </View>
+              </Card>
+            </View>
+
+            <View
+              style={{
+                width: "90%",
+                height: 150,
+                flexDirection: "row",
+                justifyContent: "space-around",
+              }}
+            >
+              <Card
+                style={{ width: 120, height: 140 }}
+                onPress={async () => {
+                  try {
+                    setisLoading(true);
+                    await dispatch(getStudentBySubject(id, 3));
+                    setisLoading(false);
+                    props.navigation.navigate("CreateShoka", {
+                      subjectId: id,
+                      status: "third",
+                    });
+                  } catch (err) {
+                    console.log(err.message);
+                    setisLoading(false);
+                    //props.navigation.navigate("selectType", { subjectId: selected });
+                    Alert.alert("Error", err.message);
+                    if (err.code == 401) {
+                      // props.navigation.replace("Login");
+                      await dispatch(logout());
+                      await AsyncStorage.clear().then().then();
+                      props.navigation.navigate("Login");
+                      // updates.reloadAsync();
+
+                      return;
+                    }
+                  }
+                }}
+              >
+                <Card.Content style={{ height: "40%" }}>
+                  <Text
+                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                  >
+                    Third Chance
+                  </Text>
+                </Card.Content>
+
+                <View
+                  style={{
+                    height: "60%",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons
+                    name="looks-3"
+                    size={80}
+                    color="black"
+                  />
+                </View>
+              </Card>
+
+              <Card
+                style={{ width: 120, height: 140 }}
+                onPress={async () => {}}
+              >
+                <Card.Content style={{ height: "40%" }}>
+                  <Text
+                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                  >
+                    Fourth Chance
+                  </Text>
+                </Card.Content>
+
+                <View
+                  style={{
+                    height: "60%",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons
+                    name="looks-4"
+                    size={80}
+                    color="black"
+                  />
+                </View>
+              </Card>
+            </View>
           </View>
+
           <Modal
             visible={isLoading}
             backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
