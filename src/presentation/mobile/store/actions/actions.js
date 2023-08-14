@@ -166,8 +166,8 @@ export const isPresent = (subjectId, studentId, type) => {
     //   throw error;
     // }
 
-    console.log(studentId);
-    dispatch({ type: ISPRESENT, id: studentId });
+    console.log(type);
+    dispatch({ type: ISPRESENT, id: studentId, cell: type });
   };
 };
 
@@ -207,8 +207,8 @@ export const isAbsent = (subjectId, studentId, type) => {
     //   error.code = data.code;
     //   throw error;
     // }
-
-    dispatch({ type: ISABSENT, id: studentId });
+    console.log(type);
+    dispatch({ type: ISABSENT, id: studentId, cell: type });
   };
 };
 

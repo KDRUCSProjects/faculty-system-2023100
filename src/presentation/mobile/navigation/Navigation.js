@@ -78,6 +78,7 @@ const Navigation = (props) => {
     <mainNavigation.Navigator
       screenOptions={{
         headerShown: false,
+
         headerStyle: {
           backgroundColor: colors.secondry,
         },

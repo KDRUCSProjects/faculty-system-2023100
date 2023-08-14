@@ -90,16 +90,25 @@ const AttendenceItem = (props, ref) => {
 
   useImperativeHandle(ref, () => ({}));
 
-  let prev =
+  let prev1 =
     indexprop == 0
       ? students[indexprop].isPresentOne
       : students[indexprop - 1].isPresentOne;
 
-  let next =
+  let prev2 =
+    indexprop == 0
+      ? students[indexprop].isPresentTwo
+      : students[indexprop - 1].isPresentTwo;
+
+  let next1 =
     indexprop < StudentsSize - 1
       ? students[indexprop + 1].isPresentOne
       : students[indexprop].isPresentOne;
 
+  let next2 =
+    indexprop < StudentsSize - 1
+      ? students[indexprop + 1].isPresentTwo
+      : students[indexprop].isPresentTwo;
   return (
     <View style={styles.studentContainer}>
       <View
@@ -141,6 +150,7 @@ const AttendenceItem = (props, ref) => {
             </View>
           </View>
         </View>
+
         <View
           style={{
             height: "100%",
@@ -167,52 +177,136 @@ const AttendenceItem = (props, ref) => {
               style={{
                 height: "33.33%",
                 width: "100%",
-                backgroundColor: prev ? "#69be28" : "#d32d41",
-                borderTopLeftRadius: width / 20,
-                borderTopRightRadius: width / 20,
-                justifyContent: "center",
+
+                flexDirection: "row",
+                justifyContent: "flex-start",
                 alignItems: "center",
                 borderBottomColor: "black",
                 borderBottomWidth: 1,
               }}
             >
-              <Text style={styles.trackText}>
-                {indexprop == 0 ? "" : students[indexprop - 1].studentName}
-              </Text>
+              <View
+                style={{
+                  width: "50%",
+                  height: "100%",
+                  borderRightWidth: 1,
+                  borderColor: "gray",
+                  borderTopLeftRadius: width / 20,
+                  backgroundColor: prev1 ? "#69be28" : "#d32d41",
+                }}
+              ></View>
+
+              <View
+                style={{
+                  width: "50%",
+                  height: "100%",
+                  borderTopRightRadius: width / 20,
+                  backgroundColor: prev2 ? "#69be28" : "#d32d41",
+                }}
+              >
+                <Text
+                  style={{
+                    position: "absolute",
+                    width: 80,
+                    bottom: 20,
+                    left: -30,
+                    color: "white",
+                  }}
+                >
+                  {indexprop == 0 ? "" : students[indexprop - 1].studentName}
+                </Text>
+              </View>
             </View>
+
             <View
               style={{
                 height: "33.33%",
                 width: "100%",
-                backgroundColor: students[indexprop].isPresentOne
-                  ? "#69be28"
-                  : "#d32d41",
-                justifyContent: "center",
+                flexDirection: "row",
+                justifyContent: "flex-start",
                 alignItems: "center",
                 borderBottomColor: "black",
                 borderBottomWidth: 1,
               }}
             >
-              <Text style={styles.trackText}>
-                {students[indexprop].studentName}
-              </Text>
+              <View
+                style={{
+                  height: "100%",
+                  width: "50%",
+                  backgroundColor: students[indexprop].isPresentOne
+                    ? "#69be28"
+                    : "#d32d41",
+                  borderRightWidth: 1,
+                  borderColor: "gray",
+                }}
+              ></View>
+
+              <View
+                style={{
+                  height: "100%",
+                  width: "50%",
+                  backgroundColor: students[indexprop].isPresentTwo
+                    ? "#69be28"
+                    : "#d32d41",
+                }}
+              >
+                <Text
+                  style={{
+                    position: "absolute",
+                    width: 80,
+                    bottom: 20,
+                    left: -30,
+                    color: "white",
+                  }}
+                >
+                  {students[indexprop].studentName}
+                </Text>
+              </View>
             </View>
+
             <View
               style={{
                 height: "33.33%",
                 width: "100%",
-                backgroundColor: next ? "#69be28" : "#d32d41",
-                borderBottomLeftRadius: width / 20,
-                borderBottomRightRadius: width / 20,
-                justifyContent: "center",
+                flexDirection: "row",
+
+                justifyContent: "flex-start",
                 alignItems: "center",
               }}
             >
-              <Text style={styles.trackText}>
-                {indexprop < StudentsSize - 1
-                  ? students[indexprop + 1].studentName
-                  : ""}
-              </Text>
+              <View
+                style={{
+                  width: "50%",
+                  height: "100%",
+                  borderRightWidth: 1,
+                  borderBottomLeftRadius: width / 20,
+                  borderColor: "gray",
+                  backgroundColor: next1 ? "#69be28" : "#d32d41",
+                }}
+              ></View>
+
+              <View
+                style={{
+                  width: "50%",
+                  height: "100%",
+                  borderBottomRightRadius: width / 20,
+                  backgroundColor: next2 ? "#69be28" : "#d32d41",
+                }}
+              >
+                <Text
+                  style={{
+                    position: "absolute",
+                    width: 80,
+                    bottom: 20,
+                    left: -30,
+                    color: "white",
+                  }}
+                >
+                  {indexprop < StudentsSize - 1
+                    ? students[indexprop + 1].studentName
+                    : ""}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
