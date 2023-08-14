@@ -15,7 +15,7 @@ const registerStudent = {
     engFatherName: Joi.string(),
     engGrandFatherName: Joi.string(),
     educationalYear: Joi.number().required(),
-    admissionYear: Joi.date(),
+    admissionYear: Joi.number().positive().integer(),
     photo: Joi.string().allow(null),
     dob: Joi.date(),
     gender: Joi.string().valid('male', 'female'),
@@ -50,7 +50,7 @@ const updateStudent = {
       engFatherName: Joi.string(),
       engGrandFatherName: Joi.string(),
       educationalYear: Joi.date(),
-      admissionYear: Joi.date(),
+      admissionYear: Joi.number().positive().integer(),
       photo: Joi.string().allow(null),
       dob: Joi.date(),
       gender: Joi.string().valid('male', 'female'),
@@ -111,7 +111,7 @@ const tempToken = {
       engFatherName: Joi.string(),
       engGrandFatherName: Joi.string(),
       educationalYear: Joi.number().required(),
-      admissionYear: Joi.date(),
+      admissionYear: Joi.number().positive().integer(),
       photo: Joi.string().allow(null),
       dob: Joi.date(),
       gender: Joi.string().valid('male', 'female'),
@@ -129,8 +129,6 @@ const tempToken = {
     .required(),
 };
 
-
-
 const createStudentSchool = {
   params: Joi.object().keys({
     studentId: Joi.number().integer().positive().required(),
@@ -141,7 +139,6 @@ const createStudentSchool = {
   }),
 };
 
-
 const createStudentMonograph = {
   params: Joi.object().keys({
     studentId: Joi.number().integer().positive().required(),
@@ -151,7 +148,6 @@ const createStudentMonograph = {
     defenseDate: Joi.date().iso().required(),
   }),
 };
-
 
 module.exports = {
   kankor,
