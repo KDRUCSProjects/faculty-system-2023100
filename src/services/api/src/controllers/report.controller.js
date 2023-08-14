@@ -54,6 +54,9 @@ const getConversionReport = catchAsync(async (req, res) => {
     for (let i = 0; i < 8; i++) {
       worksheet.getRow(row).getCell(col - i).value = fields[i];
     }
+
+    // Change to next row
+    row++;
   });
 
   const now = Date.now();
