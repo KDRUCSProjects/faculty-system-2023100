@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.AttendanceList);
       this.hasMany(models.ShokaList, { as: 'ShokaList' });
       this.hasOne(models.School);
-      this.hasOne(models.Monograph)
+      this.hasOne(models.Monograph);
     }
   }
   Student.init(
@@ -42,12 +42,13 @@ module.exports = (sequelize, DataTypes) => {
       tazkeraNumber: DataTypes.INTEGER,
       birthCity: DataTypes.STRING,
       birthCountry: DataTypes.STRING,
-      phoneNumber: DataTypes.INTEGER,
+      phoneNumber: DataTypes.STRING,
       kankorMarks: DataTypes.DOUBLE,
       kankorType: DataTypes.STRING,
       birthCityEnglish: DataTypes.STRING,
       birthCountryEnglish: DataTypes.STRING,
       bankAccount: DataTypes.STRING,
+      engDob: DataTypes.DATE,
       educationalYearId: {
         type: DataTypes.INTEGER,
         required: true,
@@ -62,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM('male', 'female'),
         defaultValue: 'male',
       },
-      admissionYear: DataTypes.DATE,
+      admissionYear: DataTypes.INTEGER,
       ...BaseModel(DataTypes),
     },
     {

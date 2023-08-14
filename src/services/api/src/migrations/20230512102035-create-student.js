@@ -66,7 +66,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       phoneNumber: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       kankorMarks: {
         type: Sequelize.DOUBLE,
@@ -83,6 +83,9 @@ module.exports = {
       bankAccount: {
         type: Sequelize.STRING,
       },
+      engDob: {
+        type: Sequelize.DATE,
+      },
       educationalYearId: {
         type: Sequelize.INTEGER,
         required: true,
@@ -94,7 +97,7 @@ module.exports = {
         onUpdate: 'cascade',
       },
       admissionYear: {
-        type: Sequelize.DATE,
+        type: Sequelize.INTEGER,
       },
       gender: {
         type: Sequelize.ENUM('male', 'female'),

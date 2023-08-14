@@ -49,7 +49,6 @@ router
   .post(auth('manageUsers'), validate(studentValidation.createStudentSchool), studentController.createStudentSchool)
   .delete(auth('manageUsers'), validate(studentValidation.getStudent), studentController.deleteStudentSchool);
 
-
 router
   .route('/:studentId/monograph')
   .get(auth('manageUsers'), validate(studentValidation.getStudent), studentController.getStudentMonograph)
@@ -501,8 +500,6 @@ module.exports = router;
  *         $ref: '#/components/responses/TokenExpired'
  */
 
-
-
 /**
  * @swagger
  * /students/{studentId}/school:
@@ -532,7 +529,7 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- * 
+ *
  *   post:
  *     summary: create student school
  *     description: create student school.
@@ -573,7 +570,7 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- * 
+ *
  *   delete:
  *     summary: delete a student school
  *     description: delete a student school.
@@ -597,7 +594,6 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-
 
 /**
  * @swagger
@@ -628,7 +624,7 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- * 
+ *
  *   post:
  *     summary: create student Monograph
  *     description: create student Monograph.
@@ -669,7 +665,7 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- * 
+ *
  *   delete:
  *     summary: delete a student Monograph
  *     description: delete a student Monograph.
