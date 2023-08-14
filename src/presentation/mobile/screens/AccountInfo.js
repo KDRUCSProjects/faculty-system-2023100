@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   BackHandler,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -29,6 +30,7 @@ import { useEffect } from "react";
 
 import { logout } from "../store/actions/actions";
 import BackHandlerChild from "../optimization/BackHandlerChild";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 export default function AccountInfo(props) {
   BackHandlerChild();
@@ -174,9 +176,14 @@ export default function AccountInfo(props) {
     props.navigation.goBack();
   };
 
+  const headerHeight = useHeaderHeight();
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={headerHeight}
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <View
           style={{
             flex: 1,
@@ -248,7 +255,7 @@ export default function AccountInfo(props) {
                           overflow: "hidden",
                           borderRadius: 120 / 2,
                         }}
-                        resizeMode="center"
+                        resizeMode="cover"
                         source={
                           teacherPhoto?.includes("null")
                             ? require("../assets/images/avatar.png")
@@ -459,7 +466,7 @@ export default function AccountInfo(props) {
         >
           <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

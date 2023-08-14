@@ -192,151 +192,154 @@ export default Login = (props) => {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
       >
-        <View
-          style={{
-            height: "20%",
-            alignContent: "center",
-            justifyContent: "center",
-          }}
-        >
+        <SafeAreaView style={{ height: "100%", width: "100%", flex: 1 }}>
           <View
             style={{
+              height: "20%",
               alignContent: "center",
               justifyContent: "center",
-              flexDirection: "row",
             }}
           >
-            <Text style={{ fontSize: 40, color: "white" }}>AssalamAlaikum</Text>
-          </View>
-
-          <Text style={{ fontSize: 20, color: "white", textAlign: "center" }}>
-            Sign in to your account
-          </Text>
-        </View>
-
-        <View
-          style={{
-            height: "60%",
-            width: "100%",
-            justifyContent: "space-around",
-          }}
-        >
-          <StatusBar hidden={true}></StatusBar>
-
-          <View style={{ height: 250 }}>
             <View
               style={{
-                width: "100%",
-                height: 250,
+                alignContent: "center",
                 justifyContent: "center",
-                alignItems: "center",
+                flexDirection: "row",
               }}
             >
-              <View style={styles.inputFieldsContainer}>
-                <View
-                  style={[
-                    styles.inputContainer,
-                    {
-                      borderColor: emailError ? "red" : "white",
-                      borderWidth: emailError ? 1.8 : 0,
-                    },
-                  ]}
-                >
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder="Email"
-                    autoCapitalize="none"
-                    onChangeText={(email) => {
-                      setEmail(email);
-                      setemailError(false);
-                    }}
-                    value={email}
-                  />
+              <Text style={{ fontSize: 40, color: "white" }}>
+                AssalamAlaikum
+              </Text>
+            </View>
 
-                  <MaterialCommunityIcons
-                    style={{ marginRight: "2%" }}
-                    name={"account"}
-                    size={25}
-                    color="#232323"
-                  />
-                </View>
-                <View style={{ width: "90%" }}>
-                  {emailError ? (
-                    <Text style={styles.errorText}>{emailError}</Text>
-                  ) : (
-                    <></>
-                  )}
-                </View>
-                <View
-                  style={[
-                    styles.inputContainer,
-                    {
-                      borderColor: passwordError ? "red" : "white",
-                      borderWidth: passwordError ? 1.8 : 0,
-                    },
-                  ]}
-                >
-                  <TextInput
-                    style={styles.inputField}
-                    name="password"
-                    placeholder="Password"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    textContentType="newPassword"
-                    secureTextEntry={passwordVisibility}
-                    value={password}
-                    onSubmitEditing={onLogin}
-                    returnKeyType={"send"}
-                    enablesReturnKeyAutomatically
-                    onChangeText={(text) => {
-                      setPassword(text);
-                      setpasswordError(false);
-                    }}
-                  />
-                  <Pressable
-                    onPress={handlePasswordVisibility}
-                    style={{ marginRight: "2%" }}
+            <Text style={{ fontSize: 20, color: "white", textAlign: "center" }}>
+              Sign in to your account
+            </Text>
+          </View>
+
+          <View
+            style={{
+              height: "60%",
+              width: "100%",
+              justifyContent: "space-around",
+            }}
+          >
+            <StatusBar hidden={true}></StatusBar>
+
+            <View style={{ height: 250 }}>
+              <View
+                style={{
+                  width: "100%",
+                  height: 250,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View style={styles.inputFieldsContainer}>
+                  <View
+                    style={[
+                      styles.inputContainer,
+                      {
+                        borderColor: emailError ? "red" : "white",
+                        borderWidth: emailError ? 1.8 : 0,
+                      },
+                    ]}
                   >
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder="Email"
+                      autoCapitalize="none"
+                      onChangeText={(email) => {
+                        setEmail(email);
+                        setemailError(false);
+                      }}
+                      value={email}
+                    />
+
                     <MaterialCommunityIcons
-                      name={rightIcon}
+                      style={{ marginRight: "2%" }}
+                      name={"account"}
                       size={25}
                       color="#232323"
                     />
-                  </Pressable>
-                </View>
-                <View style={{ width: "90%" }}>
-                  {passwordError ? (
-                    <Text style={styles.errorText}>{passwordError}</Text>
-                  ) : (
-                    <></>
-                  )}
+                  </View>
+                  <View style={{ width: "90%" }}>
+                    {emailError ? (
+                      <Text style={styles.errorText}>{emailError}</Text>
+                    ) : (
+                      <></>
+                    )}
+                  </View>
+                  <View
+                    style={[
+                      styles.inputContainer,
+                      {
+                        borderColor: passwordError ? "red" : "white",
+                        borderWidth: passwordError ? 1.8 : 0,
+                      },
+                    ]}
+                  >
+                    <TextInput
+                      style={styles.inputField}
+                      name="password"
+                      placeholder="Password"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      textContentType="newPassword"
+                      secureTextEntry={passwordVisibility}
+                      value={password}
+                      onSubmitEditing={onLogin}
+                      returnKeyType={"send"}
+                      enablesReturnKeyAutomatically
+                      onChangeText={(text) => {
+                        setPassword(text);
+                        setpasswordError(false);
+                      }}
+                    />
+                    <Pressable
+                      onPress={handlePasswordVisibility}
+                      style={{ marginRight: "2%" }}
+                    >
+                      <MaterialCommunityIcons
+                        name={rightIcon}
+                        size={25}
+                        color="#232323"
+                      />
+                    </Pressable>
+                  </View>
+                  <View style={{ width: "90%" }}>
+                    {passwordError ? (
+                      <Text style={styles.errorText}>{passwordError}</Text>
+                    ) : (
+                      <></>
+                    )}
+                  </View>
                 </View>
               </View>
             </View>
           </View>
-        </View>
 
-        <View
-          style={{
-            height: "20%",
-            width: "100%",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <TouchableOpacity
-            style={styles.loginBtn}
-            onPress={onLogin}
+          <View
+            style={{
+              height: "20%",
+              width: "100%",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
           >
-            {isLoading ? (
-              <ActivityIndicator size={"small"}></ActivityIndicator>
-            ) : (
-              <Text style={{ fontSize: 18, color: "white" }}>LOGIN</Text>
-            )}
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={styles.loginBtn}
+              onPress={onLogin}
+            >
+              {isLoading ? (
+                <ActivityIndicator size={"small"}></ActivityIndicator>
+              ) : (
+                <Text style={{ fontSize: 18, color: "white" }}>LOGIN</Text>
+              )}
+            </TouchableOpacity>
+          </View>
 
-        {/* <View
+          {/* <View
           style={{
             height: 50,
             width: "70%",
@@ -414,6 +417,7 @@ export default Login = (props) => {
             </Text>
           </TouchableOpacity>
         </View> */}
+        </SafeAreaView>
       </LinearGradient>
     </KeyboardAvoidingView>
   );

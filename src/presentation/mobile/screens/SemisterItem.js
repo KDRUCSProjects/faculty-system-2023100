@@ -29,7 +29,7 @@ const SemisterItem = (props) => {
 
       <Card.Cover
         style={{ height: "60%" }}
-        source={{ uri: "https://picsum.photos/800" }}
+        source={{ uri: "https://picsum.photos/600" }}
       />
     </Card>
   );

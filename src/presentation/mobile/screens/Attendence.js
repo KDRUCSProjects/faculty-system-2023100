@@ -136,6 +136,7 @@ export default function Attendence(props) {
         >
           <View
             style={{
+              width: "100%",
               height: 60,
               marginTop: Platform.OS == "android" ? "7%" : 0,
               backgroundColor: colors.primary,
@@ -145,7 +146,26 @@ export default function Attendence(props) {
             }}
           >
             <View style={{ width: "20%" }}>
-              <TouchableOpacity onPress={() => props.navigation.goBack()}>
+              <TouchableOpacity
+                onPress={() => {
+                  Alert.alert(
+                    "Attendence not saved!",
+                    "Do You want Cancel Attendence?",
+                    [
+                      {
+                        text: "No",
+                        onPress: () => {
+                          return;
+                        },
+                      },
+                      {
+                        text: "Yes",
+                        onPress: () => props.navigation.goBack(),
+                      },
+                    ]
+                  );
+                }}
+              >
                 <ImageBackground
                   style={{ height: 25, width: 32 }}
                   source={require("../assets/images/lessthan.png")}
