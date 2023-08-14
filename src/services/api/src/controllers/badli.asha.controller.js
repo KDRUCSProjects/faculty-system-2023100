@@ -21,25 +21,25 @@ const createBadliAshaFile = catchAsync(async (req, res) => {
       case 1:
         semTitleOne = 1;
         semTitleTwo = 2;
-        className = 'لومړی'
+        className = 'لومړی';
         conditions.push(`(semester.title = 1 OR semester.title = 2)`);
         break;
       case 2:
         semTitleOne = 3;
         semTitleTwo = 4;
-        className = 'دوهم'
+        className = 'دوهم';
         conditions.push(`(semester.title = 3 OR semester.title = 4)`);
         break;
       case 3:
         semTitleOne = 5;
         semTitleTwo = 6;
-        className = 'دریم'
+        className = 'دریم';
         conditions.push(`(semester.title = 5 OR semester.title = 6)`);
         break;
       case 4:
         semTitleOne = 7;
         semTitleTwo = 8;
-        className = 'څلورم'
+        className = 'څلورم';
         conditions.push(`(semester.title = 7 OR semester.title = 8)`);
         break;
       default:
@@ -178,7 +178,7 @@ const createBadliAshaFile = catchAsync(async (req, res) => {
   for (let i = 0; i < resultArray.length; i++) {
     const element = resultArray[i];
     const { fullName, fatherName, accountNumber, province, semOne, semTwo } = element;
-    if ((semOne + semTwo) < 80) {
+    if ((semOne + semTwo) < 65) {
       continue;
     }
     ++row;

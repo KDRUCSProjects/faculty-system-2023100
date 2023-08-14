@@ -114,7 +114,9 @@
           <v-card-actions class="mx-2">
             <v-spacer></v-spacer>
             <!-- <v-btn color="primary" variant="flat" size="large">Submit</v-btn> -->
-            <v-btn color="dark" variant="flat" size="large" @click="previousWindow" v-if="step === 2">{{ $t('Previous') }}</v-btn>
+            <v-btn color="dark" variant="flat" size="large" @click="previousWindow" v-if="step === 2">{{
+              $t('Previous')
+            }}</v-btn>
             <v-btn color="primary" variant="flat" size="large" @click="submitForm" type="submit"> {{ submitNextBtn }}</v-btn>
           </v-card-actions>
         </v-card>
@@ -144,7 +146,7 @@ export default {
     engLastName: null,
     engFatherName: null,
     engGrandFatherName: null,
-    educationalYear: 1399,
+    educationalYear: null,
   }),
   methods: {
     setPhoto(photo) {
@@ -160,7 +162,7 @@ export default {
       }
     },
     handlePhotoSize: function (photoSize) {
-      this.maxPhotoSize = photoSize
+      this.maxPhotoSize = photoSize;
     },
     previousWindow() {
       // Maximum steps reached
@@ -183,7 +185,7 @@ export default {
 
       try {
         // Continue submitting the form
-        if(!this.maxPhotoSize){
+        if (!this.maxPhotoSize) {
           await this.$store.dispatch('students/addStudent', {
             kankorId: this.kankorId,
             fullName: this.fullName,
@@ -201,9 +203,8 @@ export default {
             engGrandFatherName: this.engGrandFatherName,
             educationalYear: this.educationalYear,
           });
-        }
-        else{
-          return this.$store.commit('setToast', [0, this.$t('Photo size should be lesser than 2 MB!')]) 
+        } else {
+          return this.$store.commit('setToast', [0, this.$t('Photo size should be lesser than 2 MB!')]);
         }
 
         // Show a success toast and redirect if addNewStudentAgain was false

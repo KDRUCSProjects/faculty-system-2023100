@@ -164,7 +164,6 @@ const countUnregisteredStudent = () => {
   );
 };
 
-
 /**
  * get Student school By student id
  * @param {ObjectId} studentId
@@ -175,12 +174,12 @@ const getStudentSchool = (studentId) => {
     where: { studentId },
     include: [
       {
-        model: Student, as: 'Student'
-      }
-    ]
+        model: Student,
+        as: 'Student',
+      },
+    ],
   });
 };
-
 
 /**
  * get Student Monograph By student id
@@ -192,9 +191,10 @@ const getStudentMonograph = (studentId) => {
     where: { studentId },
     include: [
       {
-        model: Student, as: 'Student'
-      }
-    ]
+        model: Student,
+        as: 'Student',
+      },
+    ],
   });
 };
 
@@ -215,7 +215,6 @@ const createStudentSchool = (schoolBody) => {
 const createStudentMonograph = (monographBody) => {
   return Monograph.create(monographBody);
 };
-
 
 /**
  * find School By id
@@ -254,7 +253,6 @@ const deleteStudentMonograph = (monograph) => {
   if (monograph instanceof Monograph) return monograph.destroy();
   throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'some thing went wrong');
 };
-
 
 module.exports = {
   getStudent,

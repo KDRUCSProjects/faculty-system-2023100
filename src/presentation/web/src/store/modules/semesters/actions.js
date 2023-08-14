@@ -96,4 +96,23 @@ export default {
       throw e.response.data.message;
     }
   },
+  async loadStatistics(context, year) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/semesters?statistics=true&year=${year}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setStatistics', response.data);
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'All semesters load failed'], { root: true });
+      throw e.response.data.message;
+    }
+  },
 };

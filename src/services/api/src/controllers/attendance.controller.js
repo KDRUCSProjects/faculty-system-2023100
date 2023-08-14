@@ -396,8 +396,21 @@ const takeOneStdAttendance = catchAsync(async (req, res) => {
       throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameters');
   }
 });
+
+const createExcelFile = catchAsync(async (req, res) => {
+  const { semesterId } = req.params;
+  console.log(semesterId);
+  const semester = await semesterService.findById(semesterId);
+  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+  const subjects = await subjectService.getSemesterSubjects(semesterId);
+  if (subjects.length === 0) throw new ApiError(httpStatus.NOT_FOUND, 'subjects are not created for this semester');
+  const students = await subjectService.getSemesterStudents(semesterId);
+  return res.send(students);
+});
+
 module.exports = {
   getAttendance,
+  createExcelFile,
   getAttendanceById,
   getTodaysAttendance,
   takeTodaysAttendance,

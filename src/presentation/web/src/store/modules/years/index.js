@@ -10,6 +10,7 @@ export default {
       selectedYear: null,
       onGoingYear: null,
       firstHalf: false,
+      onGoingYearData: null,
     };
   },
   getters,

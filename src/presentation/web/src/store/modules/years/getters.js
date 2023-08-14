@@ -23,4 +23,7 @@ export default {
       firstHalf: state.firstHalf,
     };
   },
+  onGoingYearData(state) {
+    return state.onGoingYearData;
+  },
 };

@@ -2,170 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" data-link="" href="fonts/icofont/icofont.min.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/queriesStyle.css" />
-    <title>Search-Form-V-0</title>
-    <script defer src="js/script.js"></script>
+    <link rel="stylesheet" href="css/index.css" />
+    <title>Index</title>
   </head>
   <body>
     <main>
-      <div class="main-heading-div">
-        <h1>
-          Welcome To Kandahar University Website <br />
-          Enter Your Kankor ID To See The Result
-        </h1>
-      </div>
       <div class="main-div">
-        <!-- /////////////////////////////////////////// -->
-
-        <div class="main-container">
-          <div class="search-container">
-            <i class="icofont-search icon"></i>
-            <input
-              class="input"
-              type="text"
-              name="Search"
-              placeholder="Enter your kankor Id"
-            />
-            <i class="icofont-bubble-right bubble-icon"></i>
-            <i class="icofont-spinner-alt-2 spinner hidden"></i>
-            <img
-              class="icon-sun icon__theme swap-icon"
-              src="image/icon-moon.svg"
-            />
-          </div>
-          <!-- /////////////////////////////////////////// -->
-
-          <div class="result-container">
-            <div id="top-box" calss="result-top-box">
-              <div class="information-box">
-                <h4 class="first-heading name">Name</h4>
-                <h4 class="second-heading name-value">Mohammad Agha</h4>
-              </div>
-              <div class="information-box">
-                <h4 class="first-heading f-Name">Father Name</h4>
-                <h4 class="second-heading f-name-value">Ibrahim Shah Agha</h4>
-              </div>
-              <div class="information-box">
-                <h4 class="first-heading grand-f-name">Grand Father Name</h4>
-                <h4 class="second-heading grand-f-name-value">
-                  Sultan Shah Agha
-                </h4>
-              </div>
-              <div class="information-box">
-                <h4 class="first-heading kankor-input">Kankor ID</h4>
-                <h4 class="second-heading kankor-input-value">CS00345</h4>
-              </div>
-            </div>
-            <div class="result-bottom-box">
-              <button class="profile" onclick="onclick">Profile</button>
-            </div>
-
-            <!-- //////////////////////////////////////////////////////// -->
-          </div>
+        <div class="headings-div">
+          <h1>Welcom To Kandahar University Website</h1>
+          <h4>
+            In here you can find your infromatin by entering your kankor Id or
+            you can register your self as studen by entering a token that the
+            administration provides you
+          </h4>
         </div>
-      </div>
-      <!-- /////////////////////////////////////////////////////////////// -->
-
-      <div class="profile-card-main-div profile-card hidden">
-        <div class="profile-left">
-          <i class="icofont-close icon-close"></i>
-          <div class="profile-img-div">
-            <img src="./image/aa.jpg" alt="" />
-            <h4>Mohammad Agha</h4>
-            <h6>Ibrahimi</h6>
-          </div>
-          <div class="profiel-left-information-div">
-            <div class="profiel-left-information-divs">
-              <i class="icofont-id Database-id-icon"></i>
-              <p class="Database-id-p">Database ID :</p>
-              <p class="Database-id id">6</p>
-            </div>
-
-            <div class="profiel-left-information-divs">
-              <i class="icofont-card Database-id-icon"></i>
-              <p class="Database-id-p">Addmision Year :</p>
-              <p class="Database-id adm-date">NA</p>
-            </div>
-
-            <div class="profiel-left-information-divs">
-              <i class="icofont-id Database-id-icon"></i>
-              <p class="Database-id-p">Kankor ID :</p>
-              <p class="Database-id kankor-id">1goizccb</p>
-            </div>
-
-            <div class="profiel-left-information-divs">
-              <i class="icofont-calendar Database-id-icon"></i>
-              <p class="Database-id-p">Kankor Year :</p>
-              <p class="Database-id e-year">NA</p>
-            </div>
-          </div>
-        </div>
-        <!-- /////////////////////////////////////////////// -->
-        <div class="profile-right">
-          <div class="biography-heading-div">
-            <h2>BIOGRAPHY</h2>
-            <p class="student-p">Student All Personal Information</p>
-            <div class="icon-tag-div tag-margin">
-              <i class="icofont-user-alt-7"></i>
-              <p>Personal</p>
-            </div>
-          </div>
-          <div class="personal-information-div">
-            <!--  /////////// -->
-            <div class="personal-information-divs">
-              <div class="round-div">FN</div>
-              <div class="information-div">
-                <p class="info-name full-name">Mohammad Agha</p>
-                <p class="info-name-lable">Full Name</p>
-              </div>
-            </div>
-
-            <div class="personal-information-divs">
-              <div class="round-div">LN</div>
-              <div class="information-div">
-                <p class="info-name nick-name">Ibrahimi</p>
-                <p class="info-name-lable">Last Name</p>
-              </div>
-            </div>
-
-            <div class="personal-information-divs">
-              <div class="round-div">FN</div>
-              <div class="information-div">
-                <p class="info-name father-name">Ibrahim Shah Agha</p>
-                <p class="info-name-lable">Father Name</p>
-              </div>
-            </div>
-
-            <div class="personal-information-divs">
-              <div class="round-div">GN</div>
-              <div class="information-div">
-                <p class="info-name grand-father-name">Sultan Shah Agha</p>
-                <p class="info-name-lable">Grand Father Name</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /////////////////////////////////////////////// -->
-      </div>
-
-      <div class="overlay hidden"></div>
-      <!-- //////////////////////////////// -->
-
-      <div class="error-message-div">
-        <div class="icon-exc-div">
-          <i class="icofont-exclamation icon-exc"></i>
-        </div>
-        <div class="error-p-div">
-          <p class="error-p">
-            This ID is not in our Database Please Enter a Valid ID.
-          </p>
-        </div>
-        <div class="error-close-div">
-          <i class="icofont-close-line error-close"></i>
+        <div class="btn-div">
+          <a href="search.html" target="_blank">
+            <button class="btn-1">Search Your Infromatin</button></a
+          >
+          <a href="form.html" target="_blank">
+            <button class="btn-2">Register As a Student</button></a
+          >
         </div>
       </div>
     </main>

@@ -23,6 +23,19 @@ export default {
     return state.currentTeacher;
   },
   currentTeacherAssignedSubjects(state) {
-    return state.currentTeacherAssignedSubjects;
+    let semesters = state.currentTeacherAssignedSubjects;
+
+    semesters.map((s) => {
+      s.subjects.map((sub) => {
+        sub.name = sub.subjectName;
+        sub.credit = sub.subjectTitle;
+        sub.id = sub.subjectId;
+        return sub;
+      });
+
+      return s;
+    });
+
+    return semesters;
   },
 };

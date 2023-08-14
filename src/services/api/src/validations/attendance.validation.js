@@ -12,6 +12,16 @@ const getAttendanceById = {
   }),
 };
 
+const createExcelFile = {
+  params: Joi.object().keys({
+    semesterId: Joi.number().required(),
+  }),
+  query: Joi.object().keys({
+    startDate: Joi.date().iso().required(),
+    endDate: Joi.date().iso().required(),
+  }),
+};
+
 const getTodaysAttendance = {
   params: Joi.object().keys({
     subjectId: Joi.number().required().integer().min(1).messages({ 'number.min': 'subject id must by positive number' }),
@@ -56,6 +66,7 @@ const takeOneStdAttendance = {
 
 module.exports = {
   getAttendance,
+  createExcelFile,
   getAttendanceById,
   getTodaysAttendance,
   takeTodaysAttendance,

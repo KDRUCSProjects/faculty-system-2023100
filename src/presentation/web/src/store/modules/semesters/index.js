@@ -11,6 +11,9 @@ export default {
       currentPeriodSemesters: [],
       semester: null,
       reviewStudents: [],
+      selectedPeriodByUser: null,
+      selectedYearByUser: null,
+      statistics: null,
     };
   },
   getters,
