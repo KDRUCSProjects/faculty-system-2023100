@@ -170,6 +170,18 @@ const matchSemesterWithOnGoingSemester = async (semesterId) => {
   return { message: 'All good', eligible: 1, data };
 };
 
+const translateFields = (field) => {
+  let t = field;
+  if (t === 'male') return 'نارینه';
+  if (t === 'female') return 'شځینه';
+  if (t === 'present') return 'حاضر';
+  if (t === 'taajil') return 'تاجیل';
+  if (t === 'reentry') return 'بیاشمولیت';
+  if (t === 'total') return 'کلی';
+  if (t === 'tabdili') return 'تبدیل';
+  if (t === 'monfaq') return 'منفق';
+};
+
 module.exports = {
   findEligibleNextSemesterAfterConversion,
   checkStudentEligibilityForNextSemester,
@@ -178,4 +190,5 @@ module.exports = {
   findSemesterYearAndHalf,
   matchStudentSemesterWithOnGoingSemester,
   matchSemesterWithOnGoingSemester,
+  translateFields,
 };
