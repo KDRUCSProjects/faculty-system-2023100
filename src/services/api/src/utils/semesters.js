@@ -70,6 +70,55 @@ const getStatsBySemesterId = async (semesterId, gender, count = true) => {
   return statistics;
 };
 
+const getSemesterTitleByPashto = (title) => {
+  let className;
+  let semesterName;
+  switch (title) {
+    case 1:
+      className = 'لومړی';
+      semesterName = 'اول';
+      break;
+    case 2:
+      className = 'لومړی';
+      semesterName = 'دوهم';
+      break;
+    case 3:
+      className = 'دوهم';
+      semesterName = 'دریم';
+      break;
+    case 4:
+      className = 'دوهم';
+      semesterName = 'څلورم';
+      break;
+    case 5:
+      className = 'دریم';
+      semesterName = 'پنځم';
+      break;
+    case 6:
+      className = 'دریم';
+      semesterName = 'ښپږم';
+      break;
+    case 7:
+      className = 'څلورم';
+      semesterName = 'اووم';
+      break;
+    case 8:
+      className = 'څلورم';
+      semesterName = 'اتم';
+      break;
+    default:
+      className = 'لومړی';
+      semesterName = 'اول';
+      break;
+  }
+
+  return {
+    className,
+    semesterName,
+  };
+};
+
 module.exports = {
   getStatsBySemesterId,
+  getSemesterTitleByPashto,
 };
