@@ -2,7 +2,7 @@
   <v-overlay v-model="dialog" scrim="#000"></v-overlay>
 
   <slot>
-    <v-btn variant="flat" color="primary">Update</v-btn>
+    <v-btn variant="flat" color="primary">{{ $t('Update') }}</v-btn>
   </slot>
 
   <v-dialog
@@ -15,7 +15,7 @@
     <v-card>
       <v-card-item>
         <v-card-title class="font-weight-bold">{{ title }}</v-card-title>
-        <v-card-subtitle>{{ subtitle }}.</v-card-subtitle>
+        <v-card-subtitle>{{ $t('Please update') }}</v-card-subtitle>
       </v-card-item>
       <v-card-text>
         <v-form @submit.prevent="update">
@@ -30,10 +30,8 @@
         <v-alert v-if="errorMessage" type="error" variant="outlined" :text="errorMessage"></v-alert>
       </v-card-text>
       <v-card-actions class="mx-2">
-        <v-btn variant="elevated" class="ma-1 px-10" color="primary" @click="update" :disabled="disableUpdateButton">
-          Update
-        </v-btn>
-        <v-btn variant="tonal" class="ma-1" color="error" @click="cancel"> Cancel </v-btn>
+        <v-btn variant="elevated" class="ma-1 px-10" color="primary" @click="update" :disabled="disableUpdateButton"> {{ $t('Update') }} </v-btn>
+        <v-btn variant="tonal" class="ma-1" color="error" @click="cancel"> {{ $t('Cancel') }} </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -114,15 +112,16 @@ export default {
       this.cancel();
     },
     handlePhotoSize: function (photoSize) {
-      this.maxPhotoSize = photoSize;
-      console.log(this.maxPhotoSize);
-      if (this.maxPhotoSize) {
-        return this.$store.commit('setToast', [0, 'Maximum 2mb photo size allowed']);
-      }
+      this.maxPhotoSize = photoSize
+      console.log(this.maxPhotoSize)
+        if (this.maxPhotoSize) {
+          return this.$store.commit('setToast', [0, this.$t('Photo size should be lesser than 2 MB!')]) 
+        }
+      
     },
     cancel() {
       this.dialog = false;
-      this.resetForm();
+      // this.resetForm();
     },
     resetForm() {
       Object.assign(this.$data, initialState());

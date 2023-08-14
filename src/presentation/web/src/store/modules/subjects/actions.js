@@ -146,8 +146,6 @@ export default {
     try {
       const token = context.rootGetters.token;
 
-      console.log(marks);
-
       // If you want to add 2nd or 3rd chance, then add the query otherwise empty
       const response = await axios({
         url: `/api/shokaList`,
@@ -162,6 +160,24 @@ export default {
       context.commit('setToast', 'Marks has been added successfully', { root: true });
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message || 'Failed adding student marks to shoka'], { root: true });
+      throw e.response.data.message;
+    }
+  },
+  async downloadSubjectShokaBySubjectId(context, { subjectId, chance }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios.get(`/api/shokaList/shokas/${subjectId}?chance=${chance}`, {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // context.commit();
+
+      return response;
+    } catch (e) {
       throw e.response.data.message;
     }
   },

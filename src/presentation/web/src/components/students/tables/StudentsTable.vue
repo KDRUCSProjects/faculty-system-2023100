@@ -4,11 +4,11 @@
       v-model:items-per-page="itemsPerPage"
       @page-count="pageCount = $event"
       :loading="loading"
-      loading-text="Loading students please wait"
+      :loading-text="$t('Loading students please wait')"
       class="elevation-0 border-bottom"
       :headers="headers"
       :items="theStudents"
-      no-data-text="No students available"
+      :no-data-text="$t('No students available')"
       hide-default-footer
     >
       <template v-slot:[`item.actions`]="{ item }">

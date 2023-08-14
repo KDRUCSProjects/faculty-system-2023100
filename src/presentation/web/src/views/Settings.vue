@@ -1,8 +1,8 @@
 <template>
   <base-contents>
     <div>
-      <v-card-title> App Settings </v-card-title>
-      <v-card-subtitle> Set your account settings down below</v-card-subtitle>
+      <v-card-title> {{ $t('App Settings') }} </v-card-title>
+      <v-card-subtitle> {{ $t('Set your account settings down below') }}</v-card-subtitle>
 
       <v-tabs v-model="tab" color="primary" align-tabs="center">
         <v-tab v-for="(tab, index) in tabs" :key="index" :value="index" color="light">{{ tab.title }}</v-tab>

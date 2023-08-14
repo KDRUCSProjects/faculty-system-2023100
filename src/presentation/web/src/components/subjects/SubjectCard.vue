@@ -9,15 +9,15 @@
     </v-card-subtitle>
     <v-card-text>
 
-    <v-card-subtitle class="text-primary ">{{ semesterTitle }} th Semester</v-card-subtitle>
-    <v-card-subtitle class="text-primary ">{{ subjectCredit }} Credit</v-card-subtitle>
+    <v-card-subtitle class="text-primary ">{{ semesterTitle }} {{ $t('th Semester') }}</v-card-subtitle>
+    <v-card-subtitle class="text-primary ">{{ subjectCredit }} {{ $t('Credit') }}</v-card-subtitle>
     </v-card-text>
 
     
       <v-card-actions class="mt-2 ">
       <update-subject :subjectId="subjectId"  activator-color="primary"> </update-subject> 
       <v-btn prepend-icon="mdi-delete" variant="text" color="error" @click="deleteSubject(subjectId)">
-              Delete
+              {{ $t('Delete') }}
             </v-btn>
       </v-card-actions>
 
@@ -71,10 +71,10 @@ export default {
   async deleteSubject(subjectId) {
       // Show confirm dialog by access it with $ref
       let res = await this.$refs.baseConfirmDialog.show({
-        warningTitle: 'Warning',
-        title: 'Are you sure you want to delete this Subject?',
+        warningTitle: this.$t('Warning'),
+        title: this.$t('Are you sure you want to delete this Subject?'),
         subtitle: subjectId,
-        okButton: 'Yes',
+        okButton: this.$t('Yes'),
       });
 
       // If closed, return the function

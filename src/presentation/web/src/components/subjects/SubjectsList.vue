@@ -4,7 +4,7 @@
       <!-- <v-list-subheader>Subjects</v-list-subheader> -->
       <v-list-item v-for="(subject, i) in subjects" :key="i" class="my-1 border" variant="outline">
         <v-list-item-title>{{ subject.name }}</v-list-item-title>
-        <v-list-item-subtitle>Credits: {{ subject.credit }}</v-list-item-subtitle>
+        <v-list-item-subtitle>{{ $t('Credit') }} : {{ subject.credit }}</v-list-item-subtitle>
 
         <template v-slot:prepend>
           <v-chip variant="flat" class="mr-4" color="dark">{{ i + 1 }}</v-chip>
@@ -62,17 +62,12 @@ export default {
       let actions = [
         {
           icon: 'mdi-note-edit-outline',
-          title: 'View Shoka',
+          title: this.$t('View Shoka'),
           onClick: 'viewShoka',
         },
         {
           icon: 'mdi-passport-biometric',
           title: this.$t('Download Attendance'),
-          onClick: 'downloadAttendance ',
-        },
-        {
-          icon: 'mdi-note-text-outline',
-          title: this.$t('Download Shoka'),
           onClick: 'downloadAttendance ',
         },
         {
@@ -84,7 +79,7 @@ export default {
       if (!this.noTeacherView) {
         actions.unshift({
           icon: 'mdi-account',
-          title: 'View Teacher',
+          title: this.$t('View Teacher'),
           onClick: 'viewTeacher',
         });
       }
@@ -92,7 +87,7 @@ export default {
       if (!this.noSubjectUpdate) {
         actions.unshift({
           icon: 'mdi-form-textbox ',
-          title: 'Update Subject ',
+          title: this.$t('Update Subject'),
           onClick: 'rename',
         });
       }

@@ -7,6 +7,7 @@ import {
   Alert,
   Text,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -37,7 +38,7 @@ export default function TeacherScreen(props) {
     });
   };
   return (
-    <Layout
+    <SafeAreaView
       style={{
         flex: 1,
         height: "100%",
@@ -48,7 +49,7 @@ export default function TeacherScreen(props) {
       <View
         style={{
           height: 60,
-          marginTop: "7%",
+          marginTop: Platform.OS == "android" ? "7%" : 0,
           backgroundColor: colors.primary,
           flexDirection: "row",
           justifyContent: "space-between",
@@ -56,10 +57,10 @@ export default function TeacherScreen(props) {
         }}
       >
         <View style={{ width: "20%" }}>
-          <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+          <TouchableOpacity onPress={() => props.navigation.goBack()}>
             <ImageBackground
               style={{ height: 25, width: 32 }}
-              source={require("../assets/images/menu.png")}
+              source={require("../assets/images/lessthan.png")}
             ></ImageBackground>
           </TouchableOpacity>
         </View>
@@ -80,6 +81,8 @@ export default function TeacherScreen(props) {
             style={{
               elevation: 2,
               shadowColor: "rgba(100, 100, 111, 0.4)",
+              borderWidth: 0.5,
+              borderColor: "rgba(100, 100, 111, 0.4)",
 
               borderRadius: 15,
               width: "80%",
@@ -110,6 +113,8 @@ export default function TeacherScreen(props) {
               elevation: 2,
               shadowColor: "rgba(100, 100, 111, 0.4)",
               borderRadius: 15,
+              borderWidth: 0.5,
+              borderColor: "rgba(100, 100, 111, 0.4)",
               width: "80%",
               height: "45%",
             }}
@@ -136,7 +141,7 @@ export default function TeacherScreen(props) {
 
         <View style={{ alignSelf: "flex-start", margin: "2%" }}></View>
       </Layout>
-    </Layout>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

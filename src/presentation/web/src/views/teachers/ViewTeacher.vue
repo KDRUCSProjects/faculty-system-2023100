@@ -10,12 +10,22 @@
           </v-card-item>
           <v-divider></v-divider>
           <v-card-text>
-            <subjects-list
-              :subjects="subjects"
-              :no-teacher-view="true"
-              :no-subject-update="true"
-              @action="getAction"
-            ></subjects-list>
+            <v-card v-for="(item, i) in semesterWithSubjects" :key="i" class="theShadow pa-3 ma-2">
+              <v-card-item>
+                <v-card-title class="text-primary text-h6 font-weight-bold"
+                  >{{ item.year }}, <span class="text-dark">{{ rankSemester(item.title) }} Semester</span></v-card-title
+                >
+                <v-card-subtitle>Total subjects: {{ item.subjects.length }}</v-card-subtitle>
+              </v-card-item>
+              <v-card-text>
+                <subjects-list
+                  :subjects="item.subjects"
+                  :no-teacher-view="true"
+                  :no-subject-update="true"
+                  @action="getAction"
+                ></subjects-list>
+              </v-card-text>
+            </v-card>
           </v-card-text>
         </v-card>
       </v-col>
@@ -49,25 +59,32 @@
             <!-- Reset Teacher Password -->
             <reset-teacher-password v-if="id" :teacherId="id" activator-color="text">
               <v-btn variant="tonal" color="dark" class="px-6 mb-1" prepend-icon="mdi-account" block>
-                 {{ $t('Change Password') }}
-                </v-btn>
+                {{ $t('Change Password') }}
+              </v-btn>
             </reset-teacher-password>
-            
-            <v-btn variant="tonal" color="error" class="px-6 mb-1" prepend-icon="mdi-account" block  @click="deleteTeacher(id)">{{ $t('Delete Account') }}</v-btn>
+
+            <v-btn
+              variant="tonal"
+              color="error"
+              class="px-6 mb-1"
+              prepend-icon="mdi-account"
+              block
+              @click="deleteTeacher(id)"
+              >{{ $t('Delete Account') }}</v-btn
+            >
           </div>
           <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
         </v-card>
       </v-col>
     </v-row>
-
   </div>
-
 </template>
 
 <script>
 import SubjectsList from '@/components/subjects/SubjectsList.vue';
 import UpdateTeacher from '@/components/teachers/dialogs/UpdateTeacher.vue';
 import ResetTeacherPassword from '@/components/teachers/dialogs/ResetTeacherPassword.vue';
+import { rankSemester } from '@/utils/global';
 export default {
   props: ['id'],
   components: {
@@ -80,11 +97,14 @@ export default {
     teacher() {
       return this.$store.getters['teachers/currentTeacher'];
     },
-    subjects() {
+    semesterWithSubjects() {
       return this.$store.getters['teachers/currentTeacherAssignedSubjects'];
     },
   },
   methods: {
+    rankSemester(title) {
+      return rankSemester(title);
+    },
     async loadTeacherById(id) {
       await this.$store.dispatch('teachers/loadTeacherById', id);
     },
@@ -104,14 +124,12 @@ export default {
 
       // Otherwise, continue deleting the teacher from the database
       await this.$store.dispatch('teachers/deleteTeacher', id);
-      this.$router.replace('/teachers')
+      this.$router.replace('/teachers');
     },
   },
   async created() {
     await this.loadTeacherById(this.id);
   },
-
-
 };
 </script>
 

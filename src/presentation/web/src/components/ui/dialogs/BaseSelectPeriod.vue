@@ -2,7 +2,7 @@
   <v-overlay v-model="dialog" scrim="#000"></v-overlay>
 
   <v-btn variant="flat" color="cyan">
-    <slot> {{ $t('Select year') }} </slot>
+    <slot> Select Year </slot>
 
     <v-dialog
       v-model="dialog"
@@ -12,21 +12,21 @@
       transition="slide-y-transition"
     >
       <v-card class="mx-auto" width="250" max-width="400">
-        <v-card-title class="bg-dark"> {{ $t('Select Educational Year') }} </v-card-title>
+        <v-card-title class="bg-dark"> Select Period </v-card-title>
 
         <v-virtual-scroll :items="items" height="300" item-height="50" class="my-1">
           <template v-slot:default="{ item }">
             <v-list-item>
-              <v-btn v-if="item !== selectedYear" color="primary" variant="tonal" block @click="selectYear(item)">
+              <v-btn v-if="item !== selectedPeriod" color="primary" variant="tonal" block @click="selectPeriod(item)">
                 {{ item }}
               </v-btn>
-              <v-btn v-else color="primary" variant="flat" block @click="selectYear(item)"> {{ item }} </v-btn>
+              <v-btn v-else color="primary" variant="flat" block @click="selectPeriod(item)"> {{ item }} </v-btn>
             </v-list-item>
           </template>
         </v-virtual-scroll>
 
         <v-card-actions>
-          <v-btn color="primary" variant="flat" block @click="emitYear"> {{ $t('Select') }} </v-btn>
+          <v-btn color="primary" variant="flat" block @click="emitPeriod"> Select </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -35,7 +35,7 @@
 <script>
 const initialState = () => ({
   dialog: false,
-  selectedYear: null,
+  selectedPeriod: null,
 });
 export default {
   props: {
@@ -47,23 +47,23 @@ export default {
       type: Boolean,
       default: false,
     },
-    defaultYear: {
+    defaultPeriod: {
       type: Number,
     },
   },
   data: () => initialState(),
   computed: {
     items() {
-      return this.$store.getters['years/years']?.map((year) => year.year);
+      return this.$store.getters['years/years']?.filter((year) => year.period)?.map((period) => period.period);
     },
   },
   methods: {
-    selectYear(year) {
-      this.selectedYear = year;
+    selectPeriod(year) {
+      this.selectedPeriod = year;
     },
-    emitYear() {
-      if (!this.selectedYear) return false;
-      this.$emit('select-year', this.selectedYear);
+    emitPeriod() {
+      if (!this.selectedPeriod) return false;
+      this.$emit('select-period', this.selectedPeriod);
       this.close();
     },
     close() {
@@ -76,16 +76,16 @@ export default {
     },
   },
   watch: {
-    defaultYear(newValue) {
-      this.selectedYear = newValue;
+    defaultPeriod(newValue) {
+      this.selectedPeriod = newValue;
     },
   },
   created() {
-    if (this.defaultYear) {
-      this.selectedYear = this.defaultYear;
+    if (this.defaultPeriod) {
+      this.selectedPeriod = this.defaultPeriod;
     }
   },
-  emits: ['select-year'],
+  emits: ['select-period'],
 };
 </script>
 

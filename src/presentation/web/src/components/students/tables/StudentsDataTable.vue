@@ -15,8 +15,8 @@
       </template>
 
       <template v-slot:top>
-        <v-toolbar color="dark" class="py-2">
-          <v-toolbar-title> {{ statusTypes[type] }} students table </v-toolbar-title>
+        <v-toolbar color="dark" class="py-2" v-if="!noHeader">
+          <v-toolbar-title> {{ statusTypes[type] }} {{ $t('Students') }} </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
@@ -42,7 +42,7 @@
       </template>
 
       <template v-slot:item.studentId="{ item }">
-        <router-link :to="`/students/view/${item.columns.studentId}`">View</router-link>
+        <router-link :to="`/students/view/${item.columns.studentId}`">{{ $t('View') }}</router-link>
       </template>
 
       <template v-slot:item.kankorId="{ item }">
@@ -51,12 +51,18 @@
         </v-chip>
       </template>
 
+      <template v-slot:item.Student.kankorId="{ item }">
+        <v-chip class="" variant="flat">
+          {{ item.raw.Student.kankorId }}
+        </v-chip>
+      </template>
+
       <!-- Number Slot -->
-      <!-- <template v-slot:item.no="{ index }">
-          <v-chip class="" variant="flat">
-            {{ index + 1 + (this.page - 1) * this.itemsPerPage }}
-          </v-chip>
-        </template> -->
+      <template v-slot:item.no="{ index }" v-if="showNumbers">
+        <v-chip class="" variant="flat">
+          {{ index + 1 + (this.page - 1) * this.itemsPerPage }}
+        </v-chip>
+      </template>
 
       <!-- <template v-slot:item.status="{ item }">
           <v-chip color="red">
@@ -69,6 +75,15 @@
           <v-img v-if="item.columns?.photo" :src="`${imagesResource}/${item.columns?.photo}`" alt="user" />
           <div v-else>
             <span>{{ buildAbbreviation(item.columns?.fullName) }}</span>
+          </div>
+        </v-avatar>
+      </template>
+
+      <template v-slot:item.Student.photo="{ item }">
+        <v-avatar class="my-2" color="primary" variant="tonal">
+          <v-img v-if="item.raw?.Student?.photo" :src="`${imagesResource}/${item.raw.Student?.photo}`" alt="user" />
+          <div v-else>
+            <span>{{ buildAbbreviation(item.raw.Student?.fullName) }}</span>
           </div>
         </v-avatar>
       </template>
@@ -98,6 +113,18 @@ export default {
       type: String,
       default: 'Type',
     },
+    noHeader: {
+      type: Boolean,
+      default: false,
+    },
+    showNumbers: {
+      type: Boolean,
+      default: false,
+    },
+    defaultItemsPerPage: {
+      type: Number,
+      default: 8,
+    },
   },
   components: {
     VDataTable,
@@ -111,7 +138,7 @@ export default {
       loading: false,
       errorMessage: null,
       search: '',
-      statusTypes: ['taajil', 'reentry', 'tabdili'],
+      statusTypes: [this.$t('Taajil'), this.$t('Reentry'), this.$t('Tabdili')],
       type: null,
     };
   },
@@ -152,7 +179,11 @@ export default {
     },
   },
   emits: ['selected-student-id', 'view-student', 'delete-student'],
-  async created() {},
+  async created() {
+    if (this.defaultItemsPerPage) {
+      this.itemsPerPage = this.defaultItemsPerPage;
+    }
+  },
 };
 </script>
 

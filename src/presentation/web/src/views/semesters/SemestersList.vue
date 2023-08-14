@@ -1,13 +1,13 @@
 <template>
   <v-toolbar color="dark">
-    <v-toolbar-title> Semesters </v-toolbar-title>
+    <v-toolbar-title> {{ $t('Semesters') }} </v-toolbar-title>
     <v-divider class="mx-4" inset vertical></v-divider>
     <v-spacer></v-spacer>
 
     <base-menu :items="halfs" @selected="setHalf" :theDefault="currentHalf"></base-menu>
 
     <base-select-year-dialog @select-year="setYear" :defaultYear="selectedYear">
-      {{ selectedYear ? `Year: ${selectedYear}` : 'Select Year' }}
+      {{ $t('Year') }} {{ selectedYear ? selectedYear : $t('Select') }}
     </base-select-year-dialog>
   </v-toolbar>
   <v-row no-gutters>
@@ -60,7 +60,7 @@ export default {
     },
     async setYear(year) {
       this.selectedYear = year;
-      // this.$store.commit('setCurrentYear', year);
+      this.$store.commit('semesters/setSelectedYearByUser', year);
 
       // Also, load it's semesters
       await this.loadSemesters(year);
@@ -72,10 +72,20 @@ export default {
   async created() {
     // Load teachers at app mount
     // Set Default current on-going year on load
-    this.selectedYear = this.$store.getters['years/onGoingYear']?.year;
+    const year = this.$store.getters['years/onGoingYear']?.year;
 
     // Set default half
     // this.currentHalf = this.$store.getters['years/onGoingYear']?.firstHalf == true ? this.halfs[0] : this.halfs[1];
+
+    const theYear = this.$store.getters['semesters/selectedYearByUser'];
+    if (!theYear) {
+      this.selectedYear = year;
+      this.$store.commit('semesters/setSelectedYearByUser', year);
+    }
+
+    if (theYear) {
+      this.selectedYear = theYear;
+    }
 
     this.onGoingHalf = this.$store.getters['years/onGoingYear']?.firstHalf == true ? this.halfs[0] : this.halfs[1];
 

@@ -1,3 +1,4 @@
+import moment from 'moment';
 export default {
   computed: {
     imagesResource() {
@@ -30,6 +31,36 @@ export default {
       }
 
       return result.toUpperCase();
+    },
+    downloadFile(blobFile, fileName = 'File') {
+      const theFile = new File([blobFile], fileName, { type: blobFile.type });
+
+      console.log(theFile);
+
+      const aElement = document.createElement('a');
+
+      // Add filename + date now
+      const m = moment().format('YYYY-MM-DD | hh:mm:ss');
+
+      aElement.setAttribute('download', `${fileName} -- ${m}`);
+      const href = URL.createObjectURL(theFile);
+      aElement.href = href;
+      // aElement.setAttribute('href', href);
+      aElement.setAttribute('target', '_blank');
+      aElement.click();
+      URL.revokeObjectURL(href);
+    },
+    resetData(data, state) {
+      Object.assign(data, state());
+    },
+    async loadInitialData(data, loadDataInCallback) {
+      data.initLoader = true;
+      await loadDataInCallback();
+      data.initLoader = false;
+    },
+    capitalizeFirstLetter(word) {
+      let string = word;
+      return string[0].toUpperCase() + string.slice(1);
     },
   },
 };

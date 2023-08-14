@@ -4,18 +4,18 @@
   <v-dialog v-model="dialog" :max-width="modalWidth" transition="slide-y-transition" persistent="">
     <v-card>
       <v-card-item>
-        <v-card-title class="font-weight-bold">Confirm Identity</v-card-title>
-        <v-card-subtitle>Type your password to continue</v-card-subtitle>
+        <v-card-title class="font-weight-bold">{{ $t('Confirm Identity') }}</v-card-title>
+        <v-card-subtitle>{{ $t('Type your password to continue') }}</v-card-subtitle>
       </v-card-item>
       <v-card-text>
         <v-form @submit.prevent="confirm">
-          <v-text-field :focused="true" variant="outlined" label="Password" v-model="password"></v-text-field>
+          <v-text-field :focused="true" variant="outlined" :label="$t('Password')" v-model="password"></v-text-field>
         </v-form>
         <v-alert v-if="errorMessage" type="error" variant="outlined" :text="errorMessage"></v-alert>
       </v-card-text>
       <v-card-actions class="mx-2">
-        <v-btn variant="elevated" class="ma-1 px-10" color="primary" @click="confirm"> Continue </v-btn>
-        <v-btn variant="tonal" class="ma-1" color="error" @click="cancel"> Cancel </v-btn>
+        <v-btn variant="elevated" class="ma-1 px-10" color="primary" @click="confirm"> {{ $t('Continue') }} </v-btn>
+        <v-btn variant="tonal" class="ma-1" color="error" @click="cancel"> {{ $t('Cancel') }} </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -63,7 +63,7 @@ export default {
         .catch(() => {
           //   this.resolvePromise(false);
           //   In case the user typed in correct password, let's show the error but not resolve the promise
-          this.errorMessage = `Incorrect Password. Try again in ${3 - this.count}`;
+          this.errorMessage = `Incorrect Password Try again in ${3 - this.count}`;
           this.count = this.count + 1;
         });
 

@@ -76,4 +76,43 @@ export default {
       throw e.response.data.message;
     }
   },
+  async loadSemestersByPeriod(context, payload = 7) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/years?period=${payload}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setCurrentPeriodSemesters', response.data?.unorderedSemesters);
+      context.commit('setCurrentPeriod', payload);
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'All semesters load failed'], { root: true });
+      throw e.response.data.message;
+    }
+  },
+  async loadStatistics(context, year) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/semesters?statistics=true&year=${year}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setStatistics', response.data);
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'All semesters load failed'], { root: true });
+      throw e.response.data.message;
+    }
+  },
 };

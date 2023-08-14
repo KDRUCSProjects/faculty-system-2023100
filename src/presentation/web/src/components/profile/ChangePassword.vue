@@ -1,49 +1,49 @@
 <template>
   <v-card class="mx-auto theShadow" max-width="550">
     <v-card-item>
-      <v-card-title class="text-center font-weight-bold text-h5 mt-5"> Change account password </v-card-title>
+      <v-card-title class="text-center font-weight-bold text-h5 mt-5"> {{ $t('Change account password') }} </v-card-title>
       <v-card-subtitle class="text-center">
-        <p>Just type it twice and try not to forget it.</p>
+        <p>{{ $t('Just type it twice and try not to forget it') }}</p>
       </v-card-subtitle>
       <v-card-text class="my-3">
         <v-row style="text-align: center">
           <v-col :class="{ 'text-success': passwordRules.chars8 }">
             <b>8+</b>
-            <p>Character</p>
+            <p>{{ $t('Character') }}</p>
           </v-col>
           <v-col :class="{ 'text-success': passwordRules.uppercase }">
             <b>AA</b>
-            <p>Uppercase</p>
+            <p>{{ $t('Uppercase') }}</p>
           </v-col>
           <v-col :class="{ 'text-success': passwordRules.lowercase }">
             <b>aa</b>
-            <p>Lowercase</p>
+            <p>{{ $t('Lowercase') }}</p>
           </v-col>
           <v-col :class="{ 'text-success': passwordRules.number }">
             <b>123</b>
-            <p>Number</p>
+            <p>{{ $t('Number') }}</p>
           </v-col>
           <v-col :class="{ 'text-success': passwordRules.symbols }">
             <b>@$#</b>
-            <p>Symbol</p>
+            <p>{{ $t('Symbol') }}</p>
           </v-col>
         </v-row>
         <v-form class="pa-3 mt-5" @submit.prevent="submitForm" ref="changePasswordForm">
           <v-text-field
             v-model="newPassword"
             type="password"
-            label="New Password"
-            placeholder="Enter new password"
+            :label="$t('New Password')"
+            :placeholder="$t('New Password')"
             variant="outlined"
           ></v-text-field>
           <v-text-field
             v-model="confirmPassword"
             type="password"
-            label="Confirm Password"
-            placeholder="Enter the above password"
+            :label="$t('Confirm Password')"
+            :placeholder="$t('Enter the above password')"
             variant="outlined"
           ></v-text-field>
-          <span class="text-error" v-if="passwordComparison"> New password and confirm password doesn't match. </span>
+          <span class="text-error" v-if="passwordComparison"> {{ $t('New password and confirm password does not match') }} </span>
           <v-btn
             :disabled="disabledBtn"
             type="submit"
@@ -53,7 +53,7 @@
             size="x-large"
             variant="elevated"
           >
-            Save Changes
+            {{ $t('Save Changes') }}
           </v-btn>
           <v-alert v-if="!!errorMessage" type="error" class="pa-2 my-2 font-weight-medium">
             {{ errorMessage }}

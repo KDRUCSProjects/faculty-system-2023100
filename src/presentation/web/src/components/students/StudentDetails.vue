@@ -2,8 +2,8 @@
   <div>
     <v-card class="theShadow pa-1">
       <v-card-item>
-        <v-card-title class="font-weight-bold text-dark text-uppercase">Biography</v-card-title>
-        <v-card-subtitle>Student all personal information </v-card-subtitle>
+        <v-card-title class="font-weight-bold text-dark text-uppercase">{{ $t('Biography') }}</v-card-title>
+        <v-card-subtitle>{{ $t('Student all personal information') }}</v-card-subtitle>
       </v-card-item>
       <v-card-text>
         <v-list lines="two">
@@ -16,7 +16,7 @@
             :variant="showSecondaryLanguage ? 'outlined' : 'tonal'"
             @click="toggleView('personal')"
           >
-            Personal
+            {{ $t('Personal') }}
           </v-chip>
           <v-chip
             prepend-icon="mdi-account"
@@ -26,7 +26,7 @@
             class="px-5 my-1 mx-1"
             @click="toggleView('secondaryPersonal')"
           >
-            Secondary Language
+            {{ $t('Secondary Language') }}
           </v-chip>
 
           <v-divider></v-divider>
@@ -56,7 +56,7 @@
           </v-list-item>
           <v-divider></v-divider>
 
-          <v-chip prepend-icon="mdi-map-marker" label color="secondary" class="px-5 my-1">Location</v-chip>
+          <v-chip prepend-icon="mdi-map-marker" label color="secondary" class="px-5 my-1">{{ $t('Location') }}</v-chip>
 
           <v-list-item v-for="location in locations" :key="location.title">
             <v-list-item-title :class="{ 'text-error': !location.title }">
@@ -116,22 +116,22 @@ export default {
     personal() {
       return [
         {
-          subtitle: 'Full Name',
+          subtitle: this.$t('Full Name'),
           title: this.student?.fullName,
           fieldName: 'fullName',
         },
         {
-          subtitle: 'Last Name',
+          subtitle: this.$t('Last Name'),
           title: this.student?.nickName,
           fieldName: 'nickName',
         },
         {
-          subtitle: 'Father Name',
+          subtitle: this.$t('Father Name'),
           title: this.student?.fatherName,
           fieldName: 'fatherName',
         },
         {
-          subtitle: 'Grand Father Name',
+          subtitle: this.$t('Grand Father Name'),
           title: this.student?.grandFatherName,
           fieldName: 'grandFatherName',
         },
@@ -140,22 +140,22 @@ export default {
     personalSecondary() {
       return [
         {
-          subtitle: 'Fullname',
+          subtitle: this.$t('Full Name'),
           title: this.student?.engName,
           fieldName: 'engName',
         },
         {
-          subtitle: 'Last Name',
+          subtitle: this.$t('Last Name'),
           title: this.student?.engLastName,
           fieldName: 'engLastName',
         },
         {
-          subtitle: 'Father Name',
+          subtitle: this.$t('Father Name'),
           title: this.student?.engFatherName,
           fieldName: 'engFatherName',
         },
         {
-          subtitle: 'Grand Father Name',
+          subtitle: this.$t('Grand Father Name'),
           title: this.student?.engGrandFatherName,
           fieldName: 'engGrandFatherName',
         },
@@ -166,21 +166,21 @@ export default {
         {
           color: 'blue',
           icon: 'mdi-clipboard-text',
-          subtitle: 'Province',
+          subtitle: this.$t('Province'),
           title: this.student?.province,
           fieldName: 'province',
         },
         {
           color: 'amber',
           icon: 'mdi-gesture-tap-button',
-          subtitle: 'Division',
+          subtitle: this.$t('Division'),
           title: this.student?.division,
           fieldName: 'division',
         },
         {
           color: 'amber',
           icon: 'mdi-gesture-tap-button',
-          subtitle: 'District',
+          subtitle: this.$t('District'),
           title: this.student?.district,
           fieldName: 'district',
         },

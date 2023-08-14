@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card class="theShadow py-5 pa-3">
-      <span class="pro" v-if="!studentRegistration"> {{ studentStatus }} </span>
+      <!-- <span class="pro" v-if="!studentRegistration"> {{ studentStatus }} </span> -->
 
       <!-- <span class="pro" v-if="!studentRegistration"> {{ studentStatus }} </span> -->
 
@@ -15,8 +15,8 @@
         <v-card-title class="font-weight-bold mt-3">{{ student?.fullName }}</v-card-title>
         <v-card-subtitle :class="{ 'text-error': !student?.nickName }">{{ student?.nickName || 'N/A' }}</v-card-subtitle>
 
-        <base-update-dialog ref="profilePhotoDialog" :photo="true" title="Change Photo" @update="uploadPhoto">
-          <v-btn color="primary" variant="flat" size="small">Update Photo</v-btn>
+        <base-update-dialog ref="profilePhotoDialog" :photo="true" :title="$t('Change Photo')" @update="uploadPhoto">
+          <v-btn color="primary" variant="flat" size="small">{{ $t('Update Photo') }}</v-btn>
         </base-update-dialog>
       </v-card-item>
       <v-card-text class="my-8">
@@ -24,22 +24,22 @@
           <div class="d-flex">
             <v-chip color="primary" variant="tonal" label class="mx-2">
               <v-icon start icon="mdi-identifier"></v-icon>
-              Database ID: {{ student?.id }}
+              {{ $t('Database ID') }}: {{ student?.id }}
             </v-chip>
             <v-chip label color="primary" variant="tonal">
               <v-icon start icon="mdi-card-account-details"></v-icon>
-              Admission Year: {{ student?.admissionYear || 'NA' }}
+              {{ $t('Admission Year') }} : {{ student?.admissionYear || 'NA' }}
             </v-chip>
           </div>
 
           <div class="d-flex my-3">
             <v-chip label color="dark" variant="tonal" class="mx-2">
               <v-icon start icon="mdi-identifier"></v-icon>
-              Kankor Id: {{ student?.kankorId }}
+              {{ $t('Kankor ID') }} : {{ student?.kankorId }}
             </v-chip>
             <v-chip label color="dark" variant="tonal">
               <v-icon start icon="mdi-calendar-month"></v-icon>
-              Kankor Year: {{ student?.educationalYear || 'NA' }}
+              {{ $t('Kankor Year') }} : {{ student?.educationalYear || 'NA' }}
             </v-chip>
           </div>
         </span>

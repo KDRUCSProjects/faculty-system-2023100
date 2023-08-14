@@ -1,23 +1,30 @@
 <template>
   <v-card
     class="d-flex justify-center align-center flex-column pa-3 py-5 theShadow rounded"
-    :class="{ semesterCard: isOnGoing }"
+    :class="{ semesterCard: isOnGoing && !periodCard }"
   >
     <!-- <span class="pro"> 120 Students </span> -->
-    <span class="pro" v-if="isOnGoing">
+    <span class="pro" v-if="isOnGoing && !periodCard">
       <v-icon color="indigo-darken-2" size="x-large">mdi-check-circle-outline</v-icon>
     </span>
 
     <v-card-title class="pb-0"
-      ><span class="text-secondary">{{ rankSemester(title) }}</span> Semester</v-card-title
+      ><span class="text-secondary">{{ rankSemester(title) }}</span> {{ $t('Semester') }}</v-card-title
     >
-    <v-card-subtitle class="py-0 my-0" style="font-family: monospace"> {{ subjectsCount }} subjects </v-card-subtitle>
+
+    <v-card-subtitle v-if="!periodCard" class="py-0 my-0" style="font-family: monospace">
+      {{ subjectsCount }} subjects
+    </v-card-subtitle>
     <v-divider></v-divider>
-    <v-card-subtitle class="text-primary">{{ year }} year</v-card-subtitle>
+    <v-card-subtitle class="text-primary" v-if="!periodCard">{{ year }} year</v-card-subtitle>
+    <v-card-subtitle class="text-primary" v-if="periodCard">{{ rankSemester(period) }} Period</v-card-subtitle>
+    <div class="mt-4"></div>
+    <v-card-subtitle class="text-secondary" v-if="periodCard">Start Year: 1401</v-card-subtitle>
+    <v-card-subtitle class="text-info" v-if="periodCard">End Year: 1401</v-card-subtitle>
 
     <v-card-actions class="mt-3 px-2">
       <!-- <v-btn color="primary" variant="elevated">Profile</v-btn> -->
-      <v-btn color="primary" block variant="tonal" @click="viewSemester(semesterId)"> View Semester</v-btn>
+      <v-btn color="primary" block variant="tonal" @click="viewSemester(semesterId)"> {{ $t('View Semester') }}</v-btn>
     </v-card-actions>
 
     <!-- All Dialogs -->
@@ -34,6 +41,12 @@ export default {
     menu: false,
   }),
   props: {
+    periodCard: {
+      type: Boolean,
+    },
+    period: {
+      type: Boolean,
+    },
     semesterId: {
       type: Number,
     },

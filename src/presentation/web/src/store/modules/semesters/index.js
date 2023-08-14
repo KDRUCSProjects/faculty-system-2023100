@@ -8,8 +8,12 @@ export default {
     return {
       currentYear: null,
       currentYearSemesters: [],
+      currentPeriodSemesters: [],
       semester: null,
       reviewStudents: [],
+      selectedPeriodByUser: null,
+      selectedYearByUser: null,
+      statistics: null,
     };
   },
   getters,

@@ -56,9 +56,9 @@
                 {{ userEmail }}
               </p>
               <v-divider class="my-1"></v-divider>
-              <v-btn variant="text" block to="/settings" color="dark"> Settings </v-btn>
+              <v-btn variant="text" block to="/settings" color="dark"> {{ $t('Settings') }} </v-btn>
               <v-divider class="my-1"></v-divider>
-              <v-btn variant="text" block @click="logout" color="error"> Logout </v-btn>
+              <v-btn variant="text" block @click="logout" color="error"> {{ $t('Logout') }} </v-btn>
             </div>
           </v-card-text>
         </v-card>

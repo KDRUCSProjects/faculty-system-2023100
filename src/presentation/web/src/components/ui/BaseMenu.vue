@@ -2,7 +2,9 @@
   <div class="mx-1">
     <v-menu>
       <template v-slot:activator="{ props }">
-        <v-btn color="primary" variant="flat" v-bind="props"> {{ selected || defaultItem }} </v-btn>
+        <v-btn :color="theme || 'primary'" :variant="variant || 'flat'" v-bind="props" :block="block">
+          {{ displayPreText ? displayPreText + ' ' + selected : selected || defaultItem }}
+        </v-btn>
       </template>
       <v-list>
         <v-list-item
@@ -22,7 +24,7 @@
 
 <script>
 export default {
-  props: ['items', 'theDefault'],
+  props: ['items', 'theDefault', 'theme', 'displayPreText', 'block', 'variant'],
   data: () => ({
     selected: null,
     defaultItem: null,
@@ -41,8 +43,10 @@ export default {
   created() {
     if (this.theDefault) {
       this.defaultItem = this.theDefault;
+      this.selected = this.theDefault;
     } else if (this.items.length != 0) {
       this.defaultItem = this.items[0];
+      this.selected = this.items[0];
     }
   },
 };

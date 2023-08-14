@@ -2,6 +2,9 @@ export default {
   currentYearSemesters(state) {
     return state.currentYearSemesters;
   },
+  currentPeriodSemesters(state) {
+    return state.currentPeriodSemesters;
+  },
   currentYear(state) {
     return state.currentYear;
   },
@@ -40,8 +43,15 @@ export default {
       return student.student;
     });
 
-    console.log(theStudents);
-
     return theStudents;
+  },
+  selectedPeriodByUser(state) {
+    return state.selectedPeriodByUser;
+  },
+  selectedYearByUser(state) {
+    return state.selectedYearByUser;
+  },
+  statistics(state) {
+    return state.statistics;
   },
 };

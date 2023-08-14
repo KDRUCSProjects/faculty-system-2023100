@@ -6,26 +6,27 @@
           <v-card-item class="text-center my-4">
             <v-card-title class="text-h5 font-weight-bold">
               <v-card-title class="text-primary d-inline text-h4">{{ title }}</v-card-title>
-              Semester Overview
+              {{ $t('Semester Overview') }}
             </v-card-title>
-            <v-card-subtitle>View all the information of this semester </v-card-subtitle>
+            <v-card-subtitle>{{ $t('View all the information of this semester') }} </v-card-subtitle>
           </v-card-item>
           <v-card-item class="text-center my-0 py-0">
-            <v-chip label color="primary" size="large" class="mr-1">Semester Title: {{ title }}</v-chip>
-            <v-chip label color="secondary" size="large">Semester Year: {{ year }}</v-chip>
+            <v-chip label color="primary" size="large" class="mr-1">{{ $t('Semester Title') }} : {{ title }}</v-chip>
+            <v-chip label color="secondary" size="large">{{ $t('Semester Year') }} : {{ year }}</v-chip>
           </v-card-item>
           <v-divider class="mt-3"></v-divider>
           <v-card-text>
             <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="bg-teal-lighten-4">
-              <v-tab :value="1"> Subjects </v-tab>
-              <v-tab :value="2"> Statistics </v-tab>
-              <v-tab :value="3"> Migration </v-tab>
+              <v-tab :value="1"> {{ $t('Subjects') }} </v-tab>
+              <v-tab :value="2"> {{ $t('Statistics') }} </v-tab>
+              <v-tab :value="3"> {{ $t('Report') }} </v-tab>
+              <v-tab :value="4"> {{ $t('Migration') }} </v-tab>
             </v-tabs>
             <v-window v-model="tab">
               <v-window-item :value="1">
                 <subjects-list :subjects="subjects" @subject-delete="loadSubjects"></subjects-list>
                 <add-subject :semester-id="id">
-                  <v-btn variant="tonal" color="primary" block :prepend-icon="'mdi-plus'">New Subject</v-btn>
+                  <v-btn variant="tonal" color="primary" block :prepend-icon="'mdi-plus'">{{ $t('New Subject') }}</v-btn>
                 </add-subject>
               </v-window-item>
               <v-window-item :value="2">
@@ -37,16 +38,63 @@
                   </v-card-text>
                 </v-card>
               </v-window-item>
+
               <v-window-item :value="3">
+                <v-card class="mt-3">
+                  <v-card-item>
+                    <v-row class="pa-0 ma-0 d-flex">
+                      <v-col cols="6" class="pa-0 ma-0">
+                        <base-menu
+                          :items="reportItems"
+                          @selected="setReport"
+                          :block="true"
+                          display-pre-text="Report Type:  "
+                          theme="dark"
+                          :variant="'tonal'"
+                          :the-default="'taajil'"
+                        >
+                        </base-menu>
+                      </v-col>
+                      <v-col cols="6" class="pa-0 ma-0">
+                        <v-btn
+                          @click="downloadShoka"
+                          class="float-right"
+                          prepend-icon="mdi-download-circle"
+                          color="primary"
+                          variant="tonal"
+                          download
+                          block="true"
+                          :loading="downloadLoading"
+                        >
+                          Download Excel
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-card-item>
+                  <v-card-text>
+                    <students-data-table
+                      :headers="headersReport"
+                      :students="reportStudents"
+                      :no-header="true"
+                      :show-numbers="true"
+                      :default-items-per-page="4"
+                    ></students-data-table>
+                  </v-card-text>
+                  <v-card-actions class="mx-2"> </v-card-actions>
+                </v-card>
+              </v-window-item>
+              <v-window-item :value="4">
                 <v-card class="mt-7">
                   <v-card-item>
-                    <v-card-title class="text-dark font-weight-bold text-h5">Students Migration</v-card-title>
+                    <v-card-title class="text-dark font-weight-bold text-h5">{{ $t('Students Migration') }}</v-card-title>
                   </v-card-item>
                   <v-card-text>
                     <p>
-                      Migrate your currently enrolled students in this semester to the upcoming semester. This will not
-                      migrate students who has taajil, tabdili or students who has not completed the requireds marks for the
-                      next semester.
+                      {{
+                        $t(
+                          'Migrate your currently enrolled students in this semester to the upcoming semester. This will not migrate students who has taajil, tabdili or students who has not completed the requires marks for the next semester.'
+                        )
+                      }}
                     </p>
 
                     <v-alert
@@ -56,7 +104,7 @@
                       type="warning"
                       class="pa-2 mt-4"
                     >
-                      Do this only if your currently semester is finished
+                      {{ $t('Do this only if your currently semester is finished') }}
                     </v-alert>
                     <v-alert
                       v-if="currentSemester?.completed"
@@ -65,7 +113,7 @@
                       type="error"
                       class="pa-2 mt-4"
                     >
-                      Students have migrated already to next semester
+                      {{ $t('Students have migrated already to next semester') }}
                     </v-alert>
                   </v-card-text>
                   <v-card-actions class="mx-2">
@@ -79,13 +127,13 @@
                           block
                           :disabled="currentSemester.completed && !forceMigrate"
                         >
-                          Start Migration
+                          {{ $t('Start Migration') }}
                         </v-btn>
                       </migration-review>
                     </div>
                   </v-card-actions>
                   <v-card-text class="ma-0 pa-0" v-if="currentSemester?.completed">
-                    <v-checkbox label="Force migrate" v-model="forceMigrate"></v-checkbox>
+                    <v-checkbox :label="$t('Force migrate')" v-model="forceMigrate"></v-checkbox>
                   </v-card-text>
                 </v-card>
               </v-window-item>
@@ -115,6 +163,7 @@
 
 <script>
 import StudentsTable from '@/components/students/tables/StudentsTable.vue';
+import StudentsDataTable from '@/components/students/tables/StudentsDataTable.vue';
 import SubjectsList from '@/components/subjects/SubjectsList.vue';
 import { rankSemester } from '@/utils/global';
 import AddSubject from '@/components/subjects/dialogs/AddSubject.vue';
@@ -139,14 +188,41 @@ export default {
     AddSubject,
     MigrationReview,
     BaseBars,
+    StudentsDataTable,
   },
   data: () => ({
     tab: 1,
     page: 1,
     itemsPerPage: 8,
+    reportItems: ['present', 'taajil', 'reentry', 'monfaq', 'tabdili'],
+    selectedReport: 'taajil',
     selectedStudentId: null,
     forceMigrate: false,
     mode: 'semester-students',
+    headersReport: [
+      // {
+      //   title: 'No',
+      //   sortable: false,
+      //   key: 'no',
+      // },
+      {
+        title: 'Kankor ID',
+        align: 'start',
+        key: 'kankorId',
+      },
+      {
+        title: 'Name',
+        align: 'start',
+        sortable: true,
+        key: 'fullName',
+      },
+      {
+        title: 'Father Name',
+        align: 'start',
+        sortable: true,
+        key: 'fatherName',
+      },
+    ],
     headers: [
       // {
       //   title: 'No',
@@ -192,6 +268,11 @@ export default {
       }
       return this.$store.getters['students/studentsList'];
     },
+    reportStudents() {
+      const students = this.$store.getters['semesters/semester']?.statistics?.report;
+      const totalStudents = [...students?.male[this.selectedReport], ...students?.female[this.selectedReport]];
+      return totalStudents;
+    },
     subjects() {
       return this.$store.getters['semesters/semesterSubjects'];
     },
@@ -228,12 +309,12 @@ export default {
       ];
       return [
         {
-          label: 'Male',
+          label: this.$t('Male'),
           backgroundColor: '#400D51',
           data: maleData,
         },
         {
-          label: 'Female',
+          label: this.$t('Female'),
           backgroundColor: '#536DFE',
           data: femaleData,
         },
@@ -241,6 +322,9 @@ export default {
     },
   },
   methods: {
+    setReport(value) {
+      this.selectedReport = value;
+    },
     async getPageNumber(number) {
       this.page = number;
       // Also, now let's load students
@@ -266,10 +350,10 @@ export default {
     },
     async deleteStudentFromSemester(studentId) {
       let res = await this.$refs.baseConfirmDialog.show({
-        warningTitle: 'Warning',
-        title: 'Are you sure you want to delete this student from this semester?',
+        warningTitle: this.$t('Warning'),
+        title: this.$t('Are you sure you want to delete this student from this semester?'),
         subtitle: studentId,
-        okButton: 'Yes, continue',
+        okButton: this.$('Yes, continue'),
       });
 
       // If closed, return the function
@@ -286,16 +370,16 @@ export default {
         // Now lets reload the students
         await this.loadStudents(true);
       } catch (e) {
-        this.$store.commit('setToast', [0, e || 'Failed deleting student from semester']);
+        this.$store.commit('setToast', [0, e || this.$('Failed deleting student from semester')]);
         // this.errorMessage = e;
       }
     },
     async addStudentToSemester(semesterId, studentId) {
       let res = await this.$refs.baseConfirmDialog.show({
-        warningTitle: 'Warning',
-        title: 'Are you sure you want to add this student to this semester?',
+        warningTitle: this.$t('Warning'),
+        title: this.$t('Are you sure you want to add this student to this semester?'),
         subtitle: studentId,
-        okButton: 'Yes, continue',
+        okButton: this.$t('Yes, continue'),
       });
 
       // If closed, return the function

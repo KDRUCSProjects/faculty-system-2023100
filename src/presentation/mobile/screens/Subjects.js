@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   BackHandler,
+  Platform,
+  SafeAreaView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -58,7 +60,7 @@ export default function Subjects(props) {
   const onNext = async () => {};
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View
         style={{
           flex: 1,
@@ -70,7 +72,7 @@ export default function Subjects(props) {
         <View
           style={{
             height: 60,
-            marginTop: "7%",
+            marginTop: Platform.OS == "android" ? "7%" : 0,
             backgroundColor: colors.primary,
             flexDirection: "row",
             justifyContent: "space-between",
@@ -189,7 +191,7 @@ export default function Subjects(props) {
           </TouchableOpacity>
         </View> */}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

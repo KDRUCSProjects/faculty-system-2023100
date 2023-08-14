@@ -5,9 +5,9 @@
       {{ $t('Add Teacher') }}
 
       <v-dialog max-width="550" activator="parent" v-model="dialog" transition="slide-y-transition">
-        <v-toolbar :color="'dark'" class="mb-2">
+        <!-- <v-toolbar :color="'dark'" class="mb-2">
           <v-toolbar-title class=""> {{ $t('Add New Teacher Account') }} </v-toolbar-title>
-        </v-toolbar>
+        </v-toolbar> -->
 
         <v-card class="" :loading="isLoading">
           <!-- <v-card-item>
@@ -80,7 +80,7 @@ export default {
 
         // password validation
         password: [
-          (v) => !!v ||  this.$t('Please enter password'),
+          (v) => !!v || this.$t('Please enter password'),
           (v) => /[A-Z]/.test(v) || this.$t('Password must contain 1 uppercase letter'),
           (v) => /[a-z]/.test(v) || this.$t('Password must contain 1 lowercase letter'),
           (v) => /[0-9]/.test(v) || this.$t('Password must contain 1 number'),
@@ -122,14 +122,12 @@ export default {
           data['photo'] = this.photo;
         }
 
-
         if (this.pSize) {
-          return this.$store.commit('setToast', [0, 'Maximum 2mb phot size allowed']) 
+          return this.$store.commit('setToast', [0, 'Maximum 2mb phot size allowed']);
         }
 
         await this.$store.dispatch('teachers/addTeacher', data);
         this.closeDialog();
-
       } catch (e) {
         context.commit('setToast', [0, 'Photo size should be less than 2 mb'], { root: true });
         // Show error message if happened

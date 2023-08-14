@@ -5,30 +5,26 @@
       <template v-slot:activator="{ props }">
         <div v-bind="props">
           <slot>
-            <v-btn color="primary" prepend-icon="mdi-plus"> Add New Educational Year </v-btn>
+            <v-btn color="primary" prepend-icon="mdi-plus"> {{ $t('Add New Educational Year') }} </v-btn>
           </slot>
         </div>
       </template>
       <v-card class="pa-1" :loading="isLoading">
         <v-card-item>
-          <v-card-title>Add Educational Year</v-card-title>
-          <v-card-subtitle> Fill in the blanks to add educational year </v-card-subtitle>
+          <v-card-title>{{ $t('Add Educational Year') }}</v-card-title>
+          <v-card-subtitle> {{ $t('Click the button to add new educational year') }} </v-card-subtitle>
         </v-card-item>
         <v-card-text>
           <v-form @submit.prevent="submitForm" ref="addYearForm">
-            <v-text-field
-              :rules="rules.educationalYear"
-              v-model="educationalYear"
-              type="text"
-              variant="outlined"
-              label="Enter Educational Year"
-            ></v-text-field>
+            <br>
+            <h1 style="text-align: center;">{{ newYear = items[0].year + 1}}</h1>
+            <br>
           </v-form>
           <v-alert type="error" v-model="errorMessage" closable="" :text="errorMessage"> </v-alert>
         </v-card-text>
-        <v-card-actions class="mx-4">
-          <v-btn @click="submitForm" variant="flat" :loading="isLoading">Add Year</v-btn>
-          <v-btn @click="closeDialog" color="error">Cancel</v-btn>
+        <v-card-actions class=" mx-4">
+          <v-btn class="mx-auto mb-2"   @click="submitForm" variant="flat"  :loading="isLoading">{{ $t('Add Year') }}</v-btn>
+          <!-- <v-btn @click="closeDialog" color="error">{{ $t('Cancel') }}</v-btn> -->
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -40,16 +36,14 @@ export default {
   data: () => ({
     alert: false,
     dialog: false,
-    educationalYear: null,
+    newYear: 1394,
     show: true,
     isLoading: false,
     errorMessage: null,
   }),
   computed: {
-    rules() {
-      return {
-        educationalYear: [(v) => !!v || 'Please enter Educational Year'],
-      };
+    items() {
+      return this.$store.getters['years/years'];
     },
   },
   methods: {
@@ -66,7 +60,7 @@ export default {
 
       try {
         const data = {
-          educationalYear: this.educationalYear,
+          educationalYear: this.newYear,
         };
         await this.$store.dispatch('years/addEducationalYear', data);
 

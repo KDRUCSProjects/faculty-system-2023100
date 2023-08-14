@@ -134,7 +134,8 @@ export default Login = (props) => {
 
     props.navigation.dispatch(
       CommonActions.reset({ index: 0, routes: [{ name: "selectSemister" }] })
-    ); // navigate("selectSemister");
+    );
+    props.navigation.navigate("selectSemister");
     setEmail("");
     setPassword("");
   };

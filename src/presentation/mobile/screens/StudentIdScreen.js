@@ -128,7 +128,8 @@ export default StudentIdScreen = (props) => {
       if (err.code) {
         await dispatch(logout());
         await AsyncStorage.clear().then().then();
-        updates.reloadAsync();
+        // updates.reloadAsync();
+        props.navigation.navigate("Login");
       }
       Alert.alert("Error!", err.message);
     }
