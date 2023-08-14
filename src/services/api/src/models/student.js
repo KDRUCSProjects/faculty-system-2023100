@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       birthCityEnglish: DataTypes.STRING,
       birthCountryEnglish: DataTypes.STRING,
       bankAccount: DataTypes.STRING,
-      engDob: DataTypes.DATE,
+      // engDob: DataTypes.DATE,
       educationalYearId: {
         type: DataTypes.INTEGER,
         required: true,
