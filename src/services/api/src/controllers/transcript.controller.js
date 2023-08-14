@@ -103,62 +103,70 @@ const createTranscript = catchAsync(async (req, res) => {
   const eightSemesterMarks = reFormatMarks(formattedMarks, 8);
 
   // check is student is graduated and has all eight semester marks;
-  if (firstSemesterMarks.length === 0)
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have first semester marks');
-  if (secondSemesterMarks.length === 0)
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have second semester marks');
-  if (thirdSemesterMarks.length === 0)
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have third semester marks');
-  if (fourthSemesterMarks.length === 0)
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have fourth semester marks');
-  if (fifthSemesterMarks.length === 0)
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have fifth semester marks');
-  if (sixthSemesterMarks.length === 0)
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have sixth semester marks');
-  if (seventhSemesterMarks.length === 0)
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have seven semester marks');
-  if (eightSemesterMarks.length === 0)
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have eight semester marks');
+  // if (firstSemesterMarks.length === 0)
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have first semester marks');
+  // if (secondSemesterMarks.length === 0)
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have second semester marks');
+  // if (thirdSemesterMarks.length === 0)
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have third semester marks');
+  // if (fourthSemesterMarks.length === 0)
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have fourth semester marks');
+  // if (fifthSemesterMarks.length === 0)
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have fifth semester marks');
+  // if (sixthSemesterMarks.length === 0)
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have sixth semester marks');
+  // if (seventhSemesterMarks.length === 0)
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have seven semester marks');
+  // if (eightSemesterMarks.length === 0)
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Student does not have eight semester marks');
 
   // first semester
   const firstSemester = formattedMarks.find((element) => element.semesterTitle === 1);
   // first semester start and end date
-  const { firstHalfStart: firstSemStartDate, firstHalfEnd: firstSemEndDate } = firstSemester;
+  const firstSemStartDate = firstSemester?.firstHalfStart;
+  const firstSemEndDate = firstSemester?.firstHalfEnd;
 
   // second semester
   const secondSemester = formattedMarks.find((element) => element.semesterTitle === 2);
   // second semester start and end date
-  const { secondHalfStart: secondSemStartDate, secondHalfEnd: secondSemEndDate } = secondSemester;
+  const secondSemStartDate = secondSemester?.secondHalfStart;
+  const secondSemEndDate = secondSemester?.secondHalfEnd;
 
   // third semester
   const thirdSemester = formattedMarks.find((element) => element.semesterTitle === 3);
   // third semester start and end date
-  const { firstHalfStart: thirdSemStartDate, firstHalfEnd: thirdSemEndDate } = thirdSemester;
+  const thirdSemStartDate = thirdSemester?.firstHalfStart;
+  const thirdSemEndDate = thirdSemester?.firstHalfEnd;
 
-  // fourt semester
+  // fourth semester
   const fourthSemester = formattedMarks.find((element) => element.semesterTitle === 4);
   // fourth semester start and end date
-  const { secondHalfStart: fourthSemStartDate, secondHalfEnd: fourthSemEndDate } = fourthSemester;
+  const fourthSemStartDate = fourthSemester?.secondHalfStart;
+  const fourthSemEndDate = fourthSemester?.secondHalfEnd;
 
   // fifth semester
   const fifthSemester = formattedMarks.find((element) => element.semesterTitle === 5);
   // fifth semester start and end date
-  const { firstHalfStart: fifthSemStartDate, firstHalfEnd: fifthSemEndDate } = fifthSemester;
+  const fifthSemStartDate = fifthSemester?.firstHalfStart;
+  const fifthSemEndDate = fifthSemester?.firstHalfEnd;
 
   // six semester
   const sixthSemester = formattedMarks.find((element) => element.semesterTitle === 6);
   // sixth semester start and end date
-  const { secondHalfStart: sixthSemStartDate, secondHalfEnd: sixthSemEndDate } = sixthSemester;
+  const sixthSemStartDate = sixthSemester?.secondHalfStart;
+  const sixthSemEndDate = sixthSemester?.secondHalfEnd;
 
   // six semester
   const seventhSemester = formattedMarks.find((element) => element.semesterTitle === 7);
   // seven semester start and end date
-  const { firstHalfStart: seventhSemStartDate, firstHalfEnd: seventhSemEndDate } = seventhSemester;
+  const seventhSemStartDate = seventhSemester?.firstHalfStart;
+  const seventhSemEndDate = seventhSemester?.firstHalfEnd;
 
   // eight semester
   const eightSemester = formattedMarks.find((element) => element.semesterTitle === 6);
   // eight semester start and end date
-  const { secondHalfStart: eightSemStartDate, secondHalfEnd: eightSemEndDate } = eightSemester;
+  const eightSemStartDate = eightSemester?.secondHalfStart;
+  const eightSemEndDate = eightSemester?.secondHalfEnd;
 
   // find student taajil
   const studentTajil = await taajilService.findTaajilByStudentId(studentId);
