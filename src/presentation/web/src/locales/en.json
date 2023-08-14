@@ -207,7 +207,25 @@
     "First Step":"First Step",
     "Second Step":"Second Step",
     "Third Step":"Third Step",
-    "Overview":"Overview"
+    "Overview":"Overview",
+    "Total Students":"Total Students",
+    "Present Students":"Present Students",
+    "Taajil Students":"Taajil Students",
+    "Reentry Students":"Reentry Students",
+    "Monfaq Students":"Monfaq Students",
+    "Educational Year":"Educational Year",
+    "Recent Students":"Recent Students",
+    "Assistants":"Assistants",
+    "Period":"Period",
+    "Start Year":"Start Year",
+    "End Year":"End Year",
+    "Periods":"Periods",
+    "Semester Start Date":"Semester Start Date",
+    "Semester End Date":"Semester End Date",
+    "Update Interval Dates":"Update Interval Dates",
+    "Select Period":"Select Period"
+
+
 
 
 }

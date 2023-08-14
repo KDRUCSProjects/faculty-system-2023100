@@ -1,6 +1,6 @@
 <template>
   <v-toolbar color="dark">
-    <v-toolbar-title> Periods </v-toolbar-title>
+    <v-toolbar-title> {{ $t('Periods') }} </v-toolbar-title>
     <v-divider class="mx-4" inset vertical></v-divider>
     <v-spacer></v-spacer>
 

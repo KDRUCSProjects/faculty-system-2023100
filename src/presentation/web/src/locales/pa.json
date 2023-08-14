@@ -207,7 +207,24 @@
     "First Step":"اوله مرحله",
     "Second Step":"دوهمه مرحله",
     "Third Step":"دریمه مرحله",
-    "Overview":"کتنه"
+    "Overview":"کتنه",
+    "Total Students":"ټول محصیلین",
+    "Present Students":"حاضر محصیلین",
+    "Taajil Students":"تعجیل محصیلین",
+    "Reentry Students":"بیاشموله محصیلین",
+    "Monfaq Students":"منفق محصیلین",
+    "Educational Year":"تعلیمی کال",
+    "Recent Students":"برحاله محصیلین",
+    "Assistants":"مرستیالان",
+    "Period":"دوره",
+    "Start Year":"شروع کال",
+    "End Year":"ختم کال",
+    "Periods":"دورې",
+    "Semester Start Date":"سمستر شروع نیټه",
+    "Semester End Date":"سمستر ختم نیټه",
+    "Update Interval Dates":"دنیټو حد تغیرکړﺉ",
+    "Select Period":"دوره انتخاب کړﺉ"
+
     
 
 
