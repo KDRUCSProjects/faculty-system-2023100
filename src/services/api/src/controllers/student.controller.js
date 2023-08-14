@@ -26,7 +26,7 @@ const registerStudent = catchAsync(async (req, res) => {
 
 const updateStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudent(req.params.studentId);
-  if (!student) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('Student Not found'));
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, i18n.__('studentNotFound'));
   const results = await studentService.updateStudent(student, req.body);
   return res.status(httpStatus.ACCEPTED).send(results);
 });

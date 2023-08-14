@@ -118,7 +118,8 @@
     "studnetAlreadyTakenKankorId": "محصل مخکی لا په دی کانکور ايډی ثبت سوی دی ",
     "invalidParameters": "د پوښتنې ناسم پیرامیټونه",
     "studentNotFound": "محصل ونه موندل سو",
-    "tokenNotFound": "ټوکن ونه موندل شو"
+    "tokenNotFound": "ټوکن ونه موندل شو",
+    "teacherNotFound": "استاد ونه موندل سو"
   },
   "subject": {
     "subjectNotFound": "مضمون ونه موندل سو",
