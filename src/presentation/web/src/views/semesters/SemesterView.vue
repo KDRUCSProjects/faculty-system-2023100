@@ -57,7 +57,7 @@
                       </v-col>
                       <v-col cols="6" class="pa-0 ma-0">
                         <v-btn
-                          @click="downloadShoka"
+                          @click="downloadReport"
                           class="float-right"
                           prepend-icon="mdi-download-circle"
                           color="primary"
@@ -199,6 +199,7 @@ export default {
     selectedStudentId: null,
     forceMigrate: false,
     mode: 'semester-students',
+    downloadLoading: false,
     headersReport: [
       // {
       //   title: 'No',
@@ -322,6 +323,20 @@ export default {
     },
   },
   methods: {
+    async downloadReport() {
+      this.downloadLoading = true;
+      const file = await this.$store.dispatch('semesters/downloadSemesterReportByType', {
+        semesterId: this.id,
+        type: this.selectedReport,
+      });
+
+      this.downloadFile(file.data, `${this.selectedReport} List`);
+
+      // Make it a little stylish ;)
+      setTimeout(() => {
+        this.downloadLoading = false;
+      }, 500);
+    },
     setReport(value) {
       this.selectedReport = value;
     },
