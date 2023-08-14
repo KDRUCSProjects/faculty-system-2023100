@@ -2,7 +2,7 @@
   <v-toolbar color="dark">
     <v-toolbar-title> {{ $t('All Teachers') }} </v-toolbar-title>
 
-    <v-btn color="secondary" :variant="showAssistants ? 'flat' : 'tonal'" @click="toggleAssistants">Assistants</v-btn>
+    <v-btn color="secondary" :variant="showAssistants ? 'flat' : 'tonal'" @click="toggleAssistants">{{ $t('Assistants') }}</v-btn>
     <div class="mx-4">
       <add-teacher></add-teacher>
     </div>

@@ -2,7 +2,7 @@
   <v-overlay v-model="dialog" scrim="#000"></v-overlay>
 
   <v-btn variant="flat" color="cyan">
-    <slot> Select Year </slot>
+    <slot> {{ $t('Select year') }} </slot>
 
     <v-dialog
       v-model="dialog"
@@ -12,7 +12,7 @@
       transition="slide-y-transition"
     >
       <v-card class="mx-auto" width="250" max-width="400">
-        <v-card-title class="bg-dark"> Select Period </v-card-title>
+        <v-card-title class="bg-dark"> {{ $t('Select Period') }} </v-card-title>
 
         <v-virtual-scroll :items="items" height="300" item-height="50" class="my-1">
           <template v-slot:default="{ item }">
@@ -26,7 +26,7 @@
         </v-virtual-scroll>
 
         <v-card-actions>
-          <v-btn color="primary" variant="flat" block @click="emitPeriod"> Select </v-btn>
+          <v-btn color="primary" variant="flat" block @click="emitPeriod"> {{ $t('Select') }} </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

@@ -44,19 +44,19 @@
           <v-form @submit.prevent="setTimes(year.id)">
             <v-row>
               <v-col cols="4"
-                ><v-text-field class="mt-2" variant="outlined" v-model.number="period" label="Period"> </v-text-field
+                ><v-text-field class="mt-2" variant="outlined" v-model.number="period" :label="$t('Period')"> </v-text-field
               ></v-col>
               <v-col cols="4"
-                ><v-text-field class="mt-2" variant="outlined" v-model.number="startDate" label="Semester Start Date">
+                ><v-text-field class="mt-2" variant="outlined" v-model.number="startDate" :label="$t('Semester Start Date')">
                 </v-text-field
               ></v-col>
               <v-col cols="4"
-                ><v-text-field class="mt-2" variant="outlined" v-model.number="endDate" label="Semester End Date">
+                ><v-text-field class="mt-2" variant="outlined" v-model.number="endDate" :label="$t('Semester End Date')">
                 </v-text-field
               ></v-col>
             </v-row>
             <v-btn block size="large" color="primary" variant="tonal" @click="setTimes(year.id)"
-              >Update Interval Dates</v-btn
+              >{{ $t('Update Interval Dates') }}</v-btn
             >
           </v-form>
         </v-list-item>
@@ -162,6 +162,7 @@ export default {
     items() {
       return this.$store.getters['years/years'];
     },
+    
   },
   created() {
     // Set current year half

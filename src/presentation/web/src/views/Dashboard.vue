@@ -177,32 +177,32 @@ export default {
         {
           icon: 'mdi-calendar-month',
           value: stats?.year + ' / ' + (half ? '1st' : '2nd'),
-          title: 'Educational Year',
+          title: this.$t('Educational Year'),
         },
         {
           icon: 'mdi-account-group',
           value: stats?.sumOfSemesters.total.male + stats?.sumOfSemesters.total.female,
-          title: 'Total Students',
+          title: this.$t('Total Students'),
         },
         {
           icon: 'mdi-account-multiple-check',
           value: stats?.sumOfSemesters.present.male + stats?.sumOfSemesters.present.female,
-          title: 'Present Students',
+          title: this.$t('Present Students'),
         },
         {
           icon: 'mdi-account-multiple-minus',
           value: stats?.sumOfSemesters.taajil.male + stats?.sumOfSemesters.taajil.female,
-          title: 'Taajil Students',
+          title: this.$t('Taajil Students'),
         },
         {
           icon: 'mdi-account-multiple-plus',
           value: stats?.sumOfSemesters.reentry.male + stats?.sumOfSemesters.reentry.female,
-          title: 'Reentry Students',
+          title: this.$t('Reentry Students'),
         },
         {
           icon: 'mdi-account-switch',
           value: stats?.sumOfSemesters.monfaq.male + stats?.sumOfSemesters.monfaq.female,
-          title: 'Monfaq Students',
+          title: this.$t('Monfaq Students'),
         },
       ];
     },

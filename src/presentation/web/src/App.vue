@@ -19,13 +19,23 @@
 <script>
 export default {
   data: () => ({}),
-  methods: {},
+  methods: {
+    checkAppLanguage(){
+      const language = localStorage.getItem('appLanguage');
+      if(!language){
+        localStorage.setItem('appLanguage','en');
+      }
+      this.$i18n.locale=localStorage.getItem('appLanguage')
+    }
+  },
   computed: {
     toastMessages() {
       return this.$store.getters['toastMessages'];
     },
   },
   async created() {
+    this.checkAppLanguage();
+
     // Load all years
     await this.$store.dispatch('years/loadEducationalYears');
     // Load current on-going educational year

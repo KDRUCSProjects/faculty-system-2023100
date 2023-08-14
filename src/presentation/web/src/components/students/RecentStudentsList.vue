@@ -1,7 +1,7 @@
 <template>
   <div style="min-height: 470px" class="mx-3">
     <v-list>
-      <h3 class="font-weight-bold" :class="{ pashtoFont: isPashto }">Recent Students</h3>
+      <h3 class="font-weight-bold" :class="{ pashtoFont: isPashto }">{{ $t('Recent Students') }}</h3>
       <v-divider class="mt-2"></v-divider>
       <div class="mt-5">
         <v-list-item
