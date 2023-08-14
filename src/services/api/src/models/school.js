@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class School extends Model {
     /**
@@ -14,23 +12,26 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Student, { foreignKey: 'studentId' });
     }
   }
-  School.init({
-    studentId: {
-      type: DataTypes.INTEGER,
-      required: true,
-      trim: true,
-      references: {
-        model: 'Student',
-        key: 'id',
+  School.init(
+    {
+      studentId: {
+        type: DataTypes.INTEGER,
+        required: true,
+        trim: true,
+        references: {
+          model: 'Student',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
-      onDelete: 'cascade',
-      onUpdate: 'cascade',
+      name: DataTypes.STRING,
+      graduationDate: DataTypes.DATE,
     },
-    name: DataTypes.STRING,
-    graduationDate: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'School',
-  });
+    {
+      sequelize,
+      modelName: 'School',
+    }
+  );
   return School;
 };

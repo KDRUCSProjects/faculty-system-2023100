@@ -6,6 +6,7 @@ const cors = require('cors');
 const passport = require('passport');
 const httpStatus = require('http-status');
 const path = require('path');
+const i18n = require('i18n');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
@@ -16,7 +17,6 @@ const { errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 
 // App Localization
-const i18n = require('i18n');
 
 /**
  * configure shared state

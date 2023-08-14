@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Monograph extends Model {
     /**
@@ -14,23 +12,26 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Student, { foreignKey: 'studentId' });
     }
   }
-  Monograph.init({
-    studentId: {
-      type: DataTypes.INTEGER,
-      required: true,
-      trim: true,
-      references: {
-        model: 'Student',
-        key: 'id',
+  Monograph.init(
+    {
+      studentId: {
+        type: DataTypes.INTEGER,
+        required: true,
+        trim: true,
+        references: {
+          model: 'Student',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
-      onDelete: 'cascade',
-      onUpdate: 'cascade',
+      researchTitle: DataTypes.STRING,
+      defenseDate: DataTypes.DATE,
     },
-    researchTitle: DataTypes.STRING,
-    defenseDate: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'Monograph',
-  });
+    {
+      sequelize,
+      modelName: 'Monograph',
+    }
+  );
   return Monograph;
 };

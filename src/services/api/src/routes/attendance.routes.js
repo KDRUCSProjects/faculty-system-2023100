@@ -17,6 +17,9 @@ router
   );
 
 router
+  .route('/semester/:semesterId')
+  .get(validate(attendanceValidation.createExcelFile), attendanceController.createExcelFile);
+router
   .route('/:subjectId')
   .post(
     auth('takeAttendance'),

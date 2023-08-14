@@ -22,6 +22,7 @@ const tabdiliRoutes = require('./tabdili.routes');
 const shokaRoutes = require('./shoka.routes');
 const badliAshaRoutes = require('./badli.asha.routes');
 const monfaqiRoutes = require('./monfaqi.routes');
+const transcriptRoutes = require('./transcript.routes');
 
 const router = express.Router();
 
@@ -105,6 +106,10 @@ const defaultRoutes = [
   {
     path: '/monfaqi',
     route: monfaqiRoutes,
+  },
+  {
+    path: '/transcript',
+    route: transcriptRoutes,
   },
 ];
 

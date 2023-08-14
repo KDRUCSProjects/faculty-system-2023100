@@ -43,12 +43,7 @@ module.exports = router;
  *         description: classTitle
  *     responses:
  *       "200":
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Shoka'
+ *         description: NO CONTENT AND FILE WILL BE DOWNLOADED
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
