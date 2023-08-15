@@ -286,6 +286,11 @@ export const updateAccount = (userName, lastName, email, photo) => {
       },
       5000
     );
+    if (updateResp.status == 500) {
+      const error = new Error("Image shouldn't be larger than 2mb");
+      error.code = 500;
+      throw error;
+    }
     if (updateResp.status == 401) {
       const error = new Error("please reauthenticate");
       error.code = 401;
@@ -711,7 +716,7 @@ export const getStudentBySubject = (subjectId, chance) => {
       studentData.push({
         studentId: element.studentId,
         studentName: element.fullName,
-
+        studentGrandFatherName: element.grandFatherName,
         fatherName: element.fatherName,
       });
     });

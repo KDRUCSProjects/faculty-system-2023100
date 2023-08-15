@@ -53,7 +53,7 @@ export default function SelectStudentItem(props) {
             {props.studentFatherName}
           </Text>
           <Text style={{ fontSize: 14, fontWeight: "300" }}>
-            Studentgrandfather
+            {props.studentGrandFatherName}
           </Text>
         </View>
       </View>
@@ -79,5 +79,6 @@ const styles = StyleSheet.create({
     marginVertical: 3,
     borderRadius: 10,
     borderColor: "#5DA3FF",
+    backgroundColor: "#65B7F6",
   },
 });
