@@ -173,7 +173,7 @@ export default {
   provide() {
     return {
       semesterId: this.id,
-      enableStudentsAddition: this.$route.query.semester == 1 ? true : false,
+      enableStudentsAddition: this.enableSemesterAddition,
     };
   },
   props: {
@@ -263,6 +263,19 @@ export default {
     statisticsLabels: ['Total', 'Present', 'Taajil', 'Reentry', 'Monfaq', 'Tabdil'],
   }),
   computed: {
+    enableSemesterAddition() {
+      const semseterTitle = this.$route.query.semester == 1 ? true : false;
+
+      const currentYearSemesters = this.$store.getters['semesters/currentYearSemesters'];
+
+      let semesterIsFromCurrentYearSemester = false;
+
+      currentYearSemesters.forEach((sem) => {
+        console.log(sem);
+        if (sem.id == this.id) semesterIsFromCurrentYearSemester = true;
+      });
+      return semseterTitle && semesterIsFromCurrentYearSemester;
+    },
     students() {
       if (this.mode === 'enrollment') {
         return this.$store.getters['students/students'];

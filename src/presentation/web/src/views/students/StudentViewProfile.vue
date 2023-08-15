@@ -9,7 +9,7 @@
               class="float-right mb-1"
               prepend-icon="mdi-download-circle-outline"
               color="primary"
-              variant="tonal"
+              variant="flat"
               block
               download
               :loading="downloadLoading"

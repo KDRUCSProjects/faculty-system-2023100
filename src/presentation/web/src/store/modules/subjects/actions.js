@@ -147,8 +147,11 @@ export default {
       const token = context.rootGetters.token;
 
       // If you want to add 2nd or 3rd chance, then add the query otherwise empty
+      let url = `/api/shokaList`;
+
+      if (chance !== 1) url = url + `?chance=${chance}`;
       const response = await axios({
-        url: `/api/shokaList`,
+        url,
         method: 'post',
         headers: {
           'Content-Type': 'application/json',

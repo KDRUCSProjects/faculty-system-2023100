@@ -15,8 +15,15 @@
         <v-card-title class="font-weight-bold mt-3">{{ student?.fullName }}</v-card-title>
         <v-card-subtitle :class="{ 'text-error': !student?.nickName }">{{ student?.nickName || 'N/A' }}</v-card-subtitle>
 
-        <base-update-dialog ref="profilePhotoDialog" :photo="true" :title="$t('Change Photo')" @update="uploadPhoto">
-          <v-btn color="primary" variant="flat" size="small">{{ $t('Update Photo') }}</v-btn>
+        <base-update-dialog
+          color="primary"
+          variant="outlined"
+          ref="profilePhotoDialog"
+          :photo="true"
+          :title="$t('Change Photo')"
+          @update="uploadPhoto"
+        >
+          <v-btn color="primary" variant="outlined" size="small">{{ $t('Update Photo') }}</v-btn>
         </base-update-dialog>
       </v-card-item>
       <v-card-text class="my-8">
