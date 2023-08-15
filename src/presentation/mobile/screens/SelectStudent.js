@@ -83,6 +83,7 @@ export default function SelectStudent(props) {
                 studentId={student.studentId}
                 studentName={student.studentName}
                 studentFatherName={student.fatherName}
+                studentGrandFatherName={student.studentGrandFatherName}
               ></SelectStudentItem>
             );
           })}
