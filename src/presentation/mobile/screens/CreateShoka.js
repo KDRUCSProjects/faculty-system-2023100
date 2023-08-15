@@ -144,6 +144,15 @@ export default function CreateShoka(props) {
           status
         )
       );
+      setisLoading(false);
+      let toast = Toast.show("Shoka Created!", {
+        duration: Toast.durations.LONG,
+      });
+
+      setTimeout(function hideToast() {
+        Toast.hide(toast);
+      }, 2000);
+      props.navigation.goBack();
     } catch (e) {
       setisLoading(false);
       if (e.code == 401) {
@@ -164,14 +173,6 @@ export default function CreateShoka(props) {
     setProjectMarks(null);
     setassignments(null);
     setfinals(null);
-    let toast = Toast.show("Shoka Created!", {
-      duration: Toast.durations.LONG,
-    });
-
-    setTimeout(function hideToast() {
-      Toast.hide(toast);
-    }, 2000);
-    props.navigation.goBack();
   };
   const [expanded, setExpanded] = useState(true);
 

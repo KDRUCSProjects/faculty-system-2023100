@@ -95,6 +95,14 @@ export default function ChangePassword(props) {
         changePassword(currentPassword, newPassword, confirmPassword)
       );
       setisLoading(false);
+      let toast = Toast.show("Password updated!", {
+        duration: Toast.durations.LONG,
+      });
+
+      setTimeout(function hideToast() {
+        Toast.hide(toast);
+      }, 2000);
+      props.navigation.goBack();
     } catch (e) {
       setisLoading(false);
       console.log(e);
@@ -108,14 +116,6 @@ export default function ChangePassword(props) {
       Alert.alert("Sorry!", e.message);
       return;
     }
-    let toast = Toast.show("Password updated!", {
-      duration: Toast.durations.LONG,
-    });
-
-    setTimeout(function hideToast() {
-      Toast.hide(toast);
-    }, 2000);
-    props.navigation.goBack();
   };
 
   const headerHeight = useHeaderHeight();
