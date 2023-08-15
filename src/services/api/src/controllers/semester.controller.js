@@ -130,9 +130,33 @@ const getSemesters = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send(semesters);
 });
 
+const getConversionReport = catchAsync(async (req, res) => {
+  const headerText = `د کمپيوټر ساينس پوهنځي د ${className} ټولګی د ${semesterName} سمسټر د (${subject.name})  مضمون استاد (${teacher.name})   مميز (      )  د ${chance} چانس ازموينی نمري`;
+  const footerText = `په پورته شرح د (   ${className}     ) ټولګی د ${semesterName} سمسټر ${year.year} تحصیلي کال دنمرو شقه بدون د قلم وهنی او تراش څخه تر تيب او صحت لري.`;
+
+  const filePath = path.join(__dirname, '../', 'storage', 'exportable', 'templates', 'shoka.xlsx');
+
+  // workbook.xlsx.write(res);
+  // res.end();
+  let workbook = new Excel.Workbook();
+  workbook = await workbook.xlsx.readFile(filePath);
+  let worksheet = workbook.getWorksheet('Sheet1');
+
+  worksheet.getRow(4).getCell(1).value = headerText;
+
+  let row = 6;
+
+  const now = Date.now();
+  // worksheet.getRow(107).getCell(1).value = footerText;
+  const newPath = path.join(__dirname, '../', 'storage', 'files', `${now}.xlsx`);
+  await workbook.xlsx.writeFile(newPath);
+  return res.download(newPath);
+});
+
 module.exports = {
   getSemester,
   getSemesters,
   deleteSemester,
   createSemester,
+  getConversionReport,
 };

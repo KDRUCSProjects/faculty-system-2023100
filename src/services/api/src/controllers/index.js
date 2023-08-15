@@ -17,3 +17,4 @@ module.exports.shokaController = require('./shoka.controller');
 module.exports.badliAshaController = require('./badli.asha.controller');
 module.exports.monfaqiController = require('./monfaqi.controller');
 module.exports.transcriptController = require('./transcript.controller');
+module.exports.reportController = require('./report.controller');

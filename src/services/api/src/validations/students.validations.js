@@ -118,7 +118,7 @@ const tempToken = {
       tazkeraNumber: Joi.number().integer().positive(),
       birthCity: Joi.string(),
       birthCountry: Joi.string(),
-      phoneNumber: Joi.number().integer().positive(),
+      phoneNumber: Joi.string(),
       kankorMarks: Joi.number().positive(),
       kankorType: Joi.string(),
       birthCityEnglish: Joi.string(),

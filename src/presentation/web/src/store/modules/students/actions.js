@@ -236,4 +236,20 @@ export default {
       throw e.response.data.message;
     }
   },
+  async downloadTranscript(context, studentId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios.get(`/api/transcript/${studentId}`, {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
 };

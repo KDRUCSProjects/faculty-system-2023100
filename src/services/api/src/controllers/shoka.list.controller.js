@@ -17,12 +17,11 @@ const path = require('path');
 const moment = require('moment');
 
 const createShokaList = catchAsync(async (req, res) => {
-
   const projectMarks = req.body.projectMarks || 0;
   const assignment = req.body.assignment || 0;
   const finalMarks = req.body.finalMarks || 0;
   const practicalWork = req.body.practicalWork || 0;
-  const totalMarks = (projectMarks + assignment + finalMarks + practicalWork);
+  const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
 
   if (totalMarks > 100) {
     throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Total Marks are Above 100');
@@ -50,15 +49,16 @@ const createShokaList = catchAsync(async (req, res) => {
     switch (req.query.chance) {
       case 2:
         const studentFirstChanceMarks = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 1);
-        if (!studentFirstChanceMarks) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student does not have first chance marks')
+        if (!studentFirstChanceMarks)
+          throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student does not have first chance marks');
         const studentSecondChance = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 2);
         if (studentSecondChance) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has second chance marks');
         const projectMarks = studentFirstChanceMarks.projectMarks || 0;
         const assignment = studentFirstChanceMarks.assignment || 0;
         const practicalWork = studentFirstChanceMarks.practicalWork || 0;
         const finalMarks = studentFirstChanceMarks.finalMarks || 0;
-        const firstChanceTotalMarks = (projectMarks + assignment + finalMarks + practicalWork);
-        if (firstChanceTotalMarks >= 55) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student is pass in first chance')
+        const firstChanceTotalMarks = projectMarks + assignment + finalMarks + practicalWork;
+        if (firstChanceTotalMarks >= 55) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student is pass in first chance');
 
         req.body.shokaId = shoka.id;
         req.body.chance = 2;
@@ -67,7 +67,8 @@ const createShokaList = catchAsync(async (req, res) => {
 
       case 3:
         const studentSecondChanceMarks = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 2);
-        if (!studentSecondChanceMarks) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student does not have second chance marks')
+        if (!studentSecondChanceMarks)
+          throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student does not have second chance marks');
         const studentThirdChance = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 3);
         if (studentThirdChance) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has Third chance marks');
         const secondMidtermMarks = studentSecondChanceMarks.projectMarks || 0;
@@ -106,15 +107,15 @@ const getShokaList = catchAsync(async (req, res) => {
   switch (req.query.chance) {
     case 1:
       const firstResult = [...firstChanceMarks];
-      semStudents.forEach(element => {
-        const doesStd = firstChanceMarks.find(elem => elem.studentId === element.studentId);
+      semStudents.forEach((element) => {
+        const doesStd = firstChanceMarks.find((elem) => elem.studentId === element.studentId);
         if (!doesStd) {
           firstResult.push({
             studentId: element.Student.id,
             fullName: element.Student.fullName,
             fatherName: element.Student.fatherName,
           });
-        };
+        }
       });
       return res.status(httpStatus.OK).send(firstResult);
     case 2:
@@ -123,12 +124,12 @@ const getShokaList = catchAsync(async (req, res) => {
       const secondChance = await shokaListService.getSubjectMarks(conditions);
       const firstChanceFailStudents = await shokaListService.findFailStudents(shoka.id, 1);
       const secondResult = [...secondChance];
-      semStudents.forEach(element => {
-        const doesFirstChance = firstChanceMarks.find(elem => elem.studentId === element.studentId);
+      semStudents.forEach((element) => {
+        const doesFirstChance = firstChanceMarks.find((elem) => elem.studentId === element.studentId);
         if (doesFirstChance) {
-          const failStd = firstChanceFailStudents.find(item => item.studentId === element.studentId);
+          const failStd = firstChanceFailStudents.find((item) => item.studentId === element.studentId);
           if (failStd) {
-            const hasMarks = secondChance.find(item => item.studentId === element.studentId);
+            const hasMarks = secondChance.find((item) => item.studentId === element.studentId);
             if (!hasMarks) {
               secondResult.push({
                 studentId: element.Student.id,
@@ -156,16 +157,16 @@ const getShokaList = catchAsync(async (req, res) => {
       const secondChanceFailStudents = await shokaListService.findFailStudents(shoka.id, 2);
       const firstChanceFailStudent = await shokaListService.findFailStudents(shoka.id, 1);
       const thirdResult = [...thirdChance];
-      semStudents.forEach(element => {
-        const firstChance = firstChanceMarks.find(elem => elem.studentId === element.studentId);
+      semStudents.forEach((element) => {
+        const firstChance = firstChanceMarks.find((elem) => elem.studentId === element.studentId);
         if (firstChance) {
-          const firstChanceFail = firstChanceFailStudent.find(item => item.studentId === element.studentId);
+          const firstChanceFail = firstChanceFailStudent.find((item) => item.studentId === element.studentId);
           if (firstChanceFail) {
-            const secondChance = secondChanceMarks.find(item => item.studentId === element.studentId);
+            const secondChance = secondChanceMarks.find((item) => item.studentId === element.studentId);
             if (secondChance) {
-              const secondChanceFail = secondChanceFailStudents.find(item => item.studentId === element.studentId);
+              const secondChanceFail = secondChanceFailStudents.find((item) => item.studentId === element.studentId);
               if (secondChanceFail) {
-                const thirdChanceStdMarks = thirdChance.find(item => item.studentId === element.studentId);
+                const thirdChanceStdMarks = thirdChance.find((item) => item.studentId === element.studentId);
                 if (thirdChanceStdMarks) {
                   // do nothing
                 } else {
@@ -186,12 +187,12 @@ const getShokaList = catchAsync(async (req, res) => {
               });
             }
           } else {
-            // do nothing 
+            // do nothing
           }
         } else {
-          const secondChance = secondChanceMarks.find(item => item.studentId === element.studentId);
+          const secondChance = secondChanceMarks.find((item) => item.studentId === element.studentId);
           if (secondChance) {
-            const doesFail = secondChanceFailStudents.find(item => item.studentId === element.studentId);
+            const doesFail = secondChanceFailStudents.find((item) => item.studentId === element.studentId);
             if (doesFail) {
               thirdResult.push({
                 studentId: element.Student.id,
@@ -208,12 +209,12 @@ const getShokaList = catchAsync(async (req, res) => {
               fatherName: element.Student.fatherName,
             });
           }
-        };
+        }
       });
       return res.status(httpStatus.OK).send(thirdResult);
     default:
       throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameter');
-  };
+  }
 });
 
 const updateShokaList = catchAsync(async (req, res) => {
@@ -222,7 +223,7 @@ const updateShokaList = catchAsync(async (req, res) => {
   const assignment = req.body.assignment || 0;
   const finalMarks = req.body.finalMarks || 0;
   const practicalWork = req.body.practicalWork || 0;
-  const totalMarks = (projectMarks + assignment + finalMarks + practicalWork);
+  const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
 
   if (totalMarks > 100) {
     throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Total Marks are Above 100');
@@ -344,15 +345,15 @@ const createShokaInExcel = catchAsync(async (req, res) => {
   switch (chance) {
     case 1:
       results = [...firstChanceMarks];
-      semStudents.forEach(element => {
-        const doesStd = firstChanceMarks.find(elem => elem.studentId === element.studentId);
+      semStudents.forEach((element) => {
+        const doesStd = firstChanceMarks.find((elem) => elem.studentId === element.studentId);
         if (!doesStd) {
           results.push({
             studentId: element.Student.id,
             fullName: element.Student.fullName,
             fatherName: element.Student.fatherName,
           });
-        };
+        }
       });
       break;
     case 2:
@@ -361,12 +362,12 @@ const createShokaInExcel = catchAsync(async (req, res) => {
       const secondChance = await shokaListService.getSubjectMarks(conditions);
       const firstChanceFailStudents = await shokaListService.findFailStudents(shoka.id, 1);
       results = [...secondChance];
-      semStudents.forEach(element => {
-        const doesFirstChance = firstChanceMarks.find(elem => elem.studentId === element.studentId);
+      semStudents.forEach((element) => {
+        const doesFirstChance = firstChanceMarks.find((elem) => elem.studentId === element.studentId);
         if (doesFirstChance) {
-          const failStd = firstChanceFailStudents.find(item => item.studentId === element.studentId);
+          const failStd = firstChanceFailStudents.find((item) => item.studentId === element.studentId);
           if (failStd) {
-            const hasMarks = secondChance.find(item => item.studentId === element.studentId);
+            const hasMarks = secondChance.find((item) => item.studentId === element.studentId);
             if (!hasMarks) {
               results.push({
                 studentId: element.Student.id,
@@ -394,16 +395,16 @@ const createShokaInExcel = catchAsync(async (req, res) => {
       const secondChanceFailStudents = await shokaListService.findFailStudents(shoka.id, 2);
       const firstChanceFailStudent = await shokaListService.findFailStudents(shoka.id, 1);
       results = [...thirdChance];
-      semStudents.forEach(element => {
-        const firstChance = firstChanceMarks.find(elem => elem.studentId === element.studentId);
+      semStudents.forEach((element) => {
+        const firstChance = firstChanceMarks.find((elem) => elem.studentId === element.studentId);
         if (firstChance) {
-          const firstChanceFail = firstChanceFailStudent.find(item => item.studentId === element.studentId);
+          const firstChanceFail = firstChanceFailStudent.find((item) => item.studentId === element.studentId);
           if (firstChanceFail) {
-            const secondChance = secondChanceMarks.find(item => item.studentId === element.studentId);
+            const secondChance = secondChanceMarks.find((item) => item.studentId === element.studentId);
             if (secondChance) {
-              const secondChanceFail = secondChanceFailStudents.find(item => item.studentId === element.studentId);
+              const secondChanceFail = secondChanceFailStudents.find((item) => item.studentId === element.studentId);
               if (secondChanceFail) {
-                const thirdChanceStdMarks = thirdChance.find(item => item.studentId === element.studentId);
+                const thirdChanceStdMarks = thirdChance.find((item) => item.studentId === element.studentId);
                 if (thirdChanceStdMarks) {
                   // do nothing
                 } else {
@@ -424,12 +425,12 @@ const createShokaInExcel = catchAsync(async (req, res) => {
               });
             }
           } else {
-            // do nothing 
+            // do nothing
           }
         } else {
-          const secondChance = secondChanceMarks.find(item => item.studentId === element.studentId);
+          const secondChance = secondChanceMarks.find((item) => item.studentId === element.studentId);
           if (secondChance) {
-            const doesFail = secondChanceFailStudents.find(item => item.studentId === element.studentId);
+            const doesFail = secondChanceFailStudents.find((item) => item.studentId === element.studentId);
             if (doesFail) {
               results.push({
                 studentId: element.Student.id,
@@ -446,19 +447,16 @@ const createShokaInExcel = catchAsync(async (req, res) => {
               fatherName: element.Student.fatherName,
             });
           }
-        };
+        }
       });
       break;
     default:
       throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameter');
   }
 
-
-
   if (results.length <= 0) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'shoka is empty');
   }
-
 
   let className;
   let semesterName;
@@ -501,7 +499,7 @@ const createShokaInExcel = catchAsync(async (req, res) => {
       break;
   }
 
-  const headerText = `د کمپيوټر ساينس پوهنځي د ${className} ټولګی د ${semesterName} سمسټر د (${subject.name})  مضمون استاد (${teacher.name})   مميز (      )  د ${chance} چانس ازموينی نمري`
+  const headerText = `د کمپيوټر ساينس پوهنځي د ${className} ټولګی د ${semesterName} سمسټر د (${subject.name})  مضمون استاد (${teacher.name})   مميز (      )  د ${chance} چانس ازموينی نمري`;
   const footerText = `په پورته شرح د (   ${className}     ) ټولګی د ${semesterName} سمسټر ${year.year} تحصیلي کال دنمرو شقه بدون د قلم وهنی او تراش څخه تر تيب او صحت لري.`;
 
   const filePath = path.join(__dirname, '../', 'storage', 'exportable', 'templates', 'shoka.xlsx');
@@ -514,7 +512,7 @@ const createShokaInExcel = catchAsync(async (req, res) => {
 
   worksheet.getRow(4).getCell(1).value = headerText;
   let row = 6;
-  results.forEach(element => {
+  results.forEach((element) => {
     const { fullName, fatherName, practicalWork, assignment, projectMarks, finalMarks } = element;
     ++row;
     let col = 9;
