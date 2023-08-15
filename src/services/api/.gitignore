@@ -1,1 +1,2 @@
-src/storage/*
+src/storage/files
+src/storage/images
