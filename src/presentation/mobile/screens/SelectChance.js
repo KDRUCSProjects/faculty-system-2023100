@@ -26,6 +26,7 @@ import * as updates from "expo-updates";
 import { getStudentBySubject } from "../store/actions/actions";
 import BackHandlerChild from "../optimization/BackHandlerChild";
 import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SelectChance(props) {
   BackHandlerChild();
@@ -296,14 +297,14 @@ export default function SelectChance(props) {
               }}
             >
               <Card
-                style={{ width: 120, height: 140 }}
+                style={{ width: 130, height: 140 }}
                 onPress={async () => {
                   try {
                     setisLoading(true);
                     await dispatch(getStudentBySubject(id, 1));
                     setisLoading(false);
 
-                    props.navigation.navigate("CreateShoka", {
+                    props.navigation.navigate("selectStudent", {
                       subjectId: id,
                       status: "first",
                     });
@@ -326,7 +327,7 @@ export default function SelectChance(props) {
               >
                 <Card.Content style={{ height: "40%" }}>
                   <Text
-                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                    style={{ fontSize: 13, height: "70%", fontWeight: "bold" }}
                   >
                     First Chance
                   </Text>
@@ -348,13 +349,13 @@ export default function SelectChance(props) {
               </Card>
 
               <Card
-                style={{ width: 120, height: 140 }}
+                style={{ width: 130, height: 140 }}
                 onPress={async () => {
                   try {
                     setisLoading(true);
                     await dispatch(getStudentBySubject(id, 2));
                     setisLoading(false);
-                    props.navigation.navigate("CreateShoka", {
+                    props.navigation.navigate("selectStudent", {
                       subjectId: id,
                       status: "second",
                     });
@@ -377,7 +378,11 @@ export default function SelectChance(props) {
               >
                 <Card.Content style={{ height: "40%" }}>
                   <Text
-                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                    style={{
+                      fontSize: 13,
+                      height: "70%",
+                      fontWeight: "bold",
+                    }}
                   >
                     Second Chance
                   </Text>
@@ -408,13 +413,13 @@ export default function SelectChance(props) {
               }}
             >
               <Card
-                style={{ width: 120, height: 140 }}
+                style={{ width: 130, height: 140 }}
                 onPress={async () => {
                   try {
                     setisLoading(true);
                     await dispatch(getStudentBySubject(id, 3));
                     setisLoading(false);
-                    props.navigation.navigate("CreateShoka", {
+                    props.navigation.navigate("selectStudent", {
                       subjectId: id,
                       status: "third",
                     });
@@ -437,7 +442,7 @@ export default function SelectChance(props) {
               >
                 <Card.Content style={{ height: "40%" }}>
                   <Text
-                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                    style={{ fontSize: 13, height: "70%", fontWeight: "bold" }}
                   >
                     Third Chance
                   </Text>
@@ -459,12 +464,12 @@ export default function SelectChance(props) {
               </Card>
 
               <Card
-                style={{ width: 120, height: 140 }}
+                style={{ width: 130, height: 140 }}
                 onPress={async () => {}}
               >
                 <Card.Content style={{ height: "40%" }}>
                   <Text
-                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                    style={{ fontSize: 13, height: "70%", fontWeight: "bold" }}
                   >
                     Fourth Chance
                   </Text>

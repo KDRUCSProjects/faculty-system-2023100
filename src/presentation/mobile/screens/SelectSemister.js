@@ -98,7 +98,7 @@ const SelectSemister = (props) => {
               fontStyle: "italic",
             }}
           >
-            Choose a Semister
+            Choose a Semester
           </Text>
           <View style={{ height: "80%", width: "100%" }}>
             <ScrollView

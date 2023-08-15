@@ -101,7 +101,7 @@ export default function Subjects(props) {
             fontStyle: "italic",
           }}
         >
-          My Subjects in Semisters
+          My Subjects in Semesters
         </Text>
         <View style={{ height: "80%" }}>
           <ScrollView
