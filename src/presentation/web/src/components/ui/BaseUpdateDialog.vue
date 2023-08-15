@@ -2,7 +2,7 @@
   <v-overlay v-model="dialog" scrim="#000"></v-overlay>
 
   <slot>
-    <v-btn variant="flat" color="primary">{{ $t('Update') }}</v-btn>
+    <v-btn :variant="variant" :color="color">{{ $t('Update') }}</v-btn>
   </slot>
 
   <v-dialog
@@ -30,7 +30,9 @@
         <v-alert v-if="errorMessage" type="error" variant="outlined" :text="errorMessage"></v-alert>
       </v-card-text>
       <v-card-actions class="mx-2">
-        <v-btn variant="elevated" class="ma-1 px-10" color="primary" @click="update" :disabled="disableUpdateButton"> {{ $t('Update') }} </v-btn>
+        <v-btn variant="elevated" class="ma-1 px-10" color="primary" @click="update" :disabled="disableUpdateButton">
+          {{ $t('Update') }}
+        </v-btn>
         <v-btn variant="tonal" class="ma-1" color="error" @click="cancel"> {{ $t('Cancel') }} </v-btn>
       </v-card-actions>
     </v-card>
@@ -87,6 +89,14 @@ export default {
     data: {
       default: null,
     },
+    color: {
+      type: String,
+      default: 'primary',
+    },
+    variant: {
+      type: String,
+      default: 'flat',
+    },
   },
   data: () => initialState(),
   computed: {
@@ -112,12 +122,11 @@ export default {
       this.cancel();
     },
     handlePhotoSize: function (photoSize) {
-      this.maxPhotoSize = photoSize
-      console.log(this.maxPhotoSize)
-        if (this.maxPhotoSize) {
-          return this.$store.commit('setToast', [0, this.$t('Photo size should be lesser than 2 MB!')]) 
-        }
-      
+      this.maxPhotoSize = photoSize;
+      console.log(this.maxPhotoSize);
+      if (this.maxPhotoSize) {
+        return this.$store.commit('setToast', [0, this.$t('Photo size should be lesser than 2 MB!')]);
+      }
     },
     cancel() {
       this.dialog = false;
