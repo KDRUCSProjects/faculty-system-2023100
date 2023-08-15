@@ -163,6 +163,7 @@ export default function ChangePassword(props) {
             contentContainerStyle={{
               flexGrow: 1,
             }}
+            showsVerticalScrollIndicator={false}
           >
             <View
               style={{

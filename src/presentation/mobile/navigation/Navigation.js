@@ -30,6 +30,7 @@ import SelectSubject from "../screens/SelectSubject";
 import SelectType from "../screens/SelectType";
 import SelectChance from "../screens/SelectChance";
 import SelectSemister from "../screens/SelectSemister";
+import SelectStudent from "../screens/SelectStudent";
 
 const StudentScreen = () => {
   const stdScreen = createStackNavigator();
@@ -117,6 +118,12 @@ const Navigation = (props) => {
       <mainNavigation.Screen
         name="selectSubject"
         component={SelectSubject}
+        options={{}}
+      ></mainNavigation.Screen>
+
+      <mainNavigation.Screen
+        name="selectStudent"
+        component={SelectStudent}
         options={{}}
       ></mainNavigation.Screen>
 
