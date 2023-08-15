@@ -59,7 +59,7 @@ const SemisterItem = (props) => {
                alignItems: 'center'
             }}
          >
-            <MaterialCommunityIcons name='bookshelf' size={100} color='black' />
+            <MaterialCommunityIcons name='google-classroom' size={80} color={colors.primary} />
          </View>
       </Card>
    );
