@@ -424,3 +424,13 @@ span {
     left: 50%;
   }
 }
+
+.back-btn {
+  position: absolute;
+  top: 10px;
+  left: 50px;
+  padding: 10px 20px;
+  border-radius: 3px;
+  border: none;
+  background-color: #fed47e;
+}

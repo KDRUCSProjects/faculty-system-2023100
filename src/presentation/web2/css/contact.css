@@ -165,7 +165,6 @@ img {
   margin-top: 50px;
   margin-bottom: 70px;
   text-align: center;
-  /* background-color: antiquewhite; */
   display: inline-block;
   width: auto;
   padding: 0px 70px;
@@ -177,4 +176,14 @@ img {
   color: rgb(94, 94, 255);
   margin: 3px;
   background-color: #f4f0fe;
+}
+
+.back-btn {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  padding: 10px 20px;
+  border-radius: 3px;
+  border: none;
+  background-color: #fed47e;
 }
