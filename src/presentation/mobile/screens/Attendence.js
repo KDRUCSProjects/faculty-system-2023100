@@ -90,9 +90,19 @@ export default function Attendence(props) {
   const onSaveAttendence = async () => {
     const selectedStudents = new Array();
     students.forEach((student) => {
+      let studentStatus;
+      if (status == "one") {
+        studentStatus = student.isPresentOne;
+      } else if (status == "two") {
+        studentStatus = student.isPresentTwo;
+      } else {
+        studentStatus = student.isPresentOne;
+      }
+
       selectedStudents.push({
         studentId: student.studentId,
-        status: student.isPresentOne,
+
+        status: studentStatus,
       });
     });
 
@@ -103,6 +113,14 @@ export default function Attendence(props) {
         saveAttendence(subjectId, selectedStudents, status)
       );
       setisLoading(false);
+      let toast = Toast.show("Attendence updated!", {
+        duration: Toast.durations.LONG,
+      });
+
+      setTimeout(function hideToast() {
+        Toast.hide(toast);
+      }, 2000);
+      props.navigation.navigate("selectSemister");
     } catch (err) {
       setisLoading(false);
       Alert.alert("Error!", err.message);
@@ -113,15 +131,6 @@ export default function Attendence(props) {
         props.navigation.navigate("Login");
       }
     }
-
-    let toast = Toast.show("Attendence updated!", {
-      duration: Toast.durations.LONG,
-    });
-
-    setTimeout(function hideToast() {
-      Toast.hide(toast);
-    }, 2000);
-    props.navigation.navigate("selectSemister");
   };
 
   return (
