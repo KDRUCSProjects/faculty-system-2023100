@@ -1,263 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="fonts/icofont/icofont.min.css" />
+    <link rel="stylesheet" href="css/contact.css" />
     <title>Document</title>
-    <style>
-        .container{
-            display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-        }
-        .users-alt{
-            background-color:rgb(199, 139, 255);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            padding: 20px;
-        }
-        .users-alt img{
-            margin: auto;
-            height: 100%;
-            width: 100%;
-        }
-        .title{
-            width: 100%;
-        }
-        .title center h1{
-            font-size: 3rem;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-        }
-        .title center p{
-            font-family: Arial;
-            color: rgb(93, 93, 93);
-            width: 60%;
-        }
-        .team-tabs{
-            width: 100%;
-            
-        }
-        .team-tabs .tabs{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-
-        }
-        .team-tabs .tabs .tab{
-            width: auto;
-            padding: 20px 50px;
-            color: rgb(155, 49, 255) ;
-            background-color: rgb(232, 207, 255);
-            margin: 5px;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-            text-align: center;
-        }
-        .team-card{
-            width: 100%;
-        }
-        .team-card .cards{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .team-card .cards .card{
-            width: 300px;
-            height: 300px;
-            background-color: aliceblue;
-            border-radius: 10px;
-            margin-top: 150px;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            align-content: flex-start;
-            margin-left: 40px;
-            box-shadow: 0px 10px 20px 0px rgb(237, 237, 237);
-
-        }
-        .team-card .cards .card .avatar img{
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 10px solid rgb(234, 253, 255);
-            box-shadow: 0px 5px 10px 0px rgb(223, 223, 223);
-        }
-        .team-card .cards .card .avatar{
-            margin-top: -50px;
-            height: fit-content;
-            border-radius: 50px;
-        }
-        .name {
-            width: 100%;
-        }
-        .position{
-            width: 100%;
-        }
-        .name h3{
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-        .postion p{
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-    </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="users-alt">
-            <img src="image/users-alt.png" height="30" width="30">
+      <div class="users-alt">
+        <i class="icofont-users"></i>
+      </div>
+      <div class="title">
+        <center><h1>Our Team</h1></center>
+        <center>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Hic
+            eveniet error amet minima pariatur dignissimos odit, laudantium, non
+            iusto rerum.
+          </p>
+        </center>
+      </div>
+      <div class="team-tabs">
+        <div class="tabs">
+          <div class="tab">Forntend</div>
+          <div class="tab">Backend</div>
+          <div class="tab">Mobile</div>
+          <div class="tab">Testers</div>
         </div>
-        <div class="title">
-            <center><h1>Our Team</h1></center>
-            <center><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Hic eveniet error amet minima pariatur dignissimos odit, laudantium, non iusto rerum reprehenderit qui at neque deserunt perferendis nobis vitae a autem!</p></center>
-        </div>
-        <div class="team-tabs">
-            <div class="tabs">
-                <div class="tab">All</div>
-                <div class="tab">Marketing</div>
-                <div class="tab">Sales</div>
+      </div>
+      <div class="team-card">
+        <div class="cards">
+          <div class="card">
+            <div class="avatar">
+              <img src="image/aa.jpg" alt="" />
             </div>
-        </div>
-        <div class="team-card">
-            <div class="cards">
-                <div class="card">
-                    <div class="avatar">
-                        <img src="image/boy-avatar.png" alt="">
-                    </div>
-                    <div class="name">
-                        <center>
-                            <h3>
-                                Khan Jan
-                            </h3>
-                        </center>
-                    </div>
-                    <div class="position">
-                        <center>
-                            <p>Search Engines</p>
-                        </center>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="avatar">
-                        <img src="image/boy-avatar.png" alt="">
-                    </div>
-                    <div class="name">
-                        <center>
-                            <h3>
-                                Khan Jan
-                            </h3>
-                        </center>
-                    </div>
-                    <div class="position">
-                        <center>
-                            <p>Search Engines</p>
-                        </center>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="avatar">
-                        <img src="image/boy-avatar.png" alt="">
-                    </div>
-                    <div class="name">
-                        <center>
-                            <h3>
-                                Khan Jan
-                            </h3>
-                        </center>
-                    </div>
-                    <div class="position">
-                        <center>
-                            <p>Search Engines</p>
-                        </center>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="avatar">
-                        <img src="image/boy-avatar.png" alt="">
-                    </div>
-                    <div class="name">
-                        <center>
-                            <h3>
-                                Khan Jan
-                            </h3>
-                        </center>
-                    </div>
-                    <div class="position">
-                        <center>
-                            <p>Search Engines</p>
-                        </center>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="avatar">
-                        <img src="image/boy-avatar.png" alt="">
-                    </div>
-                    <div class="name">
-                        <center>
-                            <h3>
-                                Khan Jan
-                            </h3>
-                        </center>
-                    </div>
-                    <div class="position">
-                        <center>
-                            <p>Search Engines</p>
-                        </center>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="avatar">
-                        <img src="image/boy-avatar.png" alt="">
-                    </div>
-                    <div class="name">
-                        <center>
-                            <h3>
-                                Khan Jan
-                            </h3>
-                        </center>
-                    </div>
-                    <div class="position">
-                        <center>
-                            <p>Search Engines</p>
-                        </center>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="avatar">
-                        <img src="image/boy-avatar.png" alt="">
-                    </div>
-                    <div class="name">
-                        <center>
-                            <h3>
-                                Khan Jan
-                            </h3>
-                        </center>
-                    </div>
-                    <div class="position">
-                        <center>
-                            <p>Search Engines</p>
-                        </center>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="avatar">
-                        <img src="image/boy-avatar.png" alt="">
-                    </div>
-                    <div class="name">
-                        <center>
-                            <h3>
-                                Khan Jan
-                            </h3>
-                        </center>
-                    </div>
-                    <div class="position">
-                        <center>
-                            <p>Search Engines</p>
-                        </center>
-                    </div>
-                </div>
-                
+            <div class="name">
+              <h3>Mohammad Agha</h3>
             </div>
+            <div class="position">
+              <p>Frontend Web Developer</p>
+            </div>
+            <div class="card-icon-div">
+              <i class="icofont-facebook"></i>
+              <i class="icofont-github"></i>
+              <i class="icofont-linkedin"></i>
+            </div>
+          </div>
+          <div class="card">
+            <div class="avatar">
+              <img src="image/boy-avatar.png" alt="" />
+            </div>
+            <div class="name">
+              <h3>Khan Jan</h3>
+            </div>
+            <div class="position">
+              <p>Search Engines</p>
+            </div>
+            <div class="card-icon-div">
+              <i class="icofont-facebook"></i>
+              <i class="icofont-github"></i>
+              <i class="icofont-linkedin"></i>
+            </div>
+          </div>
+          <div class="card">
+            <div class="avatar">
+              <img src="image/boy-avatar.png" alt="" />
+            </div>
+            <div class="name">
+              <h3>Khan Jan</h3>
+            </div>
+            <div class="position">
+              <p>Search Engines</p>
+            </div>
+            <div class="card-icon-div">
+              <i class="icofont-facebook"></i>
+              <i class="icofont-github"></i>
+              <i class="icofont-linkedin"></i>
+            </div>
+          </div>
+          <div class="card">
+            <div class="avatar">
+              <img src="image/boy-avatar.png" alt="" />
+            </div>
+            <div class="name">
+              <h3>Khan Jan</h3>
+            </div>
+            <div class="position">
+              <p>Search Engines</p>
+            </div>
+            <div class="card-icon-div">
+              <i class="icofont-facebook"></i>
+              <i class="icofont-github"></i>
+              <i class="icofont-linkedin"></i>
+            </div>
+          </div>
+          <div class="card">
+            <div class="avatar">
+              <img src="image/boy-avatar.png" alt="" />
+            </div>
+            <div class="name">
+              <h3>Khan Jan</h3>
+            </div>
+            <div class="position">
+              <p>Search Engines</p>
+            </div>
+            <div class="card-icon-div">
+              <i class="icofont-facebook"></i>
+              <i class="icofont-github"></i>
+              <i class="icofont-linkedin"></i>
+            </div>
+          </div>
+          <div class="card">
+            <div class="avatar">
+              <img src="image/boy-avatar.png" alt="" />
+            </div>
+            <div class="name">
+              <h3>Khan Jan</h3>
+            </div>
+            <div class="position">
+              <p>Search Engines</p>
+            </div>
+            <div class="card-icon-div">
+              <i class="icofont-facebook"></i>
+              <i class="icofont-github"></i>
+              <i class="icofont-linkedin"></i>
+            </div>
+          </div>
+          <div class="card">
+            <div class="avatar">
+              <img src="image/boy-avatar.png" alt="" />
+            </div>
+            <div class="name">
+              <h3>Khan Jan</h3>
+            </div>
+            <div class="position">
+              <p>Search Engines</p>
+            </div>
+            <div class="card-icon-div">
+              <i class="icofont-facebook"></i>
+              <i class="icofont-github"></i>
+              <i class="icofont-linkedin"></i>
+            </div>
+          </div>
+          <div class="card">
+            <div class="avatar">
+              <img src="image/boy-avatar.png" alt="" />
+            </div>
+            <div class="name">
+              <h3>Khan Jan</h3>
+            </div>
+            <div class="position">
+              <p>Search Engines</p>
+            </div>
+            <div class="card-icon-div">
+              <i class="icofont-facebook"></i>
+              <i class="icofont-github"></i>
+              <i class="icofont-linkedin"></i>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>
