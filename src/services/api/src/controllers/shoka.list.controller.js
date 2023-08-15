@@ -35,7 +35,11 @@ const createShokaList = catchAsync(async (req, res) => {
   if (!shoka) throw new ApiError(httpStatus.NOT_FOUND, 'shoka not found');
   const semester = await semesterService.findSemesterById(subject.semesterId);
   const isStudentListed = await studentListService.findListedStudentByStudentId(studentId);
-  if (isStudentListed.length === 0 || (isStudentListed.length >= 1 && !(semester.id === isStudentListed[0]?.semesterId))) {
+  // if (isStudentListed.length === 0 || (isStudentListed.length >= 1 && !(semester.id === isStudentListed[0]?.semesterId))) {
+  //   throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student does not exists in this semester');
+  // }
+
+  if (isStudentListed.length === 0) {
     throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student does not exists in this semester');
   }
   if (!req.query.chance) {
