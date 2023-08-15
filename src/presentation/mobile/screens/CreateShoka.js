@@ -38,7 +38,9 @@ export default function CreateShoka(props) {
   // d();
   const subjectIdParam = props.route.params.subjectId;
   const status = props.route.params.status;
+  const studentIdParam = props.route.params.studentId;
 
+  console.log(studentIdParam);
   const [isGetStudentLoading, setisGetStudentLoading] = useState(false);
 
   const students = useSelector((state) => state.studentsBySubject.students);
@@ -79,18 +81,18 @@ export default function CreateShoka(props) {
   const onSave = async () => {
     const numRegEx = /\b([0-9]|[1-9][0-9]|100)\b/;
 
-    if (!selectedStudent) {
-      setselectedStudentErr("a Student should be selected!");
-      return;
-    }
+    // if (!selectedStudent) {
+    //   setselectedStudentErr("a Student should be selected!");
+    //   return;
+    // }
 
     if (ProjectMarks == "") {
       setProjectMarksError("This field is required!");
       return;
     }
 
-    if (parseInt(ProjectMarks) > 20) {
-      setProjectMarksError("ProjectMarks marks should be between 0-20");
+    if (parseInt(ProjectMarks) > 10) {
+      setProjectMarksError("ProjectMarks marks should be between 0-10");
       return;
     }
 
@@ -98,8 +100,8 @@ export default function CreateShoka(props) {
       setassignmentsError("This field is required!");
       return;
     }
-    if (parseInt(assignments) > 20) {
-      setassignmentsError("Assignments marks should be between 0-20");
+    if (parseInt(assignments) > 10) {
+      setassignmentsError("Assignments marks should be between 0-10");
       return;
     }
     if (finals == "") {
@@ -115,8 +117,8 @@ export default function CreateShoka(props) {
       setpracticalMarksErr("This field is required!");
       return;
     }
-    if (parseInt(practicalMarks) > 60) {
-      setpracticalMarksErr("practical marks should be between 0-60");
+    if (parseInt(practicalMarks) > 20) {
+      setpracticalMarksErr("practical marks should be between 0-20");
       return;
     }
     if (
@@ -134,7 +136,7 @@ export default function CreateShoka(props) {
       await dispatch(
         createShoka(
           subjectIdParam,
-          selectedStudent,
+          studentIdParam,
           ProjectMarks,
           assignments,
           finals,
@@ -142,6 +144,15 @@ export default function CreateShoka(props) {
           status
         )
       );
+      setisLoading(false);
+      let toast = Toast.show("Shoka Created!", {
+        duration: Toast.durations.LONG,
+      });
+
+      setTimeout(function hideToast() {
+        Toast.hide(toast);
+      }, 2000);
+      props.navigation.goBack();
     } catch (e) {
       setisLoading(false);
       if (e.code == 401) {
@@ -162,14 +173,6 @@ export default function CreateShoka(props) {
     setProjectMarks(null);
     setassignments(null);
     setfinals(null);
-    let toast = Toast.show("Shoka Created!", {
-      duration: Toast.durations.LONG,
-    });
-
-    setTimeout(function hideToast() {
-      Toast.hide(toast);
-    }, 2000);
-    props.navigation.goBack();
   };
   const [expanded, setExpanded] = useState(true);
 
@@ -221,6 +224,7 @@ export default function CreateShoka(props) {
               flexGrow: 1,
             }}
             ref={ref}
+            showsVerticalScrollIndicator={false}
           >
             <View
               style={{
@@ -237,7 +241,7 @@ export default function CreateShoka(props) {
                   alignItems: "center",
                 }}
               >
-                <View
+                {/* <View
                   style={{
                     width: "90%",
                     height: 90,
@@ -300,7 +304,7 @@ export default function CreateShoka(props) {
                       <View></View>
                     )}
                   </View>
-                </View>
+                </View> */}
 
                 <View
                   style={{
@@ -372,9 +376,7 @@ export default function CreateShoka(props) {
                       justifyContent: "center",
                     }}
                   >
-                    <Text style={{ fontSize: 17 }}>
-                      Assignments & Project Marks
-                    </Text>
+                    <Text style={{ fontSize: 17 }}>Assignments Marks</Text>
                   </View>
 
                   <View
@@ -386,7 +388,7 @@ export default function CreateShoka(props) {
                   >
                     <TextInput
                       style={{ height: 50 }}
-                      label={"A & P Marks"}
+                      label={"Assignments Marks"}
                       mode="outlined"
                       textColor="black"
                       outlineColor="black"

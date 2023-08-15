@@ -85,21 +85,19 @@ export default function AccountInfo(props) {
       const getFileSize = async (uri) => {
         let fileInfo = await FileSystem.getInfoAsync(uri);
         console.log(fileInfo);
-        if (fileInfo.size / 1024 / 1024 > 2097152) {
+        if (parseInt(fileInfo.size) > 2097152) {
+          Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
           return false;
         } else {
+          setimgEditedName(image.uri.split("/").pop());
+          console.log(imgEditedName);
+          setimgEdited(image.uri);
           return true;
         }
       };
       if (!getFileSize(image.uri)) {
-        Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
-
         return;
       }
-
-      setimgEditedName(image.uri.split("/").pop());
-      console.log(imgEditedName);
-      setimgEdited(image.uri);
     }
     setVisible(false);
   };
@@ -119,20 +117,20 @@ export default function AccountInfo(props) {
       const getFileSize = async (uri) => {
         let fileInfo = await FileSystem.getInfoAsync(uri);
         console.log(fileInfo);
-        if (fileInfo.size > 2097152) {
+        if (parseInt(fileInfo.size) > 2097152) {
+          Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
+
           return false;
         } else {
+          setimgEditedName(image.uri.split("/").pop());
+          console.log(imgEditedName);
+          setimgEdited(image.uri);
           return true;
         }
       };
       if (!getFileSize(image.uri)) {
-        Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
-
         return;
       }
-      setimgEditedName(image.uri.split("/").pop());
-      console.log(imgEditedName);
-      setimgEdited(image.uri);
     }
     setVisible(false);
   };
@@ -155,6 +153,14 @@ export default function AccountInfo(props) {
         await dispatch(updateAccount(userName, lastName, email));
       }
       setisLoading(false);
+      let toast = Toast.show("Account updated!", {
+        duration: Toast.durations.LONG,
+      });
+
+      setTimeout(function hideToast() {
+        Toast.hide(toast);
+      }, 2000);
+      props.navigation.goBack();
     } catch (e) {
       setisLoading(false);
       console.log(e);
@@ -165,15 +171,8 @@ export default function AccountInfo(props) {
         // updates.reloadAsync();
       }
       Alert.alert("Sorry!", e.message);
+      return;
     }
-    let toast = Toast.show("Account updated!", {
-      duration: Toast.durations.LONG,
-    });
-
-    setTimeout(function hideToast() {
-      Toast.hide(toast);
-    }, 2000);
-    props.navigation.goBack();
   };
 
   const headerHeight = useHeaderHeight();
@@ -219,6 +218,7 @@ export default function AccountInfo(props) {
             contentContainerStyle={{
               flexGrow: 1,
             }}
+            showsVerticalScrollIndicator={false}
           >
             <View
               style={{
