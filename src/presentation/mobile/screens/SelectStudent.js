@@ -21,17 +21,34 @@ export default function SelectStudent(props) {
   const students = useSelector((state) => state.studentsBySubject.students);
   const [selectedStudent, setselectedStudent] = useState(null);
   const [selectedStudentErr, setselectedStudentErr] = useState(false);
+  const [updated, setupdated] = useState(false);
 
   const onSelectStudent = () => {
     if (!selectedStudent) {
       setselectedStudentErr("A Student should be selected!");
       return;
     }
-    props.navigation.navigate("CreateShoka", {
-      subjectId: subjectIdParam,
-      status: status,
-      studentId: selectedStudent,
-    });
+    const student = students.filter(
+      (student) => student.studentId == selectedStudent
+    );
+
+    if (student[0].shokaList) {
+      setupdated(student.studentId);
+      props.navigation.navigate("CreateShoka", {
+        subjectId: subjectIdParam,
+        status: status,
+        studentId: selectedStudent,
+        update: true,
+      });
+    } else {
+      props.navigation.navigate("CreateShoka", {
+        subjectId: subjectIdParam,
+        status: status,
+        studentId: selectedStudent,
+        update: false,
+      });
+    }
+    setselectedStudent(null);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -79,10 +96,10 @@ export default function SelectStudent(props) {
               <SelectStudentItem
                 key={student.studentId}
                 onPress={() => {
-                  console.log(student.studentId);
                   setselectedStudentErr(false);
                   setselectedStudent(student.studentId);
                 }}
+                updated={student.shokaList}
                 selected={selectedStudent}
                 studentId={student.studentId}
                 studentName={student.studentName}

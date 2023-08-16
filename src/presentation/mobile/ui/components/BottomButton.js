@@ -22,7 +22,9 @@ const BottomButton = (props) => {
       }}
       onPress={props.onPress}
     >
-      <Text style={{ fontSize: 18, color: "white" }}>Select</Text>
+      <Text style={{ fontSize: 18, color: "white" }}>
+        {props.text ? props.text : "Select"}
+      </Text>
     </TouchableOpacity>
   );
 };

@@ -56,7 +56,7 @@ export default function SelectSubject(props) {
     } catch (error) {
       setisLoading(false);
       //props.navigation.navigate("selectType", { subjectId: selected });
-      Alert.alert("Error", error.message);
+      Alert.alert("Error!", error.message);
       if (error.code == 401) {
         // props.navigation.replace("Login");
         await dispatch(logout());
@@ -114,19 +114,7 @@ export default function SelectSubject(props) {
             onLeft={() => props.navigation.goBack()}
           ></Header>
 
-          <Text
-            style={{
-              marginTop: 25,
-              color: colors.primary,
-              fontSize: 21,
-              margin: 10,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            Select your subject
-          </Text>
-          <View style={{ height: "80%" }}>
+          <View style={{ height: "90%" }}>
             <ScrollView
               contentContainerStyle={{
                 flexGrow: 1,
@@ -137,15 +125,29 @@ export default function SelectSubject(props) {
               }}
               style={{}}
             >
-              {subjects?.map((subject, index) => (
-                <SelectSubjectItem
-                  key={subject.subjectId}
-                  onClick={onclick}
-                  selected={selected == subject.subjectId ? true : false}
-                  subjectId={subject.subjectId}
-                  subject={subject.subjectName}
-                ></SelectSubjectItem>
-              ))}
+              {subjects ? (
+                subjects.map((subject, index) => (
+                  <SelectSubjectItem
+                    key={subject.subjectId}
+                    onClick={onclick}
+                    selected={selected == subject.subjectId ? true : false}
+                    subjectId={subject.subjectId}
+                    subject={subject.subjectName}
+                  ></SelectSubjectItem>
+                ))
+              ) : (
+                <Text
+                  style={{
+                    color: colors.primary,
+                    fontSize: 21,
+
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  }}
+                >
+                  You haven't got any Subjects in this Semester
+                </Text>
+              )}
 
               <Modal
                 visible={isLoading}

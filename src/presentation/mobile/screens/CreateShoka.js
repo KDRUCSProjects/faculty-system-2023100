@@ -24,6 +24,7 @@ import {
   getStudentBySubject,
   logout,
   updateAccount,
+  updateShoka,
 } from "../store/actions/actions";
 import Toast from "react-native-root-toast";
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
@@ -41,11 +42,11 @@ export default function CreateShoka(props) {
   const subjectIdParam = props.route.params.subjectId;
   const status = props.route.params.status;
   const studentIdParam = props.route.params.studentId;
-
-  console.log(studentIdParam);
-  const [isGetStudentLoading, setisGetStudentLoading] = useState(false);
-
+  const updateParam = props.route.params.update;
   const students = useSelector((state) => state.studentsBySubject.students);
+  let student;
+
+  const [isGetStudentLoading, setisGetStudentLoading] = useState(false);
 
   const subjects = useSelector((state) => state.MainReducer.subjects);
   const ref = useRef();
@@ -73,12 +74,29 @@ export default function CreateShoka(props) {
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedStudentIndex, setselectedStudentIndex] = useState(null);
+  const [shokaList, setshokaList] = useState(null);
 
   const [isLoading, setisLoading] = useState(false);
 
   // useEffect(() => {
   //   ref.current.scrollToEnd();
   // }, [marksError]);
+
+  console.log(updateParam);
+  useEffect(() => {
+    if (updateParam) {
+      student = students.filter(
+        (student) => student.studentId == studentIdParam
+      );
+
+      setshokaList(student[0].shokaList);
+
+      setProjectMarks(student[0].projectMarks.toString());
+      setassignments(student[0].assignment.toString());
+      setpracticalMarks(student[0].practicalWork.toString());
+      setfinals(student[0].finalMarks.toString());
+    }
+  }, [subjectId]);
 
   const onSave = async () => {
     const numRegEx = /\b([0-9]|[1-9][0-9]|100)\b/;
@@ -133,28 +151,43 @@ export default function CreateShoka(props) {
       setmarksError("Whole marks shouldn't be greater than 100");
       return;
     }
+
+    console.log("shoka " + shokaList);
+
     try {
       setisLoading(true);
-      await dispatch(
-        createShoka(
-          subjectIdParam,
-          studentIdParam,
-          ProjectMarks,
-          assignments,
-          finals,
-          practicalMarks,
-          status
-        )
-      );
+      if (updateParam) {
+        await dispatch(
+          updateShoka(
+            shokaList,
+            ProjectMarks,
+            assignments,
+            finals,
+            practicalMarks
+          )
+        );
+      } else {
+        await dispatch(
+          createShoka(
+            subjectIdParam,
+            studentIdParam,
+            ProjectMarks,
+            assignments,
+            finals,
+            practicalMarks,
+            status
+          )
+        );
+      }
       setisLoading(false);
-      let toast = Toast.show("Shoka Created!", {
+      let toast = Toast.show(shokaList ? "Shoka Updated" : "Shoka Created!", {
         duration: Toast.durations.LONG,
       });
 
       setTimeout(function hideToast() {
         Toast.hide(toast);
       }, 2000);
-      props.navigation.goBack();
+      props.navigation.navigate("selectSemister");
     } catch (e) {
       setisLoading(false);
       if (e.code == 401) {
@@ -181,6 +214,7 @@ export default function CreateShoka(props) {
   const handlePress = () => setExpanded(!expanded);
 
   const headerHeight = useHeaderHeight();
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -587,7 +621,7 @@ export default function CreateShoka(props) {
 
           <BottomButton
             onPress={() =>
-              Alert.alert("Save?", "Do you want save?", [
+              Alert.alert("Submit?", "Do you want submit this Shoka?", [
                 {
                   text: "No",
                   onPress: () => {
@@ -600,6 +634,7 @@ export default function CreateShoka(props) {
                 },
               ])
             }
+            text={updateParam ? "Update" : "Save"}
           ></BottomButton>
         </View>
       </KeyboardAvoidingView>
