@@ -140,7 +140,7 @@ export default function SelectSubject(props) {
                   style={{
                     color: colors.primary,
                     fontSize: 21,
-
+                    margin: 20,
                     fontWeight: "bold",
                     textAlign: "center",
                   }}
