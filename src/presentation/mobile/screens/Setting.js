@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import BackHandlerParent from "../optimization/BackHanlderParent";
 import Header from "../ui/components/Header";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function Setting(props) {
   BackHandlerParent();
@@ -117,8 +118,8 @@ export default function Setting(props) {
                 alignItems: "center",
               }}
             >
-              <MaterialCommunityIcons
-                name="greater-than"
+              <FontAwesome5
+                name="angle-right"
                 size={40}
                 color={colors.primary}
               />
@@ -173,8 +174,8 @@ export default function Setting(props) {
                 alignItems: "center",
               }}
             >
-              <MaterialCommunityIcons
-                name="greater-than"
+              <FontAwesome5
+                name="angle-right"
                 size={40}
                 color={colors.primary}
               />
