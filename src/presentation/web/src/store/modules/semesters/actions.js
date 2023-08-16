@@ -131,4 +131,20 @@ export default {
       throw e.response.data.message;
     }
   },
+  async downloadBadlAsha(context, { year, classTitle }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios.get(`/api/badliAsha?year=${year}&classTitle=${classTitle}`, {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
 };
