@@ -97,6 +97,9 @@ export default {
       type: String,
       default: 'flat',
     },
+    maxValue: {
+      type: Number,
+    },
   },
   data: () => initialState(),
   computed: {
@@ -109,6 +112,13 @@ export default {
       this.field = photo;
     },
     update() {
+      // Validate values
+      if (this.maxValue) {
+        if (this.field > this.maxValue) {
+          return this.$store.commit('setToast', [0, `Maximum ${this.maxValue} value is allowed`], { root: true });
+        }
+      }
+
       const data = {
         field: this.fieldName,
         fieldValue: this.field,
