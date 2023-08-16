@@ -23,6 +23,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import BackHandlerChild from "../optimization/BackHandlerChild";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
+import Header from "../ui/components/Header";
+import { Ionicons } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("window");
 
 export default function SelectType(props) {
@@ -71,7 +73,7 @@ export default function SelectType(props) {
             width: "100%",
           }}
         >
-          <View
+          {/* <View
             style={{
               height: 60,
               marginTop: Platform.OS == "android" ? "7%" : 0,
@@ -94,7 +96,12 @@ export default function SelectType(props) {
                 FCS for University
               </Text>
             </View>
-          </View>
+          </View> */}
+          <Header
+            leftIcon="back"
+            onLeft={() => props.navigation.goBack()}
+          ></Header>
+
           <Text
             style={{
               fontSize: 28,
@@ -144,10 +151,10 @@ export default function SelectType(props) {
                     alignItems: "center",
                   }}
                 >
-                  <MaterialCommunityIcons
-                    name="sticker-check-outline"
+                  <Ionicons
+                    name="md-checkmark-circle"
                     size={80}
-                    color="black"
+                    color={colors.primary}
                   />
                 </View>
               </Card>
@@ -176,10 +183,10 @@ export default function SelectType(props) {
                     alignItems: "center",
                   }}
                 >
-                  <MaterialCommunityIcons
-                    name="sticker-check-outline"
+                  <Ionicons
+                    name="md-checkmark-circle"
                     size={80}
-                    color="black"
+                    color={colors.primary}
                   />
                 </View>
               </Card>
@@ -209,151 +216,14 @@ export default function SelectType(props) {
                   alignItems: "center",
                 }}
               >
-                <FontAwesome5
-                  name="check-double"
-                  size={70}
-                  color="black"
+                <Ionicons
+                  name="md-checkmark-done-circle"
+                  size={80}
+                  color={colors.primary}
                 />
               </View>
             </Card>
-            {/*           
-            <View
-              style={{
-                width: "80%",
-                height: "10%",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  width: "80%",
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                }}
-              >
-                <Text
-                  style={{
-                    verticalAlign: "middle",
-                    fontSize: 25,
-                    fontWeight: "bold",
-                    fontStyle: "italic",
-                  }}
-                >
-                  First
-                </Text>
-              </View>
-              <View style={{ width: "20%" }}>
-                <Switch
-                  style={{
-                    transform: [{ scaleX: 1.8 }, { scaleY: 1.4 }],
-                    width: 50,
-                  }}
-                  tintColor={colors.primary}
-                  trackColor={colors.primary}
-                  value={isOne}
-                  onValueChange={() => {
-                    setisError(false);
-                    setisOne(!isOne);
-                    setisTwo(false);
-                    setisBoth(false);
-                  }}
-                />
-              </View>
-            </View>
 
-            <View
-              style={{
-                width: "80%",
-                height: "10%",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  width: "80%",
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                }}
-              >
-                <Text
-                  style={{
-                    verticalAlign: "middle",
-                    fontSize: 25,
-                    fontWeight: "bold",
-                    fontStyle: "italic",
-                  }}
-                >
-                  Second
-                </Text>
-              </View>
-              <View style={{ width: "20%" }}>
-                <Switch
-                  style={{
-                    transform: [{ scaleX: 1.8 }, { scaleY: 1.4 }],
-                    width: 50,
-                  }}
-                  tintColor={colors.primary}
-                  trackColor={colors.primary}
-                  value={isTwo}
-                  onValueChange={() => {
-                    setisError(false);
-                    setisOne(false);
-                    setisTwo(!isTwo);
-                    setisBoth(false);
-                  }}
-                />
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: "80%",
-                height: "10%",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  width: "80%",
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                }}
-              >
-                <Text
-                  style={{
-                    verticalAlign: "middle",
-                    fontSize: 25,
-                    fontWeight: "bold",
-                    fontStyle: "italic",
-                  }}
-                >
-                  Both
-                </Text>
-              </View>
-              <View style={{ width: "20%" }}>
-                <Switch
-                  style={{
-                    transform: [{ scaleX: 1.8 }, { scaleY: 1.4 }],
-                    width: 50,
-                  }}
-                  tintColor={colors.primary}
-                  trackColor={colors.primary}
-                  value={isBoth}
-                  onValueChange={() => {
-                    setisError(false);
-                    setisOne(false);
-                    setisTwo(false);
-                    setisBoth(!isBoth);
-                  }}
-                />
-              </View>
-            {/* </View> */}
             {isError ? (
               <Text style={{ height: 30, fontSize: 18, color: "red" }}>
                 One option Should be selected!

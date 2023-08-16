@@ -1,6 +1,6 @@
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { Avatar, Button, Card, Text } from "react-native-paper";
+import { Avatar, Button, Card } from "react-native-paper";
 import { useState } from "react";
 import colors from "../constants/colors";
 import { FontAwesome5 } from "@expo/vector-icons";
