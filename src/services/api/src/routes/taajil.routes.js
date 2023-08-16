@@ -136,6 +136,10 @@ module.exports = router;
  *               attachment:
  *                 type: string
  *                 format: binary
+ *               type:
+ *                 type: string
+ *                 enum: [taajil, special_taajil]
+ *                 required: true
  *     responses:
  *       "201":
  *         description: Created

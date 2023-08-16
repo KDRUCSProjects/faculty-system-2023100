@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { shokaListService, educationalYearService, studentListService, semesterService } = require('../services');
+const { shokaListService, educationalYearService, studentListService, semesterService, subjectService } = require('../services');
 const ApiError = require('../utils/ApiError');
 const { marksFormatter } = require('../utils/marks.formatter');
 const Excel = require('exceljs');
@@ -58,6 +58,16 @@ const createBadliAshaFile = catchAsync(async (req, res) => {
   if (semOneStudents.length <= 0 && semTwoStudents.length <= 0) {
     throw new ApiError(httpStatus.BAD_REQUEST, `You don't have any student in ${semTitleOne} and ${semTitleTwo} semesters`);
   }
+
+  // find semester one and two subjects 
+  const semesterOneSubjects = await subjectService.getSemesterSubjects(semesterOne.id);
+  const semesterTwoSubjects = await subjectService.getSemesterSubjects(semesterTwo.id);
+
+  let semesterOneTotalCredits = 0;
+  let semesterTwoTotalCredits = 0;
+
+  semesterOneSubjects.forEach(element => semesterOneTotalCredits += element.credit);
+  semesterTwoSubjects.forEach(element => semesterTwoTotalCredits += element.credit);
 
   const students = [];
   semOneStudents.forEach(element => {
@@ -146,15 +156,17 @@ const createBadliAshaFile = catchAsync(async (req, res) => {
     };
     const formattedResult = marksFormatter(studentMarks);
     if (formattedResult.length >= 1) {
-      const secondLastElement = formattedResult[formattedResult.length - 2];
-      const thirdLastElement = formattedResult[formattedResult.length - 3];
+      const semesterOneMarks = formattedResult.find(elem => elem?.semester === semesterOne.title);
+      const semesterTwoMarks = formattedResult.find(elem => elem?.semester === semesterTwo.title);
+      const semesterOnePercentage = (semesterOneMarks?.semesterMarks / semesterOneTotalCredits);
+      const semesterTwoPercentage = (semesterTwoMarks?.semesterMarks / semesterOneTotalCredits);
       resultArray.push({
         fullName: std.fullName,
         fatherName: std.fatherName,
         province: std.province,
         accountNumber: std.accountNumber,
-        semOne: secondLastElement?.percentage || 0,
-        semTwo: thirdLastElement?.percentage || 0
+        semOne: semesterOnePercentage || 0,
+        semTwo: semesterTwoPercentage || 0
       });
     };
   };
@@ -178,7 +190,7 @@ const createBadliAshaFile = catchAsync(async (req, res) => {
   for (let i = 0; i < resultArray.length; i++) {
     const element = resultArray[i];
     const { fullName, fatherName, accountNumber, province, semOne, semTwo } = element;
-    if ((semOne + semTwo) < 65) {
+    if (((semOne + semTwo) / 2) < 65) {
       continue;
     }
     ++row;

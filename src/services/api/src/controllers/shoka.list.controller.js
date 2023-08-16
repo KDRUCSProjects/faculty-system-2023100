@@ -118,6 +118,9 @@ const getShokaList = catchAsync(async (req, res) => {
             studentId: element.Student.id,
             fullName: element.Student.fullName,
             fatherName: element.Student.fatherName,
+            kankorId: element.Student.kankorId,
+            grandFatherName: element.Student.grandFatherName,
+            photo: element.Student.photo,
           });
         }
       });
@@ -139,6 +142,9 @@ const getShokaList = catchAsync(async (req, res) => {
                 studentId: element.Student.id,
                 fullName: element.Student.fullName,
                 fatherName: element.Student.fatherName,
+                kankorId: element.Student.kankorId,
+                grandFatherName: element.Student.grandFatherName,
+                photo: element.Student.photo,
               });
             }
           }
@@ -147,6 +153,9 @@ const getShokaList = catchAsync(async (req, res) => {
             studentId: element.Student.id,
             fullName: element.Student.fullName,
             fatherName: element.Student.fatherName,
+            kankorId: element.Student.kankorId,
+            grandFatherName: element.Student.grandFatherName,
+            photo: element.Student.photo,
           });
         }
       });
@@ -178,6 +187,9 @@ const getShokaList = catchAsync(async (req, res) => {
                     studentId: element.Student.id,
                     fullName: element.Student.fullName,
                     fatherName: element.Student.fatherName,
+                    kankorId: element.Student.kankorId,
+                    grandFatherName: element.Student.grandFatherName,
+                    photo: element.Student.photo,
                   });
                 }
               } else {
@@ -188,6 +200,9 @@ const getShokaList = catchAsync(async (req, res) => {
                 studentId: element.Student.id,
                 fullName: element.Student.fullName,
                 fatherName: element.Student.fatherName,
+                kankorId: element.Student.kankorId,
+                grandFatherName: element.Student.grandFatherName,
+                photo: element.Student.photo,
               });
             }
           } else {
@@ -202,6 +217,9 @@ const getShokaList = catchAsync(async (req, res) => {
                 studentId: element.Student.id,
                 fullName: element.Student.fullName,
                 fatherName: element.Student.fatherName,
+                kankorId: element.Student.kankorId,
+                grandFatherName: element.Student.grandFatherName,
+                photo: element.Student.photo,
               });
             } else {
               // do nothing
@@ -211,6 +229,9 @@ const getShokaList = catchAsync(async (req, res) => {
               studentId: element.Student.id,
               fullName: element.Student.fullName,
               fatherName: element.Student.fatherName,
+              kankorId: element.Student.kankorId,
+              grandFatherName: element.Student.grandFatherName,
+              photo: element.Student.photo,
             });
           }
         }

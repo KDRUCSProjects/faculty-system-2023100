@@ -11,7 +11,17 @@ const createSubject = {
 
 const getSubject = {
   params: Joi.object().keys({
-    subjectId: Joi.number().required(),
+    subjectId: Joi.number().positive().integer().required(),
+  }),
+};
+
+const createReport = {
+  params: Joi.object().keys({
+    subjectId: Joi.number().positive().integer().required(),
+  }),
+  query: Joi.object().keys({
+    startDate: Joi.date().iso().required(),
+    endDate: Joi.date().iso().required(),
   }),
 };
 
@@ -27,13 +37,13 @@ const getTeacherSubjects = {
 
 const getSemesterStudents = {
   params: Joi.object().keys({
-    subjectId: Joi.number().required(),
+    subjectId: Joi.number().positive().integer().required(),
   }),
 };
 
 const updatedSubject = {
   params: Joi.object().keys({
-    subjectId: Joi.number().required(),
+    subjectId: Joi.number().positive().integer().required(),
   }),
   body: Joi.object()
     .keys({
@@ -47,7 +57,7 @@ const updatedSubject = {
 
 const assignSubjectToTeacher = {
   body: Joi.object().keys({
-    subjectId: Joi.number().required(),
+    subjectId: Joi.number().positive().integer().required(),
     teacherId: Joi.number().required(),
   }),
 };
@@ -60,6 +70,7 @@ const getSubjects = {
 };
 
 module.exports = {
+  createReport,
   createSubject,
   getSubject,
   getSubjects,

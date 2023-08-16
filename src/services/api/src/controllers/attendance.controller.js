@@ -116,7 +116,8 @@ const getTodaysAttendance = catchAsync(async (req, res) => {
 const takeTodaysAttendance = catchAsync(async (req, res) => {
   // prevent attendance to be not taken on friday
   // const date = moment().format('YYYY-MM-DD');
-  const date = moment();
+  const computerDate = Date.now();
+  const date = moment(computerDate);
   const shamsiDate = moment(date).format('jYYYY-jMM-jDD HH:mm:ss');
   const day = moment().format('dddd');
   if (day === 'Friday' || day === 'friday') {
@@ -289,7 +290,8 @@ const takeTodaysAttendance = catchAsync(async (req, res) => {
 
 const takeOneStdAttendance = catchAsync(async (req, res) => {
   // const date = moment().format('YYYY-MM-DD');
-  const date = moment();
+  const computerDate = Date.now();
+  const date = moment(computerDate);
   const shamsiDate = moment(date).format('jYYYY-jMM-jDD HH:mm:ss');
 
   // prevent attendance to be not taken on friday
