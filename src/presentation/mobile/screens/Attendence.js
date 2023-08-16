@@ -39,6 +39,7 @@ import * as updates from "expo-updates";
 import BackHandlerChild from "../optimization/BackHandlerChild";
 import BackHandlerParent from "../optimization/BackHanlderParent";
 import { useEffect } from "react";
+import Header from "../ui/components/Header";
 
 export default function Attendence(props) {
   useEffect(() => {
@@ -142,7 +143,7 @@ export default function Attendence(props) {
           width: "100%",
         }}
       >
-        <View
+        {/* <View
           style={{
             width: "100%",
             height: 60,
@@ -214,7 +215,43 @@ export default function Attendence(props) {
               ></ImageBackground>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
+
+        <Header
+          leftIcon="back"
+          onLeft={() => {
+            Alert.alert(
+              "Attendence not saved!",
+              "Do You want Cancel Attendence?",
+              [
+                {
+                  text: "No",
+                  onPress: () => {
+                    return;
+                  },
+                },
+                {
+                  text: "Yes",
+                  onPress: () => props.navigation.goBack(),
+                },
+              ]
+            );
+          }}
+          onRight={() =>
+            Alert.alert("Save?", "Do you want save attendence?", [
+              {
+                text: "No",
+                onPress: () => {
+                  return;
+                },
+              },
+              {
+                text: "Yes",
+                onPress: onSaveAttendence,
+              },
+            ])
+          }
+        ></Header>
 
         <ScrollView
           horizontal={true}

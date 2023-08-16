@@ -83,7 +83,6 @@ const Navigation = (props) => {
         headerStyle: {
           backgroundColor: colors.secondry,
         },
-        headerTintColor: "white",
 
         transitionSpec: {
           open: {

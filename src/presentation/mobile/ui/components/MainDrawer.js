@@ -24,6 +24,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import * as updates from "expo-updates";
+import colors from "../../constants/colors";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 export default MainDrawer = (props) => {
   const teacherName = useSelector((state) => state.MainReducer.userName);
@@ -41,14 +44,21 @@ export default MainDrawer = (props) => {
     <Drawer
       header={() => (
         <View style={[props.style, styles.header]}>
-          <View>
+          <View
+            style={{
+              width: "85%",
+              height: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <View
               style={{
-                width: 100,
-                height: 100,
+                width: 120,
+                height: 120,
                 borderWidth: 1,
-                borderColor: "#a7e9eb",
-                borderRadius: 100 / 2,
+                borderColor: colors.primary,
+                borderRadius: 120 / 2,
                 overflow: "hidden",
                 alignItems: "center",
                 justifyContent: "center",
@@ -56,8 +66,8 @@ export default MainDrawer = (props) => {
             >
               <ImageBackground
                 style={{
-                  width: 100,
-                  height: 100,
+                  width: 120,
+                  height: 120,
                   flex: 1,
                   alignItems: "flex-end",
                   justifyContent: "flex-start",
@@ -69,13 +79,26 @@ export default MainDrawer = (props) => {
                         uri: teacherPhoto,
                       }
                 }
+                resizeMode="cover"
               ></ImageBackground>
             </View>
-            <Text style={{ fontSize: 16, textAlign: "center" }}>
+            <Text
+              style={{ fontSize: 18, textAlign: "center", fontWeight: "bold" }}
+            >
               {teacherName}
             </Text>
           </View>
-          <TouchableOpacity onPress={() => props.navigation.closeDrawer()}>
+          <TouchableOpacity
+            style={{
+              width: "15%",
+              justifyContent: "flex-start",
+              alignItems: "flex-end",
+              marginTop: 5,
+              marginRight: 10,
+              height: "100%",
+            }}
+            onPress={() => props.navigation.closeDrawer()}
+          >
             <MaterialCommunityIcons
               name={"window-close"}
               size={35}
@@ -91,16 +114,16 @@ export default MainDrawer = (props) => {
           props.navigation.navigate("selectSemister");
         }
 
+        // if (index.row === 1) {
+        //   setselectedItem(1);
+        //   props.navigation.navigate("Subjects");
+        // }
         if (index.row === 1) {
           setselectedItem(1);
-          props.navigation.navigate("Subjects");
-        }
-        if (index.row === 2) {
-          setselectedItem(2);
           props.navigation.navigate("settingsScreen");
         }
 
-        if (index.row === 3) {
+        if (index.row === 2) {
           setselectedItem(0);
           props.navigation.navigate("Login");
           await dispatch(logout());
@@ -119,14 +142,15 @@ export default MainDrawer = (props) => {
     >
       <DrawerItem
         title="Home"
-        accessoryLeft={
-          <ImageBackground
-            source={require("../../assets/images/home.png")}
-            style={{ height: 50, width: 25 }}
-          ></ImageBackground>
-        }
+        accessoryLeft={() => (
+          <FontAwesome5
+            name="home"
+            size={18}
+            color={colors.primary}
+          />
+        )}
       />
-      <DrawerItem
+      {/* <DrawerItem
         title="Subjects"
         accessoryLeft={
           <ImageBackground
@@ -134,25 +158,27 @@ export default MainDrawer = (props) => {
             style={{ height: 50, width: 25 }}
           ></ImageBackground>
         }
-      />
+      /> */}
       <DrawerItem
         title="Settings"
-        accessoryLeft={
-          <ImageBackground
-            source={require("../../assets/images/gear.png")}
-            style={{ height: 50, width: 25 }}
-          ></ImageBackground>
-        }
+        accessoryLeft={() => (
+          <Ionicons
+            name="settings"
+            size={18}
+            color={colors.primary}
+          />
+        )}
       />
 
       <DrawerItem
         title={"Logout"}
-        accessoryLeft={
-          <ImageBackground
-            source={require("../../assets/images/logout.png")}
-            style={{ height: 30, width: 25 }}
-          ></ImageBackground>
-        }
+        accessoryLeft={() => (
+          <MaterialCommunityIcons
+            name="logout"
+            size={18}
+            color={colors.primary}
+          />
+        )}
       ></DrawerItem>
     </Drawer>
   );
@@ -162,9 +188,9 @@ const styles = StyleSheet.create({
   header: {
     height: "20%",
     flexDirection: "row",
-    alignItems: "stretch",
+    alignItems: "flex-start",
     marginTop: "10%",
     marginHorizontal: "5%",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
   },
 });

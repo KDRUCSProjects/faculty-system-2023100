@@ -29,6 +29,9 @@ import * as updates from "expo-updates";
 import { logout } from "../store/actions/actions";
 import BackHandlerChild from "../optimization/BackHandlerChild";
 import { useHeaderHeight } from "@react-navigation/elements";
+import Header from "../ui/components/Header";
+import BottomButton from "../ui/components/BottomButton";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function ChangePassword(props) {
   BackHandlerChild();
@@ -134,7 +137,7 @@ export default function ChangePassword(props) {
             justifyContent: "space-between",
           }}
         >
-          <View
+          {/* <View
             style={{
               height: 60,
               marginTop: Platform.OS == "android" ? "7%" : 0,
@@ -157,13 +160,20 @@ export default function ChangePassword(props) {
                 Change password
               </Text>
             </View>
-          </View>
+          </View> */}
+
+          <Header
+            headerText="Change Password"
+            leftIcon="back"
+            onLeft={() => props.navigation.goBack()}
+          ></Header>
 
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
             }}
             showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
           >
             <View
               style={{
@@ -173,11 +183,19 @@ export default function ChangePassword(props) {
                 justifyContent: "space-around",
               }}
             >
-              <View style={{ height: 180, width: 180, margin: 10 }}>
-                <ImageBackground
-                  style={{ width: "100%", height: "100%" }}
-                  source={require("../assets/images/reset-password.png")}
-                ></ImageBackground>
+              <View
+                style={{
+                  height: 180,
+                  width: 180,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="lock-reset"
+                  size={150}
+                  color={colors.primary}
+                />
               </View>
               <Text style={{ fontWeight: "bold", fontSize: 30 }}>
                 Change Password
@@ -202,13 +220,13 @@ export default function ChangePassword(props) {
                   alignItems: "center",
                 }}
               >
-                <View style={{ width: "90%", height: 120 }}>
+                <View style={{ width: "90%", height: 110 }}>
                   <TextInput
                     style={{ height: 60 }}
                     label={"Current password"}
                     mode="outlined"
+                    outlineStyle={{ backgroundColor: "white" }}
                     autoCapitalize="none"
-                    textColor="gray"
                     contentStyle={{ fontSize: 15 }}
                     error={passwordError}
                     value={currentPassword}
@@ -231,14 +249,14 @@ export default function ChangePassword(props) {
                   )}
                 </View>
 
-                <View style={{ width: "90%", height: 120 }}>
+                <View style={{ width: "90%", height: 110 }}>
                   <TextInput
                     style={{ height: 60 }}
                     label={"New password"}
                     mode="outlined"
+                    outlineStyle={{ backgroundColor: "white" }}
                     autoCapitalize="none"
                     contentStyle={{ fontSize: 15 }}
-                    textColor="gray"
                     error={newPassError}
                     value={newPassword}
                     onChangeText={(text) => {
@@ -259,12 +277,12 @@ export default function ChangePassword(props) {
                     <View></View>
                   )}
                 </View>
-                <View style={{ width: "90%", height: 120 }}>
+                <View style={{ width: "90%", height: 110 }}>
                   <TextInput
                     style={{ height: 60 }}
                     label={"Confirm password"}
                     mode="outlined"
-                    textColor="gray"
+                    outlineStyle={{ backgroundColor: "white" }}
                     autoCapitalize="none"
                     contentStyle={{ fontSize: 15 }}
                     error={confirmPassError}
@@ -297,7 +315,7 @@ export default function ChangePassword(props) {
             <ActivityIndicator size={60}></ActivityIndicator>
           </Modal>
         </View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.btn}
           onPress={() =>
             Alert.alert("Save?", "Do you want save?", [
@@ -315,7 +333,23 @@ export default function ChangePassword(props) {
           }
         >
           <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <BottomButton
+          onPress={() =>
+            Alert.alert("Save?", "Do you want save?", [
+              {
+                text: "No",
+                onPress: () => {
+                  return;
+                },
+              },
+              {
+                text: "Yes",
+                onPress: onChangePassword,
+              },
+            ])
+          }
+        ></BottomButton>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

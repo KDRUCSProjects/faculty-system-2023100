@@ -31,6 +31,8 @@ import { useEffect } from "react";
 import { logout } from "../store/actions/actions";
 import BackHandlerChild from "../optimization/BackHandlerChild";
 import { useHeaderHeight } from "@react-navigation/elements";
+import Header from "../ui/components/Header";
+import BottomButton from "../ui/components/BottomButton";
 
 export default function AccountInfo(props) {
   BackHandlerChild();
@@ -78,7 +80,7 @@ export default function AccountInfo(props) {
 
     const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [16, 12],
+      aspect: [1, 1],
       quality: 0.7,
     });
     if (!image.canceled) {
@@ -110,7 +112,7 @@ export default function AccountInfo(props) {
 
     const image = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      aspect: [16, 12],
+      aspect: [1, 1],
       quality: 0.7,
     });
     if (!image.canceled) {
@@ -191,7 +193,7 @@ export default function AccountInfo(props) {
             justifyContent: "space-between",
           }}
         >
-          <View
+          {/* <View
             style={{
               height: 60,
               marginTop: Platform.OS == "android" ? "7%" : 0,
@@ -212,13 +214,20 @@ export default function AccountInfo(props) {
             <View style={{ width: "60%", alignItems: "center" }}>
               <Text style={{ color: "white", fontSize: 23 }}>Profile</Text>
             </View>
-          </View>
+          </View> */}
+
+          <Header
+            headerText="Profile"
+            leftIcon="back"
+            onLeft={() => props.navigation.goBack()}
+          ></Header>
 
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
             }}
             showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
           >
             <View
               style={{
@@ -238,7 +247,7 @@ export default function AccountInfo(props) {
                 <View style={{}}>
                   <View
                     style={{
-                      borderColor: "#a7e9eb",
+                      borderColor: colors.primary,
                       borderWidth: 1,
                       height: 140,
                       width: 140,
@@ -292,7 +301,7 @@ export default function AccountInfo(props) {
                       width: 40,
                       height: 40,
                       borderRadius: 20,
-                      backgroundColor: "#a7e9eb",
+                      backgroundColor: colors.primary,
                       overflow: "hidden",
                       justifyContent: "center",
                       alignItems: "center",
@@ -331,11 +340,13 @@ export default function AccountInfo(props) {
                 </Text>
                 <View style={{ width: "90%", height: 100 }}>
                   <TextInput
-                    style={{ height: 60 }}
+                    style={{
+                      height: 60,
+                    }}
                     label={"Username"}
                     contentStyle={{ fontSize: 15 }}
+                    outlineStyle={{ backgroundColor: "white" }}
                     mode="outlined"
-                    textColor="gray"
                     value={userName}
                     onChangeText={(text) => {
                       setuserName(text);
@@ -347,9 +358,9 @@ export default function AccountInfo(props) {
                   <TextInput
                     style={{ height: 60 }}
                     contentStyle={{ fontSize: 15 }}
+                    outlineStyle={{ backgroundColor: "white" }}
                     label={"Lastname"}
                     mode="outlined"
-                    textColor="gray"
                     value={lastName}
                     onChangeText={(text) => setlastName(text)}
                   ></TextInput>
@@ -359,8 +370,8 @@ export default function AccountInfo(props) {
                     style={{ height: 60 }}
                     label={"Email"}
                     mode="outlined"
+                    outlineStyle={{ backgroundColor: "white" }}
                     contentStyle={{ fontSize: 15 }}
-                    textColor="gray"
                     value={email}
                     onChangeText={(text) => setemail(text)}
                   ></TextInput>
@@ -447,7 +458,7 @@ export default function AccountInfo(props) {
             <ActivityIndicator size={60}></ActivityIndicator>
           </Modal>
         </View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.btn}
           onPress={() =>
             Alert.alert("Save?", "Do you want save?", [
@@ -465,7 +476,24 @@ export default function AccountInfo(props) {
           }
         >
           <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+        <BottomButton
+          onPress={() =>
+            Alert.alert("Save?", "Do you want save?", [
+              {
+                text: "No",
+                onPress: () => {
+                  return;
+                },
+              },
+              {
+                text: "Yes",
+                onPress: onSaveUpdate,
+              },
+            ])
+          }
+        ></BottomButton>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

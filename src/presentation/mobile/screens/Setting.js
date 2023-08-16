@@ -16,6 +16,8 @@ import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 import BackHandlerParent from "../optimization/BackHanlderParent";
+import Header from "../ui/components/Header";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function Setting(props) {
   BackHandlerParent();
@@ -30,7 +32,7 @@ export default function Setting(props) {
         }}
       >
         <StatusBar hidden={false}></StatusBar>
-        <View
+        {/* <View
           style={{
             height: 60,
             marginTop: Platform.OS == "android" ? "7%" : 0,
@@ -51,7 +53,12 @@ export default function Setting(props) {
           <View style={{ width: "70%" }}>
             <Text style={{ color: "white", fontSize: 23 }}>Edit profile</Text>
           </View>
-        </View>
+        </View> */}
+        <Header
+          headerText="Edit Profile"
+          leftIcon="menu"
+          onLeft={() => props.navigation.toggleDrawer()}
+        ></Header>
         <View
           style={{
             height: "85%",
@@ -75,7 +82,7 @@ export default function Setting(props) {
               })
             }
           >
-            <View
+            {/* <View
               style={{
                 height: "100%",
                 width: "15%",
@@ -87,7 +94,7 @@ export default function Setting(props) {
                 style={{ width: "90%", height: "90%" }}
                 source={require("../assets/images/editProfile.png")}
               ></ImageBackground>
-            </View>
+            </View> */}
 
             <View
               style={{
@@ -97,7 +104,9 @@ export default function Setting(props) {
                 alignItems: "flex-start",
               }}
             >
-              <Text style={{ fontSize: 20 }}>Account info</Text>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Account info
+              </Text>
             </View>
 
             <View
@@ -105,13 +114,14 @@ export default function Setting(props) {
                 height: "100%",
                 width: "15%",
                 justifyContent: "center",
-                alignItems: "flex-end",
+                alignItems: "center",
               }}
             >
-              <ImageBackground
-                style={{ width: "70%", height: "70%" }}
-                source={require("../assets/images/forward.png")}
-              ></ImageBackground>
+              <MaterialCommunityIcons
+                name="greater-than"
+                size={40}
+                color={colors.primary}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -128,7 +138,7 @@ export default function Setting(props) {
               })
             }
           >
-            <View
+            {/* <View
               style={{
                 height: "100%",
                 width: "15%",
@@ -140,7 +150,7 @@ export default function Setting(props) {
                 style={{ width: "90%", height: "90%" }}
                 source={require("../assets/images/changePassword.png")}
               ></ImageBackground>
-            </View>
+            </View> */}
 
             <View
               style={{
@@ -150,7 +160,9 @@ export default function Setting(props) {
                 alignItems: "flex-start",
               }}
             >
-              <Text style={{ fontSize: 20 }}>Change password</Text>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Change password
+              </Text>
             </View>
 
             <View
@@ -158,13 +170,14 @@ export default function Setting(props) {
                 height: "100%",
                 width: "15%",
                 justifyContent: "center",
-                alignItems: "flex-end",
+                alignItems: "center",
               }}
             >
-              <ImageBackground
-                style={{ width: "70%", height: "70%" }}
-                source={require("../assets/images/forward.png")}
-              ></ImageBackground>
+              <MaterialCommunityIcons
+                name="greater-than"
+                size={40}
+                color={colors.primary}
+              />
             </View>
           </TouchableOpacity>
         </View>

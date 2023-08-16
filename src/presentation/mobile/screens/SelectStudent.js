@@ -1,46 +1,48 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
-   StyleSheet,
-   View,
-   Text,
-   ScrollView,
-   SafeAreaView,
-   TouchableOpacity,
-   Platform,
-   ImageBackground
-} from 'react-native';
-import { useSelector } from 'react-redux';
-import SelectStudentItem from './SelectStudentItem';
-import colors from '../constants/colors';
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+  Platform,
+  ImageBackground,
+} from "react-native";
+import { useSelector } from "react-redux";
+import SelectStudentItem from "./SelectStudentItem";
+import colors from "../constants/colors";
+import Header from "../ui/components/Header";
+import BottomButton from "../ui/components/BottomButton";
 
 export default function SelectStudent(props) {
-   const subjectIdParam = props.route.params.subjectId;
-   const status = props.route.params.status;
-   const students = useSelector((state) => state.studentsBySubject.students);
-   const [selectedStudent, setselectedStudent] = useState(null);
-   const [selectedStudentErr, setselectedStudentErr] = useState(false);
+  const subjectIdParam = props.route.params.subjectId;
+  const status = props.route.params.status;
+  const students = useSelector((state) => state.studentsBySubject.students);
+  const [selectedStudent, setselectedStudent] = useState(null);
+  const [selectedStudentErr, setselectedStudentErr] = useState(false);
 
-   const onSelectStudent = () => {
-      if (!selectedStudent) {
-         setselectedStudentErr('A Student should be selected!');
-         return;
-      }
-      props.navigation.navigate('CreateShoka', {
-         subjectId: subjectIdParam,
-         status: status,
-         studentId: selectedStudent
-      });
-   };
-   return (
-      <SafeAreaView style={styles.container}>
-         <View
-            style={{
-               width: '100%',
-               height: '90%',
-               justifyContent: 'center'
-            }}
-         >
-            <View
+  const onSelectStudent = () => {
+    if (!selectedStudent) {
+      setselectedStudentErr("A Student should be selected!");
+      return;
+    }
+    props.navigation.navigate("CreateShoka", {
+      subjectId: subjectIdParam,
+      status: status,
+      studentId: selectedStudent,
+    });
+  };
+  return (
+    <SafeAreaView style={styles.container}>
+      <View
+        style={{
+          width: "100%",
+          height: "90%",
+          justifyContent: "center",
+        }}
+      >
+        {/* <View
                style={{
                   height: 60,
                   marginTop: Platform.OS == 'android' ? '7%' : 0,
@@ -61,57 +63,68 @@ export default function SelectStudent(props) {
                <View style={{ width: '70%' }}>
                   <Text style={{ color: 'white', fontSize: 23 }}>FCS for University</Text>
                </View>
-            </View>
-            <ScrollView
-               contentContainerStyle={{
-                  justifyContent: 'center',
-                  alignItems: 'center'
-               }}
-            >
-               {students?.map((student) => {
-                  return (
-                     <SelectStudentItem
-                        key={student.studentId}
-                        onPress={() => {
-                           console.log(student.studentId);
-                           setselectedStudentErr(false);
-                           setselectedStudent(student.studentId);
-                        }}
-                        selected={selectedStudent}
-                        studentId={student.studentId}
-                        studentName={student.studentName}
-                        studentFatherName={student.fatherName}
-                        studentGrandFatherName={student.studentGrandFatherName}
-                     ></SelectStudentItem>
-                  );
-               })}
-            </ScrollView>
-            {selectedStudentErr ? (
-               <Text style={{ color: 'red', textAlign: 'center' }}>{selectedStudentErr}</Text>
-            ) : (
-               <View></View>
-            )}
-         </View>
+            </View> */}
+        <Header
+          leftIcon="back"
+          onLeft={() => props.navigation.goBack()}
+        ></Header>
+        <ScrollView
+          contentContainerStyle={{
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {students?.map((student) => {
+            return (
+              <SelectStudentItem
+                key={student.studentId}
+                onPress={() => {
+                  console.log(student.studentId);
+                  setselectedStudentErr(false);
+                  setselectedStudent(student.studentId);
+                }}
+                selected={selectedStudent}
+                studentId={student.studentId}
+                studentName={student.studentName}
+                studentFatherName={student.fatherName}
+                studentGrandFatherName={student.studentGrandFatherName}
+              ></SelectStudentItem>
+            );
+          })}
+        </ScrollView>
+        {selectedStudentErr ? (
+          <Text style={{ color: "red", textAlign: "center" }}>
+            {selectedStudentErr}
+          </Text>
+        ) : (
+          <View></View>
+        )}
+      </View>
 
-         <TouchableOpacity style={styles.btn} onPress={onSelectStudent}>
-            <Text style={{ fontSize: 18, color: 'white' }}>Select</Text>
-         </TouchableOpacity>
-      </SafeAreaView>
-   );
+      {/* <TouchableOpacity
+        style={styles.btn}
+        onPress={onSelectStudent}
+      >
+        <Text style={{ fontSize: 18, color: "white" }}>Select</Text>
+      </TouchableOpacity> */}
+
+      <BottomButton onPress={onSelectStudent}></BottomButton>
+    </SafeAreaView>
+  );
 }
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      alignItems: 'center'
-   },
-   btn: {
-      width: '90%',
-      borderRadius: 5,
+  container: {
+    flex: 1,
+    alignItems: "center",
+  },
+  btn: {
+    width: "90%",
+    borderRadius: 5,
 
-      height: 60,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginVertical: '3%',
-      backgroundColor: colors.primary
-   }
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: "3%",
+    backgroundColor: colors.primary,
+  },
 });
