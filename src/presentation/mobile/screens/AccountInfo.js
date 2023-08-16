@@ -193,29 +193,6 @@ export default function AccountInfo(props) {
             justifyContent: "space-between",
           }}
         >
-          {/* <View
-            style={{
-              height: 60,
-              marginTop: Platform.OS == "android" ? "7%" : 0,
-              backgroundColor: colors.primary,
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ width: "20%" }}>
-              <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/lessthan.png")}
-                ></ImageBackground>
-              </TouchableOpacity>
-            </View>
-            <View style={{ width: "60%", alignItems: "center" }}>
-              <Text style={{ color: "white", fontSize: 23 }}>Profile</Text>
-            </View>
-          </View> */}
-
           <Header
             headerText="Profile"
             leftIcon="back"
@@ -232,7 +209,7 @@ export default function AccountInfo(props) {
             <View
               style={{
                 height: "100%",
-
+                alignItems: "center",
                 justifyContent: "space-between",
               }}
             >
@@ -325,6 +302,7 @@ export default function AccountInfo(props) {
                   height: "70%",
                   justifyContent: "flex-start",
                   alignItems: "center",
+                  width: "100%",
                 }}
               >
                 <Text

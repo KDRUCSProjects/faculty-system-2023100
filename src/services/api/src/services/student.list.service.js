@@ -210,7 +210,7 @@ const findSemesterStudents = (semesterId) => {
       include: [
         {
           model: Student, as: 'Student',
-          attributes: ['id', 'fullName', 'fatherName', 'province'],
+          attributes: ['id', 'fullName', 'fatherName', 'province', 'kankorId', 'grandFatherName', 'photo'],
         }
       ]
     }

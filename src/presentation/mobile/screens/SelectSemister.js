@@ -124,15 +124,29 @@ const SelectSemister = (props) => {
               }}
               style={{}}
             >
-              {semisters?.map((semister, index) => (
-                <SemisterItem
-                  key={semister.semesterId}
-                  onClick={onclick}
-                  selected={selected == semister.semesterId ? true : false}
-                  semisterId={semister.semesterId}
-                  semisterName={semister.title}
-                ></SemisterItem>
-              ))}
+              {semisters && semisters.length > 0 ? (
+                semisters.map((semister, index) => (
+                  <SemisterItem
+                    key={semister.semesterId}
+                    onClick={onclick}
+                    selected={selected == semister.semesterId ? true : false}
+                    semisterId={semister.semesterId}
+                    semisterName={semister.title}
+                  ></SemisterItem>
+                ))
+              ) : (
+                <Text
+                  style={{
+                    color: colors.primary,
+                    fontSize: 21,
+                    margin: 20,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  }}
+                >
+                  You haven't got any Subjects
+                </Text>
+              )}
 
               <Modal
                 visible={isLoading}
