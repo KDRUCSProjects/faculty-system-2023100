@@ -480,7 +480,7 @@ export default function AccountInfo(props) {
 
         <BottomButton
           onPress={() =>
-            Alert.alert("Save?", "Do you want save?", [
+            Alert.alert("Save?", "Do you want save updates?", [
               {
                 text: "No",
                 onPress: () => {

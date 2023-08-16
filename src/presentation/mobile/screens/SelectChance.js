@@ -81,7 +81,7 @@ export default function SelectChance(props) {
       console.log(err.message);
       setisLoading(false);
       //props.navigation.navigate("selectType", { subjectId: selected });
-      Alert.alert("Error", err.message);
+      Alert.alert("Error!", err.message);
       if (err.code == 401) {
         // props.navigation.replace("Login");
         await dispatch(logout());
@@ -317,7 +317,7 @@ export default function SelectChance(props) {
                     console.log(err.message);
                     setisLoading(false);
                     //props.navigation.navigate("selectType", { subjectId: selected });
-                    Alert.alert("Error", err.message);
+                    Alert.alert("Error!", err.message);
                     if (err.code == 401) {
                       // props.navigation.replace("Login");
                       await dispatch(logout());
@@ -371,7 +371,7 @@ export default function SelectChance(props) {
                     console.log(err.message);
                     setisLoading(false);
                     //props.navigation.navigate("selectType", { subjectId: selected });
-                    Alert.alert("Error", err.message);
+                    Alert.alert("Error!", err.message);
                     if (err.code == 401) {
                       // props.navigation.replace("Login");
                       await dispatch(logout());
@@ -434,7 +434,7 @@ export default function SelectChance(props) {
                     console.log(err.message);
                     setisLoading(false);
                     //props.navigation.navigate("selectType", { subjectId: selected });
-                    Alert.alert("Error", err.message);
+                    Alert.alert("Error!", err.message);
                     if (err.code == 401) {
                       // props.navigation.replace("Login");
                       await dispatch(logout());
