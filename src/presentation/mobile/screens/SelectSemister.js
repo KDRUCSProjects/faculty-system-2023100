@@ -113,19 +113,19 @@ const SelectSemister = (props) => {
                >
                   All your
                </Text> */}
-          <View style={{ height: "90%", width: "100%" }}>
-            <ScrollView
-              contentContainerStyle={{
-                flexGrow: 1,
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              style={{}}
-            >
-              {semisters && semisters.length > 0 ? (
-                semisters.map((semister, index) => (
+          {semisters && semisters.length > 0 ? (
+            <View style={{ height: "90%", width: "100%" }}>
+              <ScrollView
+                contentContainerStyle={{
+                  flexGrow: 1,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                style={{}}
+              >
+                {semisters?.map((semister, index) => (
                   <SemisterItem
                     key={semister.semesterId}
                     onClick={onclick}
@@ -133,29 +133,47 @@ const SelectSemister = (props) => {
                     semisterId={semister.semesterId}
                     semisterName={semister.title}
                   ></SemisterItem>
-                ))
-              ) : (
-                <Text
-                  style={{
-                    color: colors.primary,
-                    fontSize: 21,
-                    margin: 20,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  You haven't got any Subjects
-                </Text>
-              )}
+                ))}
 
-              <Modal
-                visible={isLoading}
-                backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+                <Modal
+                  visible={isLoading}
+                  backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+                >
+                  <ActivityIndicator size={60}></ActivityIndicator>
+                </Modal>
+              </ScrollView>
+            </View>
+          ) : (
+            <View
+              style={{
+                height: "90%",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "black",
+                  fontSize: 18,
+
+                  textAlign: "center",
+                }}
               >
-                <ActivityIndicator size={60}></ActivityIndicator>
-              </Modal>
-            </ScrollView>
-          </View>
+                No subjects assigned
+              </Text>
+              <Text
+                style={{
+                  color: "black",
+                  fontSize: 12,
+                  padding: 3,
+                  textAlign: "center",
+                }}
+              >
+                Enjoy your day!
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </SafeAreaView>
