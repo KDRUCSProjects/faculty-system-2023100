@@ -351,7 +351,7 @@ export default function SelectChance(props) {
                   <MaterialIcons
                     name="looks-one"
                     size={80}
-                    color="black"
+                    color={colors.primary}
                   />
                 </View>
               </Card>
@@ -405,7 +405,7 @@ export default function SelectChance(props) {
                   <MaterialIcons
                     name="looks-two"
                     size={80}
-                    color="black"
+                    color={colors.primary}
                   />
                 </View>
               </Card>
@@ -462,7 +462,7 @@ export default function SelectChance(props) {
                   <MaterialIcons
                     name="looks-3"
                     size={80}
-                    color="black"
+                    color={colors.primary}
                   />
                 </View>
               </Card>
@@ -486,7 +486,7 @@ export default function SelectChance(props) {
                   <MaterialIcons
                     name="looks-4"
                     size={80}
-                    color="black"
+                    color={colors.primary}
                   />
                 </View>
               </Card>

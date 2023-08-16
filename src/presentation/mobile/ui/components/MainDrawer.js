@@ -186,7 +186,7 @@ export default MainDrawer = (props) => {
 
 const styles = StyleSheet.create({
   header: {
-    height: "20%",
+    height: "25%",
     flexDirection: "row",
     alignItems: "flex-start",
     marginTop: "10%",

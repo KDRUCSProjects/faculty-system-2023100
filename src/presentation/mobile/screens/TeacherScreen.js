@@ -14,6 +14,13 @@ import { HeaderBackButton } from "@react-navigation/stack";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
+import {
+  FontAwesome5,
+  FontAwesome,
+  MaterialIcons,
+  Octicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 
 import { Layout, TopNavigation, Divider } from "@ui-kitten/components";
 import colors from "../constants/colors";
@@ -102,11 +109,19 @@ export default function TeacherScreen(props) {
               }}
               onPress={onCreateShoka}
             >
-              <View style={{ height: 90, width: 90 }}>
-                <ImageBackground
-                  style={{ flex: 1 }}
-                  source={require("../assets/images/viewAttendence.png")}
-                ></ImageBackground>
+              <View
+                style={{
+                  height: 120,
+                  width: 120,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <MaterialIcons
+                  name="list-alt"
+                  size={120}
+                  color={colors.primary}
+                />
               </View>
               <Text style={{ fontSize: 25, fontWeight: "bold", marginTop: 25 }}>
                 Create Shoka
@@ -134,11 +149,19 @@ export default function TeacherScreen(props) {
               }}
               onPress={onTakeAttendence}
             >
-              <View style={{ height: 90, width: 90 }}>
-                <ImageBackground
-                  style={{ flex: 1 }}
-                  source={require("../assets/images/takeAttendence.png")}
-                ></ImageBackground>
+              <View
+                style={{
+                  height: 120,
+                  width: 120,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="clipboard-check-outline"
+                  size={120}
+                  color={colors.primary}
+                />
               </View>
               <Text style={{ fontSize: 25, fontWeight: "bold", marginTop: 25 }}>
                 Take Attendence

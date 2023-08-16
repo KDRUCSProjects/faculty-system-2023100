@@ -208,9 +208,10 @@ const AttendenceItem = (props, ref) => {
                 <Text
                   style={{
                     position: "absolute",
-                    width: 80,
+                    width: 70,
                     bottom: 20,
                     left: -30,
+                    fontSize: 12,
                     color: "white",
                   }}
                 >
@@ -254,8 +255,9 @@ const AttendenceItem = (props, ref) => {
                 <Text
                   style={{
                     position: "absolute",
-                    width: 80,
+                    width: 70,
                     bottom: 20,
+                    fontSize: 12,
                     left: -30,
                     color: "white",
                   }}
@@ -297,9 +299,10 @@ const AttendenceItem = (props, ref) => {
                 <Text
                   style={{
                     position: "absolute",
-                    width: 80,
+                    width: 70,
                     bottom: 20,
                     left: -30,
+                    fontSize: 12,
                     color: "white",
                   }}
                 >

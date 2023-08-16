@@ -24,6 +24,7 @@ import BackHandlerChild from "../optimization/BackHandlerChild";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import Header from "../ui/components/Header";
+import { Ionicons } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("window");
 
 export default function SelectType(props) {
@@ -150,10 +151,10 @@ export default function SelectType(props) {
                     alignItems: "center",
                   }}
                 >
-                  <MaterialCommunityIcons
-                    name="sticker-check-outline"
+                  <Ionicons
+                    name="md-checkmark-circle"
                     size={80}
-                    color="black"
+                    color={colors.primary}
                   />
                 </View>
               </Card>
@@ -182,10 +183,10 @@ export default function SelectType(props) {
                     alignItems: "center",
                   }}
                 >
-                  <MaterialCommunityIcons
-                    name="sticker-check-outline"
+                  <Ionicons
+                    name="md-checkmark-circle"
                     size={80}
-                    color="black"
+                    color={colors.primary}
                   />
                 </View>
               </Card>
@@ -215,10 +216,10 @@ export default function SelectType(props) {
                   alignItems: "center",
                 }}
               >
-                <FontAwesome5
-                  name="check-double"
-                  size={70}
-                  color="black"
+                <Ionicons
+                  name="md-checkmark-done-circle"
+                  size={80}
+                  color={colors.primary}
                 />
               </View>
             </Card>
