@@ -1,9 +1,7 @@
 <template>
   <div>
     <v-card class="theShadow py-5 pa-3">
-      <!-- <span class="pro" v-if="!studentRegistration"> {{ studentStatus }} </span> -->
-
-      <!-- <span class="pro" v-if="!studentRegistration"> {{ studentStatus }} </span> -->
+      <span class="pro" v-if="!studentRegistration"> {{ rankSemester(latestSemester) }} Semester</span>
 
       <v-card-item class="text-center mb-1">
         <v-avatar class="my-2" :size="avatarSize" color="secondary" variant="tonal">
@@ -59,6 +57,8 @@
 </template>
 
 <script>
+import { rankSemester } from '@/utils/global';
+
 export default {
   props: {
     studentRegistration: {
@@ -80,11 +80,19 @@ export default {
   data: () => ({
     photo: null,
   }),
+  computed: {
+    latestSemester() {
+      return this.student?.latestSemester;
+    },
+  },
   methods: {
     uploadPhoto(photo) {
       this.photo = photo;
       this.$emit('upload-photo', photo);
       // Once emitted,
+    },
+    rankSemester(p) {
+      return rankSemester(p);
     },
   },
   emits: ['upload-photo'],
@@ -93,8 +101,8 @@ export default {
 
 <style scoped>
 .pro {
-  color: #231e39;
-  background-color: #febb0b;
+  color: white;
+  background-color: #0b8dfe;
   border-radius: 3px;
   font-size: 14px;
   font-weight: bold;
