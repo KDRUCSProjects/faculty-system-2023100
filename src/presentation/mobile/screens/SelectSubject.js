@@ -125,7 +125,7 @@ export default function SelectSubject(props) {
               }}
               style={{}}
             >
-              {subjects ? (
+              {subjects && subjects.length > 0 ? (
                 subjects.map((subject, index) => (
                   <SelectSubjectItem
                     key={subject.subjectId}
