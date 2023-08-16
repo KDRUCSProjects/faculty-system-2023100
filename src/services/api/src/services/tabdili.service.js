@@ -21,6 +21,7 @@ const createTabdili = (tabdiliBody) => {
 const getTabdilis = (limit, offset) => {
   return Tabdili.findAndCountAll({
     order: [['createdAt', 'DESC']],
+
     limit,
     offset,
     include: [{ model: Student, as: 'Student' }],

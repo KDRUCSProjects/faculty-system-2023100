@@ -6,11 +6,14 @@ export default {
       student.createdAt = toDateFormat(student.createdAt);
 
       // Static status
-      student.status = 'reserve';
+      // student.status = 'reserve';
       // Convert kankorYear (educationalYearId) to real value
       student.kankorYear = rootGetters['years/yearById'](student.educationalYearId)?.year;
       return student;
     });
+  },
+  allStudents(state) {
+    return state.allStudents;
   },
   reservedStudents(state) {
     return state.reservedStudents;

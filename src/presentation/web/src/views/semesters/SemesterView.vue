@@ -43,7 +43,7 @@
                 <v-card class="mt-3">
                   <v-card-item>
                     <v-row class="pa-0 ma-0 d-flex">
-                      <v-col cols="4" class="pa-0 ma-0">
+                      <v-col :cols="showBadlAshaDownload ? '4' : '6'" class="pa-0 ma-0">
                         <div class="mx-1">
                           <base-menu
                             :items="reportItems"
@@ -57,7 +57,7 @@
                           </base-menu>
                         </div>
                       </v-col>
-                      <v-col cols="4" class="pa-0 ma-0">
+                      <v-col :cols="showBadlAshaDownload ? '4' : '6'" class="pa-0 ma-0">
                         <v-btn
                           @click="downloadReport"
                           class="float-right mx-1"
@@ -71,8 +71,9 @@
                           EXCEL FILE
                         </v-btn>
                       </v-col>
-                      <v-col cols="4" class="pa-0 ma-0">
+                      <v-col :cols="showBadlAshaDownload ? '4' : '6'" class="pa-0 ma-0">
                         <v-btn
+                          v-if="showBadlAshaDownload"
                           @click="downloadBadlAsha"
                           class="float-right"
                           prepend-icon="mdi-download-circle"

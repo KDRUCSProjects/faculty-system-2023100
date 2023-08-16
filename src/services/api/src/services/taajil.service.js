@@ -20,8 +20,8 @@ const createTaajil = (taajilBody) => {
  * @param {Number} offset
  * @returns {Promise<Taajil>}
  */
-const taajilStudents = (limit, offset) => {
-  return Taajil.findAndCountAll({
+const taajilStudents = (limit, offset, like = '') => {
+  const results = Taajil.findAndCountAll({
     order: [['createdAt', 'DESC']],
     limit,
     offset,

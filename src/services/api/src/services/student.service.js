@@ -18,10 +18,15 @@ const registerStudent = (studentBody) => {
  * @param {Number} offset
  * @returns {Promise<Student>}
  */
-const getStudents = (offset) => {
+const getStudents = (limit = 2000, offset, like = '') => {
   return Student.findAndCountAll({
     order: [['createdAt', 'DESC']],
-    limit: 2000,
+    where: {
+      kankorId: {
+        [Op.like]: `${like || ''}%`,
+      },
+    },
+    limit: limit,
     offset,
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
   });
