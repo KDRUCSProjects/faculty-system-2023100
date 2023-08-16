@@ -106,7 +106,34 @@ const findStudentFirstCellAttendance = (studentId, attendanceId) => {
   });
 };
 
+
+/**
+ * get attendance report
+ * @param {Date} startDate
+ * @param {Date} endDate
+ * @param {ObjectId} attendanceId
+ * @returns {Promise<AttendanceList>}
+ */
+const createReport = (attendanceId, startDate, endDate) => {
+  return AttendanceList.findAll({
+    attributes: ['studentId',
+      [sequelize.fn('SUM', sequelize.literal('CASE WHEN isPresentOne = 0 THEN 1 ELSE 0 END')), 'totalAbsentOne'],
+      [sequelize.fn('SUM', sequelize.literal('CASE WHEN isPresentOne = 1 THEN 1 ELSE 0 END')), 'totalPresentOne'],
+      [sequelize.fn('SUM', sequelize.literal('CASE WHEN isPresentTwo = 0 THEN 1 ELSE 0 END')), 'totalAbsentTwo'],
+      [sequelize.fn('SUM', sequelize.literal('CASE WHEN isPresentTwo = 1 THEN 1 ELSE 0 END')), 'totalPresentTwo'],
+    ],
+    where: {
+      attendanceId: attendanceId,
+      date: {
+        [Op.between]: [startDate, endDate]
+      }
+    },
+    group: ['studentId']
+  })
+};
+
 module.exports = {
+  createReport,
   getAttendance,
   createAttendance,
   updateTodaysAttendance,

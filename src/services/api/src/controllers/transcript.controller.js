@@ -123,50 +123,50 @@ const createTranscript = catchAsync(async (req, res) => {
   // first semester
   const firstSemester = formattedMarks.find((element) => element.semesterTitle === 1);
   // first semester start and end date
-  const firstSemStartDate = firstSemester?.firstHalfStart;
-  const firstSemEndDate = firstSemester?.firstHalfEnd;
+  const firstSemStartDate = firstSemester?.firstHalfStart || 1401;
+  const firstSemEndDate = firstSemester?.firstHalfEnd || 1401;
 
   // second semester
   const secondSemester = formattedMarks.find((element) => element.semesterTitle === 2);
   // second semester start and end date
-  const secondSemStartDate = secondSemester?.secondHalfStart;
-  const secondSemEndDate = secondSemester?.secondHalfEnd;
+  const secondSemStartDate = secondSemester?.secondHalfStart || 1401;
+  const secondSemEndDate = secondSemester?.secondHalfEnd || 1401;
 
   // third semester
   const thirdSemester = formattedMarks.find((element) => element.semesterTitle === 3);
   // third semester start and end date
-  const thirdSemStartDate = thirdSemester?.firstHalfStart;
-  const thirdSemEndDate = thirdSemester?.firstHalfEnd;
+  const thirdSemStartDate = thirdSemester?.firstHalfStart || 1401;
+  const thirdSemEndDate = thirdSemester?.firstHalfEnd || 1401;
 
   // fourth semester
   const fourthSemester = formattedMarks.find((element) => element.semesterTitle === 4);
   // fourth semester start and end date
-  const fourthSemStartDate = fourthSemester?.secondHalfStart;
-  const fourthSemEndDate = fourthSemester?.secondHalfEnd;
+  const fourthSemStartDate = fourthSemester?.secondHalfStart || 1401;
+  const fourthSemEndDate = fourthSemester?.secondHalfEnd || 1401;
 
   // fifth semester
   const fifthSemester = formattedMarks.find((element) => element.semesterTitle === 5);
   // fifth semester start and end date
-  const fifthSemStartDate = fifthSemester?.firstHalfStart;
-  const fifthSemEndDate = fifthSemester?.firstHalfEnd;
+  const fifthSemStartDate = fifthSemester?.firstHalfStart || 1401;
+  const fifthSemEndDate = fifthSemester?.firstHalfEnd || 1401;
 
   // six semester
   const sixthSemester = formattedMarks.find((element) => element.semesterTitle === 6);
   // sixth semester start and end date
-  const sixthSemStartDate = sixthSemester?.secondHalfStart;
-  const sixthSemEndDate = sixthSemester?.secondHalfEnd;
+  const sixthSemStartDate = sixthSemester?.secondHalfStart || 1401;
+  const sixthSemEndDate = sixthSemester?.secondHalfEnd || 1401;
 
   // six semester
   const seventhSemester = formattedMarks.find((element) => element.semesterTitle === 7);
   // seven semester start and end date
-  const seventhSemStartDate = seventhSemester?.firstHalfStart;
-  const seventhSemEndDate = seventhSemester?.firstHalfEnd;
+  const seventhSemStartDate = seventhSemester?.firstHalfStart || 1401;
+  const seventhSemEndDate = seventhSemester?.firstHalfEnd || 1401;
 
   // eight semester
   const eightSemester = formattedMarks.find((element) => element.semesterTitle === 6);
   // eight semester start and end date
-  const eightSemStartDate = eightSemester?.secondHalfStart;
-  const eightSemEndDate = eightSemester?.secondHalfEnd;
+  const eightSemStartDate = eightSemester?.secondHalfStart || 1401;
+  const eightSemEndDate = eightSemester?.secondHalfEnd || 1401;
 
   // find student taajil
   const studentTajil = await taajilService.findTaajilByStudentId(studentId);
@@ -187,7 +187,7 @@ const createTranscript = catchAsync(async (req, res) => {
 
 
   worksheet.getRow(1).getCell(31).value = student.fullName;
-  worksheet.getRow(3).getCell(31).value = student.lastName;
+  worksheet.getRow(3).getCell(31).value = student.nickName;
   worksheet.getRow(5).getCell(31).value = student.fatherName;
   worksheet.getRow(7).getCell(31).value = student.grandFatherName;
   worksheet.getRow(10).getCell(31).value = student.dob;
