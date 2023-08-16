@@ -105,7 +105,9 @@
               <div class="fullname-div inputs-divs">
                 <p>Fullname</p>
                 <input
+                
                   class="input"
+                  required
                   type="text"
                   placeholder="Fullname"
                   name="fullName"
@@ -137,6 +139,7 @@
                 <p>Father Name</p>
                 <input
                   class="input"
+                  required
                   type="text"
                   placeholder="Father Name"
                   name="fatherName"
@@ -149,6 +152,7 @@
                 <input
                   class="input"
                   type="text"
+                  required
                   id=""
                   placeholder="Grand Father Name"
                   name="grandFatherName"
@@ -197,6 +201,11 @@
           </div>
         </div>
       </form>
+      <a href="index.html">
+        <button class="back-btn">
+          <i class="icofont-arrow-left"></i> Go To Home
+        </button></a
+      >
       <div class="overlay hidden"></div>
       <div class="otp-hidden-div hidden">
         <div class="otp-div">
@@ -222,6 +231,14 @@
           </button>
         </div>
       </div>
+      <div class="success-hidden-div hidden">
+       <div class="success-msg-div">
+         <i class="icofont-close success-icon"></i>
+         <img src="image/success-msg.png" alt="">
+         <h4>Your Registeration was Successfull</h4>
+         <button class="success-btn">Got It</button>
+       </div>
+      </div>
 
       <!-- ////////////////////////////////////////////////////////// -->
       <!-- ////////////////////   Error Div  //////////////////////// -->
@@ -237,9 +254,7 @@
           <i class="icofont-close-line error-close"></i>
         </div>
       </div>
-      <a href="index.html">
-        <button class="back-btn">Go To Home Page</button></a
-      >
+      
     </main>
   </body>
 </html>

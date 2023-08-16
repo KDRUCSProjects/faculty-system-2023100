@@ -99,6 +99,7 @@ const getApiFun = id => {
           imgName.textContent =
             data.fullName;
         imgNickName.textContent = data.nickName;
+        nickName.textContent = data.nickName;
         fatherNameP.textContent = fatherNameValue.textContent = data.fatherName;
         grandFNameValue.textContent = grandFatherName.textContent =
           data.grandFatherName;

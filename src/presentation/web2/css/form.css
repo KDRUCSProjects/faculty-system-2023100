@@ -434,3 +434,44 @@ span {
   border: none;
   background-color: #fed47e;
 }
+
+.success-msg-div {
+  z-index: 20000;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 50px;
+}
+
+.success-msg-div i {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 20px;
+}
+
+.success-msg-div img {
+  width: 200px;
+  margin-bottom: 30px;
+}
+
+.success-msg-div h4 {
+  font-size: 20px;
+  font-family: Latolight;
+  margin-bottom: 30px;
+}
+
+.success-msg-div button {
+  padding: 10px 70px;
+  font-size: 18px;
+  background-color: #fed47e;
+  border: none;
+  border-radius: 50px;
+  font-family: LatoBold;
+}
