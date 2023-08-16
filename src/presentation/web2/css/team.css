@@ -188,3 +188,7 @@ img {
   border: none;
   background-color: #fed47e;
 }
+
+.hidden {
+  display: none;
+}
