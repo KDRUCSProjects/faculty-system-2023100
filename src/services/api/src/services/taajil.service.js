@@ -27,6 +27,8 @@ const taajilStudents = (limit, offset, like = '') => {
     offset,
     include: [{ model: Student, as: 'Student' }],
   });
+
+  return results;
 };
 
 /**
