@@ -41,7 +41,6 @@ overlay.addEventListener('click', closeWindow);
 ////////////////////////////////////////
 
 inputFile.onchange = function (e) {
-  e.preventDefault();
   profileImg.src = URL.createObjectURL(inputFile.files[0]);
   profileImg.classList.remove('hidden');
   photoHeadin.classList.add('hidden');
