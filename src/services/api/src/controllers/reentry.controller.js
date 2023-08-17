@@ -62,7 +62,7 @@ const createReentry = catchAsync(async (req, res) => {
   if (!semesterMatched) {
     throw new ApiError(
       httpStatus.NOT_ACCEPTABLE,
-      `Student can only take reentry at class ${data.year} and ${data.eligibleSemester} semester`
+      `Student can only take reentry at class ${data.year + 1} and ${data.eligibleSemester} semester`
     );
   }
 
