@@ -19,6 +19,10 @@ module.exports = {
         required: true,
         allowNull: false,
       },
+      codeNumber: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       semesterId: {
         type: Sequelize.INTEGER,
         required: true,
