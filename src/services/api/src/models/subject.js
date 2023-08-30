@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
         allowNull: false,
       },
+      codeNumber: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       semesterId: {
         type: DataTypes.INTEGER,
         required: true,
