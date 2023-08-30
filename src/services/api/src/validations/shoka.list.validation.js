@@ -30,7 +30,7 @@ const updateShokaList = {
 
 const getShokaList = {
   params: Joi.object().keys({
-    subjectId: Joi.number().required(),
+    subjectId: Joi.number().required().positive().integer(),
   }),
   query: Joi.object().keys({
     chance: Joi.number().min(1).max(3).required(),
