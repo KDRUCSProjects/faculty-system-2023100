@@ -28,6 +28,9 @@ export default {
   isAdmin(state) {
     return state.userData && state.userData.role === 'admin' ? true : false;
   },
+  role(state) {
+    return state.userData?.role;
+  },
   photo(state) {
     return getUserData(state.userData, 'photo');
   },

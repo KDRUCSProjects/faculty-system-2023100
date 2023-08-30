@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar class="px-4" elevation="0" border >
+  <v-app-bar class="px-4" elevation="0" border>
     <!-- The Menu -->
     <!-- navigation button/collapser -->
 
@@ -24,10 +24,12 @@
 
     <!-- Dropdown user profile menu -->
 
-    <div class="px-4" >
-      <select v-model="$i18n.locale" >
-        <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale"> {{ locale }}</option>
-      </select>
+    <div class="px-4">
+      <!-- <select v-model="$i18n.locale">
+        <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
+      </select> -->
+
+      <base-select-language></base-select-language>
     </div>
     <div id="the-menu">
       <v-cards-title class="d-inline mx-2">{{ userFullName }}</v-cards-title>
@@ -68,9 +70,12 @@
 </template>
 
 <script>
-import globalMixins from '@/mixins/global.mixins';
+import BaseSelectLanguage from '@/components/ui/dialogs/BaseSelectLanguage.vue';
 
 export default {
+  components: {
+    BaseSelectLanguage,
+  },
   data: () => ({
     user: {
       initials: 'MN',
@@ -125,6 +130,4 @@ export default {
   padding: 5px;
   box-sizing: content-box;
 }
-
-
 </style>

@@ -9,6 +9,7 @@
       :items="theStudents"
       no-data-text="No students available"
       hide-default-footer
+      :density="density"
     >
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn @click="viewStudent(item)" variant="text" color="secondary" text icon="mdi-location-enter"> </v-btn>
@@ -102,6 +103,10 @@ import { VDataTable } from 'vuetify/labs/VDataTable';
 
 export default {
   props: {
+    density: {
+      type: String,
+      default: 'default',
+    },
     headers: {
       type: Array,
       required: true,

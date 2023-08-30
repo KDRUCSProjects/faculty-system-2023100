@@ -70,7 +70,7 @@ const updateStudent = {
 
 const getStudent = {
   params: Joi.object().keys({
-    studentId: Joi.string().required(),
+    studentId: Joi.number().required().positive().integer(),
   }),
 };
 

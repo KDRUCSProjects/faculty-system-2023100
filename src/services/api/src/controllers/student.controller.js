@@ -7,6 +7,8 @@ const {
   reentryService,
   tabdiliService,
   tokenService,
+  studentListService,
+  semesterService,
 } = require('../services');
 const ApiError = require('../utils/ApiError');
 
@@ -40,6 +42,13 @@ const updateStudent = catchAsync(async (req, res) => {
 const getStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudent(req.params.studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not Found');
+
+  let findLatestSemesterId = await studentListService.findStudentLatestSemesterId(student.id);
+
+  let semester = await semesterService.findSemesterById(findLatestSemesterId);
+
+  student.dataValues.latestSemester = semester.title;
+
   res.status(httpStatus.OK).send(student);
 });
 

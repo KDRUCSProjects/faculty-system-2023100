@@ -184,4 +184,22 @@ export default {
       throw e.response.data.message;
     }
   },
+  async downloadSubjectAttendanceBySubjectId(context, { subjectId, start, end }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios.get(`/api/subjects/${subjectId}/report?startDate=${start}&endDate=${end}`, {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // context.commit();
+
+      return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
 };

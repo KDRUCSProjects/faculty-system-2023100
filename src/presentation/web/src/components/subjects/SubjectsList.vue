@@ -28,6 +28,17 @@
                     {{ action.title }}
                   </v-btn>
                 </update-subject>
+                <download-attendance v-else-if="action.onClick === 'downloadAttendance'" :subject-id="subject.id">
+                  <v-btn
+                    :prepend-icon="action.icon"
+                    variant="text"
+                    color="dark"
+                    @click="takeAction({ action: action.onClick, subject: subject })"
+                  >
+                    {{ action.title }}
+                  </v-btn>
+                </download-attendance>
+
                 <v-btn
                   v-else
                   :prepend-icon="action.icon"
@@ -51,10 +62,10 @@
 </template>
 
 <script>
+import DownloadAttendance from './dialogs/DownloadAttendance.vue';
 import UpdateSubject from './dialogs/UpdateSubject.vue';
-
 export default {
-  components: { UpdateSubject },
+  components: { UpdateSubject, DownloadAttendance },
   props: ['subjects', 'noTeacherView', 'noSubjectUpdate'],
   data: () => ({}),
   computed: {
@@ -68,7 +79,7 @@ export default {
         {
           icon: 'mdi-passport-biometric',
           title: this.$t('Download Attendance'),
-          onClick: 'downloadAttendance ',
+          onClick: 'downloadAttendance',
         },
         {
           icon: 'mdi-delete',
@@ -76,6 +87,7 @@ export default {
           onClick: 'delete',
         },
       ];
+
       if (!this.noTeacherView) {
         actions.unshift({
           icon: 'mdi-account',
@@ -104,7 +116,6 @@ export default {
         console.log(subject);
         this.showShoka(subject.id);
       } else if (action === 'downloadAttendance') {
-        console.log('downloading..');
       }
     },
     showShoka(subjectId) {

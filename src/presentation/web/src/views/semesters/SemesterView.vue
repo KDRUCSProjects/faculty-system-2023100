@@ -25,6 +25,7 @@
             <v-window v-model="tab">
               <v-window-item :value="1">
                 <subjects-list :subjects="subjects" @subject-delete="loadSubjects"></subjects-list>
+
                 <add-subject :semester-id="id">
                   <v-btn variant="tonal" color="primary" block :prepend-icon="'mdi-plus'">{{ $t('New Subject') }}</v-btn>
                 </add-subject>
