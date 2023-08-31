@@ -36,6 +36,13 @@
               variant="outlined"
               :label="$t('Subject Credit')"
             ></v-text-field>
+            <v-text-field
+              :rules="rules.codeNumber"
+              v-model="codeNumber"
+              type="text"
+              variant="outlined"
+              :label="$t('Subject Code Number')"
+            ></v-text-field>
             <v-autocomplete
               v-model="teacherId"
               clearable
@@ -66,6 +73,7 @@ export default {
     teacherId: null,
     name: null,
     credit: null,
+    codeNumber: null,
     show: true,
     isLoading: false,
     errorMessage: null,
@@ -78,6 +86,7 @@ export default {
       return {
         name: [(v) => !!v || this.$t('Please enter subject name')],
         credit: [(v) => !!v || this.$t('Please enter subject credits')],
+        codeNumber: [(v) => !!v || this.$t('Please enter subject code number')],
       };
     },
   },
@@ -101,6 +110,7 @@ export default {
           credit: this.credit,
           teacherId: this.teacherId,
           semesterId: this.semesterId,
+          codeNumber: this.codeNumber,
         };
 
         console.log(data);

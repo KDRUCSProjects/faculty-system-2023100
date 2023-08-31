@@ -21,6 +21,13 @@
               variant="outlined"
               :label="$t('Subject Credit')"
             ></v-text-field>
+            <v-text-field
+              :rules="rules.codeNumber"
+              v-model="codeNumber"
+              type="text"
+              variant="outlined"
+              :label="$t('Subject Code Number')"
+            ></v-text-field>
             <v-autocomplete
               v-model="teacherId"
               clearable
@@ -68,6 +75,7 @@ export default {
     dialog: false,
     name: null,
     credit: null,
+    codeNumber: null,
     teacherId: null,
     show: true,
     isLoading: false,
@@ -81,6 +89,7 @@ export default {
       return {
         name: [(v) => !!v || this.$t('Please enter subject name')],
         credit: [(v) => !!v || this.$t('Please enter subject credits')],
+        codeNumber: [(v) => !!v || this.$t('Please enter subject code number')],
       };
     },
   },
@@ -93,6 +102,7 @@ export default {
       this.name = response.data.name;
       this.credit = response.data.credit;
       this.teacherId= response.data.teacherId;
+      this.codeNumber = response.data.codeNumber;
 
     },
     async submitForm() {
@@ -113,6 +123,7 @@ export default {
           name: this.name,
           credit: this.credit,
           teacherId: this.teacherId,
+          codeNumber: this.codeNumber,
         };
 
         await this.$store.dispatch('subjects/updateSubject', data);
