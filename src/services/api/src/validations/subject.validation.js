@@ -3,7 +3,8 @@ const Joi = require('joi');
 const createSubject = {
   body: Joi.object().keys({
     name: Joi.string().required(),
-    credit: Joi.number().required().min(1).max(4).message('credit must be between 1 and 4'),
+    credit: Joi.number().required().min(1).max(6).message('credit must be between 1 and 6'),
+    codeNumber: Joi.string(),
     semesterId: Joi.number().required(),
     teacherId: Joi.number(),
   }),
@@ -48,7 +49,8 @@ const updatedSubject = {
   body: Joi.object()
     .keys({
       name: Joi.string(),
-      credit: Joi.number().min(1).max(4).message('credit must be between 1 and 4'),
+      credit: Joi.number().min(1).max(6).message('credit must be between 1 and 6'),
+      codeNumber: Joi.string(),
       semesterId: Joi.number(),
       teacherId: Joi.number(),
     })

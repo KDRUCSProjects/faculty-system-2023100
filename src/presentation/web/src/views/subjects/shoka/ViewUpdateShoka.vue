@@ -50,6 +50,7 @@
                 :fieldName="'assignment'"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
+                :max-value="10"
               >
                 <v-btn color="dark" text variant="outlined">
                   {{ item.columns.assignment }}
@@ -68,6 +69,7 @@
                 :fieldValue="item.columns.finalMarks"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
+                :max-value="60"
               >
                 <v-btn color="dark" text variant="outlined">
                   {{ item.columns.finalMarks }}
@@ -86,6 +88,7 @@
                 :rowId="item?.raw?.shokaListId"
                 :fieldValue="item.columns.projectMarks"
                 :data="item?.raw"
+                :max-value="20"
               >
                 <v-btn color="dark" text variant="outlined">
                   {{ item.columns.projectMarks }}
@@ -104,6 +107,7 @@
                 :rowId="item?.raw?.shokaListId"
                 :fieldValue="item.columns.practicalWork"
                 :data="item?.raw"
+                :max-value="10"
               >
                 <v-btn color="dark" text variant="outlined">
                   {{ item.columns.practicalWork }}

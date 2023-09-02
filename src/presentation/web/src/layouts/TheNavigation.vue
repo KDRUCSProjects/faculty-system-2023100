@@ -15,7 +15,7 @@
     <v-list nav dense class="menu-items">
       <div v-for="item in items" :key="item.title">
         <div v-if="!item.children">
-          <v-list-item link :to="item.to">
+          <v-list-item link :to="item.to" v-if="show(item.role)">
             <v-list-item-icon>
               <v-icon color="light">{{ item.icon }}</v-icon>
             </v-list-item-icon>
@@ -26,7 +26,7 @@
           </v-list-item>
         </div>
         <div v-else>
-          <v-list-group :value="item.title">
+          <v-list-group :value="item.title" v-if="show(item.role)">
             <template v-slot:activator="{ props }">
               <v-list-item v-bind="props">
                 <v-icon>{{ item.icon }}</v-icon>
@@ -65,15 +65,18 @@ export default {
           title: this.$t('Dashboard'),
           icon: 'mdi-poll',
           to: '/dashboard',
+          role: ['admin', 'execManager', 'teachingManager'],
         },
         {
           title: this.$t('Teachers'),
           icon: 'mdi-human-male-board',
           to: '/teachers',
+          role: ['execManager', 'admin'],
         },
         {
           title: this.$t('Students'),
           icon: 'mdi-account-school',
+          role: ['execManager', 'admin'],
           children: [
             {
               title: this.$t('All Students'),
@@ -97,6 +100,7 @@ export default {
           title: this.$t('Semesters'),
           icon: 'mdi-google-classroom',
           to: '/semesters/all',
+          role: ['execManager', 'admin'],
         },
         // {
         //   title: 'Subjects',
@@ -107,23 +111,41 @@ export default {
           title: this.$t('Periods'),
           icon: 'mdi-school',
           to: '/periods',
+          role: ['teachingManager', 'admin'],
         },
         {
-          title: this.$t('Departments'),
-          icon: 'mdi-home-city-outline',
-          to: '/departments',
+          title: this.$t('Report'),
+          icon: 'mdi-finance',
+          to: '/report',
+          role: ['teachingManager', 'admin'],
         },
+        // {
+        //   title: this.$t('Departments'),
+        //   icon: 'mdi-home-city-outline',
+        //   to: '/departments',
+        // },
         {
           title: this.$t('Settings'),
           icon: 'mdi-cog-outline',
           to: '/settings',
+          role: ['teachingManager', 'admin', 'execManager'],
         },
       ],
       drawer: true,
       open: ['Users'],
     };
   },
+  computed: {
+    role() {
+      return this.$store.getters['role'];
+    },
+  },
   methods: {
+    show(roles) {
+      let theRole = this.role;
+      let x = roles.includes(theRole);
+      return x;
+    },
     async logout() {
       await this.$store.dispatch('logout');
       this.$router.replace('/auth');

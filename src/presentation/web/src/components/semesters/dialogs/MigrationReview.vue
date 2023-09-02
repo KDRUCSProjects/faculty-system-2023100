@@ -21,9 +21,13 @@
                     <v-card-title class="text-h4 pb-2 text-uppercase font-weight-bold">
                       {{ $t('Welcome to students migration') }}
                     </v-card-title>
-                    <v-card-title class="text-h4 pb-2 text-uppercase text-secondary font-weight-bold">{{ $t('Overview') }}</v-card-title>
+                    <v-card-title class="text-h4 pb-2 text-uppercase text-secondary font-weight-bold">{{
+                      $t('Overview')
+                    }}</v-card-title>
                     <v-card-subtitle class="mt-4">
-                      {{ $t('Please review your migration before submitting the process.') }} <br />{{ $t('Here you will see which students are eligible for the next semester.') }}<br />
+                      {{ $t('Please review your migration before submitting the process.') }} <br />{{
+                        $t('Here you will see which students are eligible for the next semester.')
+                      }}<br />
                       {{ $t('Take some time and review all students') }}
                     </v-card-subtitle>
                     <v-btn
@@ -64,9 +68,9 @@
                 <v-card-text>
                   <v-card-item>
                     <v-card-title class="text-h5 text-uppercase">{{ $t('All Students') }}</v-card-title>
-                    <v-card-subtitle
-                      >{{ $t('Review all the student of this semester and then hit the migrate button') }}</v-card-subtitle
-                    >
+                    <v-card-subtitle>{{
+                      $t('Review all the student of this semester and then hit the migrate button')
+                    }}</v-card-subtitle>
                   </v-card-item>
                   <v-data-table-virtual
                     :loading="loading"
@@ -133,9 +137,9 @@
                 <v-card-actions class="mx-2">
                   <v-spacer></v-spacer>
                   <v-btn variant="outlined" color="error" @click="cancelMigration">{{ $t('Cancel') }}</v-btn>
-                  <v-btn variant="flat" @click="promoteSemesterStudents" :loading="migrateLoader"
-                    >{{ $t('Proceed with Migration') }}</v-btn
-                  >
+                  <v-btn variant="flat" @click="promoteSemesterStudents" :loading="migrateLoader">{{
+                    $t('Proceed with Migration')
+                  }}</v-btn>
                 </v-card-actions>
               </v-card>
             </v-window-item>
@@ -195,7 +199,6 @@ export default {
       { title: 'Taajil', key: 'taajil', sortable: false },
       { title: 'Tabdil', key: 'tabdil', sortable: false },
       { title: 'Monfaq', key: 'monfaq', sortable: false },
-      { title: 'Mahrom', key: 'mahrom', sortable: false },
       { title: 'Info', key: 'message', sortable: false },
       { title: 'Eligibility', key: 'eligibility', sortable: false },
     ],

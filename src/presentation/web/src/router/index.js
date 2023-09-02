@@ -37,11 +37,11 @@ const routes = [
       },
     ],
   },
-  {
-    path: '/departments',
-    component: () => import('@/views/departments/departmentList.vue'),
-    // component: () => import('@/views/setupWizard/setupWizard.vue')
-  },
+  // {
+  //   path: '/departments',
+  //   component: () => import('@/views/departments/departmentList.vue'),
+  //   // component: () => import('@/views/setupWizard/setupWizard.vue')
+  // },
   {
     path: '/settings',
     meta: {
@@ -164,6 +164,13 @@ const routes = [
         props: true,
       },
     ],
+  },
+  {
+    path: '/report',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Report.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
