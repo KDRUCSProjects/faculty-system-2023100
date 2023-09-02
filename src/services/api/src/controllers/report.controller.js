@@ -8,7 +8,7 @@ const { semesterService, educationalYearService } = require('../services');
 const { translateFields } = require('../utils/global');
 
 const getConversionReport = catchAsync(async (req, res) => {
-  const { type, semesterId } = req.query;
+  const { type, semesterId, gender } = req.query;
 
   const { title, educationalYearId } = await semesterService.findSemesterById(semesterId);
   const { year } = await educationalYearService.getEducationalYear(educationalYearId);
@@ -30,7 +30,14 @@ const getConversionReport = catchAsync(async (req, res) => {
   const maleStatsReport = await getStatsBySemesterId(semesterId, 'male', false);
   const femaleStatsReport = await getStatsBySemesterId(semesterId, 'female', false);
 
-  const results = [...maleStatsReport[type], ...femaleStatsReport[type]];
+  let results = [];
+  if (gender) {
+    results = gender === 'male' ? (results = [...maleStatsReport[type]]) : (results = [...femaleStatsReport[type]]);
+  } else {
+    results = [...maleStatsReport[type], ...femaleStatsReport[type]];
+  }
+
+  console.log(results);
 
   // workbook.xlsx.write(res);
   // res.end();

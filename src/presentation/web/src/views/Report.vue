@@ -71,8 +71,33 @@
           :no-header="true"
           :show-numbers="true"
           :default-items-per-page="itemsPerPage"
-          density="default"
-        ></students-data-table>
+          :search="search"
+          :custom-header="true"
+        >
+          <v-card-text class="pa-0 ma-0">
+            <v-row>
+              <v-col cols="9">
+                <v-text-field
+                  density="compact"
+                  v-model="search"
+                  placeholder="Search anything..."
+                  variant="outlined"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="3">
+                <span style="position: relative; top: 2px; right: 10px">
+                  <base-menu
+                    :items="genderItems"
+                    @selected="setGender"
+                    :display-pre-text="'Gender -'"
+                    theme="dark"
+                    variant="tonal"
+                  ></base-menu>
+                </span>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </students-data-table>
       </v-card-text>
     </v-card>
   </base-contents>
@@ -94,6 +119,9 @@ export default {
     itemsPerPage: 7,
     reportItems: ['present', 'taajil', 'reentry', 'monfaq', 'tabdili'],
     selectedReport: 'present',
+    gender: 'all',
+    genderItems: ['male', 'female', 'all'],
+    search: null,
     downloadLoading: false,
     downloadBadlAshaLoading: false,
     headersReport: [
@@ -161,7 +189,11 @@ export default {
       const students = this.$store.getters['semesters/semester']?.statistics?.report;
       if (students) {
         const totalStudents = [...students?.male[this.selectedReport], ...students?.female[this.selectedReport]];
-        return totalStudents;
+        return totalStudents.filter((s) => {
+          if (this.gender == 'all') return s;
+          if (this.gender == 'male' && s.gender === 'male') return s;
+          if (this.gender == 'female' && s.gender === 'female') return s;
+        });
       } else {
         return [];
       }
@@ -171,6 +203,9 @@ export default {
     },
   },
   methods: {
+    setGender(v) {
+      this.gender = v;
+    },
     async setSemesterItem(v) {
       this.currentSemesterItem = v;
 
@@ -215,10 +250,13 @@ export default {
     },
     async downloadReport() {
       this.downloadLoading = true;
-      const file = await this.$store.dispatch('semesters/downloadSemesterReportByType', {
+      const data = {
         semesterId: this.id,
         type: this.selectedReport,
-      });
+        gender: this.gender,
+      };
+
+      const file = await this.$store.dispatch('semesters/downloadSemesterReportByType', data);
 
       this.downloadFile(file.data, `${this.selectedReport} List`);
 

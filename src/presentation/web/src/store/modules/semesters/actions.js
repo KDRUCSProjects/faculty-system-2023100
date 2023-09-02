@@ -115,11 +115,16 @@ export default {
       throw e.response.data.message;
     }
   },
-  async downloadSemesterReportByType(context, { semesterId, type }) {
+  async downloadSemesterReportByType(context, { semesterId, type, gender }) {
     try {
       const token = context.rootGetters.token;
 
-      const response = await axios.get(`/api/report/conversion?semesterId=${semesterId}&type=${type}`, {
+      let url = `/api/report/conversion?semesterId=${semesterId}&type=${type}`;
+
+      if (gender != 'all') {
+        url = url + `&gender=${gender}`;
+      }
+      const response = await axios.get(url, {
         responseType: 'blob',
         headers: {
           Authorization: `Bearer ${token}`,
