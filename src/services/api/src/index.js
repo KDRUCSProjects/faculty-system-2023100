@@ -2,6 +2,9 @@ const app = require('./app');
 const config = require('./config/config');
 const logger = require('./config/logger');
 
+// App Jobs
+const { createDBBackup } = require('./jobs/backup');
+
 // Connect database
 const db = require('./models/index');
 
@@ -11,6 +14,9 @@ const db = require('./models/index');
 // Start server
 const server = app.listen(config.port, () => {
   logger.info(`Listening at http://localhost:${config.port}`);
+
+  // Create db backup
+  createDBBackup();
 });
 
 const exitHandler = () => {

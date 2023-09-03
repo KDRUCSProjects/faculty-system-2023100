@@ -19,7 +19,7 @@
             <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="bg-teal-lighten-4">
               <v-tab :value="1"> {{ $t('Subjects') }} </v-tab>
               <v-tab :value="2"> {{ $t('Statistics') }} </v-tab>
-              <v-tab :value="3"> {{ $t('Report') }} </v-tab>
+              <!-- <v-tab :value="3"> {{ $t('Report') }} </v-tab> -->
               <v-tab :value="4"> {{ $t('Migration') }} </v-tab>
             </v-tabs>
             <v-window v-model="tab">
@@ -40,7 +40,7 @@
                 </v-card>
               </v-window-item>
 
-              <v-window-item :value="3">
+              <!-- <v-window-item :value="3">
                 <v-card class="mt-3">
                   <v-card-item>
                     <v-row class="pa-0 ma-0 d-flex">
@@ -100,7 +100,7 @@
                   </v-card-text>
                   <v-card-actions class="mx-2"> </v-card-actions>
                 </v-card>
-              </v-window-item>
+              </v-window-item> -->
               <v-window-item :value="4">
                 <v-card class="mt-7">
                   <v-card-item>

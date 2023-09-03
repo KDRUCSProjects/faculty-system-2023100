@@ -21,6 +21,7 @@ import BaseConfirmDialog from '@/components/ui/BaseConfirmDialog.vue';
 import BasePhotoUploader from '@/components/ui/BasePhotoUploader.vue';
 import BaseConfirmPassword from '@/components/ui/BaseConfirmPassword.vue';
 import BaseUpdateDialog from '@/components/ui/BaseUpdateDialog';
+import BaseUpdateField from '@/components/ui/BaseUpdateField';
 import BaseSelectYearDialog from '@/components/ui/dialogs/BaseSelectYear.vue';
 import BaseSelectPeriodDialog from '@/components/ui/dialogs/BaseSelectPeriod.vue';
 import BaseToast from '@/components/ui/BaseToast.vue';
@@ -39,6 +40,7 @@ app.component('base-toast', BaseToast);
 app.component('base-autocomplete-year', BaseAutoCompleteYear);
 app.component('base-menu', BaseMenu);
 app.component('base-select-period-dialog', BaseSelectPeriodDialog);
+app.component('base-update-field', BaseUpdateField);
 
 registerPlugins(app);
 
