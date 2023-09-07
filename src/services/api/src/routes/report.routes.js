@@ -8,6 +8,8 @@ const router = express.Router();
 
 router.get('/conversion', validate(reportValidation.createConversionReport), reportController.getConversionReport);
 
+router.get('/dbBackup', auth(), reportController.createBackup);
+
 module.exports = router;
 
 /**
@@ -43,6 +45,26 @@ module.exports = router;
  *     responses:
  *       "200":
  *         description: NO CONTENT AND FILE WILL BE DOWNLOADED
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /report/dbBackup:
+ *   get:
+ *     summary: create database backup .
+ *     description: Manual and auto database backup.  On Thursday, database will be automatically backed up.
+ *     tags: [Report]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       "200":
+ *         description: NO CONTENT AND FILE WILL BE SAVED AT HOME-DOUCMENTS-FACULTY MS
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

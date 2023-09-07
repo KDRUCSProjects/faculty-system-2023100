@@ -6,6 +6,7 @@ const Excel = require('exceljs');
 const path = require('path');
 const { semesterService, educationalYearService } = require('../services');
 const { translateFields } = require('../utils/global');
+const { createDBBackup } = require('../jobs/backup');
 
 const getConversionReport = catchAsync(async (req, res) => {
   const { type, semesterId, gender } = req.query;
@@ -73,6 +74,21 @@ const getConversionReport = catchAsync(async (req, res) => {
   return res.download(newPath);
 });
 
+const createBackup = catchAsync(async (req, res) => {
+  try {
+    await createDBBackup(true);
+
+    res.send({
+      message: 'Backup successfully created @ -> Home/Documents/Faculty MS',
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: 'Failed generating db backup',
+    });
+  }
+});
+
 module.exports = {
   getConversionReport,
+  createBackup,
 };

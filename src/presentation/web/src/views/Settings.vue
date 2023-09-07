@@ -16,10 +16,13 @@
           <change-password></change-password>
         </v-window-item>
         <v-window-item class="pa-3">
-          <educational-years > </educational-years>
+          <educational-years> </educational-years>
         </v-window-item>
         <v-window-item class="pa-3">
           <token-generate> </token-generate>
+        </v-window-item>
+        <v-window-item class="pa-3">
+          <system-backup> </system-backup>
         </v-window-item>
       </v-window>
     </div>
@@ -31,6 +34,7 @@ import ViewEditProfile from '@/components/profile/ViewEditProfile.vue';
 import ChangePassword from '@/components/profile/ChangePassword.vue';
 import EducationalYears from '@/components/profile/EducationalYears.vue';
 import TokenGenerate from '@/components/profile/TokenGenerate.vue';
+import SystemBackup from '@/components/profile/SystemBackup.vue';
 
 export default {
   components: {
@@ -38,6 +42,7 @@ export default {
     ChangePassword,
     EducationalYears,
     TokenGenerate,
+    SystemBackup,
   },
   data: () => ({
     tab: null,
@@ -57,6 +62,10 @@ export default {
       {
         title: 'Token Generate',
         component: 'TokenGenerate',
+      },
+      {
+        title: 'System Backup',
+        component: 'SystemBackup',
       },
     ],
   }),

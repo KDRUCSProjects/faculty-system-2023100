@@ -92,6 +92,7 @@
                     :display-pre-text="'Gender -'"
                     theme="dark"
                     variant="tonal"
+                    theDefault="all"
                   ></base-menu>
                 </span>
               </v-col>
