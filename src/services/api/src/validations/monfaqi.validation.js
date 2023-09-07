@@ -12,13 +12,13 @@ const createMonfaqi = {
 
 const getMonfaqi = {
   params: Joi.object().keys({
-    monfaqiId: Joi.number(),
+    monfaqiId: Joi.number().positive().integer(),
   }),
 };
 
 const updateMonfaqi = {
   params: Joi.object().keys({
-    monfaqiId: Joi.number().required(),
+    monfaqiId: Joi.number().required().positive().integer(),
   }),
   body: Joi.object()
     .keys({

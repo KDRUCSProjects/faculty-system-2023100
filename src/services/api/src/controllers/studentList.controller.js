@@ -176,6 +176,7 @@ const promoteStudents = catchAsync(async (req, res) => {
         // if (!lastSemester.onGoing) {
         //   result = await studentListService.updatedStudentList(studentAllLists[0], { 'onGoing': false, 'completed': true });
         // }
+        await studentService.makeStudentGraduated(studentId);
         results.push({ message: 'Student is Graduated', result });
         continue;
       }

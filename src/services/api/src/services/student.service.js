@@ -14,6 +14,20 @@ const registerStudent = (studentBody) => {
 };
 
 /**
+ * make a student graduated
+ * @param {ObjectId} studentId
+ * @returns {Promise<Student>}
+ */
+const makeStudentGraduated = async (studentId) => {
+  // return Student.create(studentBody);
+  const student = await Student.findOne({ where: { id: studentId } });
+  if (student && !student.graduated) {
+    return updateStudent(student, { graduated: true });
+  }
+  return;
+};
+
+/**
  * Create a Student
  * @param {Number} offset
  * @returns {Promise<Student>}
@@ -263,6 +277,7 @@ module.exports = {
   deleteStudentById,
   getStudentByKankorId,
   getStudentOnKankorId,
+  makeStudentGraduated,
   getUnRegisteredStudents,
   countUnregisteredStudent,
   getStudentSchool,

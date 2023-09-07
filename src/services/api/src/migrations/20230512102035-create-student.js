@@ -86,6 +86,10 @@ module.exports = {
       engDob: {
         type: Sequelize.DATE,
       },
+      graduated: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       educationalYearId: {
         type: Sequelize.INTEGER,
         required: true,

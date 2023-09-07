@@ -30,7 +30,7 @@ const updateShokaList = {
 
 const getShokaList = {
   params: Joi.object().keys({
-    subjectId: Joi.number().required(),
+    subjectId: Joi.number().required().positive().integer(),
   }),
   query: Joi.object().keys({
     chance: Joi.number().min(1).max(3).required(),
@@ -39,13 +39,13 @@ const getShokaList = {
 
 const deleteShokaList = {
   params: Joi.object().keys({
-    shokalistId: Joi.number().required(),
+    shokalistId: Joi.number().required().integer().positive(),
   }),
 };
 
 const getStudentMarks = {
   params: Joi.object().keys({
-    studentId: Joi.number().required(),
+    studentId: Joi.number().required().integer().positive(),
   }),
   query: Joi.object().keys({
     semester: Joi.number().min(1).max(8),

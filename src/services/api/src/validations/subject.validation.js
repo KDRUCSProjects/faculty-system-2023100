@@ -27,7 +27,7 @@ const createReport = {
 
 const getTeacherSubjects = {
   params: Joi.object().keys({
-    teacherId: Joi.number().required(),
+    teacherId: Joi.number().required().positive().integer(),
   }),
   query: Joi.object().keys({
     year: Joi.number().integer(),
@@ -58,13 +58,13 @@ const updatedSubject = {
 const assignSubjectToTeacher = {
   body: Joi.object().keys({
     subjectId: Joi.number().positive().integer().required(),
-    teacherId: Joi.number().required(),
+    teacherId: Joi.number().required().positive().integer(),
   }),
 };
 
 const getSubjects = {
   query: Joi.object().keys({
-    semesterId: Joi.number(),
+    semesterId: Joi.number().positive().integer(),
     status: Joi.string().valid('unassigned'),
   }),
 };

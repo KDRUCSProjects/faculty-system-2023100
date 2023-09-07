@@ -48,6 +48,10 @@ module.exports = (sequelize, DataTypes) => {
       birthCityEnglish: DataTypes.STRING,
       birthCountryEnglish: DataTypes.STRING,
       bankAccount: DataTypes.STRING,
+      graduated: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       // engDob: DataTypes.DATE,
       educationalYearId: {
         type: DataTypes.INTEGER,
