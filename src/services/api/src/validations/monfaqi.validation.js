@@ -3,7 +3,7 @@ const Joi = require('joi');
 const createMonfaqi = {
   body: Joi.object().keys({
     studentId: Joi.number().required(),
-    year: Joi.number().required(),
+    educationalYear: Joi.number().required(),
     regNumber: Joi.number().required(),
     attachment: Joi.string(),
     notes: Joi.string(),

@@ -7,6 +7,7 @@ const {
   taajilService,
   reentryService,
   studentListService,
+  monfaqiService,
 } = require('../services');
 const ApiError = require('./ApiError');
 
@@ -36,6 +37,9 @@ const findEligibleNextSemesterAfterConversion = async (semesterId) => {
 };
 
 const checkStudentEligibilityForNextSemester = async (studentId) => {
+  const isMonfaq = await monfaqiService.findMonfaqiByStudentId(studentId);
+  if (isMonfaq) return { message: 'Student is monfaq', eligible: 0, reason: 'monfaq' };
+
   // 1. Let's check if the student has been given tabdili:
   const isTabdil = await tabdiliService.findTabdiliByStudentId(studentId);
   if (isTabdil) return { message: 'Student is tabdil', eligible: 0, reason: 'tabdil' };
