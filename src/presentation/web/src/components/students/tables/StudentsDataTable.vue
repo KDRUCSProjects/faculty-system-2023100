@@ -156,7 +156,7 @@ export default {
       itemsPerPage: 8,
       loading: false,
       errorMessage: null,
-      statusTypes: [this.$t('Taajil'), this.$t('Reentry'), this.$t('Tabdili')],
+      statusTypes: [this.$t('Taajil'), this.$t('Reentry'), this.$t('Tabdili'), this.$t('monfaqi')],
       type: null,
     };
   },

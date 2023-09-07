@@ -92,36 +92,66 @@
                     </template>
 
                     <template v-slot:item.message="{ item }">
-                      <v-tooltip :text="item.columns.message" location="top">
-                        <template v-slot:activator="{ props }">
-                          <v-icon v-bind="props" icon="mdi-information" color="dark"></v-icon>
-                        </template>
-                      </v-tooltip>
+                      <div class="text-center">
+                        <v-tooltip :text="item.columns.message" location="top">
+                          <template v-slot:activator="{ props }">
+                            <v-icon v-bind="props" icon="mdi-information" color="dark"></v-icon>
+                          </template>
+                        </v-tooltip>
+                      </div>
                     </template>
 
                     <template v-slot:item.taajil="{ item }">
-                      <v-icon v-if="!!item.columns.taajil" icon="mdi-check-circle-outline" color="success"></v-icon>
-                      <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.taajil" icon="mdi-check-circle-outline" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
                     </template>
 
                     <template v-slot:item.tabdil="{ item }">
-                      <v-icon v-if="!!item.columns.tabdil" icon="mdi-check-circle-outline" color="success"></v-icon>
-                      <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.tabdil" icon="mdi-check-circle-outline" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
                     </template>
 
                     <template v-slot:item.mahrom="{ item }">
-                      <v-icon v-if="!!item.columns.mahrom" icon="mdi-check-circle-outline" color="success"></v-icon>
-                      <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.mahrom" icon="mdi-check-circle-outline" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
                     </template>
 
                     <template v-slot:item.monfaq="{ item }">
-                      <v-icon v-if="!!item.columns.monfaq" icon="mdi-check-circle-outline" color="success"></v-icon>
-                      <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.monfaq" icon="mdi-check-circle-outline" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
+                    </template>
+
+                    <template v-slot:item.absent="{ item }">
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.absent" icon="mdi-check-circle-outline" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
+                    </template>
+
+                    <template v-slot:item.repeat_semester="{ item }">
+                      <div class="text-center">
+                        <v-icon
+                          v-if="!!item.columns.repeat_semester"
+                          icon="mdi-check-circle-outline"
+                          color="success"
+                        ></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
                     </template>
 
                     <template v-slot:item.eligibility="{ item }">
-                      <v-icon v-if="!!item.columns.eligibility" icon="mdi-check-circle" color="success"></v-icon>
-                      <v-icon v-else icon="mdi-close-circle" color="error"></v-icon>
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.eligibility" icon="mdi-check-circle" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-close-circle" color="error"></v-icon>
+                      </div>
                     </template>
 
                     <template v-slot:item.photo="{ item }">
@@ -199,6 +229,8 @@ export default {
       { title: 'Taajil', key: 'taajil', sortable: false },
       { title: 'Tabdil', key: 'tabdil', sortable: false },
       { title: 'Monfaq', key: 'monfaq', sortable: false },
+      { title: 'Absent', key: 'absent', sortable: false },
+      { title: 'Repeat', key: 'repeat_semester', sortable: false },
       { title: 'Info', key: 'message', sortable: false },
       { title: 'Eligibility', key: 'eligibility', sortable: false },
     ],

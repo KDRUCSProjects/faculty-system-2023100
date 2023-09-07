@@ -177,6 +177,8 @@ export default {
         return 'tabdili';
       } else if (this.type === 'reentry') {
         return 'reentries';
+      } else if (this.type === 'monfaqi') {
+        return 'monfaqi';
       } else {
         return 'taajils';
       }
