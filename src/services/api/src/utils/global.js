@@ -90,8 +90,6 @@ const findEligibleNextSemester = async (currentSemester) => {
 
   const semesterYear = await educationalYearService.getEducationalYear(educationalYearId);
 
-  console.log(semesterYear.year);
-
   const theYear = title % 2 === 0 ? ++semesterYear.year : semesterYear.year;
 
   const { id: findTheYearId } = await educationalYearService.getEducationalYearByValue(theYear);

@@ -84,6 +84,15 @@ const getSemesterSubjects = (semesterId) => {
 };
 
 /**
+ * get subject of semester
+ * @param {ObjectId} semesterId
+ * @returns {Promise<Student>}
+ */
+const getSemesterSubjectsSortedById = (semesterId) => {
+  return Subject.findAll({ where: { semesterId }, order: [['id', 'ASC']] });
+};
+
+/**
  * get subject by id
  * @param {ObjectId} id
  * @returns {Promise<Student>}
@@ -199,4 +208,5 @@ module.exports = {
   getSemesterStudents,
   getUnassignedSubjects,
   getTeacherSubjectsOfYear,
+  getSemesterSubjectsSortedById,
 };

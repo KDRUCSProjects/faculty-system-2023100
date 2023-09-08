@@ -77,7 +77,6 @@ const getEducationalYears = catchAsync(async (req, res) => {
       semestersWithEducationalYear.push(semester);
     }
 
-    console.log(semestersWithEducationalYear);
     return res.status(httpStatus.OK).send({ orderedSemesters: semesters, unorderedSemesters: theSemesters });
   }
   const results = await educationalYearService.getEducationalYears();

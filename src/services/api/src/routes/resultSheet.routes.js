@@ -1,36 +1,34 @@
 const express = require('express');
 const validate = require('../middlewares/validate');
 const auth = require('../middlewares/auth');
-const { transcriptValidation } = require('../validations');
-const { transcriptController } = require('../controllers');
+const { resultSheetValidation } = require('../validations');
+const { resultSheetController } = require('../controllers');
 
 const router = express.Router();
 
-router
-  .route('/:studentId')
-  .get(auth('manageUsers'), validate(transcriptValidation.createFile), transcriptController.createTranscript);
+router.route('/:period').get(validate(resultSheetValidation.createFile), resultSheetController.createResultSheet);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Transcript
- *   description: Transcript management and retrieval
+ *   name: ResultSheet
+ *   description: ResultSheet management and retrieval
  */
 
 /**
  * @swagger
- * /transcript/{studentId}:
+ * /resultSheet/{period}:
  *   get:
- *     summary: create Transcript file in excel.
- *     description: create Transcript file in excel.
- *     tags: [Transcript]
+ *     summary: create ResultSheet file in excel.
+ *     description: create ResultSheet file in excel.
+ *     tags: [ResultSheet]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: studentId
+ *         name: period
  *         required: true
  *         schema:
  *           type: number

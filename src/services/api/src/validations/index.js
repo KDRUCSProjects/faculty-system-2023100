@@ -19,3 +19,4 @@ module.exports.shokaValidation = require('./shoka.validation');
 module.exports.badliAshaValidation = require('./badli.asha.validation');
 module.exports.monfaqiValidation = require('./monfaqi.validation');
 module.exports.transcriptValidation = require('./transcript.validation');
+module.exports.resultSheetValidation = require('./resultSheet.validation');

@@ -115,6 +115,53 @@ const getStudentMarks = (conditions) => {
 };
 
 /**
+ * get student marks
+ * @param {Array} conditions
+ * @returns {Promise<ShokaList>}
+ */
+const getStudentMarksSortByName = (conditions) => {
+  return sequelize.query(
+    `
+    select 
+    shokalist.id,
+    shokalist.shokaId,
+    shokalist.studentId,
+    shokalist.projectMarks,
+    shokalist.assignment,
+    shokalist.practicalWork,
+    shokalist.chance,
+    shokalist.finalMarks,
+    shokalist.createdAt,
+    shokalist.deletedAt,
+    shoka.id as shokaId, 
+    shoka.subjectId,
+    student.fullName as fullName,
+    student.fatherName as fatherName,
+    student.kankorId as kankorId,
+    subject.name as subjectName,
+    subject.semesterId as semesterId,
+    subject.credit as subjectCredit,
+    semester.title as semesterTitle,
+    semester.educationalYearId as educationalYearId,
+    educationalYear.year as educationalYear,
+    educationalYear.firstHalfStart,
+    educationalYear.firstHalfEnd,
+    educationalYear.SecondHalfStart,
+    educationalYear.SecondHalfEnd
+    from shokalists as shokalist
+    inner join shokas as shoka on shoka.id = shokalist.shokaId
+    inner join subjects as subject on subject.id = shoka.subjectId
+    inner join semesters as semester on semester.id = subject.semesterId
+    inner join students as student on shokalist.studentId = student.id
+    inner join educationalYears as educationalYear on educationalYear.id = semester.educationalYearId 
+    where ${conditions.join(` AND `)}
+    order by student.fullName
+    `,
+    { type: QueryTypes.SELECT }
+  );
+};
+
+/**
  * get subject marks
  * @param {ObjectId} shokaId
  * @param {ObjectId} chance
@@ -223,4 +270,5 @@ module.exports = {
   getShokaListById,
   findFailStudents,
   isStudentListedInShokaList,
+  getStudentMarksSortByName,
 };

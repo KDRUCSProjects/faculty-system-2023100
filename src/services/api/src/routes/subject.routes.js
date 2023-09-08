@@ -17,9 +17,7 @@ router
   .patch(auth(), validate(subjectValidation.updatedSubject), subjectController.updatedSubject)
   .delete(auth(), validate(subjectValidation.getSubject), subjectController.deleteSubject);
 
-router
-  .route('/:subjectId/report')
-  .get(auth(), validate(subjectValidation.createReport), subjectController.createReport)
+router.route('/:subjectId/report').get(auth(), validate(subjectValidation.createReport), subjectController.createReport);
 
 router
   .route('/teachers/:teacherId')
@@ -227,7 +225,6 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  */
 
-
 /**
  * @swagger
  * /subjects/assign:
@@ -381,49 +378,47 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  */
 
-
-
-/** 
-  * @swagger
-  * /subjects/{subjectId}/report:
-  *   get:
-  *     summary: create attendance report in excel.
-  *     description: create attendance report in excel.
-  *     tags: [Subject]
-  *     security:
-  *       - bearerAuth: []
-  *     parameters:
-  *       - in: path
-  *         name: subjectId
-  *         required: true
-  *         schema:
-  *           type: number
-  *         description: subject id
-  *       - in: query
-  *         name: startDate
-  *         required: true
-  *         schema:
-  *           type: string
-  *           format: 2023-05-23
-  *         description: start date
-  *       - in: query
-  *         name: endDate
-  *         required: true
-  *         schema:
-  *           type: string
-  *           format: 2023-08-15
-  *         description: end date
-  *     responses:
-  *       "200":
-  *         description: OK
-  *         content:
-  *           application/json:
-  *             schema:
-  *                $ref: '#/components/schemas/Subject'
-  *       "401":
-  *         $ref: '#/components/responses/Unauthorized'
-  *       "403":
-  *         $ref: '#/components/responses/Forbidden'
-  *       "404":
-  *         $ref: '#/components/responses/NotFound'
-*/
+/**
+ * @swagger
+ * /subjects/{subjectId}/report:
+ *   get:
+ *     summary: create attendance report in excel.
+ *     description: create attendance report in excel.
+ *     tags: [Subject]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: subjectId
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: subject id
+ *       - in: query
+ *         name: startDate
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: 2023-05-23
+ *         description: start date
+ *       - in: query
+ *         name: endDate
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: 2023-08-15
+ *         description: end date
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Subject'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */

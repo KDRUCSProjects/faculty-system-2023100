@@ -24,7 +24,6 @@ const makeStudentGraduated = async (studentId) => {
   if (student && !student.graduated) {
     return updateStudent(student, { graduated: true });
   }
-  return;
 };
 
 /**

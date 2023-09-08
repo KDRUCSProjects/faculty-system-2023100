@@ -261,7 +261,6 @@ const updateShokaList = catchAsync(async (req, res) => {
       throw new ApiError(httpStatus.FORBIDDEN, 'FORBIDDEN');
     }
     if (moment() >= moment(shokaList.createdAt).add(3, 'days')) {
-      console.log(moment(shokaList.createdAt).add(3, 'days'));
       throw new ApiError(httpStatus.FORBIDDEN, 'FORBIDDEN');
     }
     const results = await shokaListService.updateShokaList(shokaList, req.body);
@@ -282,7 +281,6 @@ const deleteShokaList = catchAsync(async (req, res) => {
       throw new ApiError(httpStatus.FORBIDDEN, 'FORBIDDEN');
     }
     if (moment() >= moment(shokaList.createdAt).add(3, 'days')) {
-      console.log(moment(shokaList.createdAt).add(3, 'days'));
       throw new ApiError(httpStatus.FORBIDDEN, 'You Can not Delete Marks After Three days');
     }
     await shokaListService.deleteShokaList(shokaList);

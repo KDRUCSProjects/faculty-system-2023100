@@ -261,8 +261,6 @@ const reviewStudentsPromotion = catchAsync(async (req, res) => {
     // Once promotion is completed, mark the current semester as completed
   }
 
-  console.log(results);
-
   return res.send(results);
 });
 
