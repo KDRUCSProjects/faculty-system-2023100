@@ -7,6 +7,7 @@ const {
   taajilService,
   reentryService,
   studentListService,
+  monfaqiService,
 } = require('../services');
 const ApiError = require('./ApiError');
 
@@ -36,6 +37,9 @@ const findEligibleNextSemesterAfterConversion = async (semesterId) => {
 };
 
 const checkStudentEligibilityForNextSemester = async (studentId) => {
+  const isMonfaq = await monfaqiService.findMonfaqiByStudentId(studentId);
+  if (isMonfaq) return { message: 'Student is monfaq', eligible: 0, reason: 'monfaq' };
+
   // 1. Let's check if the student has been given tabdili:
   const isTabdil = await tabdiliService.findTabdiliByStudentId(studentId);
   if (isTabdil) return { message: 'Student is tabdil', eligible: 0, reason: 'tabdil' };
@@ -168,6 +172,18 @@ const matchSemesterWithOnGoingSemester = async (semesterId) => {
   return { message: 'All good', eligible: 1, data };
 };
 
+const translateFields = (field) => {
+  let t = field;
+  if (t === 'male') return 'نارینه';
+  if (t === 'female') return 'شځینه';
+  if (t === 'present') return 'حاضر';
+  if (t === 'taajil') return 'تاجیل';
+  if (t === 'reentry') return 'بیاشمولیت';
+  if (t === 'total') return 'کلی';
+  if (t === 'tabdili') return 'تبدیل';
+  if (t === 'monfaq') return 'منفق';
+};
+
 module.exports = {
   findEligibleNextSemesterAfterConversion,
   checkStudentEligibilityForNextSemester,
@@ -176,4 +192,5 @@ module.exports = {
   findSemesterYearAndHalf,
   matchStudentSemesterWithOnGoingSemester,
   matchSemesterWithOnGoingSemester,
+  translateFields,
 };

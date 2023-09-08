@@ -1,8 +1,10 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, View, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { Avatar, Button, Card, Text } from "react-native-paper";
+import { Avatar, Button, Card } from "react-native-paper";
 import { useState } from "react";
 import colors from "../constants/colors";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
 
@@ -19,23 +21,32 @@ const SubjectItem = (props) => {
       }}
     >
       <Card.Content style={{ height: "40%" }}>
-        <Text style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}>
+        {/* <Text style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}>
           SemisterId: {props.semisterId}
-        </Text>
-        <Text style={{ fontSize: 13, height: "30%" }}>
-          Semister: {props.semisterName}
+        </Text> */}
+        <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+          Semester: {props.semisterName}
         </Text>
       </Card.Content>
 
-      <Card.Cover
-        style={{ height: "60%" }}
-        source={{ uri: "https://picsum.photos/800" }}
-      />
+      <View
+        style={{
+          height: "60%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <MaterialCommunityIcons
+          name="bookshelf"
+          size={100}
+          color="black"
+        />
+      </View>
     </Card>
   );
 };
 const styles = StyleSheet.create({
-  normal: { margin: 20, width: width / 2.7, height: height / 3.5 },
+  normal: { margin: 20, width: width / 2.7, height: height / 4.4 },
   selected: {
     margin: 20,
     width: width / 2.5,

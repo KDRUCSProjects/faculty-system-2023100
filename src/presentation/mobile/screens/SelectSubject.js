@@ -24,6 +24,7 @@ import * as updates from "expo-updates";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../store/actions/actions";
 import BackHandlerChild from "../optimization/BackHandlerChild";
+import Header from "../ui/components/Header";
 
 export default function SelectSubject(props) {
   const semisterId = props.route.params.semisterId;
@@ -55,7 +56,7 @@ export default function SelectSubject(props) {
     } catch (error) {
       setisLoading(false);
       //props.navigation.navigate("selectType", { subjectId: selected });
-      Alert.alert("Error", error.message);
+      Alert.alert("Error!", error.message);
       if (error.code == 401) {
         // props.navigation.replace("Login");
         await dispatch(logout());
@@ -86,41 +87,34 @@ export default function SelectSubject(props) {
             width: "100%",
           }}
         >
-          <View
-            style={{
-              height: 60,
-              marginTop: Platform.OS == "android" ? "7%" : 0,
-              backgroundColor: colors.primary,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ width: "20%" }}>
-              <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/lessthan.png")}
-                ></ImageBackground>
-              </TouchableOpacity>
-            </View>
-            <View style={{ width: "70%" }}>
-              <Text style={{ color: "white", fontSize: 23 }}>
-                FCS for University
-              </Text>
-            </View>
-          </View>
-          <Text
-            style={{
-              fontSize: 25,
-              margin: 10,
-              fontWeight: "bold",
-              fontStyle: "italic",
-            }}
-          >
-            Choose a subject
-          </Text>
-          <View style={{ height: "80%" }}>
+          {/* <View
+                  style={{
+                     height: 60,
+                     marginTop: Platform.OS == 'android' ? '7%' : 0,
+                     backgroundColor: colors.primary,
+                     flexDirection: 'row',
+                     justifyContent: 'space-between',
+                     alignItems: 'center'
+                  }}
+               >
+                  <View style={{ width: '20%' }}>
+                     <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                        <ImageBackground
+                           style={{ height: 25, width: 32 }}
+                           source={require('../assets/images/lessthan.png')}
+                        ></ImageBackground>
+                     </TouchableOpacity>
+                  </View>
+                  <View style={{ width: '70%' }}>
+                     <Text style={{ color: 'white', fontSize: 23 }}>FCS for University</Text>
+                  </View>
+               </View> */}
+          <Header
+            leftIcon="back"
+            onLeft={() => props.navigation.goBack()}
+          ></Header>
+
+          <View style={{ height: "90%" }}>
             <ScrollView
               contentContainerStyle={{
                 flexGrow: 1,
@@ -131,15 +125,29 @@ export default function SelectSubject(props) {
               }}
               style={{}}
             >
-              {subjects?.map((subject, index) => (
-                <SelectSubjectItem
-                  key={subject.subjectId}
-                  onClick={onclick}
-                  selected={selected == subject.subjectId ? true : false}
-                  subjectId={subject.subjectId}
-                  subject={subject.subjectName}
-                ></SelectSubjectItem>
-              ))}
+              {subjects && subjects.length > 0 ? (
+                subjects.map((subject, index) => (
+                  <SelectSubjectItem
+                    key={subject.subjectId}
+                    onClick={onclick}
+                    selected={selected == subject.subjectId ? true : false}
+                    subjectId={subject.subjectId}
+                    subject={subject.subjectName}
+                  ></SelectSubjectItem>
+                ))
+              ) : (
+                <Text
+                  style={{
+                    color: colors.primary,
+                    fontSize: 21,
+                    margin: 20,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  }}
+                >
+                  You haven't got any Subjects in this Semester
+                </Text>
+              )}
 
               <Modal
                 visible={isLoading}

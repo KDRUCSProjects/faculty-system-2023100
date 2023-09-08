@@ -34,16 +34,12 @@
           ></v-text-field>
 
           <!-- Status Filter menu -->
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn color="cyan" variant="flat" v-bind="props"> {{ $t('Status') }} </v-btn>
-            </template>
-            <v-list>
-              <v-list-item v-for="(item, index) in studentStatus" :key="index" :value="index">
-                <v-list-item-title>{{ item }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+          <base-menu
+            :items="studentStatus"
+            display-pre-text="TYPE - "
+            theme="cyan"
+            @selected="setStudentsStatus"
+          ></base-menu>
 
           <v-btn color="primary" class="ml-1" variant="flat" link to="/students/new"> {{ $t('New Student') }} </v-btn>
         </v-toolbar>
@@ -63,11 +59,11 @@
         </v-chip>
       </template>
 
-      <template v-slot:item.status="{ item }">
-        <v-chip color="red">
-          {{ item.columns.status }}
+      <!-- <template v-slot:item.status="{ item }">
+        <v-chip color="primary">
+          {{ selectedStatus }}
         </v-chip>
-      </template>
+      </template> -->
 
       <template v-slot:item.photo="{ item }">
         <v-avatar class="my-2" color="primary" variant="tonal">
@@ -91,6 +87,7 @@ export default {
   data() {
     return {
       menu: false,
+      selectedStatus: false,
       page: 1,
       // Default from server/api
       itemsPerPage: 10,
@@ -138,17 +135,12 @@ export default {
           key: 'createdAt',
         },
         {
-          title: this.$t('Status'),
-          sortable: false,
-          key: 'status',
-        },
-        { 
           title: this.$t('Actions'),
           key: 'actions',
-          sortable: false 
+          sortable: false,
         },
       ],
-      studentStatus: [this.$t('Reserve'), this.$t('Present'), this.$t('Taajil'), this.$t('Tabdili'), this.$t('Graduate')],
+      studentStatus: ['all', 'reserved'],
     };
   },
   computed: {
@@ -161,6 +153,10 @@ export default {
   },
   methods: {
     deleteStudent() {},
+    async setStudentsStatus(status) {
+      this.selectedStatus = status;
+      this.loadStudents({ page: 1, limit: this.itemsPerPage, status });
+    },
     editStudent() {},
     viewStudent(item) {
       const { raw } = item;
@@ -185,10 +181,10 @@ export default {
   },
   watch: {
     async page(newValue) {
-      await this.loadStudents({ page: newValue, limit: this.itemsPerPage, like: this.search });
+      await this.loadStudents({ page: newValue, limit: this.itemsPerPage, like: this.search, status: this.selectedStatus });
     },
     async search(newValue) {
-      await this.loadStudents({ page: 1, limit: this.itemsPerPage, like: newValue });
+      await this.loadStudents({ page: 1, limit: this.itemsPerPage, like: newValue, status: this.selectedStatus });
     },
   },
   async created() {

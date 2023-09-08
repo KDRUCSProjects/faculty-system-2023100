@@ -1,0 +1,83 @@
+@font-face {
+  font-family: LatoBold;
+  src: url(../fonts/Lato-Bold.ttf);
+}
+
+@font-face {
+  font-family: Latolight;
+  src: url(../fonts/Lato-Light.ttf);
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url(../image/backgrounds-blank-blue-953214.jpg);
+  background-size: cover;
+}
+
+.main-div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.headings-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.headings-div h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+  font-family: LatoBold;
+  text-align: center;
+}
+
+.headings-div h4 {
+  text-align: center;
+  font-size: 18px;
+  font-family: LatoLight;
+  color: rgb(220, 220, 220);
+  word-spacing: 3px;
+  line-height: 25px;
+  text-transform: capitalize;
+}
+
+.btn-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-div button {
+  font-size: 16px;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.btn-1 {
+  background-color: #8ac185;
+}
+
+.btn-2 {
+  background-color: #fed47e;
+}
+.btn-3 {
+  background-color: salmon;
+}

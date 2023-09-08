@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -23,6 +24,7 @@ import {
   getStudentBySubject,
   logout,
   updateAccount,
+  updateShoka,
 } from "../store/actions/actions";
 import Toast from "react-native-root-toast";
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
@@ -31,15 +33,20 @@ import { Modal } from "@ui-kitten/components/ui";
 import * as updates from "expo-updates";
 import { List } from "react-native-paper";
 import BackHandlerChild from "../optimization/BackHandlerChild";
+import { useHeaderHeight } from "@react-navigation/elements";
+import Header from "../ui/components/Header";
+import BottomButton from "../ui/components/BottomButton";
 
 export default function CreateShoka(props) {
   // d();
   const subjectIdParam = props.route.params.subjectId;
   const status = props.route.params.status;
+  const studentIdParam = props.route.params.studentId;
+  const updateParam = props.route.params.update;
+  const students = useSelector((state) => state.studentsBySubject.students);
+  let student;
 
   const [isGetStudentLoading, setisGetStudentLoading] = useState(false);
-
-  const students = useSelector((state) => state.studentsBySubject.students);
 
   const subjects = useSelector((state) => state.MainReducer.subjects);
   const ref = useRef();
@@ -67,6 +74,7 @@ export default function CreateShoka(props) {
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedStudentIndex, setselectedStudentIndex] = useState(null);
+  const [shokaList, setshokaList] = useState(null);
 
   const [isLoading, setisLoading] = useState(false);
 
@@ -74,32 +82,56 @@ export default function CreateShoka(props) {
   //   ref.current.scrollToEnd();
   // }, [marksError]);
 
+  console.log(updateParam);
+  useEffect(() => {
+    if (updateParam) {
+      student = students.filter(
+        (student) => student.studentId == studentIdParam
+      );
+
+      setshokaList(student[0].shokaList);
+
+      setProjectMarks(student[0].projectMarks.toString());
+      setassignments(student[0].assignment.toString());
+      setpracticalMarks(student[0].practicalWork.toString());
+      setfinals(student[0].finalMarks.toString());
+    }
+  }, [subjectId]);
+
   const onSave = async () => {
     const numRegEx = /\b([0-9]|[1-9][0-9]|100)\b/;
 
-    if (!selectedStudent) {
-      setselectedStudentErr("a Student should be selected!");
-      return;
-    }
-
-    if (ProjectMarks == "") {
-      setProjectMarksError("This field is required!");
-      return;
-    }
-
-    if (parseInt(ProjectMarks) > 20) {
-      setProjectMarksError("ProjectMarks marks should be between 0-20");
-      return;
-    }
+    // if (!selectedStudent) {
+    //   setselectedStudentErr("a Student should be selected!");
+    //   return;
+    // }
 
     if (assignments == "") {
       setassignmentsError("This field is required!");
       return;
     }
-    if (parseInt(assignments) > 20) {
-      setassignmentsError("Assignments marks should be between 0-20");
+    if (parseInt(assignments) > 10) {
+      setassignmentsError("Assignments marks should be between 0-10");
       return;
     }
+    if (practicalMarks == "") {
+      setpracticalMarksErr("This field is required!");
+      return;
+    }
+    if (parseInt(practicalMarks) > 10) {
+      setpracticalMarksErr("practical marks should be between 0-10");
+      return;
+    }
+    if (ProjectMarks == "") {
+      setProjectMarksError("Marks are required");
+      return;
+    }
+
+    if (parseInt(ProjectMarks) > 20) {
+      setProjectMarksError("MidExam marks should be between 0-20");
+      return;
+    }
+
     if (finals == "") {
       setfinalsError("This field is required!");
       return;
@@ -109,14 +141,6 @@ export default function CreateShoka(props) {
       return;
     }
 
-    if (practicalMarks == "") {
-      setpracticalMarksErr("This field is required!");
-      return;
-    }
-    if (parseInt(practicalMarks) > 60) {
-      setpracticalMarksErr("practical marks should be between 0-60");
-      return;
-    }
     if (
       parseInt(practicalMarks) +
         parseInt(finals) +
@@ -127,19 +151,43 @@ export default function CreateShoka(props) {
       setmarksError("Whole marks shouldn't be greater than 100");
       return;
     }
+
+    console.log("shoka " + shokaList);
+
     try {
       setisLoading(true);
-      await dispatch(
-        createShoka(
-          subjectIdParam,
-          selectedStudent,
-          ProjectMarks,
-          assignments,
-          finals,
-          practicalMarks,
-          status
-        )
-      );
+      if (updateParam) {
+        await dispatch(
+          updateShoka(
+            shokaList,
+            ProjectMarks,
+            assignments,
+            finals,
+            practicalMarks
+          )
+        );
+      } else {
+        await dispatch(
+          createShoka(
+            subjectIdParam,
+            studentIdParam,
+            ProjectMarks,
+            assignments,
+            finals,
+            practicalMarks,
+            status
+          )
+        );
+      }
+      setisLoading(false);
+      let toast = Toast.show(shokaList ? "Shoka Updated" : "Shoka Created!", {
+        duration: Toast.durations.LONG,
+      });
+
+      setTimeout(function hideToast() {
+        Toast.hide(toast);
+      }, 2000);
+      props.navigation.navigate("selectSemister");
     } catch (e) {
       setisLoading(false);
       if (e.code == 401) {
@@ -160,21 +208,20 @@ export default function CreateShoka(props) {
     setProjectMarks(null);
     setassignments(null);
     setfinals(null);
-    let toast = Toast.show("Shoka Created!", {
-      duration: Toast.durations.LONG,
-    });
-
-    setTimeout(function hideToast() {
-      Toast.hide(toast);
-    }, 2000);
-    props.navigation.goBack();
   };
   const [expanded, setExpanded] = useState(true);
 
   const handlePress = () => setExpanded(!expanded);
+
+  const headerHeight = useHeaderHeight();
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={headerHeight}
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <View
           style={{
             flex: 1,
@@ -184,35 +231,42 @@ export default function CreateShoka(props) {
             alignItems: "center",
           }}
         >
-          <View
-            style={{
-              height: 60,
-              marginTop: Platform.OS == "android" ? "7%" : 0,
-              backgroundColor: colors.primary,
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
-            <View style={{ width: "20%" }}>
-              <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/lessthan.png")}
-                ></ImageBackground>
-              </TouchableOpacity>
-            </View>
-            <View style={{ width: "60%", alignItems: "center" }}>
-              <Text style={{ color: "white", fontSize: 23 }}>Create Shoka</Text>
-            </View>
-          </View>
+          {/* <View
+                  style={{
+                     height: 60,
+                     marginTop: Platform.OS == 'android' ? '7%' : 0,
+                     backgroundColor: colors.primary,
+                     flexDirection: 'row',
+                     justifyContent: 'flex-start',
+                     alignItems: 'center',
+                     width: '100%'
+                  }}
+               >
+                  <View style={{ width: '20%' }}>
+                     <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                        <ImageBackground
+                           style={{ height: 25, width: 32 }}
+                           source={require('../assets/images/lessthan.png')}
+                        ></ImageBackground>
+                     </TouchableOpacity>
+                  </View>
+                  <View style={{ width: '60%', alignItems: 'center' }}>
+                     <Text style={{ color: 'white', fontSize: 23 }}>Create Shoka</Text>
+                  </View>
+               </View> */}
+
+          <Header
+            leftIcon="back"
+            onLeft={() => props.navigation.goBack()}
+          ></Header>
 
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
             }}
             ref={ref}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
           >
             <View
               style={{
@@ -229,7 +283,7 @@ export default function CreateShoka(props) {
                   alignItems: "center",
                 }}
               >
-                <View
+                {/* <View
                   style={{
                     width: "90%",
                     height: 90,
@@ -292,8 +346,7 @@ export default function CreateShoka(props) {
                       <View></View>
                     )}
                   </View>
-                </View>
-
+                </View> */}
                 <View
                   style={{
                     width: "90%",
@@ -310,7 +363,7 @@ export default function CreateShoka(props) {
                       justifyContent: "center",
                     }}
                   >
-                    <Text style={{ fontSize: 17 }}>Project Marks</Text>
+                    <Text style={{ fontSize: 17 }}>Assignments</Text>
                   </View>
 
                   <View
@@ -322,63 +375,7 @@ export default function CreateShoka(props) {
                   >
                     <TextInput
                       style={{ height: 50 }}
-                      label={"Project Marks"}
-                      mode="outlined"
-                      textColor="black"
-                      outlineColor="black"
-                      contentStyle={{
-                        fontSize: 13,
-                      }}
-                      keyboardType="number-pad"
-                      inputMode="numeric"
-                      maxLength={2}
-                      error={ProjectMarksError}
-                      value={ProjectMarks}
-                      onChangeText={(text) => {
-                        setmarksError(false);
-                        setProjectMarksError(false);
-                        setProjectMarks(text);
-                      }}
-                    ></TextInput>
-                    {ProjectMarksError ? (
-                      <Text style={{ color: "red" }}>{ProjectMarksError}</Text>
-                    ) : (
-                      <View></View>
-                    )}
-                  </View>
-                </View>
-
-                <View
-                  style={{
-                    width: "90%",
-                    height: 90,
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                  }}
-                >
-                  <View
-                    style={{
-                      width: "40%",
-                      height: 60,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text style={{ fontSize: 17 }}>
-                      Assignments & Project Marks
-                    </Text>
-                  </View>
-
-                  <View
-                    style={{
-                      width: "60%",
-                      height: 60,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <TextInput
-                      style={{ height: 50 }}
-                      label={"A & P Marks"}
+                      label={"0-10"}
                       mode="outlined"
                       textColor="black"
                       outlineColor="black"
@@ -399,11 +396,12 @@ export default function CreateShoka(props) {
                     {assignmentsError ? (
                       <Text style={{ color: "red" }}>{assignmentsError}</Text>
                     ) : (
-                      <View></View>
+                      <View>
+                        <Text></Text>
+                      </View>
                     )}
                   </View>
                 </View>
-
                 <View
                   style={{
                     width: "90%",
@@ -420,7 +418,7 @@ export default function CreateShoka(props) {
                       justifyContent: "center",
                     }}
                   >
-                    <Text style={{ fontSize: 17 }}>Final Marks</Text>
+                    <Text style={{ fontSize: 17 }}>Practical</Text>
                   </View>
 
                   <View
@@ -432,61 +430,7 @@ export default function CreateShoka(props) {
                   >
                     <TextInput
                       style={{ height: 50 }}
-                      label={"Final Marks"}
-                      mode="outlined"
-                      textColor="black"
-                      outlineColor="black"
-                      contentStyle={{
-                        fontSize: 13,
-                      }}
-                      keyboardType="number-pad"
-                      inputMode="numeric"
-                      maxLength={2}
-                      error={finalsError}
-                      value={finals}
-                      onChangeText={(text) => {
-                        setmarksError(false);
-                        setfinalsError(false);
-                        setfinals(text);
-                      }}
-                    ></TextInput>
-                    {finalsError ? (
-                      <Text style={{ color: "red" }}>{finalsError}</Text>
-                    ) : (
-                      <View></View>
-                    )}
-                  </View>
-                </View>
-
-                <View
-                  style={{
-                    width: "90%",
-                    height: 90,
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                  }}
-                >
-                  <View
-                    style={{
-                      width: "40%",
-                      height: 60,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text style={{ fontSize: 17 }}>Practical work Marks</Text>
-                  </View>
-
-                  <View
-                    style={{
-                      width: "60%",
-                      height: 60,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <TextInput
-                      style={{ height: 50 }}
-                      label={"Final Marks"}
+                      label={"0-10"}
                       mode="outlined"
                       textColor="black"
                       outlineColor="black"
@@ -508,7 +452,121 @@ export default function CreateShoka(props) {
                     {practicalMarksErr ? (
                       <Text style={{ color: "red" }}>{practicalMarksErr}</Text>
                     ) : (
-                      <View></View>
+                      <View>
+                        <Text></Text>
+                      </View>
+                    )}
+                  </View>
+                </View>
+
+                <View
+                  style={{
+                    width: "90%",
+                    height: 90,
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: "40%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 17 }}>Mid Exam</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      width: "60%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TextInput
+                      style={{ height: 50 }}
+                      label={"0-20"}
+                      mode="outlined"
+                      textColor="black"
+                      outlineColor="black"
+                      contentStyle={{
+                        fontSize: 13,
+                      }}
+                      keyboardType="number-pad"
+                      inputMode="numeric"
+                      maxLength={2}
+                      error={ProjectMarksError}
+                      value={ProjectMarks}
+                      onChangeText={(text) => {
+                        setmarksError(false);
+                        setProjectMarksError(false);
+                        setProjectMarks(text);
+                      }}
+                    ></TextInput>
+                    {ProjectMarksError ? (
+                      <Text style={{ color: "red" }}>{ProjectMarksError}</Text>
+                    ) : (
+                      <View>
+                        <Text></Text>
+                      </View>
+                    )}
+                  </View>
+                </View>
+
+                <View
+                  style={{
+                    width: "90%",
+                    height: 90,
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: "40%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 17 }}>Final Exam</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      width: "60%",
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TextInput
+                      style={{ height: 50 }}
+                      label={"0-60"}
+                      mode="outlined"
+                      textColor="black"
+                      outlineColor="black"
+                      contentStyle={{
+                        fontSize: 13,
+                      }}
+                      keyboardType="number-pad"
+                      inputMode="numeric"
+                      maxLength={2}
+                      error={finalsError}
+                      value={finals}
+                      onChangeText={(text) => {
+                        setmarksError(false);
+                        setfinalsError(false);
+                        setfinals(text);
+                      }}
+                    ></TextInput>
+                    {finalsError ? (
+                      <Text style={{ color: "red" }}>{finalsError}</Text>
+                    ) : (
+                      <View>
+                        <Text></Text>
+                      </View>
                     )}
                   </View>
                 </View>
@@ -540,7 +598,7 @@ export default function CreateShoka(props) {
           >
             <ActivityIndicator size={60}></ActivityIndicator>
           </Modal>
-
+          {/* 
           <TouchableOpacity
             style={styles.btn}
             onPress={() =>
@@ -559,9 +617,27 @@ export default function CreateShoka(props) {
             }
           >
             <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
+          <BottomButton
+            onPress={() =>
+              Alert.alert("Submit?", "Do you want submit this Shoka?", [
+                {
+                  text: "No",
+                  onPress: () => {
+                    return;
+                  },
+                },
+                {
+                  text: "Yes",
+                  onPress: onSave,
+                },
+              ])
+            }
+            text={updateParam ? "Update" : "Save"}
+          ></BottomButton>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

@@ -26,6 +26,10 @@
                 ></subjects-list>
               </v-card-text>
             </v-card>
+
+            <div class="d-flex align-center justify-center" style="min-height: 500px">
+              <div v-if="semesterWithSubjects?.length === 0" class="text-error">Teacher has no subjects assigned</div>
+            </div>
           </v-card-text>
         </v-card>
       </v-col>

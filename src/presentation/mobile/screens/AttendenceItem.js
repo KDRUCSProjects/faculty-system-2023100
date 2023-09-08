@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Alert,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { useState } from "react";
 import { RadioButton } from "react-native-paper";
@@ -90,16 +91,25 @@ const AttendenceItem = (props, ref) => {
 
   useImperativeHandle(ref, () => ({}));
 
-  let prev =
+  let prev1 =
     indexprop == 0
       ? students[indexprop].isPresentOne
       : students[indexprop - 1].isPresentOne;
 
-  let next =
+  let prev2 =
+    indexprop == 0
+      ? students[indexprop].isPresentTwo
+      : students[indexprop - 1].isPresentTwo;
+
+  let next1 =
     indexprop < StudentsSize - 1
       ? students[indexprop + 1].isPresentOne
       : students[indexprop].isPresentOne;
 
+  let next2 =
+    indexprop < StudentsSize - 1
+      ? students[indexprop + 1].isPresentTwo
+      : students[indexprop].isPresentTwo;
   return (
     <View style={styles.studentContainer}>
       <View
@@ -113,7 +123,7 @@ const AttendenceItem = (props, ref) => {
       >
         <View
           style={{
-            backgroundColor: "#4e17f0",
+            backgroundColor: colors.primary,
             height: height / 2.7,
             width: width / 2.7,
             borderBottomLeftRadius: height / 4,
@@ -141,6 +151,7 @@ const AttendenceItem = (props, ref) => {
             </View>
           </View>
         </View>
+
         <View
           style={{
             height: "100%",
@@ -167,52 +178,139 @@ const AttendenceItem = (props, ref) => {
               style={{
                 height: "33.33%",
                 width: "100%",
-                backgroundColor: prev ? "#69be28" : "#d32d41",
-                borderTopLeftRadius: width / 20,
-                borderTopRightRadius: width / 20,
-                justifyContent: "center",
+
+                flexDirection: "row",
+                justifyContent: "flex-start",
                 alignItems: "center",
                 borderBottomColor: "black",
                 borderBottomWidth: 1,
               }}
             >
-              <Text style={styles.trackText}>
-                {indexprop == 0 ? "" : students[indexprop - 1].studentName}
-              </Text>
+              <View
+                style={{
+                  width: "50%",
+                  height: "100%",
+                  borderRightWidth: 1,
+                  borderColor: "gray",
+
+                  backgroundColor: prev1 ? "#43A047" : "#d32d41",
+                }}
+              ></View>
+
+              <View
+                style={{
+                  width: "50%",
+                  height: "100%",
+
+                  backgroundColor: prev2 ? "#43A047" : "#d32d41",
+                }}
+              >
+                <Text
+                  style={{
+                    position: "absolute",
+                    width: 70,
+                    bottom: 20,
+                    left: -30,
+                    fontSize: 12,
+                    color: "white",
+                  }}
+                >
+                  {indexprop == 0 ? "" : students[indexprop - 1].studentName}
+                </Text>
+              </View>
             </View>
+
             <View
               style={{
                 height: "33.33%",
                 width: "100%",
-                backgroundColor: students[indexprop].isPresentOne
-                  ? "#69be28"
-                  : "#d32d41",
-                justifyContent: "center",
+                flexDirection: "row",
+                justifyContent: "flex-start",
                 alignItems: "center",
                 borderBottomColor: "black",
                 borderBottomWidth: 1,
               }}
             >
-              <Text style={styles.trackText}>
-                {students[indexprop].studentName}
-              </Text>
+              <View
+                style={{
+                  height: "100%",
+                  width: "50%",
+                  backgroundColor: students[indexprop].isPresentOne
+                    ? "#43A047"
+                    : "#d32d41",
+                  borderRightWidth: 1,
+                  borderColor: "gray",
+                }}
+              ></View>
+
+              <View
+                style={{
+                  height: "100%",
+                  width: "50%",
+                  backgroundColor: students[indexprop].isPresentTwo
+                    ? "#43A047"
+                    : "#d32d41",
+                }}
+              >
+                <Text
+                  style={{
+                    position: "absolute",
+                    width: 70,
+                    bottom: 20,
+                    fontSize: 12,
+                    left: -30,
+                    color: "white",
+                  }}
+                >
+                  {/* {students[indexprop].studentName} */}
+                </Text>
+              </View>
             </View>
+
             <View
               style={{
                 height: "33.33%",
                 width: "100%",
-                backgroundColor: next ? "#69be28" : "#d32d41",
-                borderBottomLeftRadius: width / 20,
-                borderBottomRightRadius: width / 20,
-                justifyContent: "center",
+                flexDirection: "row",
+
+                justifyContent: "flex-start",
                 alignItems: "center",
               }}
             >
-              <Text style={styles.trackText}>
-                {indexprop < StudentsSize - 1
-                  ? students[indexprop + 1].studentName
-                  : ""}
-              </Text>
+              <View
+                style={{
+                  width: "50%",
+                  height: "100%",
+                  borderRightWidth: 1,
+
+                  borderColor: "grey",
+                  backgroundColor: next1 ? "#43A047" : "#d32d41",
+                }}
+              ></View>
+
+              <View
+                style={{
+                  width: "50%",
+                  height: "100%",
+
+                  backgroundColor: next2 ? "#43A047" : "#d32d41",
+                }}
+              >
+                <Text
+                  style={{
+                    position: "absolute",
+                    width: 70,
+                    bottom: 20,
+                    left: -30,
+                    fontSize: 12,
+                    color: "white",
+                  }}
+                >
+                  {indexprop < StudentsSize - 1
+                    ? students[indexprop + 1].studentName
+                    : ""}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
@@ -230,9 +328,10 @@ const AttendenceItem = (props, ref) => {
           <View style={{ alignItems: "center", justifyContent: "flex-start" }}>
             <Text
               style={{
-                fontSize: 28,
+                fontSize: 31,
                 textAlign: "center",
-                color: "blue",
+                color: "#007EA7",
+                fontWeight: "bold",
                 textTransform: "capitalize",
               }}
             >
@@ -241,15 +340,15 @@ const AttendenceItem = (props, ref) => {
           </View>
           <View style={{ justifyContent: "flex-start" }}>
             <View style={styles.stdInfoItem}>
-              <Text style={styles.text}>student ID: </Text>
+              <Text style={styles.text}>Student ID: </Text>
               <Text style={styles.text}>{props.studentId}</Text>
             </View>
             <View style={styles.stdInfoItem}>
-              <Text style={styles.text}>Father Name: </Text>
+              <Text style={styles.text}>FName: </Text>
               <Text style={styles.text}>{props.fatherName}</Text>
             </View>
             <View style={styles.stdInfoItem}>
-              <Text style={{ fontSize: 17 }}>Grand Father Name: </Text>
+              <Text style={styles.text}>GFather Name: </Text>
               <Text style={styles.text}>{props.grandFatherName}</Text>
             </View>
           </View>
@@ -278,7 +377,7 @@ const AttendenceItem = (props, ref) => {
 
           flexDirection: "row",
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: Platform.OS == "ios" ? "flex-start" : "center",
         }}
       >
         <TouchableOpacity
@@ -291,7 +390,7 @@ const AttendenceItem = (props, ref) => {
           style={{
             height: "100%",
             width: "100%",
-            backgroundColor: "#d32d41",
+            backgroundColor: "#C62828",
             borderTopRightRadius: width / 3,
             borderBottomRightRadius: width / 3,
             justifyContent: "center",
@@ -310,7 +409,7 @@ const AttendenceItem = (props, ref) => {
           style={{
             height: "100%",
             width: "100%",
-            backgroundColor: "#69be28",
+            backgroundColor: "#43A047",
             borderTopLeftRadius: width / 3,
             borderBottomLeftRadius: width / 3,
             justifyContent: "center",
@@ -374,7 +473,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     textAlign: "center",
-    textTransform: "capitalize",
   },
   trackText: {
     color: "white",

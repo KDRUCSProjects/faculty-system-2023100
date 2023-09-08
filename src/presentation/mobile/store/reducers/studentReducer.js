@@ -15,15 +15,29 @@ const studentReducer = (state = initialState, action) => {
         (student) => student.studentId == action.id
       );
       console.log(selectedPresentStudent);
-      state.students[selectedPresentStudent].isPresentOne = true;
+      if (action.cell == "one") {
+        state.students[selectedPresentStudent].isPresentOne = true;
+      } else if (action.cell == "two") {
+        state.students[selectedPresentStudent].isPresentTwo = true;
+      } else {
+        state.students[selectedPresentStudent].isPresentOne = true;
+        state.students[selectedPresentStudent].isPresentTwo = true;
+      }
+
       console.log(state.students[selectedPresentStudent].isPresentOne);
       return state;
     case ISABSENT:
       const selectedAbsentStudent = state.students.findIndex(
         (student) => student.studentId == action.id
       );
-
-      state.students[selectedAbsentStudent].isPresentOne = false;
+      if (action.cell == "one") {
+        state.students[selectedAbsentStudent].isPresentOne = false;
+      } else if (action.cell == "two") {
+        state.students[selectedAbsentStudent].isPresentTwo = false;
+      } else {
+        state.students[selectedAbsentStudent].isPresentOne = false;
+        state.students[selectedAbsentStudent].isPresentTwo = false;
+      }
       console.log(state.students[selectedAbsentStudent].isPresentOne);
       return state;
     case GETATTENDENCE:

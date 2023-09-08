@@ -14,7 +14,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getAttendence, loadSubjects } from "../store/actions/actions";
 import { useEffect, useState } from "react";
-import { Button } from "react-native-paper";
+import { Button, Card } from "react-native-paper";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
 import SubjectItem from "./SubjectItem";
@@ -25,6 +25,9 @@ import { Modal } from "@ui-kitten/components";
 import * as updates from "expo-updates";
 import { getStudentBySubject } from "../store/actions/actions";
 import BackHandlerChild from "../optimization/BackHandlerChild";
+import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Header from "../ui/components/Header";
 
 export default function SelectChance(props) {
   BackHandlerChild();
@@ -78,7 +81,7 @@ export default function SelectChance(props) {
       console.log(err.message);
       setisLoading(false);
       //props.navigation.navigate("selectType", { subjectId: selected });
-      Alert.alert("Error", err.message);
+      Alert.alert("Error!", err.message);
       if (err.code == 401) {
         // props.navigation.replace("Login");
         await dispatch(logout());
@@ -101,31 +104,34 @@ export default function SelectChance(props) {
             width: "100%",
           }}
         >
-          <View
-            style={{
-              height: 60,
-              marginTop: Platform.OS == "android" ? "7%" : 0,
-              backgroundColor: colors.primary,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ width: "20%" }}>
-              <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/lessthan.png")}
-                ></ImageBackground>
-              </TouchableOpacity>
-            </View>
-            <View style={{ width: "70%" }}>
-              <Text style={{ color: "white", fontSize: 23 }}>
-                FCS for University
-              </Text>
-            </View>
-          </View>
-          <Text
+          {/* <View
+                  style={{
+                     height: 60,
+                     marginTop: Platform.OS == 'android' ? '7%' : 0,
+                     backgroundColor: colors.primary,
+                     flexDirection: 'row',
+                     justifyContent: 'space-between',
+                     alignItems: 'center'
+                  }}
+               >
+                  <View style={{ width: '20%' }}>
+                     <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                        <ImageBackground
+                           style={{ height: 25, width: 32 }}
+                           source={require('../assets/images/lessthan.png')}
+                        ></ImageBackground>
+                     </TouchableOpacity>
+                  </View>
+                  <View style={{ width: '70%' }}>
+                     <Text style={{ color: 'white', fontSize: 23 }}>FCS for University</Text>
+                  </View>
+               </View> */}
+          <Header
+            leftIcon="back"
+            onLeft={() => props.navigation.goBack()}
+          ></Header>
+
+          {/* <Text
             style={{
               fontSize: 20,
               margin: 10,
@@ -134,14 +140,15 @@ export default function SelectChance(props) {
             }}
           >
             Choose Chance for this student
-          </Text>
+          </Text> */}
           <View
             style={{
-              height: "40%",
-              justifyContent: "space-around",
+              height: "80%",
+              justifyContent: "space-evenly",
               alignItems: "center",
             }}
           >
+            {/* 
             <View
               style={{
                 width: "80%",
@@ -285,67 +292,207 @@ export default function SelectChance(props) {
               </Text>
             ) : (
               <View style={{ height: 30 }}></View>
-            )}
-          </View>
-          <View
-            style={{
-              height: "35%",
-              width: "90%",
-              marginTop: "3%",
-              flexDirection: "row",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
-              marginHorizontal: 10,
-            }}
-          >
-            <TouchableOpacity
+            )} */}
+            <View
               style={{
-                backgroundColor: "blue",
-                height: 45,
-                width: 80,
-                borderRadius: 8,
-                padding: 10,
-                marginLeft: 15,
-                justifyContent: "center",
-                alignItems: "center",
+                width: "90%",
+                height: 150,
+                flexDirection: "row",
+                justifyContent: "space-around",
               }}
-              onPress={() => props.navigation.goBack()}
             >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 18,
-                  textAlign: "center",
-                  textAlignVertical: "center",
+              <Card
+                style={{ width: 130, height: 140, justifyContent: "center" }}
+                onPress={async () => {
+                  try {
+                    setisLoading(true);
+                    await dispatch(getStudentBySubject(id, 1));
+                    setisLoading(false);
+
+                    props.navigation.navigate("selectStudent", {
+                      subjectId: id,
+                      status: "first",
+                    });
+                  } catch (err) {
+                    console.log(err.message);
+                    setisLoading(false);
+                    //props.navigation.navigate("selectType", { subjectId: selected });
+                    Alert.alert("Error!", err.message);
+                    if (err.code == 401) {
+                      // props.navigation.replace("Login");
+                      await dispatch(logout());
+                      await AsyncStorage.clear().then().then();
+                      props.navigation.navigate("Login");
+                      // updates.reloadAsync();
+
+                      return;
+                    }
+                  }
                 }}
               >
-                Back
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.primary,
-                height: 45,
-                width: 80,
-                borderRadius: 8,
-                padding: 10,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={onclick}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 18,
-                  textAlign: "center",
-                  textAlignVertical: "center",
+                <Card.Content style={{}}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: "bold",
+                      textAlign: "center",
+                    }}
+                  >
+                    1st Chance
+                  </Text>
+                </Card.Content>
+
+                <View
+                  style={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons
+                    name="looks-one"
+                    size={80}
+                    color={colors.primary}
+                  />
+                </View>
+              </Card>
+
+              <Card
+                style={{ width: 130, height: 140, justifyContent: "center" }}
+                onPress={async () => {
+                  try {
+                    setisLoading(true);
+                    await dispatch(getStudentBySubject(id, 2));
+                    setisLoading(false);
+                    props.navigation.navigate("selectStudent", {
+                      subjectId: id,
+                      status: "second",
+                    });
+                  } catch (err) {
+                    console.log(err.message);
+                    setisLoading(false);
+                    //props.navigation.navigate("selectType", { subjectId: selected });
+                    Alert.alert("Error!", err.message);
+                    if (err.code == 401) {
+                      // props.navigation.replace("Login");
+                      await dispatch(logout());
+                      await AsyncStorage.clear().then().then();
+                      props.navigation.navigate("Login");
+                      // updates.reloadAsync();
+
+                      return;
+                    }
+                  }
                 }}
               >
-                Next
-              </Text>
-            </TouchableOpacity>
+                <Card.Content style={{}}>
+                  <Text
+                    style={{
+                      fontSize: 13,
+
+                      fontWeight: "bold",
+                    }}
+                  >
+                    2nd Chance
+                  </Text>
+                </Card.Content>
+
+                <View
+                  style={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons
+                    name="looks-two"
+                    size={80}
+                    color={colors.primary}
+                  />
+                </View>
+              </Card>
+            </View>
+
+            <View
+              style={{
+                width: "90%",
+                height: 150,
+                flexDirection: "row",
+                justifyContent: "space-around",
+              }}
+            >
+              <Card
+                style={{ width: 130, height: 140, justifyContent: "center" }}
+                onPress={async () => {
+                  try {
+                    setisLoading(true);
+                    await dispatch(getStudentBySubject(id, 3));
+                    setisLoading(false);
+                    props.navigation.navigate("selectStudent", {
+                      subjectId: id,
+                      status: "third",
+                    });
+                  } catch (err) {
+                    console.log(err.message);
+                    setisLoading(false);
+                    //props.navigation.navigate("selectType", { subjectId: selected });
+                    Alert.alert("Error!", err.message);
+                    if (err.code == 401) {
+                      // props.navigation.replace("Login");
+                      await dispatch(logout());
+                      await AsyncStorage.clear().then().then();
+                      props.navigation.navigate("Login");
+                      // updates.reloadAsync();
+
+                      return;
+                    }
+                  }
+                }}
+              >
+                <Card.Content style={{}}>
+                  <Text style={{ fontSize: 13, fontWeight: "bold" }}>
+                    Third Chance
+                  </Text>
+                </Card.Content>
+
+                <View
+                  style={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons
+                    name="looks-3"
+                    size={80}
+                    color={colors.primary}
+                  />
+                </View>
+              </Card>
+
+              <Card
+                style={{ width: 130, height: 140, justifyContent: "center" }}
+                onPress={async () => {}}
+              >
+                <Card.Content style={{}}>
+                  <Text style={{ fontSize: 13, fontWeight: "bold" }}>
+                    Fourth Chance
+                  </Text>
+                </Card.Content>
+
+                <View
+                  style={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons
+                    name="looks-4"
+                    size={80}
+                    color={colors.primary}
+                  />
+                </View>
+              </Card>
+            </View>
           </View>
+
           <Modal
             visible={isLoading}
             backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}

@@ -14,6 +14,10 @@ export default {
         url = url + `&kankorId=${options.like}`;
       }
 
+      if (options.status && options.status != 'reserved') {
+        url = url + `&status=${options.status}`;
+      }
+
       const response = await axios({
         url,
         method: 'get',
@@ -23,7 +27,16 @@ export default {
         },
       });
 
-      context.commit('setStudents', response.data.results);
+      let results = response.data.results;
+
+      // Bad Code! But its Defense Day. ;)
+      if (options.status && options.status != 'reserved') {
+        if (options.status !== 'all') {
+          results = results.map((rec) => rec?.Student);
+        }
+      }
+
+      context.commit('setStudents', results);
       context.commit('setCounts', {
         total: response.data.total,
         totalPages: response.data.totalPages,
@@ -34,8 +47,6 @@ export default {
       throw e.response.data.message;
     }
   },
-  // load all the Students
-  async loadAllStudent(context) {},
   async loadStudentById(context, studentId) {
     try {
       const token = context.rootGetters.token;
@@ -233,6 +244,22 @@ export default {
       context.commit('setToast', 'Student successfully remove from Semester', { root: true });
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message], { root: true });
+      throw e.response.data.message;
+    }
+  },
+  async downloadTranscript(context, studentId) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios.get(`/api/transcript/${studentId}`, {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response;
+    } catch (e) {
       throw e.response.data.message;
     }
   },

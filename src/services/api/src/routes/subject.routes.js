@@ -102,12 +102,15 @@ module.exports = router;
  *                 type: string
  *               credit:
  *                 type: number
+ *               codeNumber:
+ *                 type: string
  *               semesterId:
  *                 type: number
  *               teacherId:
  *                 type: number
  *             example:
  *               name: Big Data
+ *               codeNumber: CS0193
  *               credit: 4
  *               semesterId: 8
  *               teacherId: 3

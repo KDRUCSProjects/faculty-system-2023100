@@ -1,9 +1,7 @@
 <template>
   <div>
     <v-card class="theShadow py-5 pa-3">
-      <!-- <span class="pro" v-if="!studentRegistration"> {{ studentStatus }} </span> -->
-
-      <!-- <span class="pro" v-if="!studentRegistration"> {{ studentStatus }} </span> -->
+      <span class="pro" v-if="!studentRegistration"> {{ rankSemester(latestSemester) }} Semester</span>
 
       <v-card-item class="text-center mb-1">
         <v-avatar class="my-2" :size="avatarSize" color="secondary" variant="tonal">
@@ -15,8 +13,15 @@
         <v-card-title class="font-weight-bold mt-3">{{ student?.fullName }}</v-card-title>
         <v-card-subtitle :class="{ 'text-error': !student?.nickName }">{{ student?.nickName || 'N/A' }}</v-card-subtitle>
 
-        <base-update-dialog ref="profilePhotoDialog" :photo="true" :title="$t('Change Photo')" @update="uploadPhoto">
-          <v-btn color="primary" variant="flat" size="small">{{ $t('Update Photo') }}</v-btn>
+        <base-update-dialog
+          color="primary"
+          variant="outlined"
+          ref="profilePhotoDialog"
+          :photo="true"
+          :title="$t('Change Photo')"
+          @update="uploadPhoto"
+        >
+          <v-btn color="primary" variant="outlined" size="small">{{ $t('Update Photo') }}</v-btn>
         </base-update-dialog>
       </v-card-item>
       <v-card-text class="my-8">
@@ -52,6 +57,8 @@
 </template>
 
 <script>
+import { rankSemester } from '@/utils/global';
+
 export default {
   props: {
     studentRegistration: {
@@ -73,11 +80,19 @@ export default {
   data: () => ({
     photo: null,
   }),
+  computed: {
+    latestSemester() {
+      return this.student?.latestSemester;
+    },
+  },
   methods: {
     uploadPhoto(photo) {
       this.photo = photo;
       this.$emit('upload-photo', photo);
       // Once emitted,
+    },
+    rankSemester(p) {
+      return rankSemester(p);
     },
   },
   emits: ['upload-photo'],
@@ -86,8 +101,8 @@ export default {
 
 <style scoped>
 .pro {
-  color: #231e39;
-  background-color: #febb0b;
+  color: white;
+  background-color: #0b8dfe;
   border-radius: 3px;
   font-size: 14px;
   font-weight: bold;

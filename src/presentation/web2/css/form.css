@@ -237,7 +237,7 @@ span {
 }
 
 .personal-information {
-  margin: 20px 0px 10px 20px;
+  margin: 20px 0px 10px 0px;
 }
 
 .province-div input {
@@ -423,4 +423,14 @@ span {
     top: 10%;
     left: 50%;
   }
+}
+
+.back-btn {
+  position: absolute;
+  top: 10px;
+  left: 50px;
+  padding: 10px 20px;
+  border-radius: 3px;
+  border: none;
+  background-color: #fed47e;
 }

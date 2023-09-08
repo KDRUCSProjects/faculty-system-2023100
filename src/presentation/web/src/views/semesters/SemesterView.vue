@@ -19,12 +19,13 @@
             <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="bg-teal-lighten-4">
               <v-tab :value="1"> {{ $t('Subjects') }} </v-tab>
               <v-tab :value="2"> {{ $t('Statistics') }} </v-tab>
-              <v-tab :value="3"> {{ $t('Report') }} </v-tab>
+              <!-- <v-tab :value="3"> {{ $t('Report') }} </v-tab> -->
               <v-tab :value="4"> {{ $t('Migration') }} </v-tab>
             </v-tabs>
             <v-window v-model="tab">
               <v-window-item :value="1">
                 <subjects-list :subjects="subjects" @subject-delete="loadSubjects"></subjects-list>
+
                 <add-subject :semester-id="id">
                   <v-btn variant="tonal" color="primary" block :prepend-icon="'mdi-plus'">{{ $t('New Subject') }}</v-btn>
                 </add-subject>
@@ -39,26 +40,28 @@
                 </v-card>
               </v-window-item>
 
-              <v-window-item :value="3">
+              <!-- <v-window-item :value="3">
                 <v-card class="mt-3">
                   <v-card-item>
                     <v-row class="pa-0 ma-0 d-flex">
-                      <v-col cols="6" class="pa-0 ma-0">
-                        <base-menu
-                          :items="reportItems"
-                          @selected="setReport"
-                          :block="true"
-                          display-pre-text="Report Type:  "
-                          theme="dark"
-                          :variant="'tonal'"
-                          :the-default="'taajil'"
-                        >
-                        </base-menu>
+                      <v-col :cols="showBadlAshaDownload ? '4' : '6'" class="pa-0 ma-0">
+                        <div class="mx-1">
+                          <base-menu
+                            :items="reportItems"
+                            @selected="setReport"
+                            :block="true"
+                            display-pre-text="Type:   "
+                            theme="dark"
+                            :variant="'tonal'"
+                            :the-default="'present'"
+                          >
+                          </base-menu>
+                        </div>
                       </v-col>
-                      <v-col cols="6" class="pa-0 ma-0">
+                      <v-col :cols="showBadlAshaDownload ? '4' : '6'" class="pa-0 ma-0">
                         <v-btn
-                          @click="downloadShoka"
-                          class="float-right"
+                          @click="downloadReport"
+                          class="float-right mx-1"
                           prepend-icon="mdi-download-circle"
                           color="primary"
                           variant="tonal"
@@ -66,7 +69,22 @@
                           block="true"
                           :loading="downloadLoading"
                         >
-                          Download Excel
+                          EXCEL FILE
+                        </v-btn>
+                      </v-col>
+                      <v-col :cols="showBadlAshaDownload ? '4' : '6'" class="pa-0 ma-0">
+                        <v-btn
+                          v-if="showBadlAshaDownload"
+                          @click="downloadBadlAsha"
+                          class="float-right"
+                          prepend-icon="mdi-download-circle"
+                          color="teal"
+                          variant="tonal"
+                          download
+                          block="true"
+                          :loading="downloadBadlAshaLoading"
+                        >
+                          Badl Asha
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -82,7 +100,7 @@
                   </v-card-text>
                   <v-card-actions class="mx-2"> </v-card-actions>
                 </v-card>
-              </v-window-item>
+              </v-window-item> -->
               <v-window-item :value="4">
                 <v-card class="mt-7">
                   <v-card-item>
@@ -173,7 +191,8 @@ export default {
   provide() {
     return {
       semesterId: this.id,
-      enableStudentsAddition: this.$route.query.semester == 1 ? true : false,
+      enableStudentsAddition: this.enableSemesterAddition,
+      showBadlAshaDownload: this.showBadlAshaDownload,
     };
   },
   props: {
@@ -195,10 +214,12 @@ export default {
     page: 1,
     itemsPerPage: 8,
     reportItems: ['present', 'taajil', 'reentry', 'monfaq', 'tabdili'],
-    selectedReport: 'taajil',
+    selectedReport: 'present',
     selectedStudentId: null,
     forceMigrate: false,
     mode: 'semester-students',
+    downloadLoading: false,
+    downloadBadlAshaLoading: false,
     headersReport: [
       // {
       //   title: 'No',
@@ -262,6 +283,22 @@ export default {
     statisticsLabels: ['Total', 'Present', 'Taajil', 'Reentry', 'Monfaq', 'Tabdil'],
   }),
   computed: {
+    enableSemesterAddition() {
+      const semesterTitle = this.$route.query.semester == 1 ? true : false;
+
+      // const currentYearSemesters = this.$store.getters['semesters/currentYearSemesters'];
+
+      // let semesterIsFromCurrentYearSemester = false;
+
+      // const currentSemesterYearId =  this.$store.dispatch('semester/loadSemesterById', this.id);
+
+      return semesterTitle;
+    },
+    showBadlAshaDownload() {
+      const semesterTitle = this.$route.query.semester;
+
+      return semesterTitle % 2 === 0 ? true : false;
+    },
     students() {
       if (this.mode === 'enrollment') {
         return this.$store.getters['students/students'];
@@ -288,7 +325,6 @@ export default {
     semesterStatistics() {
       // female data are set to null fr now
       const stats = this.$store.getters['semesters/currentSemesterStatistics'];
-      console.log(stats.male);
 
       // Labels are like these: present, taajil, reentry monfaq, tabdili
       let maleData = [
@@ -322,6 +358,41 @@ export default {
     },
   },
   methods: {
+    async downloadBadlAsha() {
+      this.downloadBadlAshaLoading = true;
+
+      let title = this.currentSemester.title;
+      let className = null;
+      if (title === 2) className = 1;
+      if (title === 4) className = 2;
+      if (title === 6) className = 3;
+      if (title === 8) className = 4;
+      const file = await this.$store.dispatch('semesters/downloadBadlAsha', {
+        year: this.year,
+        classTitle: className,
+      });
+
+      this.downloadFile(file.data, `Class ${className} ${this.year} - BadlAsha List`);
+
+      // Make it a little stylish ;)
+      setTimeout(() => {
+        this.downloadBadlAshaLoading = false;
+      }, 500);
+    },
+    async downloadReport() {
+      this.downloadLoading = true;
+      const file = await this.$store.dispatch('semesters/downloadSemesterReportByType', {
+        semesterId: this.id,
+        type: this.selectedReport,
+      });
+
+      this.downloadFile(file.data, `${this.selectedReport} List`);
+
+      // Make it a little stylish ;)
+      setTimeout(() => {
+        this.downloadLoading = false;
+      }, 500);
+    },
     setReport(value) {
       this.selectedReport = value;
     },

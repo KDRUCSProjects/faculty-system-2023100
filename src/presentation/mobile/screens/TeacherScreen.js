@@ -14,11 +14,19 @@ import { HeaderBackButton } from "@react-navigation/stack";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
+import {
+  FontAwesome5,
+  FontAwesome,
+  MaterialIcons,
+  Octicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 
 import { Layout, TopNavigation, Divider } from "@ui-kitten/components";
 import colors from "../constants/colors";
 import { StatusBar } from "expo-status-bar";
 import BackHandlerChild from "../optimization/BackHandlerChild";
+import Header from "../ui/components/Header";
 
 export default function TeacherScreen(props) {
   BackHandlerChild();
@@ -46,34 +54,37 @@ export default function TeacherScreen(props) {
       }}
     >
       <StatusBar hidden={false}></StatusBar>
-      <View
-        style={{
-          height: 60,
-          marginTop: Platform.OS == "android" ? "7%" : 0,
-          backgroundColor: colors.primary,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <View style={{ width: "20%" }}>
-          <TouchableOpacity onPress={() => props.navigation.goBack()}>
-            <ImageBackground
-              style={{ height: 25, width: 32 }}
-              source={require("../assets/images/lessthan.png")}
-            ></ImageBackground>
-          </TouchableOpacity>
-        </View>
-        <View style={{ width: "70%" }}>
-          <Text style={{ color: "white", fontSize: 23 }}>
-            FCS for University
-          </Text>
-        </View>
-      </View>
+      {/* <View
+            style={{
+               height: 60,
+               marginTop: Platform.OS == 'android' ? '7%' : 0,
+               backgroundColor: colors.primary,
+               flexDirection: 'row',
+               justifyContent: 'space-between',
+               alignItems: 'center'
+            }}
+         >
+            <View style={{ width: '20%' }}>
+               <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                  <ImageBackground
+                     style={{ height: 25, width: 32 }}
+                     source={require('../assets/images/lessthan.png')}
+                  ></ImageBackground>
+               </TouchableOpacity>
+            </View>
+            <View style={{ width: '70%' }}>
+               <Text style={{ color: 'white', fontSize: 23 }}>FCS for University</Text>
+            </View>
+         </View> */}
+
+      <Header
+        leftIcon="back"
+        onLeft={() => props.navigation.goBack()}
+      ></Header>
 
       <Layout style={styles.container}>
         <View style={styles.teacherInfo}>
-          <Text style={{ fontSize: 25 }}>Welcome To Third Class</Text>
+          {/* <Text style={{ fontSize: 25 }}></Text> */}
         </View>
 
         <View style={[styles.attendenceContainer, styles.shadowProp]}>
@@ -94,17 +105,27 @@ export default function TeacherScreen(props) {
                 height: "100%",
                 width: "100%",
                 alignItems: "center",
-                justifyContent: "space-around",
+                justifyContent: "center",
               }}
               onPress={onCreateShoka}
             >
-              <View style={{ height: 90, width: 90 }}>
-                <ImageBackground
-                  style={{ flex: 1 }}
-                  source={require("../assets/images/viewAttendence.png")}
-                ></ImageBackground>
+              <View
+                style={{
+                  height: 120,
+                  width: 120,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <MaterialIcons
+                  name="list-alt"
+                  size={120}
+                  color={colors.primary}
+                />
               </View>
-              <Text style={{ fontSize: 25 }}>Create Shoka</Text>
+              <Text style={{ fontSize: 25, fontWeight: "bold", marginTop: 25 }}>
+                Create Shoka
+              </Text>
             </TouchableWithoutFeedback>
           </View>
 
@@ -124,17 +145,27 @@ export default function TeacherScreen(props) {
                 height: "100%",
                 width: "100%",
                 alignItems: "center",
-                justifyContent: "space-around",
+                justifyContent: "center",
               }}
               onPress={onTakeAttendence}
             >
-              <View style={{ height: 90, width: 90 }}>
-                <ImageBackground
-                  style={{ flex: 1 }}
-                  source={require("../assets/images/takeAttendence.png")}
-                ></ImageBackground>
+              <View
+                style={{
+                  height: 120,
+                  width: 120,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="clipboard-check-outline"
+                  size={120}
+                  color={colors.primary}
+                />
               </View>
-              <Text style={{ fontSize: 25 }}>Take Attendence</Text>
+              <Text style={{ fontSize: 25, fontWeight: "bold", marginTop: 25 }}>
+                Take Attendence
+              </Text>
             </TouchableWithoutFeedback>
           </View>
         </View>

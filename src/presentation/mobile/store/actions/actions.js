@@ -14,6 +14,7 @@ export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const GETSTUDENTINFO = "GETSTUDENTINFO";
 export const GETATTENDENCE = "GETATTENDENCE";
 export const GETSTUDENTSBYSUBJECT = "GETSTUDENTSBYSUBJECT";
+export const UPDATEMARKS = "UPDATEMARKS";
 
 import { useNavigation } from "@react-navigation/native";
 const base_ip = process.env.REACT_APP_base_ip;
@@ -132,83 +133,83 @@ export const localAuth = (
 };
 export const isPresent = (subjectId, studentId, type) => {
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
+    // const userData = await AsyncStorage.getItem("userData");
 
-    const transformedData = JSON.parse(userData);
-    const { token } = transformedData;
-    const updateResp = await FetchWithTimeout(
-      "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({
-          studentId: studentId,
-          status: true,
-        }),
-      },
-      5000
-    );
-    console.log(updateResp.status);
-    if (updateResp.status == 401) {
-      const error = new Error("please reauthenticate");
-      error.code = 401;
-      throw error;
-    }
+    // const transformedData = JSON.parse(userData);
+    // const { token } = transformedData;
+    // const updateResp = await FetchWithTimeout(
+    //   "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: "Bearer " + token,
+    //     },
+    //     body: JSON.stringify({
+    //       studentId: studentId,
+    //       status: true,
+    //     }),
+    //   },
+    //   5000
+    // );
+    // console.log(updateResp.status);
+    // if (updateResp.status == 401) {
+    //   const error = new Error("please reauthenticate");
+    //   error.code = 401;
+    //   throw error;
+    // }
 
-    const data = await updateResp.json();
+    // const data = await updateResp.json();
 
-    if (!updateResp.ok) {
-      const error = new Error(data.message);
-      error.code = data.code;
-      throw error;
-    }
+    // if (!updateResp.ok) {
+    //   const error = new Error(data.message);
+    //   error.code = data.code;
+    //   throw error;
+    // }
 
-    console.log(studentId);
-    dispatch({ type: ISPRESENT, id: studentId });
+    console.log(type);
+    dispatch({ type: ISPRESENT, id: studentId, cell: type });
   };
 };
 
 export const isAbsent = (subjectId, studentId, type) => {
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
+    // const userData = await AsyncStorage.getItem("userData");
 
-    const transformedData = JSON.parse(userData);
-    const { token } = transformedData;
-    const updateResp = await FetchWithTimeout(
-      "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({
-          studentId: studentId,
-          status: false,
-        }),
-      },
-      5000
-    );
+    // const transformedData = JSON.parse(userData);
+    // const { token } = transformedData;
+    // const updateResp = await FetchWithTimeout(
+    //   "http://" + base_ip + ":4000/attendance/" + subjectId + "?type=" + type,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: "Bearer " + token,
+    //     },
+    //     body: JSON.stringify({
+    //       studentId: studentId,
+    //       status: false,
+    //     }),
+    //   },
+    //   5000
+    // );
 
-    if (updateResp.status == 401) {
-      const error = new Error("please reauthenticate");
-      error.code = 401;
-      throw error;
-    }
+    // if (updateResp.status == 401) {
+    //   const error = new Error("please reauthenticate");
+    //   error.code = 401;
+    //   throw error;
+    // }
 
-    const data = await updateResp.json();
-    console.log(data);
+    // const data = await updateResp.json();
+    // console.log(data);
 
-    if (!updateResp.ok) {
-      const error = new Error(data.message);
-      error.code = data.code;
-      throw error;
-    }
-
-    dispatch({ type: ISABSENT, id: studentId });
+    // if (!updateResp.ok) {
+    //   const error = new Error(data.message);
+    //   error.code = data.code;
+    //   throw error;
+    // }
+    console.log(type);
+    dispatch({ type: ISABSENT, id: studentId, cell: type });
   };
 };
 
@@ -286,6 +287,11 @@ export const updateAccount = (userName, lastName, email, photo) => {
       },
       5000
     );
+    if (updateResp.status == 500) {
+      const error = new Error("Image shouldn't be larger than 2mb");
+      error.code = 500;
+      throw error;
+    }
     if (updateResp.status == 401) {
       const error = new Error("please reauthenticate");
       error.code = 401;
@@ -603,6 +609,83 @@ export const createShoka = (
   };
 };
 
+export const updateShoka = (
+  shokaList,
+
+  projectMarks,
+  assignmentsMarks,
+  finalMarks,
+  practicalMarks
+) => {
+  return async (dispatch) => {
+    console.log(
+      shokaList,
+      projectMarks,
+      assignmentsMarks,
+      finalMarks,
+      practicalMarks
+    );
+    const userData = await AsyncStorage.getItem("userData");
+
+    const transformedData = JSON.parse(userData);
+    const { userPassword, subjects, token, userId, expirationDate } =
+      transformedData;
+
+    let updateResp;
+
+    updateResp = await FetchWithTimeout(
+      "http://" + base_ip + ":4000/shokaList/" + shokaList,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          projectMarks: projectMarks,
+          assignment: assignmentsMarks,
+          finalMarks: finalMarks,
+          practicalWork: practicalMarks,
+        }),
+      },
+      5000
+    );
+
+    if (updateResp.status == 401) {
+      const error = new Error("please reauthenticate");
+      error.code = 401;
+      throw error;
+    }
+
+    const data = await updateResp.json();
+
+    if (!updateResp.ok) {
+      const error = new Error(data.message);
+      error.code = data.code;
+      throw error;
+    }
+
+    const studentData = new Array();
+
+    studentData.push({
+      shokaList: shokaList,
+      finalMarks: finalMarks,
+      assignment: assignmentsMarks,
+      practicalWork: practicalMarks,
+      projectMarks: practicalMarks,
+    });
+
+    dispatch({
+      type: UPDATEMARKS,
+      shokaList,
+      finalMarks,
+      assignmentsMarks,
+      practicalMarks,
+      projectMarks,
+    });
+  };
+};
+
 export const getAttendence = (id) => {
   return async (dispatch) => {
     const userData = await AsyncStorage.getItem("userData");
@@ -708,11 +791,35 @@ export const getStudentBySubject = (subjectId, chance) => {
     }
     const studentData = new Array();
     data.forEach((element) => {
+      let shokaList;
+      let finalMarks;
+      let assignment;
+      let practicalWork;
+      let projectMarks;
+      if (element.shokaListId) {
+        shokaList = element.shokaListId;
+        finalMarks = element.finalMarks;
+        assignment = element.assignment;
+        practicalWork = element.practicalWork;
+        projectMarks = element.projectMarks;
+      } else {
+        shokaList = false;
+        finalMarks = false;
+        assignment = false;
+        practicalWork = false;
+        projectMarks = false;
+      }
       studentData.push({
         studentId: element.studentId,
         studentName: element.fullName,
-
+        studentGrandFatherName: element.grandFatherName,
         fatherName: element.fatherName,
+        photo: element.photo,
+        shokaList: shokaList,
+        finalMarks: finalMarks,
+        assignment: assignment,
+        practicalWork: practicalWork,
+        projectMarks: projectMarks,
       });
     });
 

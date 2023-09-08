@@ -21,9 +21,13 @@
                     <v-card-title class="text-h4 pb-2 text-uppercase font-weight-bold">
                       {{ $t('Welcome to students migration') }}
                     </v-card-title>
-                    <v-card-title class="text-h4 pb-2 text-uppercase text-secondary font-weight-bold">{{ $t('Overview') }}</v-card-title>
+                    <v-card-title class="text-h4 pb-2 text-uppercase text-secondary font-weight-bold">{{
+                      $t('Overview')
+                    }}</v-card-title>
                     <v-card-subtitle class="mt-4">
-                      {{ $t('Please review your migration before submitting the process.') }} <br />{{ $t('Here you will see which students are eligible for the next semester.') }}<br />
+                      {{ $t('Please review your migration before submitting the process.') }} <br />{{
+                        $t('Here you will see which students are eligible for the next semester.')
+                      }}<br />
                       {{ $t('Take some time and review all students') }}
                     </v-card-subtitle>
                     <v-btn
@@ -64,9 +68,9 @@
                 <v-card-text>
                   <v-card-item>
                     <v-card-title class="text-h5 text-uppercase">{{ $t('All Students') }}</v-card-title>
-                    <v-card-subtitle
-                      >{{ $t('Review all the student of this semester and then hit the migrate button') }}</v-card-subtitle
-                    >
+                    <v-card-subtitle>{{
+                      $t('Review all the student of this semester and then hit the migrate button')
+                    }}</v-card-subtitle>
                   </v-card-item>
                   <v-data-table-virtual
                     :loading="loading"
@@ -88,36 +92,66 @@
                     </template>
 
                     <template v-slot:item.message="{ item }">
-                      <v-tooltip :text="item.columns.message" location="top">
-                        <template v-slot:activator="{ props }">
-                          <v-icon v-bind="props" icon="mdi-information" color="dark"></v-icon>
-                        </template>
-                      </v-tooltip>
+                      <div class="text-center">
+                        <v-tooltip :text="item.columns.message" location="top">
+                          <template v-slot:activator="{ props }">
+                            <v-icon v-bind="props" icon="mdi-information" color="dark"></v-icon>
+                          </template>
+                        </v-tooltip>
+                      </div>
                     </template>
 
                     <template v-slot:item.taajil="{ item }">
-                      <v-icon v-if="!!item.columns.taajil" icon="mdi-check-circle-outline" color="success"></v-icon>
-                      <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.taajil" icon="mdi-check-circle-outline" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
                     </template>
 
                     <template v-slot:item.tabdil="{ item }">
-                      <v-icon v-if="!!item.columns.tabdil" icon="mdi-check-circle-outline" color="success"></v-icon>
-                      <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.tabdil" icon="mdi-check-circle-outline" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
                     </template>
 
                     <template v-slot:item.mahrom="{ item }">
-                      <v-icon v-if="!!item.columns.mahrom" icon="mdi-check-circle-outline" color="success"></v-icon>
-                      <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.mahrom" icon="mdi-check-circle-outline" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
                     </template>
 
                     <template v-slot:item.monfaq="{ item }">
-                      <v-icon v-if="!!item.columns.monfaq" icon="mdi-check-circle-outline" color="success"></v-icon>
-                      <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.monfaq" icon="mdi-check-circle-outline" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
+                    </template>
+
+                    <template v-slot:item.absent="{ item }">
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.absent" icon="mdi-check-circle-outline" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
+                    </template>
+
+                    <template v-slot:item.repeat_semester="{ item }">
+                      <div class="text-center">
+                        <v-icon
+                          v-if="!!item.columns.repeat_semester"
+                          icon="mdi-check-circle-outline"
+                          color="success"
+                        ></v-icon>
+                        <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
+                      </div>
                     </template>
 
                     <template v-slot:item.eligibility="{ item }">
-                      <v-icon v-if="!!item.columns.eligibility" icon="mdi-check-circle" color="success"></v-icon>
-                      <v-icon v-else icon="mdi-close-circle" color="error"></v-icon>
+                      <div class="text-center">
+                        <v-icon v-if="!!item.columns.eligibility" icon="mdi-check-circle" color="success"></v-icon>
+                        <v-icon v-else icon="mdi-close-circle" color="error"></v-icon>
+                      </div>
                     </template>
 
                     <template v-slot:item.photo="{ item }">
@@ -133,9 +167,9 @@
                 <v-card-actions class="mx-2">
                   <v-spacer></v-spacer>
                   <v-btn variant="outlined" color="error" @click="cancelMigration">{{ $t('Cancel') }}</v-btn>
-                  <v-btn variant="flat" @click="promoteSemesterStudents" :loading="migrateLoader"
-                    >{{ $t('Proceed with Migration') }}</v-btn
-                  >
+                  <v-btn variant="flat" @click="promoteSemesterStudents" :loading="migrateLoader">{{
+                    $t('Proceed with Migration')
+                  }}</v-btn>
                 </v-card-actions>
               </v-card>
             </v-window-item>
@@ -195,7 +229,8 @@ export default {
       { title: 'Taajil', key: 'taajil', sortable: false },
       { title: 'Tabdil', key: 'tabdil', sortable: false },
       { title: 'Monfaq', key: 'monfaq', sortable: false },
-      { title: 'Mahrom', key: 'mahrom', sortable: false },
+      { title: 'Absent', key: 'absent', sortable: false },
+      { title: 'Repeat', key: 'repeat_semester', sortable: false },
       { title: 'Info', key: 'message', sortable: false },
       { title: 'Eligibility', key: 'eligibility', sortable: false },
     ],

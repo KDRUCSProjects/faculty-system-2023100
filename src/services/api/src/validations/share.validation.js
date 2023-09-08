@@ -5,7 +5,7 @@ const paginate = {
     page: Joi.number(),
     limit: Joi.number(),
     skip: Joi.number(),
-    status: Joi.string().valid('taajils', 'reentry', 'tabdili'),
+    status: Joi.string().valid('taajils', 'reentry', 'tabdili', 'all'),
     kankorId: Joi.string(),
   }),
 };

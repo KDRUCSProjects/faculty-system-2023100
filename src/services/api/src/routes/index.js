@@ -24,6 +24,7 @@ const badliAshaRoutes = require('./badli.asha.routes');
 const monfaqiRoutes = require('./monfaqi.routes');
 const transcriptRoutes = require('./transcript.routes');
 const resultSheetRoutes = require('./resultSheet.routes');
+const reportRoutes = require('./report.routes');
 
 const router = express.Router();
 
@@ -111,6 +112,10 @@ const defaultRoutes = [
   {
     path: '/transcript',
     route: transcriptRoutes,
+  },
+  {
+    path: '/report',
+    route: reportRoutes,
   },
   {
     path: '/resultSheet',

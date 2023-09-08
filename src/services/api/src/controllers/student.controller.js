@@ -1,12 +1,21 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { studentService, educationalYearService, taajilService, reentryService, tabdiliService, tokenService } = require('../services');
+const {
+  studentService,
+  educationalYearService,
+  taajilService,
+  reentryService,
+  tabdiliService,
+  tokenService,
+  studentListService,
+  semesterService,
+} = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const registerStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudentOnKankorId(req.body.kankorId);
   if (student) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already created on this Kankor Id');
-  const year = await educationalYearService.findEducationalYearByValue(req.body.educationalYear)
+  const year = await educationalYearService.findEducationalYearByValue(req.body.educationalYear);
   let educationalYearId;
   if (year) {
     educationalYearId = year;
@@ -33,6 +42,13 @@ const updateStudent = catchAsync(async (req, res) => {
 const getStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudent(req.params.studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'Student Not Found');
+
+  let findLatestSemesterId = await studentListService.findStudentLatestSemesterId(student.id);
+
+  let semester = await semesterService.findSemesterById(findLatestSemesterId);
+
+  student.dataValues.latestSemester = semester.title;
+
   res.status(httpStatus.OK).send(student);
 });
 
@@ -46,7 +62,7 @@ const deleteStudent = catchAsync(async (req, res) => {
 const getStudents = catchAsync(async (req, res) => {
   const page = req.query?.page ? req.query?.page : 1;
   const limit = req.query?.limit ? req.query?.limit : 2000;
-  const offset = parseInt(((page - 1) * limit), 10);
+  const offset = parseInt((page - 1) * limit, 10);
 
   if (req.query.kankorId) {
     const { count, rows } = await studentService.getStudentByKankorId(req.query.kankorId, limit, offset);
@@ -54,7 +70,7 @@ const getStudents = catchAsync(async (req, res) => {
       page: parseInt(page, 10),
       totalPages: Math.ceil(count / limit),
       total: count,
-      results: rows
+      results: rows,
     });
   }
 
@@ -66,10 +82,13 @@ const getStudents = catchAsync(async (req, res) => {
         result = await taajilService.taajilStudents(limit, offset);
         break;
       case 'reentry':
-        result = await reentryService.reentryStudents(limit, offset)
+        result = await reentryService.reentryStudents(limit, offset);
         break;
       case 'tabdili':
         result = await tabdiliService.getTabdilis(limit, offset);
+        break;
+      case 'all':
+        result = await studentService.getStudents(limit, offset, req.query.kankorId);
         break;
       default:
         throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameters');
@@ -81,7 +100,7 @@ const getStudents = catchAsync(async (req, res) => {
       page: parseInt(page, 10),
       totalPages: Math.ceil(count / limit),
       total: count,
-      results: result
+      results: result,
     });
   }
   const { rows, count } = result;
@@ -89,7 +108,7 @@ const getStudents = catchAsync(async (req, res) => {
     page: parseInt(page, 10),
     totalPages: Math.ceil(count / limit),
     total: count,
-    results: rows
+    results: rows,
   });
 });
 
@@ -116,7 +135,6 @@ const registerYourSelf = catchAsync(async (req, res, next) => {
   return registerStudent(req, res, next);
 });
 
-
 const getStudentSchool = catchAsync(async (req, res, next) => {
   const { studentId } = req.params;
   const student = await studentService.getStudent(studentId);
@@ -125,7 +143,6 @@ const getStudentSchool = catchAsync(async (req, res, next) => {
   if (!school) throw new ApiError(httpStatus.NOT_FOUND, 'school not found');
   return res.status(httpStatus.CREATED).send(school);
 });
-
 
 const createStudentSchool = catchAsync(async (req, res, next) => {
   const { studentId } = req.params;
@@ -137,7 +154,6 @@ const createStudentSchool = catchAsync(async (req, res, next) => {
   const results = await studentService.createStudentSchool(req.body);
   return res.status(httpStatus.CREATED).send(results);
 });
-
 
 const deleteStudentSchool = catchAsync(async (req, res, next) => {
   const { studentId } = req.params;
@@ -158,7 +174,6 @@ const getStudentMonograph = catchAsync(async (req, res, next) => {
   if (!monograph) throw new ApiError(httpStatus.NOT_FOUND, 'Monograph not found');
   return res.status(httpStatus.CREATED).send(monograph);
 });
-
 
 const createStudentMonograph = catchAsync(async (req, res, next) => {
   const { studentId } = req.params;
@@ -181,9 +196,6 @@ const deleteStudentMonograph = catchAsync(async (req, res, next) => {
   await studentService.deleteStudentMonograph(onlyMonograph);
   return res.status(httpStatus.NO_CONTENT).send();
 });
-
-
-
 
 module.exports = {
   getStudent,

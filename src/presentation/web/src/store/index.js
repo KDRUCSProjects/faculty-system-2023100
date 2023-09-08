@@ -9,7 +9,8 @@ import departmentModule from './modules/departments';
 import semestersModule from './modules/semesters';
 import yearsModule from './modules/years';
 import conversionModule from './modules/conversion';
-import tokensModule from './modules/tokens'
+import tokensModule from './modules/tokens';
+import axios from 'axios';
 
 export default createStore({
   modules: {
@@ -27,6 +28,32 @@ export default createStore({
     toastMessages: [],
     totalStudents: 0,
     totalTeachers: 0,
+  },
+  actions: {
+    async startDBBackup(context) {
+      try {
+        const token = context.rootGetters.token;
+
+        const response = await axios({
+          url: '/api/report/dbBackup',
+          method: 'get',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        context.commit('setToast', [1, response.data.message || 'DB backup successfully started'], {
+          root: true,
+        });
+      } catch (e) {
+        context.commit('setToast', [0, e.response.data.message || 'Failed generating db backup'], {
+          root: true,
+        });
+
+        throw e.response.data.message;
+      }
+    },
   },
   getters: {
     toastMessages(state) {

@@ -1,4 +1,4 @@
-const { taajilService, reentryService, tabdiliService, studentListService } = require('../services');
+const { taajilService, reentryService, tabdiliService, studentListService, monfaqiService } = require('../services');
 
 const getStatsBySemesterId = async (semesterId, gender, count = true) => {
   const taajilsCount = await taajilService.findTaajilBySemesterId(semesterId, { count, gender });
@@ -16,9 +16,11 @@ const getStatsBySemesterId = async (semesterId, gender, count = true) => {
 
   const tabdiliCount = await tabdiliService.findTabdiliBySemesterId(semesterId, { count, gender });
 
+  const monfaqiCount = await monfaqiService.findMonfaqiBySemesterId(semesterId, { count, gender });
+
   const totalCount = await studentListService.getAllStudentsCountBySemesterId(semesterId, { count, gender });
 
-  const presentStudentsCount = totalCount - (tabdiliCount + taajilsCount);
+  const presentStudentsCount = totalCount - (tabdiliCount + taajilsCount + monfaqiCount);
 
   if (!count) {
     // If no count (return real data)
@@ -38,14 +40,22 @@ const getStatsBySemesterId = async (semesterId, gender, count = true) => {
           exists = true;
         }
       });
+
+      // Remove monfaqi students
+      monfaqiCount.forEach((s) => {
+        if (s.id === student.id) {
+          exists = true;
+        }
+      });
       if (!exists) return student;
     });
+
     const report = {
       present: presentStudents,
       taajil: taajilsCount,
       reentry: [...reentryTaajilsCount, ...reentrySpecialTaajilsCount],
       tabdili: tabdiliCount,
-      // monfaq: 0
+      monfaq: monfaqiCount,
     };
 
     return report;
@@ -63,13 +73,61 @@ const getStatsBySemesterId = async (semesterId, gender, count = true) => {
       total: 0 + 0 + reentryTaajilsCount + reentrySpecialTaajilsCount,
     },
     tabdili: tabdiliCount,
-    // Missing for now
-    monfaq: 0,
+    monfaq: monfaqiCount,
   };
 
   return statistics;
 };
 
+const getSemesterTitleByPashto = (title) => {
+  let className;
+  let semesterName;
+  switch (title) {
+    case 1:
+      className = 'لومړی';
+      semesterName = 'اول';
+      break;
+    case 2:
+      className = 'لومړی';
+      semesterName = 'دوهم';
+      break;
+    case 3:
+      className = 'دوهم';
+      semesterName = 'دریم';
+      break;
+    case 4:
+      className = 'دوهم';
+      semesterName = 'څلورم';
+      break;
+    case 5:
+      className = 'دریم';
+      semesterName = 'پنځم';
+      break;
+    case 6:
+      className = 'دریم';
+      semesterName = 'ښپږم';
+      break;
+    case 7:
+      className = 'څلورم';
+      semesterName = 'اووم';
+      break;
+    case 8:
+      className = 'څلورم';
+      semesterName = 'اتم';
+      break;
+    default:
+      className = 'لومړی';
+      semesterName = 'اول';
+      break;
+  }
+
+  return {
+    className,
+    semesterName,
+  };
+};
+
 module.exports = {
   getStatsBySemesterId,
+  getSemesterTitleByPashto,
 };

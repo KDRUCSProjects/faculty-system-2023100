@@ -115,4 +115,41 @@ export default {
       throw e.response.data.message;
     }
   },
+  async downloadSemesterReportByType(context, { semesterId, type, gender }) {
+    try {
+      const token = context.rootGetters.token;
+
+      let url = `/api/report/conversion?semesterId=${semesterId}&type=${type}`;
+
+      if (gender != 'all') {
+        url = url + `&gender=${gender}`;
+      }
+      const response = await axios.get(url, {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async downloadBadlAsha(context, { year, classTitle }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios.get(`/api/badliAsha?year=${year}&classTitle=${classTitle}`, {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
 };

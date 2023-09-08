@@ -8,11 +8,12 @@ import {
   Switch,
   Platform,
   SafeAreaView,
+  Dimensions,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getAttendence, loadSubjects } from "../store/actions/actions";
 import { useEffect, useState } from "react";
-import { Button } from "react-native-paper";
+import { Button, Card } from "react-native-paper";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
 import SubjectItem from "./SubjectItem";
@@ -20,6 +21,11 @@ import SelectSubjectItem from "./SelectSubjectItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import BackHandlerChild from "../optimization/BackHandlerChild";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import Header from "../ui/components/Header";
+import { Ionicons } from "@expo/vector-icons";
+const { width, height } = Dimensions.get("window");
 
 export default function SelectType(props) {
   BackHandlerChild();
@@ -67,7 +73,7 @@ export default function SelectType(props) {
             width: "100%",
           }}
         >
-          <View
+          {/* <View
             style={{
               height: 60,
               marginTop: Platform.OS == "android" ? "7%" : 0,
@@ -90,7 +96,12 @@ export default function SelectType(props) {
                 FCS for University
               </Text>
             </View>
-          </View>
+          </View> */}
+          <Header
+            leftIcon="back"
+            onLeft={() => props.navigation.goBack()}
+          ></Header>
+
           <Text
             style={{
               fontSize: 28,
@@ -103,148 +114,116 @@ export default function SelectType(props) {
           </Text>
           <View
             style={{
-              height: "40%",
-              justifyContent: "space-around",
+              height: "90%",
+              justifyContent: "space-evenly",
               alignItems: "center",
             }}
           >
             <View
               style={{
-                width: "80%",
-                height: "10%",
+                width: "90%",
+                height: 150,
                 flexDirection: "row",
                 justifyContent: "space-around",
-                alignItems: "center",
               }}
             >
-              <View
-                style={{
-                  width: "80%",
-                  justifyContent: "center",
-                  alignItems: "flex-start",
+              <Card
+                style={{ width: 120, height: 140 }}
+                onPress={() => {
+                  props.navigation.navigate("attendenceScreen", {
+                    subjectId: id,
+                    status: "one",
+                  });
                 }}
               >
-                <Text
+                <Card.Content style={{ height: "40%" }}>
+                  <Text
+                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                  >
+                    First Cell
+                  </Text>
+                </Card.Content>
+
+                <View
                   style={{
-                    verticalAlign: "middle",
-                    fontSize: 25,
-                    fontWeight: "bold",
-                    fontStyle: "italic",
+                    height: "60%",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
                   }}
                 >
-                  First
-                </Text>
-              </View>
-              <View style={{ width: "20%" }}>
-                <Switch
+                  <Ionicons
+                    name="md-checkmark-circle"
+                    size={80}
+                    color={colors.primary}
+                  />
+                </View>
+              </Card>
+
+              <Card
+                style={{ width: 120, height: 140 }}
+                onPress={() => {
+                  props.navigation.navigate("attendenceScreen", {
+                    subjectId: id,
+                    status: "two",
+                  });
+                }}
+              >
+                <Card.Content style={{ height: "40%" }}>
+                  <Text
+                    style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
+                  >
+                    Second Cell
+                  </Text>
+                </Card.Content>
+
+                <View
                   style={{
-                    transform: [{ scaleX: 1.8 }, { scaleY: 1.4 }],
-                    width: 50,
+                    height: "60%",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
                   }}
-                  tintColor={colors.primary}
-                  trackColor={colors.primary}
-                  value={isOne}
-                  onValueChange={() => {
-                    setisError(false);
-                    setisOne(!isOne);
-                    setisTwo(false);
-                    setisBoth(false);
-                  }}
-                />
-              </View>
+                >
+                  <Ionicons
+                    name="md-checkmark-circle"
+                    size={80}
+                    color={colors.primary}
+                  />
+                </View>
+              </Card>
             </View>
 
-            <View
-              style={{
-                width: "80%",
-                height: "10%",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
+            <Card
+              style={{ width: 120, height: 140 }}
+              onPress={() => {
+                props.navigation.navigate("attendenceScreen", {
+                  subjectId: id,
+                  status: "both",
+                });
               }}
             >
-              <View
-                style={{
-                  width: "80%",
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                }}
-              >
+              <Card.Content style={{ height: "40%" }}>
                 <Text
-                  style={{
-                    verticalAlign: "middle",
-                    fontSize: 25,
-                    fontWeight: "bold",
-                    fontStyle: "italic",
-                  }}
+                  style={{ fontSize: 14, height: "70%", fontWeight: "bold" }}
                 >
-                  Second
+                  Both Cells
                 </Text>
-              </View>
-              <View style={{ width: "20%" }}>
-                <Switch
-                  style={{
-                    transform: [{ scaleX: 1.8 }, { scaleY: 1.4 }],
-                    width: 50,
-                  }}
-                  tintColor={colors.primary}
-                  trackColor={colors.primary}
-                  value={isTwo}
-                  onValueChange={() => {
-                    setisError(false);
-                    setisOne(false);
-                    setisTwo(!isTwo);
-                    setisBoth(false);
-                  }}
-                />
-              </View>
-            </View>
+              </Card.Content>
 
-            <View
-              style={{
-                width: "80%",
-                height: "10%",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-              }}
-            >
               <View
                 style={{
-                  width: "80%",
-                  justifyContent: "center",
-                  alignItems: "flex-start",
+                  height: "60%",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
                 }}
               >
-                <Text
-                  style={{
-                    verticalAlign: "middle",
-                    fontSize: 25,
-                    fontWeight: "bold",
-                    fontStyle: "italic",
-                  }}
-                >
-                  Both
-                </Text>
-              </View>
-              <View style={{ width: "20%" }}>
-                <Switch
-                  style={{
-                    transform: [{ scaleX: 1.8 }, { scaleY: 1.4 }],
-                    width: 50,
-                  }}
-                  tintColor={colors.primary}
-                  trackColor={colors.primary}
-                  value={isBoth}
-                  onValueChange={() => {
-                    setisError(false);
-                    setisOne(false);
-                    setisTwo(false);
-                    setisBoth(!isBoth);
-                  }}
+                <Ionicons
+                  name="md-checkmark-done-circle"
+                  size={80}
+                  color={colors.primary}
                 />
               </View>
-            </View>
+            </Card>
+
             {isError ? (
               <Text style={{ height: 30, fontSize: 18, color: "red" }}>
                 One option Should be selected!
@@ -252,65 +231,6 @@ export default function SelectType(props) {
             ) : (
               <View style={{ height: 30 }}></View>
             )}
-          </View>
-          <View
-            style={{
-              height: "35%",
-              width: "90%",
-              marginTop: "3%",
-              flexDirection: "row",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
-              marginHorizontal: 10,
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                backgroundColor: "blue",
-                height: 45,
-                width: 80,
-                borderRadius: 8,
-                padding: 10,
-                marginLeft: 15,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={() => props.navigation.goBack()}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 18,
-                  textAlign: "center",
-                  textAlignVertical: "center",
-                }}
-              >
-                Back
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.primary,
-                height: 45,
-                width: 80,
-                borderRadius: 8,
-                padding: 10,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={onclick}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 18,
-                  textAlign: "center",
-                  textAlignVertical: "center",
-                }}
-              >
-                Next
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
       </View>

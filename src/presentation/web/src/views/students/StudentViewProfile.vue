@@ -4,9 +4,22 @@
       <v-col cols="4">
         <student-photo :student="student" @upload-photo="updatePhoto">
           <div id="actions" class="ma-4">
-            <v-btn variant="flat" block color="dark"> {{ $t('Actions') }} </v-btn>
+            <v-btn
+              @click="downloadTranscript"
+              class="float-right mb-1"
+              prepend-icon="mdi-download-circle-outline"
+              color="primary"
+              variant="flat"
+              block
+              download
+              :loading="downloadLoading"
+            >
+              Transcript
+            </v-btn>
             <div class="my-1"></div>
-            <v-btn variant="flat" block color="red" @click="deleteStudent(student.id)"> {{ $t('Delete') }} </v-btn>
+            <v-btn variant="flat" prepend-icon="mdi-delete-outline" block color="red" @click="deleteStudent(student.id)">
+              {{ $t('Delete') }}
+            </v-btn>
           </div>
         </student-photo>
       </v-col>
@@ -36,6 +49,7 @@ export default {
   data: () => ({
     initLoader: false,
     photo: null,
+    downloadLoading: false,
   }),
   props: {
     id: {
@@ -43,6 +57,17 @@ export default {
     },
   },
   methods: {
+    async downloadTranscript() {
+      this.downloadLoading = true;
+      const file = await this.$store.dispatch('students/downloadTranscript', this.id);
+
+      this.downloadFile(file.data, 'Transcripts - Numeric Table');
+
+      // Make it a little stylish ;)
+      setTimeout(() => {
+        this.downloadLoading = false;
+      }, 500);
+    },
     async updatePhoto(photo) {
       await this.$store.dispatch('students/updateStudent', { ['photo']: photo.fieldValue, studentId: this.id });
     },

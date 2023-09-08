@@ -1,33 +1,34 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { monfaqiService, studentService, educationalYearService } = require('../services');
-
+const { monfaqiService, studentService, educationalYearService, studentListService } = require('../services');
 const createMonfaqi = catchAsync(async (req, res) => {
-  const { studentId, year } = req.body;
+  const { studentId, educationalYear } = req.body;
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
   const studentMonfaqi = await monfaqiService.findMonfaqiByStudentId(studentId);
   if (studentMonfaqi) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student already has monfaqi');
   // delete year value from body
-  delete req.body.year;
-  let educationalYearId = await educationalYearService.findEducationalYearByValue(year);
+
+  let educationalYearId = await educationalYearService.findEducationalYearByValue(educationalYear);
   if (!educationalYearId) {
-    educationalYearId = (await educationalYearService.createEducationalYear(year))?.id;
+    educationalYearId = (await educationalYearService.createEducationalYear(educationalYear))?.id;
   }
 
   req.body.year = educationalYearId;
+
+  // Get student on-going semester id
+  const currentSemesterId = await studentListService.findStudentLatestSemesterId(studentId);
+  req.body.semesterId = currentSemesterId;
+
   const monfaqi = await monfaqiService.createMonfaqi(req.body);
   return res.status(httpStatus.CREATED).send(monfaqi);
 });
-
-
 
 const getMonfaqies = catchAsync(async (req, res) => {
   const monfaqies = await monfaqiService.getMonfaqis();
   return res.status(httpStatus.OK).send(monfaqies);
 });
-
 
 const getMonfaqi = catchAsync(async (req, res) => {
   const monfaqi = await monfaqiService.findMonfaqiById(req.params.monfaqiId);

@@ -147,8 +147,11 @@ export default {
       const token = context.rootGetters.token;
 
       // If you want to add 2nd or 3rd chance, then add the query otherwise empty
+      let url = `/api/shokaList`;
+
+      if (chance !== 1) url = url + `?chance=${chance}`;
       const response = await axios({
-        url: `/api/shokaList`,
+        url,
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -168,6 +171,24 @@ export default {
       const token = context.rootGetters.token;
 
       const response = await axios.get(`/api/shokaList/shokas/${subjectId}?chance=${chance}`, {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // context.commit();
+
+      return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async downloadSubjectAttendanceBySubjectId(context, { subjectId, start, end }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios.get(`/api/subjects/${subjectId}/report?startDate=${start}&endDate=${end}`, {
         responseType: 'blob',
         headers: {
           Authorization: `Bearer ${token}`,

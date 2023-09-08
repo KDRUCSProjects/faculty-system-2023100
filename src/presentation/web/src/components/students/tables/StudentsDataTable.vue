@@ -9,6 +9,8 @@
       :items="theStudents"
       no-data-text="No students available"
       hide-default-footer
+      :density="density"
+      :search="searched"
     >
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn @click="viewStudent(item)" variant="text" color="secondary" text icon="mdi-location-enter"> </v-btn>
@@ -39,6 +41,12 @@
             </v-list>
           </v-menu>
         </v-toolbar>
+
+        <slot v-if="customHeader">
+          <!-- <v-toolbar flat>
+            <v-toolbar-title>Expandable Table</v-toolbar-title>
+          </v-toolbar> -->
+        </slot>
       </template>
 
       <template v-slot:item.studentId="{ item }">
@@ -102,6 +110,13 @@ import { VDataTable } from 'vuetify/labs/VDataTable';
 
 export default {
   props: {
+    search: {
+      type: String,
+    },
+    density: {
+      type: String,
+      default: 'default',
+    },
     headers: {
       type: Array,
       required: true,
@@ -114,6 +129,10 @@ export default {
       default: 'Type',
     },
     noHeader: {
+      type: Boolean,
+      default: false,
+    },
+    customHeader: {
       type: Boolean,
       default: false,
     },
@@ -137,14 +156,16 @@ export default {
       itemsPerPage: 8,
       loading: false,
       errorMessage: null,
-      search: '',
-      statusTypes: [this.$t('Taajil'), this.$t('Reentry'), this.$t('Tabdili')],
+      statusTypes: [this.$t('Taajil'), this.$t('Reentry'), this.$t('Tabdili'), this.$t('monfaqi')],
       type: null,
     };
   },
   computed: {
     theStudents() {
       return this.students;
+    },
+    searched() {
+      return this.search;
     },
   },
   methods: {

@@ -23,6 +23,7 @@ import SemisterItem from "./SemisterItem";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import BackHandlerParent from "../optimization/BackHanlderParent";
+import Header from "../ui/components/Header";
 
 const SelectSemister = (props) => {
   BackHandlerParent();
@@ -60,75 +61,119 @@ const SelectSemister = (props) => {
             width: "100%",
           }}
         >
-          <View
-            style={{
-              height: 60,
-              marginTop: Platform.OS == "android" ? "7%" : 0,
-              backgroundColor: colors.primary,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <StatusBar hidden={false}></StatusBar>
+          {/* <View
+                  style={{
+                     height: 60,
+                     marginTop: Platform.OS == 'android' ? '7%' : 0,
+                     backgroundColor: colors.primary,
+                     flexDirection: 'row',
+                     justifyContent: 'space-between',
+                     alignItems: 'center'
+                  }}
+               >
+                  <StatusBar hidden={false}></StatusBar>
+                  <View
+                     style={{
+                        width: '20%'
+                     }}
+                  >
+                     <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+                        <ImageBackground
+                           style={{ height: 25, width: 28, marginLeft: 10 }}
+                           source={require('../assets/images/menu.png')}
+                        ></ImageBackground>
+                     </TouchableOpacity>
+                  </View>
+                  <View style={{ width: '70%' }}>
+                     <Text
+                        style={{
+                           color: 'white',
+                           fontSize: 19,
+                           paddingLeft: 20,
+                           fontWeight: 'bold'
+                        }}
+                     >
+                        Faculty App
+                     </Text>
+                  </View>
+               </View> */}
+
+          <Header
+            leftIcon="menu"
+            onLeft={() => props.navigation.toggleDrawer()}
+          ></Header>
+
+          {/* <Text
+                  style={{
+                     fontSize: 25,
+                     margin: 10,
+                     fontWeight: 'bold',
+                     fontStyle: 'italic'
+                  }}
+               >
+                  All your
+               </Text> */}
+          {semisters && semisters.length > 0 ? (
+            <View style={{ height: "90%", width: "100%" }}>
+              <ScrollView
+                contentContainerStyle={{
+                  flexGrow: 1,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                style={{}}
+              >
+                {semisters?.map((semister, index) => (
+                  <SemisterItem
+                    key={semister.semesterId}
+                    onClick={onclick}
+                    selected={selected == semister.semesterId ? true : false}
+                    semisterId={semister.semesterId}
+                    semisterName={semister.title}
+                  ></SemisterItem>
+                ))}
+
+                <Modal
+                  visible={isLoading}
+                  backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+                >
+                  <ActivityIndicator size={60}></ActivityIndicator>
+                </Modal>
+              </ScrollView>
+            </View>
+          ) : (
             <View
               style={{
-                width: "20%",
-              }}
-            >
-              <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/menu.png")}
-                ></ImageBackground>
-              </TouchableOpacity>
-            </View>
-            <View style={{ width: "70%" }}>
-              <Text style={{ color: "white", fontSize: 23 }}>
-                FCS for University
-              </Text>
-            </View>
-          </View>
-
-          <Text
-            style={{
-              fontSize: 25,
-              margin: 10,
-              fontWeight: "bold",
-              fontStyle: "italic",
-            }}
-          >
-            Choose a Semister
-          </Text>
-          <View style={{ height: "80%", width: "100%" }}>
-            <ScrollView
-              contentContainerStyle={{
-                flexGrow: 1,
-                flexDirection: "row",
-                flexWrap: "wrap",
+                height: "90%",
+                width: "100%",
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              style={{}}
             >
-              {semisters?.map((semister, index) => (
-                <SemisterItem
-                  key={semister.semesterId}
-                  onClick={onclick}
-                  selected={selected == semister.semesterId ? true : false}
-                  semisterId={semister.semesterId}
-                  semisterName={semister.title}
-                ></SemisterItem>
-              ))}
+              <Text
+                style={{
+                  color: "black",
+                  fontSize: 18,
 
-              <Modal
-                visible={isLoading}
-                backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+                  textAlign: "center",
+                }}
               >
-                <ActivityIndicator size={60}></ActivityIndicator>
-              </Modal>
-            </ScrollView>
-          </View>
+                No subjects assigned
+              </Text>
+              <Text
+                style={{
+                  color: "black",
+                  fontSize: 12,
+                  padding: 3,
+                  textAlign: "center",
+                }}
+              >
+                Enjoy your day!
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </SafeAreaView>

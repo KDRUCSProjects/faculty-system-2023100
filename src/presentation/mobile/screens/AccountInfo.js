@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   BackHandler,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import colors from "../constants/colors";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -29,6 +30,9 @@ import { useEffect } from "react";
 
 import { logout } from "../store/actions/actions";
 import BackHandlerChild from "../optimization/BackHandlerChild";
+import { useHeaderHeight } from "@react-navigation/elements";
+import Header from "../ui/components/Header";
+import BottomButton from "../ui/components/BottomButton";
 
 export default function AccountInfo(props) {
   BackHandlerChild();
@@ -76,28 +80,26 @@ export default function AccountInfo(props) {
 
     const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [16, 12],
+      aspect: [1, 1],
       quality: 0.7,
     });
     if (!image.canceled) {
       const getFileSize = async (uri) => {
         let fileInfo = await FileSystem.getInfoAsync(uri);
         console.log(fileInfo);
-        if (fileInfo.size / 1024 / 1024 > 2097152) {
+        if (parseInt(fileInfo.size) > 2097152) {
+          Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
           return false;
         } else {
+          setimgEditedName(image.uri.split("/").pop());
+          console.log(imgEditedName);
+          setimgEdited(image.uri);
           return true;
         }
       };
       if (!getFileSize(image.uri)) {
-        Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
-
         return;
       }
-
-      setimgEditedName(image.uri.split("/").pop());
-      console.log(imgEditedName);
-      setimgEdited(image.uri);
     }
     setVisible(false);
   };
@@ -110,27 +112,27 @@ export default function AccountInfo(props) {
 
     const image = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      aspect: [16, 12],
+      aspect: [1, 1],
       quality: 0.7,
     });
     if (!image.canceled) {
       const getFileSize = async (uri) => {
         let fileInfo = await FileSystem.getInfoAsync(uri);
         console.log(fileInfo);
-        if (fileInfo.size > 2097152) {
+        if (parseInt(fileInfo.size) > 2097152) {
+          Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
+
           return false;
         } else {
+          setimgEditedName(image.uri.split("/").pop());
+          console.log(imgEditedName);
+          setimgEdited(image.uri);
           return true;
         }
       };
       if (!getFileSize(image.uri)) {
-        Alert.alert("Error!", "Image size shouldn't be greated than 2 mb");
-
         return;
       }
-      setimgEditedName(image.uri.split("/").pop());
-      console.log(imgEditedName);
-      setimgEdited(image.uri);
     }
     setVisible(false);
   };
@@ -153,6 +155,14 @@ export default function AccountInfo(props) {
         await dispatch(updateAccount(userName, lastName, email));
       }
       setisLoading(false);
+      let toast = Toast.show("Account updated!", {
+        duration: Toast.durations.LONG,
+      });
+
+      setTimeout(function hideToast() {
+        Toast.hide(toast);
+      }, 2000);
+      props.navigation.goBack();
     } catch (e) {
       setisLoading(false);
       console.log(e);
@@ -163,20 +173,18 @@ export default function AccountInfo(props) {
         // updates.reloadAsync();
       }
       Alert.alert("Sorry!", e.message);
+      return;
     }
-    let toast = Toast.show("Account updated!", {
-      duration: Toast.durations.LONG,
-    });
-
-    setTimeout(function hideToast() {
-      Toast.hide(toast);
-    }, 2000);
-    props.navigation.goBack();
   };
 
+  const headerHeight = useHeaderHeight();
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={headerHeight}
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <View
           style={{
             flex: 1,
@@ -185,38 +193,23 @@ export default function AccountInfo(props) {
             justifyContent: "space-between",
           }}
         >
-          <View
-            style={{
-              height: 60,
-              marginTop: Platform.OS == "android" ? "7%" : 0,
-              backgroundColor: colors.primary,
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ width: "20%" }}>
-              <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                <ImageBackground
-                  style={{ height: 25, width: 32 }}
-                  source={require("../assets/images/lessthan.png")}
-                ></ImageBackground>
-              </TouchableOpacity>
-            </View>
-            <View style={{ width: "60%", alignItems: "center" }}>
-              <Text style={{ color: "white", fontSize: 23 }}>Profile</Text>
-            </View>
-          </View>
+          <Header
+            headerText="Profile"
+            leftIcon="back"
+            onLeft={() => props.navigation.goBack()}
+          ></Header>
 
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
             }}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
           >
             <View
               style={{
                 height: "100%",
-
+                alignItems: "center",
                 justifyContent: "space-between",
               }}
             >
@@ -231,7 +224,7 @@ export default function AccountInfo(props) {
                 <View style={{}}>
                   <View
                     style={{
-                      borderColor: "#a7e9eb",
+                      borderColor: colors.primary,
                       borderWidth: 1,
                       height: 140,
                       width: 140,
@@ -248,7 +241,7 @@ export default function AccountInfo(props) {
                           overflow: "hidden",
                           borderRadius: 120 / 2,
                         }}
-                        resizeMode="center"
+                        resizeMode="cover"
                         source={
                           teacherPhoto?.includes("null")
                             ? require("../assets/images/avatar.png")
@@ -285,7 +278,7 @@ export default function AccountInfo(props) {
                       width: 40,
                       height: 40,
                       borderRadius: 20,
-                      backgroundColor: "#a7e9eb",
+                      backgroundColor: colors.primary,
                       overflow: "hidden",
                       justifyContent: "center",
                       alignItems: "center",
@@ -309,6 +302,7 @@ export default function AccountInfo(props) {
                   height: "70%",
                   justifyContent: "flex-start",
                   alignItems: "center",
+                  width: "100%",
                 }}
               >
                 <Text
@@ -324,11 +318,13 @@ export default function AccountInfo(props) {
                 </Text>
                 <View style={{ width: "90%", height: 100 }}>
                   <TextInput
-                    style={{ height: 60 }}
+                    style={{
+                      height: 60,
+                    }}
                     label={"Username"}
                     contentStyle={{ fontSize: 15 }}
+                    outlineStyle={{ backgroundColor: "white" }}
                     mode="outlined"
-                    textColor="gray"
                     value={userName}
                     onChangeText={(text) => {
                       setuserName(text);
@@ -340,9 +336,9 @@ export default function AccountInfo(props) {
                   <TextInput
                     style={{ height: 60 }}
                     contentStyle={{ fontSize: 15 }}
+                    outlineStyle={{ backgroundColor: "white" }}
                     label={"Lastname"}
                     mode="outlined"
-                    textColor="gray"
                     value={lastName}
                     onChangeText={(text) => setlastName(text)}
                   ></TextInput>
@@ -352,8 +348,8 @@ export default function AccountInfo(props) {
                     style={{ height: 60 }}
                     label={"Email"}
                     mode="outlined"
+                    outlineStyle={{ backgroundColor: "white" }}
                     contentStyle={{ fontSize: 15 }}
-                    textColor="gray"
                     value={email}
                     onChangeText={(text) => setemail(text)}
                   ></TextInput>
@@ -440,7 +436,7 @@ export default function AccountInfo(props) {
             <ActivityIndicator size={60}></ActivityIndicator>
           </Modal>
         </View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.btn}
           onPress={() =>
             Alert.alert("Save?", "Do you want save?", [
@@ -458,8 +454,25 @@ export default function AccountInfo(props) {
           }
         >
           <Text style={{ fontSize: 18, color: "white" }}>Save</Text>
-        </TouchableOpacity>
-      </View>
+        </TouchableOpacity> */}
+
+        <BottomButton
+          onPress={() =>
+            Alert.alert("Save?", "Do you want save updates?", [
+              {
+                text: "No",
+                onPress: () => {
+                  return;
+                },
+              },
+              {
+                text: "Yes",
+                onPress: onSaveUpdate,
+              },
+            ])
+          }
+        ></BottomButton>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

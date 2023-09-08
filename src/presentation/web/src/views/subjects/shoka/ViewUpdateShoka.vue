@@ -22,6 +22,7 @@
       </v-card-item>
       <v-card-text>
         <!-- The Table -->
+
         <v-data-table-virtual
           :loading="loading"
           loading-text="Loading students please wait"
@@ -41,74 +42,62 @@
           </template>
 
           <template v-slot:item.assignment="{ item }">
-            <div class="text-center">
-              <base-update-dialog
-                :title="'Assignment Marks'"
-                @update="updateMarks"
-                :fieldLabel="'Marks'"
+            <div class="text-center" :key="item?.columns?.assignment">
+              <base-update-field
+                fieldLabel="Marks"
                 :fieldValue="item.columns.assignment"
                 :fieldName="'assignment'"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
+                :max-value="10"
+                @update="updateMarks"
               >
-                <v-btn color="dark" text variant="outlined">
-                  {{ item.columns.assignment }}
-                </v-btn>
-              </base-update-dialog>
+              </base-update-field>
             </div>
           </template>
 
           <template v-slot:item.finalMarks="{ item }">
-            <div class="text-center">
-              <base-update-dialog
-                :title="'Final Marks'"
-                @update="updateMarks"
-                :fieldLabel="'Marks'"
-                :fieldName="'finalMarks'"
+            <div class="text-center" :key="item?.columns?.finalMarks">
+              <base-update-field
+                fieldLabel="Marks"
                 :fieldValue="item.columns.finalMarks"
+                :fieldName="'finalMarks'"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
+                :max-value="60"
+                @update="updateMarks"
               >
-                <v-btn color="dark" text variant="outlined">
-                  {{ item.columns.finalMarks }}
-                </v-btn>
-              </base-update-dialog>
+              </base-update-field>
             </div>
           </template>
 
           <template v-slot:item.projectMarks="{ item }">
-            <div class="text-center" v-if="item">
-              <base-update-dialog
-                :title="'Project Marks'"
-                @update="updateMarks"
-                :fieldLabel="'Marks'"
+            <div class="text-center" :key="item?.columns?.projectMarks">
+              <base-update-field
+                fieldLabel="Marks"
+                :fieldValue="item.columns.projectMarks"
                 :fieldName="'projectMarks'"
                 :rowId="item?.raw?.shokaListId"
-                :fieldValue="item.columns.projectMarks"
                 :data="item?.raw"
+                :max-value="20"
+                @update="updateMarks"
               >
-                <v-btn color="dark" text variant="outlined">
-                  {{ item.columns.projectMarks }}
-                </v-btn>
-              </base-update-dialog>
+              </base-update-field>
             </div>
           </template>
 
           <template v-slot:item.practicalWork="{ item }">
-            <div class="text-center">
-              <base-update-dialog
-                :title="'Practical Work Marks'"
-                @update="updateMarks"
-                :fieldLabel="'Marks'"
+            <div class="text-center" :key="item?.columns?.practicalWork">
+              <base-update-field
+                fieldLabel="Marks"
+                :fieldValue="item.columns.practicalWork"
                 :fieldName="'practicalWork'"
                 :rowId="item?.raw?.shokaListId"
-                :fieldValue="item.columns.practicalWork"
                 :data="item?.raw"
+                :max-value="10"
+                @update="updateMarks"
               >
-                <v-btn color="dark" text variant="outlined">
-                  {{ item.columns.practicalWork }}
-                </v-btn>
-              </base-update-dialog>
+              </base-update-field>
             </div>
           </template>
 
@@ -131,26 +120,6 @@
             </v-tooltip>
           </template>
 
-          <!-- <template v-slot:item.taajil="{ item }">
-            <v-icon v-if="!!item.columns.taajil" icon="mdi-check-circle-outline" color="success"></v-icon>
-            <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
-          </template>
-
-          <template v-slot:item.tabdil="{ item }">
-            <v-icon v-if="!!item.columns.tabdil" icon="mdi-check-circle-outline" color="success"></v-icon>
-            <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
-          </template>
-
-          <template v-slot:item.mahrom="{ item }">
-            <v-icon v-if="!!item.columns.mahrom" icon="mdi-check-circle-outline" color="success"></v-icon>
-            <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
-          </template>
-
-          <template v-slot:item.monfaq="{ item }">
-            <v-icon v-if="!!item.columns.monfaq" icon="mdi-check-circle-outline" color="success"></v-icon>
-            <v-icon v-else icon="mdi-checkbox-blank-circle-outline" color="dark"></v-icon>
-          </template> -->
-
           <template v-slot:item.eligibility="{ item }">
             <div class="text-center">
               <v-icon v-if="!!item.columns.eligibility" icon="mdi-check-circle" color="success"></v-icon>
@@ -167,13 +136,6 @@
             </v-avatar>
           </template>
         </v-data-table-virtual>
-        <!-- <v-card-actions>
-          <v-card-actions class="mx-2">
-            <v-spacer></v-spacer>
-            <v-btn variant="outlined" color="error" @click="cancelMigration">Cancel</v-btn>
-            <v-btn variant="flat" @click="promoteSemesterStudents" :loading="migrateLoader">Proceed with Migration</v-btn>
-          </v-card-actions>
-        </v-card-actions> -->
       </v-card-text>
     </v-card>
 
@@ -186,6 +148,7 @@ import { VDataTableVirtual } from 'vuetify/labs/VDataTable';
 
 const initialState = () => ({
   chance: 1,
+  renderComponent: true,
   subject: null,
   downloadLoading: false,
   chanceItems: [1, 2, 3, 4],
@@ -250,12 +213,23 @@ export default {
   data: () => initialState(),
   computed: {
     students() {
-      return this.$store.getters['subjects/currentShoka'];
+      let students = this.$store.getters['subjects/currentShoka'];
+
+      return students.sort((a, b) => a.fullName.localeCompare(b.fullName));
     },
   },
   methods: {
+    forceRender() {
+      this.renderComponent = false;
+
+      this.$nextTick(() => {
+        // Adding the component back in
+        this.renderComponent = true;
+      });
+    },
     setChance(value) {
       this.chance = value;
+      this.forceRender();
     },
     async downloadShoka() {
       this.downloadLoading = true;
