@@ -1,7 +1,9 @@
 <template>
   <div>
     <v-card class="theShadow py-5 pa-3">
-      <span class="pro" v-if="!studentRegistration"> {{ rankSemester(latestSemester) }} Semester</span>
+      <span class="pro" v-if="!studentRegistration">
+        {{ latestSemester ? `${rankSemester(latestSemester)} Semester` : 'Reserved' }}
+      </span>
 
       <v-card-item class="text-center mb-1">
         <v-avatar class="my-2" :size="avatarSize" color="secondary" variant="tonal">
@@ -33,7 +35,7 @@
             </v-chip>
             <v-chip label color="primary" variant="tonal">
               <v-icon start icon="mdi-card-account-details"></v-icon>
-              {{ $t('Admission Year') }} : {{ student?.admissionYear || 'NA' }}
+              {{ $t('Kankor Type') }} : {{ student?.kankorType }}
             </v-chip>
           </div>
 

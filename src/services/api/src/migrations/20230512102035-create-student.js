@@ -72,7 +72,8 @@ module.exports = {
         type: Sequelize.DOUBLE,
       },
       kankorType: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM('general', 'pass14'),
+        defaultValue: 'general',
       },
       birthCityEnglish: {
         type: Sequelize.STRING,
