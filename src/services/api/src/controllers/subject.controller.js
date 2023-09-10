@@ -73,12 +73,28 @@ const getTeacherSubjects = catchAsync(async (req, res) => {
 
   const { year: onGoingYear } = await educationalYearService.getCurrentEducationalYear();
   const year = await educationalYearService.getEducationalYearByValue(req.query?.year || onGoingYear);
+
   if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'Year Not Found');
   const subjects = await subjectService.getTeacherSubjectsOfYear(teacherId, year.id);
   if (subjects.length <= 0) {
     return res.status(httpStatus.OK).send(subjects);
   }
-  const results = subjectsFormatter(subjects);
+
+  // Only send the current on-going half subjects
+  const isFirstHalf = year.firstHalf;
+  let halfSubjects = [];
+  for (let i = 0; i < subjects.length; i++) {
+    if (!subjects[i].semesterId) continue;
+    let semester = await semesterService.findSemesterById(subjects[i]?.semesterId);
+
+    if (isFirstHalf && semester.title % 2 !== 0) {
+      halfSubjects.push(subjects[i]);
+    } else if (!isFirstHalf && semester.title % 2 === 0) {
+      halfSubjects.push(subjects[i]);
+    }
+  }
+
+  const results = subjectsFormatter(halfSubjects);
   return res.status(httpStatus.OK).send(results);
 });
 
@@ -119,7 +135,6 @@ const takeBackSubjectFromTeacher = catchAsync(async (req, res) => {
   return res.status(httpStatus.ACCEPTED).send(results);
 });
 
-
 const createReport = catchAsync(async (req, res) => {
   const { subjectId } = req.params;
   const { startDate, endDate } = req.query;
@@ -128,7 +143,6 @@ const createReport = catchAsync(async (req, res) => {
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'Subject not found');
   const attendance = await attendanceService.findAttendanceBySubjectId(subjectId);
   if (!attendance) throw new ApiError(httpStatus.NOT_FOUND, 'attendance not found');
-
 
   const formattedStartDate = moment(startDate).format('YYYY-MM-DD');
   const formattedEndDate = moment(endDate).format('YYYY-MM-DD');
@@ -154,22 +168,24 @@ const createReport = catchAsync(async (req, res) => {
   }
 
   const filePath = path.join(__dirname, '../', 'storage', 'exportable', 'templates', 'attendance.xlsx');
-  const header = `د  ${subject.name} مضمون د حاضری راپور`
-  let workbook = new Excel.Workbook()
+  const header = `د  ${subject.name} مضمون د حاضری راپور`;
+  let workbook = new Excel.Workbook();
   workbook = await workbook.xlsx.readFile(filePath);
   const worksheet = workbook.getWorksheet('Sheet1');
   worksheet.getRow(1).getCell(1).value = header;
 
   let row = 2;
-  resultArray.forEach(element => {
-    const { studentId,
+  resultArray.forEach((element) => {
+    const {
+      studentId,
       studentName,
       studentFatherName,
       studentGrandFatherName,
       totalAbsentOne,
       totalPresentOne,
       totalAbsentTwo,
-      totalPresentTwo } = element;
+      totalPresentTwo,
+    } = element;
 
     row++;
     let col = 1;
@@ -188,15 +204,13 @@ const createReport = catchAsync(async (req, res) => {
     worksheet.getRow(row).getCell(col).value = totalPresentTwo;
     col++;
     worksheet.getRow(row).getCell(col).value = totalAbsentTwo;
-
-  })
+  });
 
   const now = Date.now().toLocaleString();
   const newPath = path.join(__dirname, '../', 'storage', 'files', `${now}.xlsx`);
   await workbook.xlsx.writeFile(newPath);
   return res.download(newPath);
 });
-
 
 module.exports = {
   getSubjects,

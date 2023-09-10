@@ -51,6 +51,8 @@ export default {
     try {
       const token = context.rootGetters.token;
 
+      // if (!studentId) return false;
+
       const response = await axios.get(`/api/students/${studentId}`, {
         headers: {
           'Content-Type': 'application/json',

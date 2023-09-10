@@ -119,7 +119,7 @@ const getTeacherSubjects = (teacherId) => {
  * @returns {Promise<Student>}
  */
 const getTeacherSubjectsOfYear = (teacherId, yearId) => {
-  return Subject.findAll({
+  let subjects = Subject.findAll({
     where: { teacherId },
     order: [['createdAt', 'DESC']],
     include: [
@@ -140,6 +140,7 @@ const getTeacherSubjectsOfYear = (teacherId, yearId) => {
       },
     ],
   });
+  return subjects;
 };
 
 /**

@@ -8,6 +8,8 @@ const {
   taajilService,
   semesterService,
   studentListService,
+  tabdiliService,
+  monfaqiService,
 } = require('../services');
 const { findEligibleNextSemesterAfterConversion, matchSemesterWithOnGoingSemester } = require('../utils/global');
 
@@ -16,9 +18,7 @@ const createReentry = catchAsync(async (req, res) => {
   // check student id if it is correct student id
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, `student not found with id ${studentId}`);
-  // find student all taajils. if student has Taajils or Not
-  const studentAllTajils = await taajilService.findStudentAllTajils(studentId);
-  if (studentAllTajils.length <= 0) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student does not have any Taajil');
+
   // find student all student lists
   const studentList = await studentListService.findAllStudentListOfSingleStudent(studentId);
   // if student has not registered to any semester we will give reentry
@@ -28,32 +28,64 @@ const createReentry = catchAsync(async (req, res) => {
       `Student is not registered in any semester. Student should be registered in 1st semester of ${student.admissionYear}} educational year!`
     );
 
-  // Here starts our actual validation and code:
+  // Check if student is tabdil or monfaq
+  const isMonfaq = await monfaqiService.findMonfaqiByStudentId(studentId);
+  const isTabdil = await tabdiliService.findTabdiliByStudentId(studentId);
 
-  const generalTaajil = await taajilService.findTaajilByStudentIdAndType(studentId, 'taajil');
-  const specialTaajil = await taajilService.findTaajilByStudentIdAndType(studentId, 'special_taajil');
-
-  // Now, if the students wants reentry for general taajil reason, check their taajil record first:
-  if (reason === 'taajil' && !generalTaajil) {
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student has not taken any taajil yet.');
-  } else if (reason === 'special_taajil' && !specialTaajil) {
-    // If user tried giving reentry for special_taajil but the student has not taken any special taajil
-    throw new ApiError(httpStatus.NOT_FOUND, 'Student has not taken any special taajil yet.');
+  if (isMonfaq) {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student is monfaq!');
+  } else if (isTabdil) {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student is tabdil!');
   }
 
-  const reentryExistForGeneralTaail = await reentryService.findReentryByStudentIdAndReason(studentId, 'taajil');
-  const reentryExistForSpecialTaail = await reentryService.findReentryByStudentIdAndReason(studentId, 'special_taajil');
-  if (reason === 'taajil' && generalTaajil && reentryExistForGeneralTaail) {
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already has taken reentry for common taajil');
-  } else if (reason === 'special_taajil' && specialTaajil && reentryExistForSpecialTaail) {
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already has taken reentry for special taajil.');
+  // Check if reason is mahrom or repeat:
+  const reentryExists = await reentryService.findReentryByStudentIdAndReason(studentId, reason);
+
+  if (reentryExists && reason === 'repeat') {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already has reentry for repeat');
+  } else if (reentryExists && reason === 'mahrom') {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already has reentry for mahrom ');
   }
+
+  // For taajil or special taajil, check if they first exists
+  if (reason === 'taajil' || reason === 'special_taajil') {
+    // find student all taajils. if student has Taajils or Not
+    const studentAllTajils = await taajilService.findStudentAllTajils(studentId);
+    if (studentAllTajils.length <= 0) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student does not have any Taajil');
+
+    // Here starts our actual validation and code:
+
+    const generalTaajil = await taajilService.findTaajilByStudentIdAndType(studentId, 'taajil');
+    const specialTaajil = await taajilService.findTaajilByStudentIdAndType(studentId, 'special_taajil');
+
+    // Now, if the students wants reentry for general taajil reason, check their taajil record first:
+    if (reason === 'taajil' && !generalTaajil) {
+      throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student has not taken any taajil yet.');
+    } else if (reason === 'special_taajil' && !specialTaajil) {
+      // If user tried giving reentry for special_taajil but the student has not taken any special taajil
+      throw new ApiError(httpStatus.NOT_FOUND, 'Student has not taken any special taajil yet.');
+    }
+
+    const reentryExistForGeneralTaail = await reentryService.findReentryByStudentIdAndReason(studentId, 'taajil');
+    const reentryExistForSpecialTaail = await reentryService.findReentryByStudentIdAndReason(studentId, 'special_taajil');
+    if (reason === 'taajil' && generalTaajil && reentryExistForGeneralTaail) {
+      throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already has taken reentry for common taajil');
+    } else if (reason === 'special_taajil' && specialTaajil && reentryExistForSpecialTaail) {
+      throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student already has taken reentry for special taajil.');
+    }
+
+    var latestSemesterIdOfTaajil = specialTaajil?.semesterId || generalTaajil?.semesterId;
+  }
+
+  // Get student on-going semester id
+  const currentSemesterId = await studentListService.findStudentLatestSemesterId(studentId);
+
+  let eligibleNextSemesterId = latestSemesterIdOfTaajil || currentSemesterId;
 
   // check if one year has been passed
-  const latestSemesterIdOfTaajil = specialTaajil?.semesterId || generalTaajil?.semesterId;
 
   // Get the semester that the student should/will start upcoming year.
-  const eligibleNextSemester = await findEligibleNextSemesterAfterConversion(latestSemesterIdOfTaajil);
+  const eligibleNextSemester = await findEligibleNextSemesterAfterConversion(eligibleNextSemesterId);
 
   // Match eligibleNextSemester with on-going semester
 

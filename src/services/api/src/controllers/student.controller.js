@@ -45,9 +45,10 @@ const getStudent = catchAsync(async (req, res) => {
 
   let findLatestSemesterId = await studentListService.findStudentLatestSemesterId(student.id);
 
-  let semester = await semesterService.findSemesterById(findLatestSemesterId);
-
-  student.dataValues.latestSemester = semester.title;
+  if (findLatestSemesterId) {
+    let semester = await semesterService.findSemesterById(findLatestSemesterId);
+    student.dataValues.latestSemester = semester.title;
+  }
 
   res.status(httpStatus.OK).send(student);
 });
