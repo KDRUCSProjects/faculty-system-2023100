@@ -114,8 +114,8 @@ const createResultSheet = catchAsync(async (req, res) => {
   let workbook = new Excel.Workbook();
   workbook = await workbook.xlsx.readFile(filePath);
 
-  let row = 12;
   for await (const semester of semesters) {
+    let row = 12;
     const worksheet = workbook.getWorksheet(`sem${semester.title}`);
     const semesterStudents = await studentListService.findSemesterStudents(semester.id);
     const subjects = await subjectService.getSemesterSubjectsSortedById(semester.id);
@@ -133,7 +133,20 @@ const createResultSheet = catchAsync(async (req, res) => {
         const formattedMarks = marksFormatter(subjectMarks);
         studentMarks.push(formattedMarks);
       }
+      const year = semester?.EducationalYear.year;
+      const className = semester.title === 1 ? 'لومړی'
+        : semester.title === 2 ? 'دوهم'
+          : semester.title === 3 ? 'دریم'
+            : semester.title === 4 ? 'څلورم'
+              : semester.title === 5 ? 'پنځم'
+                : semester.title === 6 ? 'ښپږم'
+                  : semester.title === 7 ? 'اووم'
+                    : semester.title === 8 ? 'اتم'
+                      : '...';
+
+      const headerText = `د ${year} کال د (${className}) سمسټر د نتایجو جدول`
       // write in the excel file
+      worksheet.getRow(5).getCell(3).value = headerText;
       row += 3;
       worksheet.getRow(row).getCell(24).value = student.Student.kankorId;
       worksheet.getRow(row).getCell(23).value = student.Student.csId;

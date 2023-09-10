@@ -48,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       birthCityEnglish: DataTypes.STRING,
       birthCountryEnglish: DataTypes.STRING,
       bankAccount: DataTypes.STRING,
+      csId: DataTypes.STRING,
       graduated: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

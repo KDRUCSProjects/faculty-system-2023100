@@ -103,6 +103,9 @@ module.exports = {
       admissionYear: {
         type: Sequelize.INTEGER,
       },
+      csId: {
+        type: Sequelize.STRING,
+      },
       gender: {
         type: Sequelize.ENUM('male', 'female'),
         defaultValue: 'male',
