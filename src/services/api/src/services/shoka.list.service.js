@@ -259,6 +259,23 @@ const getSubjectMarks = (conditions) => {
     { type: QueryTypes.SELECT }
   );
 };
+
+/**
+ * find student marks by chance subject id and student id
+ * @param {INTEGER} studentId
+ * @param {INTEGER} shokaId
+ * @param {INTEGER} chance
+ * @returns {Promise<ShokaList>}
+ */
+const findStdMarksByChanceAndShokaId = (studentId, shokaId, chance) => {
+  return ShokaList.findOne({
+    where: {
+      shokaId, studentId, chance
+    }
+  });
+}
+
+
 module.exports = {
   getShokaList,
   getShokaMarks,
@@ -271,4 +288,5 @@ module.exports = {
   findFailStudents,
   isStudentListedInShokaList,
   getStudentMarksSortByName,
+  findStdMarksByChanceAndShokaId,
 };

@@ -86,6 +86,25 @@ const createShokaList = catchAsync(async (req, res) => {
         req.body.chance = 3;
         const secondChanceShokaList = await shokaListService.createShokaList(req.body);
         return res.status(httpStatus.CREATED).send(secondChanceShokaList);
+      // case four
+      case 4: {
+        const studentThirdChanceMarks = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 3);
+        if (!studentThirdChanceMarks)
+          throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student does not have third chance marks');
+        const studentFourthChance = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 4);
+        if (studentFourthChance) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has fourth chance marks');
+        const projectMarks = studentThirdChanceMarks.projectMarks || 0;
+        const assignment = studentThirdChanceMarks.assignment || 0;
+        const practicalWork = studentThirdChanceMarks.practicalWork || 0;
+        const finalMarks = studentThirdChanceMarks.finalMarks || 0;
+        const firstChanceTotalMarks = projectMarks + assignment + finalMarks + practicalWork;
+        if (firstChanceTotalMarks >= 55) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student is pass in third chance');
+
+        req.body.shokaId = shoka.id;
+        req.body.chance = 4;
+        const fourthChanceShokaList = await shokaListService.createShokaList(req.body);
+        return res.status(httpStatus.CREATED).send(fourthChanceShokaList);
+      }
       default:
         throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Query Parameters');
     }
@@ -237,6 +256,191 @@ const getShokaList = catchAsync(async (req, res) => {
         }
       });
       return res.status(httpStatus.OK).send(thirdResult);
+    case 4: {
+      conditions.pop();
+      conditions.push(`shokalist.chance = 2`);
+      const secondChanceMarks = await shokaListService.getSubjectMarks(conditions);
+      conditions.pop();
+      conditions.push(`shokalist.chance = 3`);
+      const thirdChanceMarks = await shokaListService.getSubjectMarks(conditions);
+      conditions.pop();
+      conditions.push(`shokalist.chance = 4`);
+      const fourthChanceMarks = await shokaListService.getSubjectMarks(conditions);
+      const secondChanceFailStudents = await shokaListService.findFailStudents(shoka.id, 2);
+      const firstChanceFailStudent = await shokaListService.findFailStudents(shoka.id, 1);
+      const thirdChanceFailStudent = await shokaListService.findFailStudents(shoka.id, 3);
+      const fourthResult = [...fourthChanceMarks];
+      semStudents.forEach((element) => {
+        const firstChance = firstChanceMarks.find((elem) => elem.studentId === element.studentId);
+        if (firstChance) {
+          const firstChanceFail = firstChanceFailStudent.find((item) => item.studentId === element.studentId);
+          if (firstChanceFail) {
+            const secondChance = secondChanceMarks.find((item) => item.studentId === element.studentId);
+            if (secondChance) {
+              const secondChanceFail = secondChanceFailStudents.find((item) => item.studentId === element.studentId);
+              if (secondChanceFail) {
+                const thirdChanceStdMarks = thirdChanceMarks.find((item) => item.studentId === element.studentId);
+                if (thirdChanceStdMarks) {
+                  const thirdChanceFail = thirdChanceFailStudent.find((item) => item.studentId === element.studentId);
+                  if (thirdChanceFail) {
+                    const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                    if (fourthChance) {
+                      // do nothing
+                    } else {
+                      fourthResult.push({
+                        studentId: element.Student.id,
+                        fullName: element.Student.fullName,
+                        fatherName: element.Student.fatherName,
+                        kankorId: element.Student.kankorId,
+                        grandFatherName: element.Student.grandFatherName,
+                        photo: element.Student.photo,
+                      });
+                    }
+                  } else {
+                    // do nothing
+                  }
+                } else {
+                  const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                  if (fourthChance) {
+                    // do nothing
+                  } else {
+                    fourthResult.push({
+                      studentId: element.Student.id,
+                      fullName: element.Student.fullName,
+                      fatherName: element.Student.fatherName,
+                      kankorId: element.Student.kankorId,
+                      grandFatherName: element.Student.grandFatherName,
+                      photo: element.Student.photo,
+                    });
+                  }
+                }
+              } else {
+                // do nothing
+              }
+            } else {
+              const thirdChance = thirdChanceMarks.find((item) => item.studentId === element.studentId);
+              if (thirdChance) {
+                const doesFail = thirdChanceFailStudent.find((item) => item.studentId === element.studentId);
+                if (doesFail) {
+                  const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                  if (fourthChance) {
+                    // do nothing
+                  } else {
+                    fourthResult.push({
+                      studentId: element.Student.id,
+                      fullName: element.Student.fullName,
+                      fatherName: element.Student.fatherName,
+                      kankorId: element.Student.kankorId,
+                      grandFatherName: element.Student.grandFatherName,
+                      photo: element.Student.photo,
+                    });
+                  }
+                } else {
+                  // do nothing
+                }
+              } else {
+                const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                if (fourthChance) {
+                  // do nothing
+                } else {
+                  fourthResult.push({
+                    studentId: element.Student.id,
+                    fullName: element.Student.fullName,
+                    fatherName: element.Student.fatherName,
+                    kankorId: element.Student.kankorId,
+                    grandFatherName: element.Student.grandFatherName,
+                    photo: element.Student.photo,
+                  });
+                }
+              }
+            }
+          } else {
+            // do nothing
+          }
+        } else {
+          const secondChance = secondChanceMarks.find((item) => item.studentId === element.studentId);
+          if (secondChance) {
+            const doesFail = secondChanceFailStudents.find((item) => item.studentId === element.studentId);
+            if (doesFail) {
+              const thirdChance = thirdChanceMarks.find((item) => item.studentId === element.studentId);
+              if (thirdChance) {
+                const doesFail = thirdChanceFailStudent.find((item) => item.studentId === element.studentId);
+                if (doesFail) {
+                  const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                  if (fourthChance) {
+                    // do nothing
+                  } else {
+                    fourthResult.push({
+                      studentId: element.Student.id,
+                      fullName: element.Student.fullName,
+                      fatherName: element.Student.fatherName,
+                      kankorId: element.Student.kankorId,
+                      grandFatherName: element.Student.grandFatherName,
+                      photo: element.Student.photo,
+                    });
+                  }
+                } else {
+                  // do nothing
+                }
+              } else {
+                const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                if (fourthChance) {
+                  // do nothing
+                } else {
+                  fourthResult.push({
+                    studentId: element.Student.id,
+                    fullName: element.Student.fullName,
+                    fatherName: element.Student.fatherName,
+                    kankorId: element.Student.kankorId,
+                    grandFatherName: element.Student.grandFatherName,
+                    photo: element.Student.photo,
+                  });
+                }
+              }
+            } else {
+              // do nothing
+            }
+          } else {
+            const thirdChance = thirdChanceMarks.find((item) => item.studentId === element.studentId);
+            if (thirdChance) {
+              const doesFail = thirdChanceFailStudent.find((item) => item.studentId === element.studentId);
+              if (doesFail) {
+                const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                if (fourthChance) {
+                  // do nothing
+                } else {
+                  fourthResult.push({
+                    studentId: element.Student.id,
+                    fullName: element.Student.fullName,
+                    fatherName: element.Student.fatherName,
+                    kankorId: element.Student.kankorId,
+                    grandFatherName: element.Student.grandFatherName,
+                    photo: element.Student.photo,
+                  });
+                }
+              } else {
+                // do nothing
+              }
+            } else {
+              const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+              if (fourthChance) {
+                // do nothing
+              } else {
+                fourthResult.push({
+                  studentId: element.Student.id,
+                  fullName: element.Student.fullName,
+                  fatherName: element.Student.fatherName,
+                  kankorId: element.Student.kankorId,
+                  grandFatherName: element.Student.grandFatherName,
+                  photo: element.Student.photo,
+                });
+              }
+            }
+          }
+        }
+      });
+      return res.status(httpStatus.OK).send(fourthResult);
+    }
     default:
       throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameter');
   }
@@ -253,9 +457,20 @@ const updateShokaList = catchAsync(async (req, res) => {
   if (totalMarks > 100) {
     throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Total Marks are Above 100');
   }
+
   const { shokalistId } = req.params;
   const shokaList = await shokaListService.getShokaListById(shokalistId);
   if (!shokaList) throw new ApiError(httpStatus.NOT_FOUND, 'shoka marks not found');
+  const { studentId, shokaId, chance } = shokaList;
+  // prevent if the student has further chances marks
+  if (chance !== 4) {
+    const chanceNumber = chance + 1;
+    const doesStdHasMarks = await shokaListService.findStdMarksByChanceAndShokaId(studentId, shokaId, chanceNumber)
+    if (doesStdHasMarks) {
+      throw new ApiError(httpStatus.FORBIDDEN, `You can not update student ${chance} marks because student has ${chanceNumber} marks`);
+    }
+  }
+
   const shoka = await shokaService.findShokaById(shokaList.shokaId);
   const subject = await subjectService.getSubjectById(shoka.subjectId);
   if (req.user.role === 'admin') {
@@ -472,6 +687,167 @@ const createShokaInExcel = catchAsync(async (req, res) => {
           }
         }
       });
+      break;
+    case 4: {
+      conditions.pop();
+      conditions.push(`shokalist.chance = 2`);
+      const secondChanceMarks = await shokaListService.getSubjectMarks(conditions);
+      conditions.pop();
+      conditions.push(`shokalist.chance = 3`);
+      const thirdChanceMarks = await shokaListService.getSubjectMarks(conditions);
+      conditions.pop();
+      conditions.push(`shokalist.chance = 4`);
+      const fourthChanceMarks = await shokaListService.getSubjectMarks(conditions);
+      const secondChanceFailStudents = await shokaListService.findFailStudents(shoka.id, 2);
+      const firstChanceFailStudent = await shokaListService.findFailStudents(shoka.id, 1);
+      const thirdChanceFailStudent = await shokaListService.findFailStudents(shoka.id, 3);
+      results = [...fourthChanceMarks];
+      semStudents.forEach((element) => {
+        const firstChance = firstChanceMarks.find((elem) => elem.studentId === element.studentId);
+        if (firstChance) {
+          const firstChanceFail = firstChanceFailStudent.find((item) => item.studentId === element.studentId);
+          if (firstChanceFail) {
+            const secondChance = secondChanceMarks.find((item) => item.studentId === element.studentId);
+            if (secondChance) {
+              const secondChanceFail = secondChanceFailStudents.find((item) => item.studentId === element.studentId);
+              if (secondChanceFail) {
+                const thirdChance = thirdChanceMarks.find((item) => item.studentId === element.studentId);
+                if (thirdChance) {
+                  const doesThirdChanceFail = thirdChanceFailStudent.find((item) => item.studentId === element.studentId);
+                  if (doesThirdChanceFail) {
+                    const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                    if (fourthChance) {
+                      // do nothing
+                    } else {
+                      results.push({
+                        studentId: element.Student.id,
+                        fullName: element.Student.fullName,
+                        fatherName: element.Student.fatherName,
+                      });
+                    }
+                  } else {
+                    // do nothing
+                  }
+                } else {
+                  const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                  if (fourthChance) {
+                    // do nothing
+                  } else {
+                    results.push({
+                      studentId: element.Student.id,
+                      fullName: element.Student.fullName,
+                      fatherName: element.Student.fatherName,
+                    });
+                  }
+                }
+              } else {
+                // do nothing
+              }
+            } else {
+              const thirdChance = thirdChanceMarks.find((item) => item.studentId === element.studentId);
+              if (thirdChance) {
+                const doesThirdChanceFail = thirdChanceFailStudent.find((item) => item.studentId === element.studentId);
+                if (doesThirdChanceFail) {
+                  const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                  if (fourthChance) {
+                    // do nothing
+                  } else {
+                    results.push({
+                      studentId: element.Student.id,
+                      fullName: element.Student.fullName,
+                      fatherName: element.Student.fatherName,
+                    });
+                  }
+                } else {
+                  // do nothing
+                }
+              } else {
+                const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                if (fourthChance) {
+                  // do nothing
+                } else {
+                  results.push({
+                    studentId: element.Student.id,
+                    fullName: element.Student.fullName,
+                    fatherName: element.Student.fatherName,
+                  });
+                }
+              }
+            }
+          } else {
+            // do nothing
+          }
+        } else {
+          const secondChance = secondChanceMarks.find((item) => item.studentId === element.studentId);
+          if (secondChance) {
+            const doesFail = secondChanceFailStudents.find((item) => item.studentId === element.studentId);
+            if (doesFail) {
+              const thirdChance = thirdChanceMarks.find((item) => item.studentId === element.studentId);
+              if (thirdChance) {
+                const doesThirdChanceFail = thirdChanceFailStudent.find((item) => item.studentId === element.studentId);
+                if (doesThirdChanceFail) {
+                  const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                  if (fourthChance) {
+                    // do nothing
+                  } else {
+                    results.push({
+                      studentId: element.Student.id,
+                      fullName: element.Student.fullName,
+                      fatherName: element.Student.fatherName,
+                    });
+                  }
+                } else {
+                  // do nothing
+                }
+              } else {
+                const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                if (fourthChance) {
+                  // do nothing
+                } else {
+                  results.push({
+                    studentId: element.Student.id,
+                    fullName: element.Student.fullName,
+                    fatherName: element.Student.fatherName,
+                  });
+                }
+              }
+            } else {
+              // do nothing
+            }
+          } else {
+            const thirdChance = thirdChanceMarks.find((item) => item.studentId === element.studentId);
+            if (thirdChance) {
+              const doesThirdChanceFail = thirdChanceFailStudent.find((item) => item.studentId === element.studentId);
+              if (doesThirdChanceFail) {
+                const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+                if (fourthChance) {
+                  // do nothing
+                } else {
+                  results.push({
+                    studentId: element.Student.id,
+                    fullName: element.Student.fullName,
+                    fatherName: element.Student.fatherName,
+                  });
+                }
+              } else {
+                // do nothing
+              }
+            } else {
+              const fourthChance = fourthChanceMarks.find((item) => item.studentId === element.studentId);
+              if (fourthChance) {
+                // do nothing
+              } else {
+                results.push({
+                  studentId: element.Student.id,
+                  fullName: element.Student.fullName,
+                  fatherName: element.Student.fatherName,
+                });
+              }
+            }
+          }
+        }
+      });
+    }
       break;
     default:
       throw new ApiError(httpStatus.BAD_REQUEST, 'invalid query parameter');

@@ -39,7 +39,7 @@ const getStudents = (limit = 2000, offset, like = '') => {
         [Op.like]: `${like || ''}%`,
       },
     },
-    limit: limit,
+    limit,
     offset,
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
   });

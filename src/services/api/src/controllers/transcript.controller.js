@@ -28,6 +28,7 @@ const reFormatMarks = (allMarks, key) => {
           if (element.chance === 1) {
             const secondChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 2);
             const thirdChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 3);
+            const fourthChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 4);
             if (secondChance) {
               ob.secondChance = secondChance.totalMarks;
             } else {
@@ -38,11 +39,18 @@ const reFormatMarks = (allMarks, key) => {
               ob.thirdChance = thirdChance.totalMarks;
             } else {
               ob.thirdChance = null;
+            }
+
+            if (fourthChance) {
+              ob.fourthChance = fourthChance.totalMarks;
+            } else {
+              ob.fourthChance = null;
             }
             ob.firstChance = element.totalMarks;
           } else if (element.chance === 2) {
             const firstChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 1);
             const thirdChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 3);
+            const fourthChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 4);
             if (firstChance) {
               ob.firstChance = firstChance.totalMarks;
             } else {
@@ -54,10 +62,17 @@ const reFormatMarks = (allMarks, key) => {
             } else {
               ob.thirdChance = null;
             }
+
+            if (fourthChance) {
+              ob.fourthChance = fourthChance.totalMarks;
+            } else {
+              ob.fourthChance = null;
+            }
             ob.secondChance = element.totalMarks;
           } else if (element.chance === 3) {
             const secondChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 2);
             const firstChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 1);
+            const fourthChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 4);
             if (secondChance) {
               ob.secondChance = secondChance.totalMarks;
             } else {
@@ -69,7 +84,35 @@ const reFormatMarks = (allMarks, key) => {
             } else {
               ob.firstChance = null;
             }
+
+            if (fourthChance) {
+              ob.fourthChance = fourthChance.totalMarks;
+            } else {
+              ob.fourthChance = null;
+            }
             ob.thirdChance = element.totalMarks;
+          } else if (element.chance === 4) {
+            const firstChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 1);
+            const secondChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 2);
+            const thirdChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 3);
+            if (secondChance) {
+              ob.secondChance = secondChance.totalMarks;
+            } else {
+              ob.secondChance = null;
+            }
+
+            if (firstChance) {
+              ob.firstChance = firstChance.totalMarks;
+            } else {
+              ob.firstChance = null;
+            }
+
+            if (thirdChance) {
+              ob.thirdChance = thirdChance.totalMarks;
+            } else {
+              ob.thirdChance = null;
+            }
+            ob.fourthChance = element.totalMarks;
           }
           resultArray.push(ob);
         }
@@ -279,7 +322,7 @@ const createTranscript = catchAsync(async (req, res) => {
 
     marks.forEach((element) => {
       ++row;
-      const { subjectName, subjectCredit, firstChance, secondChance, thirdChance } = element;
+      const { subjectName, subjectCredit, firstChance, secondChance, thirdChance, fourthChance } = element;
       worksheet.getRow(row).getCell(col).value = subjectName;
       --col;
       worksheet.getRow(row).getCell(col).value = subjectCredit;
@@ -289,6 +332,8 @@ const createTranscript = catchAsync(async (req, res) => {
       worksheet.getRow(row).getCell(col).value = secondChance;
       --col;
       worksheet.getRow(row).getCell(col).value = thirdChance;
+      --col;
+      worksheet.getRow(row).getCell(col).value = fourthChance;
       col = column;
     });
 

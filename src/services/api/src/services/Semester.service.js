@@ -121,8 +121,8 @@ const findSemesterByYearIdAndTitle = async (educationalYearId, title) => {
       {
         model: EducationalYear,
         as: 'EducationalYear',
-        attributes: ['year']
-      }
+        attributes: ['year'],
+      },
     ],
   });
 };
