@@ -115,10 +115,11 @@ const taajilStudents = catchAsync(async (req, res) => {
   const limit = req.query?.limit ? req.query?.limit : 2000;
   const offset = parseInt((page - 1) * limit, 10);
 
-  if (req.query?.educationalYear) {
-    const educationalYearId = await educationalYearService.findEducationalYearByValue(req.query.educationalYear);
+  if (req.query.educationalYear) {
+    const { educationalYear } = req.query;
+    const educationalYearId = await educationalYearService.findEducationalYearByValue(educationalYear);
     if (!educationalYearId) throw new ApiError(httpStatus.NOT_FOUND, 'educationalYear not found');
-    const { count, rows } = await taajilService.findTaajilsByYearId(limit, offset, educationalYearId);
+    const { count, rows } = await taajilService.findTaajilsByYear(limit, offset, educationalYear);
     return res.status(httpStatus.OK).send({
       page: parseInt(page, 10),
       totalPages: Math.ceil(count / limit),

@@ -32,15 +32,15 @@ const taajilStudents = (limit, offset, like = '') => {
 };
 
 /**
- * find Taajils by educationalYearId
+ * find Taajils by educational Year
  * @param {Number} limit
  * @param {Number} offset
- * @param {ObjectId} yearId
+ * @param {INTEGER} year
  * @returns {Promise<Taajil>}
  */
-const findTaajilsByYearId = (limit, offset, yearId) => {
+const findTaajilsByYear = (limit, offset, year) => {
   return Taajil.findAndCountAll({
-    where: { educationalYearId: yearId },
+    where: { year },
     order: [['createdAt', 'DESC']],
     limit,
     offset,
@@ -178,7 +178,7 @@ module.exports = {
   taajilStudents,
   findTaajilById,
   deleteTaajil,
-  findTaajilsByYearId,
+  findTaajilsByYear,
   findStudentAllTajils,
   findTaajilByStudentId,
   findTaajilByStdKankorId,

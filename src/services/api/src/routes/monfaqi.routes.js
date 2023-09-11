@@ -1,14 +1,14 @@
 const express = require('express');
 const auth = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
-const { monfaqiValidation } = require('../validations');
+const { monfaqiValidation, shareValidation } = require('../validations');
 const { monfaqiController } = require('../controllers');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(auth(), validate({}), monfaqiController.getMonfaqies)
+  .get(auth(), validate(shareValidation.studentsWithTaajilReentryAndTabdili), monfaqiController.getMonfaqies)
   .post(auth(), validate(monfaqiValidation.createMonfaqi), monfaqiController.createMonfaqi);
 
 router
@@ -35,6 +35,37 @@ module.exports = router;
  *     tags: [Monfaqi]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: educationalYear
+ *         schema:
+ *           type: number
+ *         description: Education Year e.g 1402
+ *       - in: query
+ *         name: studentId
+ *         schema:
+ *           type: number
+ *         description: student id
+ *       - in: query
+ *         name: kankorId
+ *         schema:
+ *           type: string
+ *         description: kankor id
+ *       - in: query
+ *         name: monfaqiId
+ *         schema:
+ *           type: number
+ *         description: monfaqi id
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: number
+ *         description: page
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: number
+ *         description: limit and default limit is 2000
  *     responses:
  *       "200":
  *         description: OK
