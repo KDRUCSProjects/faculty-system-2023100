@@ -270,11 +270,12 @@ const getSubjectMarks = (conditions) => {
 const findStdMarksByChanceAndShokaId = (studentId, shokaId, chance) => {
   return ShokaList.findOne({
     where: {
-      shokaId, studentId, chance
-    }
+      shokaId,
+      studentId,
+      chance,
+    },
   });
-}
-
+};
 
 module.exports = {
   getShokaList,

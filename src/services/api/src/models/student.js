@@ -44,7 +44,10 @@ module.exports = (sequelize, DataTypes) => {
       birthCountry: DataTypes.STRING,
       phoneNumber: DataTypes.STRING,
       kankorMarks: DataTypes.DOUBLE,
-      kankorType: DataTypes.STRING,
+      kankorType: {
+        type: DataTypes.ENUM('general', '14Pass'),
+        defaultValue: 'general',
+      },
       birthCityEnglish: DataTypes.STRING,
       birthCountryEnglish: DataTypes.STRING,
       bankAccount: DataTypes.STRING,
