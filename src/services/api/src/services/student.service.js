@@ -14,6 +14,19 @@ const registerStudent = (studentBody) => {
 };
 
 /**
+ * make a student graduated
+ * @param {ObjectId} studentId
+ * @returns {Promise<Student>}
+ */
+const makeStudentGraduated = async (studentId) => {
+  // return Student.create(studentBody);
+  const student = await Student.findOne({ where: { id: studentId } });
+  if (student && !student.graduated) {
+    return updateStudent(student, { graduated: true });
+  }
+};
+
+/**
  * Create a Student
  * @param {Number} offset
  * @returns {Promise<Student>}
@@ -26,7 +39,7 @@ const getStudents = (limit = 2000, offset, like = '') => {
         [Op.like]: `${like || ''}%`,
       },
     },
-    limit: limit,
+    limit,
     offset,
     include: [{ model: EducationalYear, as: 'EducationalYear', attributes: ['year'] }],
   });
@@ -269,6 +282,7 @@ module.exports = {
   deleteStudentById,
   getStudentByKankorId,
   getStudentOnKankorId,
+  makeStudentGraduated,
   getUnRegisteredStudents,
   countUnregisteredStudent,
   getStudentSchool,

@@ -192,6 +192,7 @@ const promoteStudents = catchAsync(async (req, res) => {
         // if (!lastSemester.onGoing) {
         //   result = await studentListService.updatedStudentList(studentAllLists[0], { 'onGoing': false, 'completed': true });
         // }
+        await studentService.makeStudentGraduated(studentId);
         results.push({ message: 'Student is Graduated', result });
         continue;
       }
@@ -275,8 +276,6 @@ const reviewStudentsPromotion = catchAsync(async (req, res) => {
 
     // Once promotion is completed, mark the current semester as completed
   }
-
-  console.log(results);
 
   return res.send(results);
 });

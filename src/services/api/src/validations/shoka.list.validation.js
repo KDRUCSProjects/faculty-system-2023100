@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const createShokaList = {
   query: Joi.object().keys({
-    chance: Joi.number().integer().min(2).max(3),
+    chance: Joi.number().integer().min(2).max(4),
   }),
   body: Joi.object().keys({
     subjectId: Joi.number().required().integer(),
@@ -33,19 +33,19 @@ const getShokaList = {
     subjectId: Joi.number().required().positive().integer(),
   }),
   query: Joi.object().keys({
-    chance: Joi.number().min(1).max(3).required(),
+    chance: Joi.number().min(1).max(4).required(),
   }),
 };
 
 const deleteShokaList = {
   params: Joi.object().keys({
-    shokalistId: Joi.number().required(),
+    shokalistId: Joi.number().required().integer().positive(),
   }),
 };
 
 const getStudentMarks = {
   params: Joi.object().keys({
-    studentId: Joi.number().required(),
+    studentId: Joi.number().required().integer().positive(),
   }),
   query: Joi.object().keys({
     semester: Joi.number().min(1).max(8),

@@ -1,9 +1,9 @@
 const httpStatus = require('http-status');
+const Excel = require('exceljs');
+const path = require('path');
 const catchAsync = require('../utils/catchAsync');
 const ApiError = require('../utils/ApiError');
 const { getSemesterTitleByPashto, getStatsBySemesterId } = require('../utils/semesters');
-const Excel = require('exceljs');
-const path = require('path');
 const { semesterService, educationalYearService } = require('../services');
 const { translateFields } = require('../utils/global');
 const { createDBBackup } = require('../jobs/backup');
@@ -14,9 +14,9 @@ const getConversionReport = catchAsync(async (req, res) => {
   const { title, educationalYearId } = await semesterService.findSemesterById(semesterId);
   const { year } = await educationalYearService.getEducationalYear(educationalYearId);
 
-  let { className, semesterName } = getSemesterTitleByPashto(title);
+  const { className, semesterName } = getSemesterTitleByPashto(title);
 
-  let typeTranslate = translateFields(type);
+  const typeTranslate = translateFields(type);
 
   const headerText = `د  کمپيوټر ساينس پوهنځي د (${year}) تحصیلی کال  د ( ${className}) ټولګی  د  (${semesterName}) سمستر د  (${typeTranslate}) محصلينو  لیست`;
 
@@ -44,12 +44,12 @@ const getConversionReport = catchAsync(async (req, res) => {
   // res.end();
   let workbook = new Excel.Workbook();
   workbook = await workbook.xlsx.readFile(filePath);
-  let worksheet = workbook.getWorksheet('Sheet2');
+  const worksheet = workbook.getWorksheet('Sheet2');
 
   worksheet.getRow(2).getCell(1).value = headerText;
 
   let row = 5;
-  let col = 9;
+  const col = 9;
 
   results.forEach((student) => {
     // File Headers are as follow:
@@ -57,7 +57,7 @@ const getConversionReport = catchAsync(async (req, res) => {
     let { kankorId, fullName, fatherName, grandFatherName, gender, province } = student;
     gender = translateFields(gender);
 
-    let fields = [kankorId, fullName, fatherName, grandFatherName, gender, province, className, semesterName];
+    const fields = [kankorId, fullName, fatherName, grandFatherName, gender, province, className, semesterName];
 
     for (let i = 0; i < 8; i++) {
       worksheet.getRow(row).getCell(col - i).value = fields[i];

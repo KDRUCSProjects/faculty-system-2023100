@@ -61,7 +61,7 @@ module.exports = {
         defaultValue: 1,
         validate: {
           min: 1,
-          max: 3,
+          max: 4,
         },
       },
       ...BaseModel(Sequelize),

@@ -12,13 +12,13 @@ const createTabdili = {
 
 const getTabdili = {
   params: Joi.object().keys({
-    tabdiliId: Joi.number(),
+    tabdiliId: Joi.number().positive().integer(),
   }),
 };
 
 const updateTabdili = {
   params: Joi.object().keys({
-    tabdiliId: Joi.number().required(),
+    tabdiliId: Joi.number().required().positive().integer(),
   }),
   body: Joi.object()
     .keys({

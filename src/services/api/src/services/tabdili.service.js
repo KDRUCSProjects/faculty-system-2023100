@@ -21,7 +21,6 @@ const createTabdili = (tabdiliBody) => {
 const getTabdilis = (limit, offset) => {
   return Tabdili.findAndCountAll({
     order: [['createdAt', 'DESC']],
-
     limit,
     offset,
     include: [{ model: Student, as: 'Student' }],
@@ -34,7 +33,7 @@ const getTabdilis = (limit, offset) => {
  * @returns {Promise<Tabdili>}
  */
 const findTabdiliByStudentId = (studentId) => {
-  return Tabdili.findOne({ where: { studentId } });
+  return Tabdili.findOne({ where: { studentId }, include: [{ model: Student, as: 'Student' }] });
 };
 
 /**
@@ -43,7 +42,7 @@ const findTabdiliByStudentId = (studentId) => {
  * @returns {Promise<Tabdili>}
  */
 const findTabdiliById = (tabdiliId) => {
-  return Tabdili.findOne({ where: { id: tabdiliId } });
+  return Tabdili.findOne({ where: { id: tabdiliId }, include: [{ model: Student, as: 'Student' }] });
 };
 
 /**
@@ -95,12 +94,47 @@ const findTabdiliBySemesterId = async (semesterId, options = { count: false, gen
   return options.count ? await Student.count(studentsQuery) : await Student.findAll(studentsQuery);
 };
 
+
+/**
+ * find Tabdili by student kankor id
+ * @param {ObjectId} studentKankorId
+ * @returns {Promise<Tabdili>}
+ */
+const findTabdiliByStdKankorId = (studentKankorId) => {
+  return Tabdili.findOne({
+    include: [{ model: Student, as: 'Student', where: { kankorId: studentKankorId } }],
+  });
+};
+
+
+
+/**
+ * find Tabdili by educationalYearId
+ * @param {Number} limit
+ * @param {Number} offset
+ * @param {INTEGER} year
+ * @returns {Promise<Tabdili>}
+ */
+const findTabdiliByYearId = (limit, offset, year) => {
+  return Tabdili.findAndCountAll({
+    where: { year },
+    order: [['createdAt', 'DESC']],
+    limit,
+    offset,
+    include: [{ model: Student, as: 'Student' }],
+  });
+};
+
+
+
 module.exports = {
   getTabdilis,
   createTabdili,
   deleteTabdili,
   updateTabdili,
   findTabdiliById,
+  findTabdiliByYearId,
   findTabdiliByStudentId,
   findTabdiliBySemesterId,
+  findTabdiliByStdKankorId,
 };

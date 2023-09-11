@@ -24,7 +24,7 @@ const registerStudent = {
     birthCountry: Joi.string(),
     phoneNumber: Joi.number().integer().positive(),
     kankorMarks: Joi.number().positive(),
-    kankorType: Joi.string(),
+    kankorType: Joi.string().valid('14Pass'),
     birthCityEnglish: Joi.string(),
     birthCountryEnglish: Joi.string(),
     bankAccount: Joi.string(),
@@ -33,7 +33,7 @@ const registerStudent = {
 
 const updateStudent = {
   params: Joi.object().keys({
-    studentId: Joi.string().required(),
+    studentId: Joi.number().positive().integer().required(),
   }),
   body: Joi.object()
     .keys({
@@ -59,7 +59,7 @@ const updateStudent = {
       birthCountry: Joi.string(),
       phoneNumber: Joi.number().integer().positive(),
       kankorMarks: Joi.number().positive(),
-      kankorType: Joi.string(),
+      kankorType: Joi.string().valid('14Pass'),
       birthCityEnglish: Joi.string(),
       birthCountryEnglish: Joi.string(),
       bankAccount: Joi.string(),
@@ -70,7 +70,7 @@ const updateStudent = {
 
 const getStudent = {
   params: Joi.object().keys({
-    studentId: Joi.number().required().positive().integer(),
+    studentId: Joi.number().positive().integer().required(),
   }),
 };
 
@@ -83,7 +83,7 @@ const kankor = {
 const deleteStudents = {
   body: Joi.array()
     .items({
-      studentId: Joi.number(),
+      studentId: Joi.number().positive().integer().required(),
     })
     .min(1),
 };
@@ -120,7 +120,7 @@ const tempToken = {
       birthCountry: Joi.string(),
       phoneNumber: Joi.string(),
       kankorMarks: Joi.number().positive(),
-      kankorType: Joi.string(),
+      kankorType: Joi.string().valid('14Pass'),
       birthCityEnglish: Joi.string(),
       birthCountryEnglish: Joi.string(),
       bankAccount: Joi.string(),
@@ -131,7 +131,7 @@ const tempToken = {
 
 const createStudentSchool = {
   params: Joi.object().keys({
-    studentId: Joi.number().integer().positive().required(),
+    studentId: Joi.number().positive().integer().required(),
   }),
   body: Joi.object().keys({
     name: Joi.string().required(),
@@ -141,7 +141,7 @@ const createStudentSchool = {
 
 const createStudentMonograph = {
   params: Joi.object().keys({
-    studentId: Joi.number().integer().positive().required(),
+    studentId: Joi.number().positive().integer().required(),
   }),
   body: Joi.object().keys({
     researchTitle: Joi.string().required(),

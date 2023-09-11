@@ -401,7 +401,6 @@ const takeOneStdAttendance = catchAsync(async (req, res) => {
 
 const createExcelFile = catchAsync(async (req, res) => {
   const { semesterId } = req.params;
-  console.log(semesterId);
   const semester = await semesterService.findById(semesterId);
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
   const subjects = await subjectService.getSemesterSubjects(semesterId);
