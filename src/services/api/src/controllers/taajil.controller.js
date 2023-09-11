@@ -8,6 +8,8 @@ const {
   studentListService,
   reentryService,
   semesterService,
+  monfaqiService,
+  tabdiliService,
 } = require('../services');
 const { findSemesterYearAndHalf, matchStudentSemesterWithOnGoingSemester } = require('../utils/global');
 
@@ -23,6 +25,16 @@ const createTaajil = catchAsync(async (req, res) => {
       httpStatus.NOT_ACCEPTABLE,
       `Student is not registered in any semester. Student should be registered in 1st semester of ${student.admissionYear} educational year`
     );
+
+  // Check if student is tabdil or monfaq
+  const isMonfaq = await monfaqiService.findMonfaqiByStudentId(studentId);
+  const isTabdil = await tabdiliService.findTabdiliByStudentId(studentId);
+
+  if (isMonfaq) {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student is monfaq!');
+  } else if (isTabdil) {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student is tabdil!');
+  }
 
   // Prevent taking taajil for the second time
   const generalTaajil = await taajilService.findTaajilByStudentIdAndType(studentId, 'taajil');

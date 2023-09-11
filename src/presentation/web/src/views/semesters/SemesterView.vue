@@ -284,7 +284,7 @@ export default {
   }),
   computed: {
     enableSemesterAddition() {
-      const semesterTitle = this.$route.query.semester == 1 ? true : false;
+      const semesterTitle = this.$route.query.semester == 1 || this.$route.query.semester == 5 ? true : false;
 
       // const currentYearSemesters = this.$store.getters['semesters/currentYearSemesters'];
 
@@ -301,7 +301,19 @@ export default {
     },
     students() {
       if (this.mode === 'enrollment') {
-        return this.$store.getters['students/students'];
+        let students = this.$store.getters['students/students'];
+        // Return 1st semester if 1st semester
+
+        let semesterTitle = this.$route.query.semester;
+        students = students?.filter((s) => {
+          if (semesterTitle == 1 && s.kankorType === 'general') {
+            return s;
+          } else if (semesterTitle == 5 && s.kankorType === 'pass14') {
+            return s;
+          }
+        });
+
+        return students;
       }
       return this.$store.getters['students/studentsList'];
     },

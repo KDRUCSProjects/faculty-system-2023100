@@ -7,6 +7,7 @@ const {
   taajilService,
   tabdiliService,
   educationalYearService,
+  monfaqiService,
 } = require('../services');
 const ApiError = require('../utils/ApiError');
 const { checkStudentEligibilityForNextSemester, findEligibleNextSemester } = require('../utils/global');
@@ -21,12 +22,22 @@ const createStudentList = catchAsync(async (req, res) => {
   const currentEduYear = (await educationalYearService.getCurrentEducationalYear())?.year;
   const studentKankorYear = (await educationalYearService.getEducationalYear(student.educationalYearId))?.year;
 
-  if (studentKankorYear !== currentEduYear)
-    throw new ApiError(httpStatus.NOT_ACCEPTABLE, `Student can be only enrolled at ${studentKankorYear}. `);
+  // Let's disable this for now.
+  // if (studentKankorYear !== currentEduYear)
+  //   throw new ApiError(httpStatus.NOT_ACCEPTABLE, `Student can be only enrolled at ${studentKankorYear}. `);
 
   /** check if tabdily has been given to the student */
-  const studentTabdili = await tabdiliService.findTabdiliByStudentId(studentId);
-  if (studentTabdili) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student has got tabdili');
+
+  // Check if student is tabdil or monfaq
+  const isMonfaq = await monfaqiService.findMonfaqiByStudentId(studentId);
+  const isTabdil = await tabdiliService.findTabdiliByStudentId(studentId);
+  if (isMonfaq) {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student is monfaq!');
+  } else if (isTabdil) {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student is tabdil!');
+  }
+
+  // Good, let's do this now.
 
   /** find student all student lists */
   const studentList = await studentListService.findAllStudentListOfSingleStudent(studentId);
@@ -37,7 +48,12 @@ const createStudentList = catchAsync(async (req, res) => {
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
 
   /** check if the semester title is one */
-  if (semester.title !== 1) throw new ApiError(httpStatus.ACCEPTED, `You can only enroll the student at first semester`);
+  const studentType = student?.kankorType;
+  if (semester.title !== 1 && studentType !== 'pass14')
+    throw new ApiError(httpStatus.ACCEPTED, `You can only enroll the student at first semester`);
+
+  if (semester.title !== 5 && studentType === 'general')
+    throw new ApiError(httpStatus.ACCEPTED, `You can only enroll the student at 5h semester. Student is 14 Pass`);
 
   const result = await studentListService.createStudentList(req.body);
   return res.status(httpStatus.CREATED).send(result);

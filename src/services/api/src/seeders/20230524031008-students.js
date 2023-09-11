@@ -33,6 +33,7 @@ const students = [...Array(15)].map((student, i) => {
     engName: `${faker.name.firstName()} ${faker.name.lastName()}`,
     engFatherName: faker.name.firstName(),
     engGrandFatherName: faker.name.firstName(),
+    kankorType: i > 12 ? 'pass14' : 'general',
     createdAt: new Date(),
     updatedAt: new Date(),
   };

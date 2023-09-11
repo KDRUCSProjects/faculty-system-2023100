@@ -1,13 +1,25 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { monfaqiService, studentService, educationalYearService, studentListService } = require('../services');
-
-
+const {
+  monfaqiService,
+  studentService,
+  educationalYearService,
+  studentListService,
+  tabdiliService,
+} = require('../services');
 const createMonfaqi = catchAsync(async (req, res) => {
   const { studentId, year } = req.body;
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+
+  // Check if student is tabdil or monfaq
+  const isTabdil = await tabdiliService.findTabdiliByStudentId(studentId);
+
+  if (isTabdil) {
+    throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student is tabdil!');
+  }
+
   const studentMonfaqi = await monfaqiService.findMonfaqiByStudentId(studentId);
   if (studentMonfaqi) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student already has monfaqi');
 

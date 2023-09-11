@@ -141,6 +141,7 @@ const getUnRegisteredStudents = (limit, offset) => {
   student.division as division,
   student.district as district,
   student.engName as engName,
+  student.kankorType as kankorType,
   student.engLastName as engLastName,
   student.engFatherName as engFatherName,
   student.engGrandFatherName as engGrandFatherName,
