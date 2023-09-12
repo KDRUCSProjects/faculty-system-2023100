@@ -13,6 +13,7 @@ router
 
 router
   .route('/:semesterId')
+  .patch(auth(), validate(semesterValidation.updateSemester), semesterController.updateSemester)
   .get(auth(), validate(semesterValidation.getSemester), semesterController.getSemester)
   .delete(auth(), validate(semesterValidation.getSemester), semesterController.deleteSemester);
 
@@ -67,13 +68,17 @@ module.exports = router;
 
 /**
  * @swagger
- * /semesters:
- *   post:
- *     summary: Create an semester
- *     description: There is no need of creating semesters when an educational year is created the Eight Semesters will be created automatically. But you can manually create a semester when there is no semester for the specific year
+ * /semesters/{id}:
+ *   patch:
+ *     summary: update semester
+ *     description: Update semester attendance information
  *     tags: [Semester]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
  *     requestBody:
  *       required: true
  *       content:
@@ -83,11 +88,19 @@ module.exports = router;
  *             required:
  *               - name
  *             properties:
- *               name:
+ *               totalWeeks:
+ *                 type: number
+ *               monthStart:
+ *                 type: number
+ *               monthEnd:
+ *                 type: number
+ *               attendancePercentage:
  *                 type: number
  *             example:
- *               title: 2
- *               educationalYearId: 1
+ *               totalWeeks: 16
+ *               monthStart: 0
+ *               monthEnd: 0
+ *               attendancePercentage: 25
  *     responses:
  *       "201":
  *         description: Created

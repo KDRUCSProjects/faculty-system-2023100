@@ -7,6 +7,18 @@ const createSemester = {
   }),
 };
 
+const updateSemester = {
+  params: Joi.object().keys({
+    semesterId: Joi.number().positive().required(),
+  }),
+  body: Joi.object().keys({
+    totalWeeks: Joi.number().positive().required(),
+    monthStart: Joi.number().positive().required(),
+    monthEnd: Joi.number().positive().required(),
+    attendancePercentage: Joi.number().positive().required(),
+  }),
+};
+
 const getSemester = {
   params: Joi.object().keys({
     semesterId: Joi.number().required(),
@@ -23,4 +35,5 @@ module.exports = {
   getSemester,
   getSemesters,
   createSemester,
+  updateSemester,
 };

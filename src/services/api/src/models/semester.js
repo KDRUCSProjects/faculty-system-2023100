@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.EducationalYear, { foreignKey: 'educationalYearId', as: 'EducationalYear' });
       this.hasMany(models.Subject);
       this.hasMany(models.StudentsList);
-      this.hasMany(models.AttendanceReport);
     }
   }
   Semester.init(

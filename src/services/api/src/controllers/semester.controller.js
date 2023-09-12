@@ -35,6 +35,14 @@ const getSemester = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send(semester);
 });
 
+const updateSemester = catchAsync(async (req, res) => {
+  const semester = await semesterService.findById(req.params.semesterId);
+  console.log(req.params.semesterId);
+  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'Semester Not found');
+  const results = await semesterService.updateSemester(semester, req.body);
+  return res.status(httpStatus.ACCEPTED).send(results);
+});
+
 const deleteSemester = catchAsync(async (req, res) => {
   const semester = await semesterService.findById(req.params.semesterId);
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
@@ -156,6 +164,7 @@ const getConversionReport = catchAsync(async (req, res) => {
 module.exports = {
   getSemester,
   getSemesters,
+  updateSemester,
   deleteSemester,
   createSemester,
   getConversionReport,

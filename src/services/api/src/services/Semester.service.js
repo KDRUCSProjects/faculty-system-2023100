@@ -15,6 +15,23 @@ const getAllSemesters = () => {
 };
 
 /**
+ * update a semester
+ * @param {Object} oldSemester
+ * @param {Object} newSemester
+ * @returns {Promise<Semester>}
+ */
+const updateSemester = (oldSemester, newSemester) => {
+  if (oldSemester instanceof Semester) {
+    oldSemester.set({
+      ...oldSemester,
+      ...newSemester,
+    });
+    return oldSemester.save();
+  }
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
+};
+
+/**
  * find semester by id
  * @param {Number} semesterId
  * @returns {Promise<Semester>}
@@ -151,6 +168,7 @@ module.exports = {
   findSemester,
   deleteSemester,
   getAllSemesters,
+  updateSemester,
   findNextSemester,
   findSemesterById,
   getYearSemesters,
