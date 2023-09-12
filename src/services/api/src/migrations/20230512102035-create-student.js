@@ -72,7 +72,7 @@ module.exports = {
         type: Sequelize.DOUBLE,
       },
       kankorType: {
-        type: Sequelize.ENUM('general', 'pass14'),
+        type: Sequelize.ENUM('general', '14Pass'),
         defaultValue: 'general',
       },
       birthCityEnglish: {
@@ -87,6 +87,10 @@ module.exports = {
       engDob: {
         type: Sequelize.DATE,
       },
+      graduated: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       educationalYearId: {
         type: Sequelize.INTEGER,
         required: true,
@@ -99,6 +103,9 @@ module.exports = {
       },
       admissionYear: {
         type: Sequelize.INTEGER,
+      },
+      csId: {
+        type: Sequelize.STRING,
       },
       gender: {
         type: Sequelize.ENUM('male', 'female'),

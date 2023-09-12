@@ -1,14 +1,14 @@
 const express = require('express');
 const auth = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
-const { tabdiliValidation } = require('../validations');
+const { tabdiliValidation, shareValidation } = require('../validations');
 const { tabdiliController } = require('../controllers');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(auth(), tabdiliController.getTabdilis)
+  .get(auth(), validate(shareValidation.studentsWithTaajilReentryAndTabdili), tabdiliController.getTabdilis)
   .post(auth(), validate(tabdiliValidation.createTabdili), tabdiliController.createTabdili);
 
 router
@@ -35,6 +35,37 @@ module.exports = router;
  *     tags: [Tabdili]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: educationalYear
+ *         schema:
+ *           type: number
+ *         description: Education Year e.g 1402
+ *       - in: query
+ *         name: studentId
+ *         schema:
+ *           type: number
+ *         description: student id
+ *       - in: query
+ *         name: kankorId
+ *         schema:
+ *           type: string
+ *         description: kankor id
+ *       - in: query
+ *         name: tabdiliId
+ *         schema:
+ *           type: number
+ *         description: tabdili id
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: number
+ *         description: page
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: number
+ *         description: limit and default limit is 2000
  *     responses:
  *       "200":
  *         description: OK

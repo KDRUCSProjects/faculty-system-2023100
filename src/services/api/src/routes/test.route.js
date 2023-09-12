@@ -15,7 +15,6 @@ router.post('/createSub', async (req, res) => {
     const newSub = await Subject.create({ name: 'Math', semesterId: 1 });
     res.send(newSub);
   } catch (e) {
-    console.log(e);
     res.status(500).send(e);
   }
 });

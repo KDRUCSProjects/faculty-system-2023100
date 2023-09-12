@@ -3,7 +3,7 @@ const Joi = require('joi');
 const createMonfaqi = {
   body: Joi.object().keys({
     studentId: Joi.number().required(),
-    educationalYear: Joi.number().required(),
+    year: Joi.number().required(),
     regNumber: Joi.number().required(),
     attachment: Joi.string(),
     notes: Joi.string(),
@@ -12,13 +12,13 @@ const createMonfaqi = {
 
 const getMonfaqi = {
   params: Joi.object().keys({
-    monfaqiId: Joi.number(),
+    monfaqiId: Joi.number().positive().integer(),
   }),
 };
 
 const updateMonfaqi = {
   params: Joi.object().keys({
-    monfaqiId: Joi.number().required(),
+    monfaqiId: Joi.number().required().positive().integer(),
   }),
   body: Joi.object()
     .keys({

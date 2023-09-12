@@ -2,14 +2,14 @@ const Joi = require('joi');
 
 const createStudentList = {
   body: Joi.object().keys({
-    studentId: Joi.number().required(),
-    semesterId: Joi.number().required(),
+    studentId: Joi.number().required().positive().integer(),
+    semesterId: Joi.number().required().positive().integer(),
   }),
 };
 
 const getStudentList = {
   params: Joi.object().keys({
-    studentListId: Joi.number().required(),
+    studentListId: Joi.number().required().positive().integer(),
   }),
 };
 
@@ -35,7 +35,7 @@ const deleteBunch = {
 
 const promoteStudents = {
   params: Joi.object().keys({
-    semesterId: Joi.number().required('Semester Id is required'),
+    semesterId: Joi.number().required('Semester Id is required').positive().integer(),
   }),
 };
 

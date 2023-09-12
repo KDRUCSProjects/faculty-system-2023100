@@ -48,7 +48,7 @@ module.exports = router;
  *         name: chance
  *         schema:
  *           type: number
- *           enum: [2,3]
+ *           enum: [2,3,4]
  *         description: if you want create first chance marks do not send query parameters
  *     requestBody:
  *       required: true
@@ -197,7 +197,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: number
- *           enum: [1,2,3]
+ *           enum: [1,2,3,4]
  *         description: chance
  *     responses:
  *       "200":
@@ -286,7 +286,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: number
- *           enum: [1,2,3]
+ *           enum: [1,2,3,4]
  *         description: chance
  *     responses:
  *       "200":

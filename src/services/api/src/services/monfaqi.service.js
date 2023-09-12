@@ -16,11 +16,14 @@ const createMonfaqi = (MonfaqiBody) => {
  * Get all Monfaqi
  * @returns {Promise<Monfaqi>}
  */
-const getMonfaqis = () => {
+const getMonfaqis = (limit, offset,) => {
   return Monfaqi.findAndCountAll({
     order: [['createdAt', 'DESC']],
+    limit,
+    offset,
     include: [{ model: Student, as: 'Student' }],
   });
+
 };
 
 /**
@@ -29,7 +32,7 @@ const getMonfaqis = () => {
  * @returns {Promise<Monfaqi>}
  */
 const findMonfaqiByStudentId = (studentId) => {
-  return Monfaqi.findOne({ where: { studentId } });
+  return Monfaqi.findOne({ where: { studentId }, include: [{ model: Student, as: 'Student' }] });
 };
 
 /**
@@ -38,7 +41,7 @@ const findMonfaqiByStudentId = (studentId) => {
  * @returns {Promise<Monfaqi>}
  */
 const findMonfaqiById = (MonfaqiId) => {
-  return Monfaqi.findOne({ where: { id: MonfaqiId } });
+  return Monfaqi.findOne({ where: { id: MonfaqiId }, include: [{ model: Student, as: 'Student' }] });
 };
 
 /**
@@ -90,16 +93,51 @@ const findMonfaqiBySemesterId = async (semesterId, options = { count: false, gen
   return options.count ? await Student.count(studentsQuery) : await Student.findAll(studentsQuery);
 };
 
+
+/**
+ * find Monfaqi by student kankor id
+ * @param {ObjectId} studentKankorId
+ * @returns {Promise<Monfaqi>}
+ */
+const findMonfaqiByStdKankorId = (studentKankorId) => {
+  return Monfaqi.findOne({
+    include: [{ model: Student, as: 'Student', where: { kankorId: studentKankorId } }],
+  });
+};
+
+
+
+/**
+ * find Monfaqi by educationalYearId
+ * @param {Number} limit
+ * @param {Number} offset
+ * @param {ObjectId} yearId
+ * @returns {Promise<Monfaqi>}
+ */
+const findMonfaqiByYearId = (limit, offset, yearId) => {
+  return Monfaqi.findAndCountAll({
+    where: { educationalYearId: yearId },
+    order: [['createdAt', 'DESC']],
+    limit,
+    offset,
+    include: [{ model: Student, as: 'Student' }],
+  });
+};
+
+
+
 module.exports = {
   getMonfaqis,
   createMonfaqi,
   deleteMonfaqi,
   updateMonfaqi,
   findMonfaqiById,
+  findMonfaqiByYearId,
   findMonfaqiByStudentId,
   findMonfaqiBySemesterId,
   updateMonfaqi,
   findMonfaqiById,
   findMonfaqiByStudentId,
   findMonfaqiBySemesterId,
+  findMonfaqiByStdKankorId,
 };

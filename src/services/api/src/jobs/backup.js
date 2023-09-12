@@ -2,9 +2,9 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const mysqldump = require('mysqldump');
-let moment = require('moment');
+const moment = require('moment');
 
-let documentsDir = path.join(os.homedir(), './Documents/Faculty MS');
+const documentsDir = path.join(os.homedir(), './Documents/Faculty MS');
 
 // Check if dir exists, otherwise create one
 if (!fs.existsSync(documentsDir)) {
@@ -17,7 +17,7 @@ let todaysDate = moment().format('YYYY-MM-DD');
 
 const createDBBackup = async (customBackup = false) => {
   try {
-    let isThursday = moment().weekday() == 4 ? true : false;
+    const isThursday = moment().weekday() == 4;
 
     // Only do backups on Thursday
     if (!isThursday && !customBackup) return false;
@@ -31,7 +31,7 @@ const createDBBackup = async (customBackup = false) => {
       todaysDate = moment().format('YYYY-MM-DD HH-mm-ss');
     }
 
-    let result = await mysqldump({
+    const result = await mysqldump({
       connection: {
         host: process.env.DB_DEV_HOST || process.env.DB_HOST,
         user: process.env.DB_DEV_USER || process.env.DB_USER,

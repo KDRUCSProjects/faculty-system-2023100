@@ -9,7 +9,7 @@ const {
   tabdiliService,
 } = require('../services');
 const createMonfaqi = catchAsync(async (req, res) => {
-  const { studentId, educationalYear } = req.body;
+  const { studentId, year } = req.body;
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
 
@@ -22,14 +22,11 @@ const createMonfaqi = catchAsync(async (req, res) => {
 
   const studentMonfaqi = await monfaqiService.findMonfaqiByStudentId(studentId);
   if (studentMonfaqi) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student already has monfaqi');
-  // delete year value from body
 
-  let educationalYearId = await educationalYearService.findEducationalYearByValue(educationalYear);
+  let educationalYearId = await educationalYearService.findEducationalYearByValue(year);
   if (!educationalYearId) {
-    educationalYearId = (await educationalYearService.createEducationalYear(educationalYear))?.id;
+    await educationalYearService.createEducationalYear(year);
   }
-
-  req.body.year = educationalYearId;
 
   // Get student on-going semester id
   const currentSemesterId = await studentListService.findStudentLatestSemesterId(studentId);
@@ -40,8 +37,48 @@ const createMonfaqi = catchAsync(async (req, res) => {
 });
 
 const getMonfaqies = catchAsync(async (req, res) => {
-  const monfaqies = await monfaqiService.getMonfaqis();
-  return res.status(httpStatus.OK).send(monfaqies);
+  if (req.query.studentId) {
+    const { studentId } = req.query;
+    const results = await monfaqiService.findMonfaqiByStudentId(studentId);
+    if (!results) throw new ApiError(httpStatus.NOT_FOUND, `Monfaqi Not Found With Student id ${studentId}`);
+    return res.status(httpStatus.OK).send(results);
+  }
+  if (req.query.monfaqiId) {
+    const { monfaqiId } = req.query;
+    const results = await monfaqiService.findMonfaqiById(monfaqiId);
+    if (!results) throw new ApiError(httpStatus.NOT_FOUND, `monfiqi Not Found with id ${monfaqiId}`);
+    return res.status(httpStatus.OK).send(results);
+  }
+  if (req.query.kankorId) {
+    const { kankorId } = req.query;
+    const results = await monfaqiService.findMonfaqiByStdKankorId(kankorId);
+    if (!results) throw new ApiError(httpStatus.NOT_FOUND, `monfaqi Not Found Student With Kankor id ${kankorId}`);
+    return res.status(httpStatus.OK).send(results);
+  }
+  // calculate query parameters
+  const page = req.query?.page ? req.query?.page : 1;
+  const limit = req.query?.limit ? req.query?.limit : 2000;
+  const offset = parseInt((page - 1) * limit, 10);
+
+  if (req.query.educationalYear) {
+    const educationalYearId = await educationalYearService.findEducationalYearByValue(req.query.educationalYear);
+    if (!educationalYearId) throw new ApiError(httpStatus.NOT_FOUND, 'educationalYear not found');
+    const { count, rows } = await monfaqiService.findMonfaqiByYearId(limit, offset, educationalYearId);
+    return res.status(httpStatus.OK).send({
+      page: parseInt(page, 10),
+      totalPages: Math.ceil(count / limit),
+      total: count,
+      results: rows,
+    });
+  }
+
+  const { count, rows } = await monfaqiService.getMonfaqis(limit, offset);
+  return res.status(httpStatus.OK).send({
+    page: parseInt(page, 10),
+    totalPages: Math.ceil(count / limit),
+    total: count,
+    results: rows,
+  });
 });
 
 const getMonfaqi = catchAsync(async (req, res) => {
