@@ -314,7 +314,7 @@ module.exports = router;
  *                 type: number
  *               kankorType:
  *                 type: string
- *                 enum: [general, 14Pass]
+ *                 enum: [general, pass14]
  *               birthCityEnglish:
  *                 type: string
  *               birthCountryEnglish:
@@ -482,7 +482,7 @@ module.exports = router;
  *                 type: number
  *               kankorType:
  *                 type: string
- *                 enum: [general, 14Pass]
+ *                 enum: [general, pass14]
  *               birthCityEnglish:
  *                 type: string
  *               birthCountryEnglish:

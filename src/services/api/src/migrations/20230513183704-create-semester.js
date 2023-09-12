@@ -18,6 +18,26 @@ module.exports = {
         type: Sequelize.INTEGER,
         required: true,
       },
+      totalWeeks: {
+        type: Sequelize.INTEGER,
+        defaultValue: 16,
+        required: true,
+      },
+      monthStart: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        required: true,
+      },
+      monthEnd: {
+        type: Sequelize.INTEGER,
+        defaultValue: 3,
+        required: true,
+      },
+      attendancePercentage: {
+        type: Sequelize.INTEGER,
+        defaultValue: 25,
+        required: true,
+      },
       completed: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
