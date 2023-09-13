@@ -13,8 +13,8 @@ const updateSemester = {
   }),
   body: Joi.object().keys({
     totalWeeks: Joi.number().positive().required(),
-    monthStart: Joi.number().positive().required(),
-    monthEnd: Joi.number().positive().required(),
+    monthStart: Joi.number().required(),
+    monthEnd: Joi.number().required(),
     attendancePercentage: Joi.number().positive().required(),
   }),
 };
