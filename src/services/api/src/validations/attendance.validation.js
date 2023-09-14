@@ -39,7 +39,6 @@ const getAttendanceReport = {
   }),
   query: Joi.object().keys({
     month: Joi.number().required(),
-    type: Joi.string().required().valid('semester', 'subject'),
   }),
 };
 

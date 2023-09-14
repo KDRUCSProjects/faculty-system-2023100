@@ -152,13 +152,6 @@ module.exports = router;
  *         schema:
  *           type: number
  *         description: month of report id
- *       - in: query
- *         name: type
- *         required: true
- *         schema:
- *           type: string
- *           enum: [subject]
- *         description: report type
  *     security:
  *       - bearerAuth: []
  *     responses:

@@ -50,12 +50,8 @@ const updateAttendanceReport = catchAsync(async (req, res) => {
 });
 
 const getAttendanceReport = catchAsync(async (req, res) => {
-  if (req.query.type === 'subject') {
-    const report = await getAttendanceReportBySubjectId(req.params.subjectId, req.query.month);
-    return res.status(httpStatus.CREATED).send(report);
-  }
-
-  // if (req.query.type === 'semester')
+  const report = await getAttendanceReportBySubjectId(req.params.subjectId, req.query.month);
+  return res.status(httpStatus.CREATED).send(report);
 });
 
 const getAttendance = catchAsync(async (req, res) => {
