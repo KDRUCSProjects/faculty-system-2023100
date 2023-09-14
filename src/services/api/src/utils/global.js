@@ -321,8 +321,29 @@ const checkStudentMahromiatBySemesterId = async (studentId, semesterId) => {
   };
 };
 
+/**
+ * check student status by semester such as: taajli, mahromiat, repeat semester and more...
+ * @param {ObjectId} semesterId
+ * @returns {Promise<Student>}
+ */
+
+const checkStudentStatusBySemesterId = async (studentId, semesterId) => {
+  const allStatus = [];
+
+  const { isMahrom, repeatSemester } = await checkStudentMahromiatBySemesterId(studentId, semesterId);
+  if (isMahrom) allStatus.push('mahrom');
+  if (repeatSemester) allStatus.push('repeat_semester');
+
+  // if (taajil);
+  // if (reentry);
+  // Will be added...
+
+  return allStatus;
+};
+
 module.exports = {
   checkStudentMahromiatBySemesterId,
+  checkStudentStatusBySemesterId,
   findEligibleNextSemesterAfterConversion,
   checkStudentEligibilityForNextSemester,
   checkTaajilWithReentry,
