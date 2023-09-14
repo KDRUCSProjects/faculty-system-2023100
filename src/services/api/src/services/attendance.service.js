@@ -1,7 +1,43 @@
 // Sequelize Models
 const httpStatus = require('http-status');
-const { Attendance } = require('../models');
+const { Attendance, AttendanceReport } = require('../models');
 const ApiError = require('../utils/ApiError');
+
+/**
+ * Create a Attendance Report
+ * @param {Object} attendanceBody
+ * @returns {Promise<Attendance>}
+ */
+const createAttendanceReport = (attendanceBody) => {
+  return AttendanceReport.create(attendanceBody);
+};
+
+/**
+ * update a attendance report
+ * @param {Object} oldAttendanceReport
+ * @param {Object} newAttendanceReport
+ * @returns {Promise<AttendanceReport>}
+ */
+const updateAttendanceReport = (oldAttendanceReport, newAttendanceReport) => {
+  if (oldAttendanceReport instanceof AttendanceReport) {
+    oldAttendanceReport.set({
+      ...oldAttendanceReport,
+      ...newAttendanceReport,
+    });
+    return oldAttendanceReport.save();
+  }
+
+  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'something went wrong');
+};
+
+/**
+ * get attendance report
+ * @param {ObjectId} attendanceId
+ * @returns {Promise<Attendance>}
+ */
+const getAttendanceReport = (body) => {
+  return AttendanceReport.findOne({ where: body });
+};
 
 /**
  * Create a Attendance
@@ -56,4 +92,7 @@ module.exports = {
   createAttendance,
   deleteAttendance,
   findAttendanceBySubjectId,
+  createAttendanceReport,
+  updateAttendanceReport,
+  getAttendanceReport,
 };

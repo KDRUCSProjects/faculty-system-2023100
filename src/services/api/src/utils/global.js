@@ -8,6 +8,9 @@ const {
   reentryService,
   studentListService,
   monfaqiService,
+  subjectService,
+  studentService,
+  attendanceService,
 } = require('../services');
 const ApiError = require('./ApiError');
 
@@ -184,6 +187,50 @@ const translateFields = (field) => {
   if (t === 'monfaq') return 'منفق';
 };
 
+/**
+ * get attendance report by subjectId
+ * @param {ObjectId} subjectId
+ * @returns {Promise<AttendanceReport>}
+ */
+
+const getAttendanceReportBySubjectId = async (subjectId, month) => {
+  const subject = await subjectService.getSubject(subjectId);
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+
+  // Get above subject's students
+  const semesterStudents = await studentListService.getAllStudentsBySemesterId(subject.semesterId);
+
+  // Let's filter the view
+
+  const response = {
+    subject,
+    month,
+  };
+
+  const students = [];
+  // Prepare data
+  for (let i = 0; i < semesterStudents.length; i++) {
+    const student = await studentService.getStudent(semesterStudents[i].studentId);
+    // Lets attach student data
+    const report = await attendanceService.getAttendanceReport({ subjectId, month, studentId: student.id });
+
+    students.push({
+      kankorId: student.dataValues.kankorId,
+      fullName: student.dataValues.fullName,
+      grandFatherName: student.dataValues.grandFatherName,
+      photo: student.dataValues.photo,
+      studentId: student.dataValues.id,
+      absent: report?.absent || 0,
+      present: report?.present || 0,
+      reportId: report?.id,
+    });
+  }
+
+  response.students = students;
+
+  return response;
+};
+
 module.exports = {
   findEligibleNextSemesterAfterConversion,
   checkStudentEligibilityForNextSemester,
@@ -193,4 +240,5 @@ module.exports = {
   matchStudentSemesterWithOnGoingSemester,
   matchSemesterWithOnGoingSemester,
   translateFields,
+  getAttendanceReportBySubjectId,
 };

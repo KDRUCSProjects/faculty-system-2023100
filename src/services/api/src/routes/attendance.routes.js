@@ -19,6 +19,7 @@ router
 router
   .route('/semester/:semesterId')
   .get(validate(attendanceValidation.createExcelFile), attendanceController.createExcelFile);
+
 router
   .route('/:subjectId')
   .post(
@@ -26,6 +27,12 @@ router
     validate(attendanceValidation.takeOneStdAttendance),
     attendanceController.takeOneStdAttendance
   );
+
+router
+  .route('/report/:subjectId')
+  .get(validate(attendanceValidation.getAttendanceReport), attendanceController.getAttendanceReport)
+  .post(validate(attendanceValidation.createAttendanceReport), attendanceController.createAttendanceReport)
+  .patch(validate(attendanceValidation.updateAttendanceReport), attendanceController.updateAttendanceReport);
 
 router
   .route('/subject/:subjectId')
@@ -38,6 +45,13 @@ module.exports = router;
  * tags:
  *   name: Attendance
  *   description: Attendance management and retrieval
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: AttendanceReport
+ *   description: Attendance Report management and retrieval
  */
 
 /**
@@ -103,6 +117,155 @@ module.exports = router;
  *             example:
  *               studentId: 1
  *               status: true
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Attendance'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /attendance/report/{subjectId}:
+ *   get:
+ *     summary: Attendance Report By SubjectId
+ *     description: get attendance report of a given subject
+ *     tags: [AttendanceReport]
+ *     parameters:
+ *       - in: path
+ *         name: subjectId
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: subject id
+ *       - in: query
+ *         name: month
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: month of report id
+ *       - in: query
+ *         name: type
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [subject]
+ *         description: report type
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Attendance'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /attendance/report/{subjectId}:
+ *   post:
+ *     summary: Create attendance report of a student of a specific month.
+ *     description: Create attendance report.
+ *     tags: [AttendanceReport]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: subjectId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: subject id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               studentId:
+ *                 type: number
+ *               subjectId:
+ *                 type: boolean
+ *               month:
+ *                 type: number
+ *             example:
+ *               studentId: 1
+ *               subjectId: 1
+ *               month: 0
+ *               present: 26
+ *               absent: 4
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Attendance'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /attendance/report/{subjectId}:
+ *   patch:
+ *     summary: update attendance report of a student of a specific month by report id.
+ *     description: Create attendance report.
+ *     tags: [AttendanceReport]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: subjectId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: subject id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               studentId:
+ *                 type: number
+ *               subjectId:
+ *                 type: boolean
+ *               month:
+ *                 type: number
+ *               id:
+ *                 type: number
+ *             example:
+ *               id: 1
+ *               subjectId: 1
+ *               studentId: 1
+ *               month: 0
+ *               present: 26
+ *               absent: 4
  *     responses:
  *       "200":
  *         description: OK
