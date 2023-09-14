@@ -55,9 +55,7 @@
                 </v-text-field
               ></v-col>
             </v-row>
-            <v-btn block size="large" color="primary" variant="tonal" @click="setTimes(year.id)"
-              >Update Interval Dates</v-btn
-            >
+            <v-btn block size="large" color="primary" variant="tonal" @click="setTimes(year.id)">Update Information</v-btn>
           </v-form>
         </v-list-item>
       </div>

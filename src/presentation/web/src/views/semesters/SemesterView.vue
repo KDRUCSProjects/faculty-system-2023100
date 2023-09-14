@@ -16,11 +16,19 @@
           </v-card-item>
           <v-divider class="mt-3"></v-divider>
           <v-card-text>
-            <v-tabs v-model="tab" fixed-tabs color="light" align-tabs="center" selected-class="bg-teal-lighten-4">
+            <v-tabs
+              v-model="tab"
+              fixed-tabs
+              color="light"
+              align-tabs="center"
+              center-active=""
+              selected-class="bg-teal-lighten-4"
+            >
               <v-tab :value="1"> {{ $t('Subjects') }} </v-tab>
               <v-tab :value="2"> {{ $t('Statistics') }} </v-tab>
               <!-- <v-tab :value="3"> {{ $t('Report') }} </v-tab> -->
               <v-tab :value="4"> {{ $t('Migration') }} </v-tab>
+              <v-tab :value="5"> {{ $t('Attendance') }} </v-tab>
             </v-tabs>
             <v-window v-model="tab">
               <v-window-item :value="1">
@@ -155,6 +163,79 @@
                   </v-card-text>
                 </v-card>
               </v-window-item>
+              <v-window-item :value="5">
+                <v-card class="mt-7">
+                  <v-card-item>
+                    <v-card-title class="text-dark font-weight-bold text-h5">{{ $t('Attendance') }}</v-card-title>
+                  </v-card-item>
+                  <v-card-text class="my-0 py-0">
+                    <p>
+                      {{
+                        $t(
+                          'Set semester attendance duration, start and end of months and attendance percentage that the students  should complete.'
+                        )
+                      }}
+                    </p>
+
+                    <v-form @submit.prevent="submitSemesterDuration" ref="semesterDurationForm">
+                      <!-- <v-range-slider
+                        class="mt-12 mb-3"
+                        :ticks="months"
+                        :model-value="[semesterStart, semesterEnd]"
+                        min="1"
+                        max="12"
+                        :step="1"
+                        show-ticks="always"
+                        thumb-label="always"
+                        tick-size="5"
+                      >
+                        <template v-slot:thumb-label="{ modelValue }">
+                          <v-item-title class="pashtoFont"> {{ monthNames[modelValue - 1] }}</v-item-title>
+                        </template>
+                      </v-range-slider> -->
+
+                      <v-row class="pa-0 ma-0">
+                        <v-col cols="6">
+                          <v-select
+                            variant="outlined"
+                            label="Semester Start"
+                            :items="monthNames"
+                            v-model="semesterStart"
+                          ></v-select>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-select label="Semester End" :items="monthNames" variant="outlined" v-model="semesterEnd">
+                          </v-select>
+                        </v-col>
+                      </v-row>
+
+                      <v-row class="pa-0 ma-0">
+                        <v-col cols="6">
+                          <v-text-field
+                            label="Total Duration (Weeks)"
+                            variant="outlined"
+                            prepend-inner-icon="mdi-clock-time-eight-outline"
+                            v-model="totalWeeks"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-text-field
+                            label="Attendance Percentage"
+                            variant="outlined"
+                            prepend-inner-icon="mdi-list-status"
+                            v-model="attendancePercentage"
+                            append-inner-icon="mdi-percent"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+
+                      <v-btn variant="tonal" type="submit" size="large" color="primary" block>
+                        {{ $t('Update Attendance') }}
+                      </v-btn>
+                    </v-form>
+                  </v-card-text>
+                </v-card>
+              </v-window-item>
             </v-window>
           </v-card-text>
         </v-card>
@@ -210,6 +291,25 @@ export default {
     StudentsDataTable,
   },
   data: () => ({
+    monthNames: ['حمل', 'ثور', 'جوزا', 'سرطان', 'زمری', 'سنبله', 'میزان', 'عقرب', 'قوس', 'جدی', 'دلوه', 'حوت'],
+    months: {
+      1: '1',
+      2: '2',
+      3: '3',
+      4: '4',
+      5: '5',
+      6: '6',
+      7: '7',
+      8: '8',
+      9: '9',
+      10: '10',
+      11: '11',
+      12: '12',
+    },
+    semesterStart: 0,
+    semesterEnd: 3,
+    totalWeeks: 16,
+    attendancePercentage: 25,
     tab: 1,
     page: 1,
     itemsPerPage: 8,
@@ -370,6 +470,28 @@ export default {
     },
   },
   methods: {
+    async submitSemesterDuration() {
+      const { valid } = await this.$refs.semesterDurationForm.validate();
+
+      if (!valid) return false;
+
+      const start = this.monthNames.findIndex((item) => item === this.semesterStart);
+      const end = this.monthNames.findIndex((item) => item === this.semesterEnd);
+
+      if (!start && !end) {
+        return this.$store.commit('setToast', [0, 'Please set start and end of the semester']);
+      }
+
+      const data = {
+        totalWeeks: this.totalWeeks,
+        attendancePercentage: this.attendancePercentage,
+        monthStart: start,
+        monthEnd: end,
+        semesterId: this.id,
+      };
+
+      await this.$store.dispatch('semesters/updateDuration', data);
+    },
     async downloadBadlAsha() {
       this.downloadBadlAshaLoading = true;
 
@@ -513,10 +635,20 @@ export default {
       return rankSemester(number);
     },
     viewTeacher() {},
+    async setSemesterData(semesterId) {
+      const { data } = await this.$store.dispatch('semesters/loadSemesterById', semesterId);
+
+      this.semesterStart = this.monthNames[data?.monthStart];
+      this.semesterEnd = this.monthNames[data?.monthEnd];
+      this.attendancePercentage = data?.attendancePercentage;
+      this.totalWeeks = data?.totalWeeks;
+    },
   },
   async created() {
     await this.loadStudents(true);
     await this.loadSemesterData();
+
+    await this.setSemesterData(this.id);
   },
 };
 </script>
