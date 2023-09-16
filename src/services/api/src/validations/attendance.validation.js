@@ -14,8 +14,8 @@ const createAttendanceReport = {
     studentId: Joi.number().required('Student Id is required'),
     subjectId: Joi.number().required('Subject Id is required'),
     month: Joi.number().required('Month number is required'),
-    present: Joi.number().required('Present count is required'),
-    absent: Joi.number().required('Absent count is required'),
+    present: Joi.number(),
+    absent: Joi.number(),
   }),
 };
 
@@ -28,8 +28,8 @@ const updateAttendanceReport = {
     studentId: Joi.number().required('Student Id is required'),
     subjectId: Joi.number().required('Subject Id is required'),
     month: Joi.number().required('Month number is required'),
-    present: Joi.number().required('Present count is required'),
-    absent: Joi.number().required('Absent count is required'),
+    present: Joi.number(),
+    absent: Joi.number(),
   }),
 };
 
