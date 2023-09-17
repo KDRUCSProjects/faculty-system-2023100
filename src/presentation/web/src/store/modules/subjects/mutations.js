@@ -21,4 +21,7 @@ export default {
   setShoka(state, payload) {
     state.currentShoka = payload;
   },
+  setAttendance(state, payload) {
+    state.currentAttendance = payload?.students;
+  },
 };

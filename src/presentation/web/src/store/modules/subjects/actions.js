@@ -202,4 +202,67 @@ export default {
       throw e.response.data.message;
     }
   },
+  async loadAttendanceBySubjectId(context, { subjectId, month }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/attendance/report/${subjectId}?month=${month}`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setAttendance', response.data);
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async addStudentCountToAttendanceBySubjectId(context, { subjectId, month, counts, studentId }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/attendance/report/${subjectId}?month=${month}`,
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data: { ...counts, subjectId, studentId, month },
+      });
+
+      context.commit('setAttendance', response.data);
+      context.commit('setToast', 'Attendance has been added successfully', { root: true });
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed adding student attendance report'], { root: true });
+      throw e.response.data.message;
+    }
+  },
+  async updateAttendanceByReportId(context, { subjectId, month, counts, studentId, id }) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/attendance/report/${subjectId}?month=${month}`,
+        method: 'patch',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data: { ...counts, subjectId, studentId, month, id },
+      });
+
+      context.commit('setAttendance', response.data);
+
+      context.commit('setToast', 'Attendance has been updated successfully', { root: true });
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed updating student attendance report'], {
+        root: true,
+      });
+      throw e.response.data.message;
+    }
+  },
 };

@@ -14,4 +14,7 @@ export default {
       return shoka;
     });
   },
+  currentAttendance(state) {
+    return state.currentAttendance;
+  },
 };
