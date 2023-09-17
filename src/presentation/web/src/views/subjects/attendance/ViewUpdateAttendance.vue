@@ -6,12 +6,14 @@
 
         <div class="float-right d-flex">
           <base-menu
+            v-if="month != null"
             :displayPreText="'Month:'"
             theme="dark"
             :items="monthItems"
             :theDefault="month"
             @selected="setMonth"
           ></base-menu>
+          <base-menu v-else :displayPreText="'loading'" theme="dark" :items="[]" :theDefault="' '"></base-menu>
         </div>
         <v-card-title class="mt-1">Total Credits: {{ subject?.credit }}</v-card-title>
         <v-card-subtitle class="mt-1">Subject Database ID: {{ subject?.id }}</v-card-subtitle>
@@ -67,6 +69,35 @@
             </div>
           </template>
 
+          <template v-slot:item.isMahrom="{ item }">
+            <div class="text-center">
+              <v-icon v-if="!!item.columns.isMahrom" icon="mdi-check-circle" color="success"></v-icon>
+              <v-icon v-else icon="mdi-close-circle" color="dark"></v-icon>
+            </div>
+          </template>
+
+          <template v-slot:item.totalPresent="{ item }">
+            <div class="text-center">
+              <v-chip color="success" variant="tonal" v-if="!!!item.columns.isMahrom">
+                {{ item.columns.totalPresent }}
+              </v-chip>
+              <v-chip color="error" variant="tonal" v-if="!!item.columns.isMahrom">
+                {{ item.columns.totalPresent }}
+              </v-chip>
+            </div>
+          </template>
+
+          <template v-slot:item.totalAbsent="{ item }">
+            <div class="text-center">
+              <v-chip color="success" variant="tonal" v-if="!!!item.columns.isMahrom">
+                {{ item.columns.totalAbsent }}
+              </v-chip>
+              <v-chip color="error" variant="tonal" v-if="!!item.columns.isMahrom">
+                {{ item.columns.totalAbsent }}
+              </v-chip>
+            </div>
+          </template>
+
           <template v-slot:item.photo="{ item }">
             <v-avatar class="my-2" color="primary" variant="tonal">
               <v-img v-if="item.columns?.photo" :src="`${imagesResource}/${item.columns?.photo}`" alt="user" />
@@ -88,7 +119,7 @@ import { VDataTableVirtual } from 'vuetify/labs/VDataTable';
 
 const initialState = () => ({
   semester: null,
-  month: 0,
+  month: null,
   renderComponent: true,
   subject: null,
   headers: [
@@ -128,6 +159,9 @@ const initialState = () => ({
     },
     { title: 'Present', key: 'present', sortable: false },
     { title: 'Absent', key: 'absent', sortable: false },
+    { title: 'Mahrom', key: 'isMahrom', sortable: false },
+    { title: 'Total Present', key: 'totalPresent', sortable: false },
+    { title: 'Total Absent', key: 'totalAbsent', sortable: false },
 
     // { title: 'Success', key: 'eligibility', sortable: false },
   ],

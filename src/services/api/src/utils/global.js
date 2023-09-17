@@ -223,6 +223,10 @@ const getAttendanceReportBySubjectId = async (subjectId, month, studentId = null
     // Lets attach student data
     const report = await attendanceService.getAttendanceReport({ subjectId, month, studentId: student.id });
 
+    const mahromiat = await checkStudentMahromiatBySubjectId(student.id, subjectId);
+
+    // console.log(student.id, subjectId);
+
     students.push({
       kankorId: student.dataValues.kankorId,
       fullName: student.dataValues.fullName,
@@ -232,6 +236,9 @@ const getAttendanceReportBySubjectId = async (subjectId, month, studentId = null
       absent: report?.absent || 0,
       present: report?.present || 0,
       reportId: report?.id,
+      isMahrom: mahromiat?.isMahrom,
+      totalPresent: mahromiat.totalPresent,
+      totalAbsent: mahromiat.totalAbsent,
     });
   }
 
@@ -322,6 +329,52 @@ const checkStudentMahromiatBySemesterId = async (studentId, semesterId) => {
 };
 
 /**
+ * check student mahrom-iat by semesterId
+ * @param {ObjectId} semesterId
+ * @returns {Promise<Student>}
+ */
+
+const checkStudentMahromiatBySubjectId = async (studentId, subjectId) => {
+  const student = await studentService.getStudent(studentId);
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+
+  const subject = await subjectService.getSubjectById(subjectId);
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+
+  const semester = await semesterService.findById(subject.semesterId);
+  if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
+
+  // Variables to watch for
+
+  let isMahrom = false;
+
+  let { attendancePercentage, monthStart, monthEnd, totalWeeks } = semester;
+
+  let totalPresent = 0;
+  let totalAbsent = 0;
+
+  for (let j = monthStart; j <= monthEnd; j++) {
+    const report = await attendanceService.getAttendanceReport({ subjectId, month: j, studentId });
+
+    // Singular Subject total
+    totalPresent += report?.present || 0;
+    totalAbsent += report?.absent || 0;
+  }
+
+  // Check if student is mahrom in this subject:
+  if ((totalAbsent / (totalWeeks * subject.credit)) * 100 > attendancePercentage) {
+    // Then student is mahrom
+    isMahrom = true;
+  }
+
+  return {
+    isMahrom,
+    totalAbsent,
+    totalPresent,
+  };
+};
+
+/**
  * check student status by semester such as: taajli, mahromiat, repeat semester and more...
  * @param {ObjectId} semesterId
  * @returns {Promise<Student>}
@@ -342,6 +395,7 @@ const checkStudentStatusBySemesterId = async (studentId, semesterId) => {
 };
 
 module.exports = {
+  checkStudentMahromiatBySubjectId,
   checkStudentMahromiatBySemesterId,
   checkStudentStatusBySemesterId,
   findEligibleNextSemesterAfterConversion,
