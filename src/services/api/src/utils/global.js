@@ -313,6 +313,9 @@ const checkStudentMahromiatBySemesterId = async (studentId, semesterId) => {
   // Now, check if student is mahrom in every subject
   if (mahromSubjects.length === subjects.length) isMahrom = true;
 
+  // Also check, if grand total present is 0 or null
+  if (!!!grandTotalPresent) isMahrom = true;
+
   // Check if student is repeat semester
   if (Math.round(totalCreditsOfSemester / 2) < totalCreditsMahrom) repeatSemester = true;
 
