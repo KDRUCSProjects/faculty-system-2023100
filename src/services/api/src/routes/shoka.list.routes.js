@@ -3,12 +3,20 @@ const validate = require('../middlewares/validate');
 const { shokaListValidation } = require('../validations');
 const { shokaListController } = require('../controllers');
 const auth = require('../middlewares/auth');
+const upload = require('../middlewares/multer');
+const { attachAttachment } = require('../middlewares/attachFileToBody');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('takeAttendance'), validate(shokaListValidation.createShokaList), shokaListController.createShokaList);
+  .post(
+    auth('takeAttendance'),
+    upload.single('photo'),
+    attachAttachment,
+    validate(shokaListValidation.createShokaList),
+    shokaListController.createShokaList
+  );
 
 router
   .route('/students/:studentId')
@@ -16,7 +24,13 @@ router
 
 router
   .route('/:shokalistId')
-  .patch(auth('takeAttendance'), validate(shokaListValidation.updateShokaList), shokaListController.updateShokaList)
+  .patch(
+    auth('takeAttendance'),
+    upload.single('photo'),
+    attachAttachment,
+    validate(shokaListValidation.updateShokaList),
+    shokaListController.updateShokaList
+  )
   .delete(auth('takeAttendance'), validate(shokaListValidation.deleteShokaList), shokaListController.deleteShokaList);
 
 router

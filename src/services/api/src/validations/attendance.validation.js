@@ -16,6 +16,7 @@ const createAttendanceReport = {
     month: Joi.number().required('Month number is required'),
     present: Joi.number(),
     absent: Joi.number(),
+    attachment: Joi.string().allow(null),
   }),
 };
 
@@ -30,6 +31,7 @@ const updateAttendanceReport = {
     month: Joi.number().required('Month number is required'),
     present: Joi.number(),
     absent: Joi.number(),
+    attachment: Joi.string().allow(null),
   }),
 };
 
