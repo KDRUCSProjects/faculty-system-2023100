@@ -64,9 +64,6 @@ module.exports = {
           max: 4,
         },
       },
-      attachment: {
-        type: Sequelize.STRING,
-      },
       ...BaseModel(Sequelize),
     });
   },

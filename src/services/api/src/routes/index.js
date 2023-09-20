@@ -25,6 +25,7 @@ const monfaqiRoutes = require('./monfaqi.routes');
 const transcriptRoutes = require('./transcript.routes');
 const resultSheetRoutes = require('./resultSheet.routes');
 const reportRoutes = require('./report.routes');
+const attachmentRoutes = require('./attachment.routes');
 
 const router = express.Router();
 
@@ -120,6 +121,10 @@ const defaultRoutes = [
   {
     path: '/resultSheet',
     route: resultSheetRoutes,
+  },
+  {
+    path: '/attachments',
+    route: attachmentRoutes,
   },
 ];
 

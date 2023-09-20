@@ -67,9 +67,6 @@ module.exports = (sequelize, DataTypes) => {
           max: 4,
         },
       },
-      attachment: {
-        type: DataTypes.STRING,
-      },
       ...BaseModel(DataTypes),
     },
     {

@@ -54,9 +54,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         default: 0,
       },
-      attachment: {
-        type: DataTypes.STRING,
-      },
       ...BaseModel(DataTypes),
     },
     {

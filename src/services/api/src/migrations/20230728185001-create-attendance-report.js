@@ -35,9 +35,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         default: 0,
       },
-      attachment: {
-        type: Sequelize.STRING,
-      },
       present: {
         type: Sequelize.INTEGER,
         default: 0,

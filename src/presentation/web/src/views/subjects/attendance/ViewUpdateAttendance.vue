@@ -5,6 +5,9 @@
         <v-card-title class="text-h5 text-primary text-uppercase font-weight-bold">{{ subject?.name }}</v-card-title>
 
         <div class="float-right d-flex">
+          <!-- Upload and view attachment dialog -->
+          <base-attachment-upload @upload-photo="updatePhoto"></base-attachment-upload>
+
           <base-menu
             v-if="month != null"
             :displayPreText="'Month:'"
@@ -117,6 +120,8 @@
 <script>
 import { VDataTableVirtual } from 'vuetify/labs/VDataTable';
 
+import BaseAttachmentUpload from '@/components/ui/dialogs/BaseAttachmentUpload.vue';
+
 const initialState = () => ({
   semester: null,
   month: null,
@@ -180,6 +185,7 @@ export default {
   },
   components: {
     VDataTableVirtual,
+    BaseAttachmentUpload,
   },
   data: () => initialState(),
   computed: {
@@ -212,6 +218,9 @@ export default {
     },
   },
   methods: {
+    async updatePhoto(photo) {
+      await this.$store.dispatch('students/updateStudent', { ['photo']: photo.fieldValue, studentId: this.id });
+    },
     forceRender() {
       this.renderComponent = false;
 
