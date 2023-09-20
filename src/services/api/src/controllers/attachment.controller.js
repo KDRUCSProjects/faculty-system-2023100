@@ -6,7 +6,8 @@ const { attachmentService } = require('../services');
 const createAttachment = catchAsync(async (req, res) => {
   const attachableIdIsTaken = await attachmentService.getAttachmentByAttachableIdAndType(
     req.body.attachableId,
-    req.body.type
+    req.body.type,
+    req.body.attribute
   );
 
   if (attachableIdIsTaken) throw new ApiError(httpStatus.NOT_FOUND, 'Attachable Id taken');
@@ -17,7 +18,11 @@ const createAttachment = catchAsync(async (req, res) => {
 });
 
 const getAttachment = catchAsync(async (req, res) => {
-  const attachment = await attachmentService.getAttachmentByAttachableId(req.params.attachableId);
+  const attachment = await attachmentService.getAttachmentByAttachableIdAndType(
+    req.params.attachableId,
+    req.query.type,
+    req.query.attribute
+  );
   if (!attachment) throw new ApiError(httpStatus.NOT_FOUND, 'Attachment Not Found');
   res.status(httpStatus.OK).send(attachment);
 });

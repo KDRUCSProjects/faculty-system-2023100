@@ -5,12 +5,17 @@ const createAttachment = {
     attachableId: Joi.number().required(),
     type: Joi.string().valid('shoka', 'attendance'),
     photo: Joi.string().required('photo is required'),
+    attribute: Joi.string(),
   }),
 };
 
 const getAttachment = {
   params: Joi.object().keys({
     attachableId: Joi.number().required(),
+  }),
+  query: Joi.object().keys({
+    attribute: Joi.number(),
+    type: Joi.string(),
   }),
 };
 

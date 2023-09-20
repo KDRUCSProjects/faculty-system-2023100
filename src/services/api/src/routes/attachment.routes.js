@@ -57,6 +57,18 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: attachableId
+ *       - in: query
+ *         name: type
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [shoka, attendance]
+ *         description: type of attachment you want to get
+ *       - in: query
+ *         name: attribute
+ *         schema:
+ *           type: string
+ *         description: additional attribute values. e.g month, chance...
  *     responses:
  *       "201":
  *         description: ACCEPtED
@@ -98,6 +110,9 @@ module.exports = router;
  *                 type: string
  *                 enum: [shoka, attendance]
  *                 format: string
+ *               attribute:
+ *                 type: string
+ *                 format: string
  *               photo:
  *                 type: string
  *                 format: binary
@@ -105,6 +120,7 @@ module.exports = router;
  *               attachableId: 1
  *               type: shoka
  *               photo: blob
+ *               attribute: 0
  *     responses:
  *       "201":
  *         description: ACCEPtED

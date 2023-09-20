@@ -21,6 +21,9 @@ module.exports = {
         type: Sequelize.ENUM('shoka', 'attendance'),
         default: 'attendance',
       },
+      attribute: {
+        type: Sequelize.STRING,
+      },
       ...BaseModel(Sequelize),
     });
   },

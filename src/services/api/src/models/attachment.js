@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM('shoka', 'attendance'),
         default: 'attendance',
       },
+      // Attribute can be: [month] for attendance and [chance] for shoka
+      attribute: {
+        type: DataTypes.STRING,
+      },
       ...BaseModel(DataTypes),
     },
     {

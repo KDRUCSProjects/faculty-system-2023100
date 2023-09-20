@@ -6,7 +6,7 @@
 
         <div class="float-right d-flex">
           <!-- Upload and view attachment dialog -->
-          <base-attachment-upload @upload-photo="updatePhoto"></base-attachment-upload>
+          <base-attachment-upload @upload-photo="updatePhoto" ref="attachmentUpload"></base-attachment-upload>
 
           <base-menu
             v-if="month != null"
@@ -127,6 +127,7 @@ const initialState = () => ({
   month: null,
   renderComponent: true,
   subject: null,
+  attachment: null,
   headers: [
     {
       title: 'No',
@@ -219,7 +220,25 @@ export default {
   },
   methods: {
     async updatePhoto(photo) {
-      await this.$store.dispatch('students/updateStudent', { ['photo']: photo.fieldValue, studentId: this.id });
+      if (this.attachment?.id) {
+        const result = await this.$store.dispatch('subjects/updateAttachment', {
+          ['photo']: photo.fieldValue,
+          attachmentId: this.attachment.id,
+        });
+
+        this.$refs.attachmentUpload.setPhoto(result?.data?.photo);
+        return;
+      }
+
+      const result = await this.$store.dispatch('subjects/uploadAttachment', {
+        ['photo']: photo.fieldValue,
+        type: 'attendance',
+        // Attach subject id
+        attachableId: this.subjectId,
+        attribute: this.month || 0,
+      });
+
+      this.$refs.attachmentUpload.setPhoto(result?.data?.photo);
     },
     forceRender() {
       this.renderComponent = false;
@@ -232,6 +251,17 @@ export default {
     setMonth(value) {
       this.month = this.monthNames.findIndex((i) => i === value);
       //   this.forceRender();
+    },
+    async loadAttachment() {
+      const data = await this.$store.dispatch('subjects/loadAttachment', {
+        type: 'attendance',
+        attachableId: this.subjectId,
+        attribute: 0,
+      });
+
+      this.attachment = data?.data;
+
+      this.$refs.attachmentUpload.setPhoto(data?.data?.photo);
     },
     async loadAttendanceBySubject(month = this.month) {
       if (!this.subjectId) return false;
@@ -271,6 +301,8 @@ export default {
     const { data: semester } = await this.$store.dispatch('semesters/loadSemesterById', subject.semesterId);
     this.semester = semester;
     this.month = this.semester.monthStart;
+
+    this.loadAttachment();
   },
 };
 </script>

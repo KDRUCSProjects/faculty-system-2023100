@@ -35,7 +35,10 @@ const getAttachmentByAttachableId = async (id) => {
  * @param {ObjectId} id
  * @returns {Promise<Attachment>}
  */
-const getAttachmentByAttachableIdAndType = async (id, type) => {
+const getAttachmentByAttachableIdAndType = async (id, type, attribute) => {
+  if (attribute) {
+    return Attachment.findOne({ where: { attachableId: id, type, attribute } });
+  }
   return Attachment.findOne({ where: { attachableId: id, type } });
 };
 
