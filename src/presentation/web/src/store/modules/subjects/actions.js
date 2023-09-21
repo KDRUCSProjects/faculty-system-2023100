@@ -283,7 +283,7 @@ export default {
       });
 
       // Instead of adding the student, let's reload. This will be changed later as this is not good for performance.
-      context.commit('setToast', 'Attachment has been added successfully', { root: true });
+      // context.commit('setToast', 'Attachment has been added successfully', { root: true });
 
       return result;
     } catch (e) {
@@ -307,7 +307,7 @@ export default {
       });
 
       // Instead of adding the student, let's reload. This will be changed later as this is not good for performance.
-      context.commit('setToast', 'Attachment has been updated successfully', { root: true });
+      // context.commit('setToast', 'Attachment has been updated successfully', { root: true });
 
       return result;
     } catch (e) {
@@ -329,8 +329,29 @@ export default {
         },
       });
 
+      console.log(response);
+
       return response;
     } catch (e) {
+      return null;
+    }
+  },
+  async deleteAttachment(context, attachableId) {
+    try {
+      const token = context.rootGetters.token;
+
+      await axios({
+        url: `/api/attachments/${attachableId}`,
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // context.commit('setToast', 'Attachment successfully deleted', { root: true });
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed deleting attachment'], { root: true });
       throw e.response.data.message;
     }
   },

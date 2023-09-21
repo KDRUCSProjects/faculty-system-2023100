@@ -15,7 +15,9 @@
           Download Excel
         </v-btn>
         <div class="float-right d-flex">
-          <base-menu :displayPreText="'Chance:'" theme="dark" :items="chanceItems" @selected="setChance"></base-menu>
+          <base-attachment-upload @upload-photo="updatePhoto" ref="attachmentUpload"></base-attachment-upload>
+
+          <base-menu :displayPreText="'Chance - '" theme="dark" :items="chanceItems" @selected="setChance"></base-menu>
         </div>
         <v-card-title class="mt-1">Total Credits: {{ subject?.credit }}</v-card-title>
         <v-card-subtitle class="mt-1">Subject Database ID: {{ subject?.id }}</v-card-subtitle>
@@ -145,6 +147,7 @@
 
 <script>
 import { VDataTableVirtual } from 'vuetify/labs/VDataTable';
+import BaseAttachmentUpload from '@/components/ui/dialogs/BaseAttachmentUpload.vue';
 
 const initialState = () => ({
   chance: 1,
@@ -152,6 +155,7 @@ const initialState = () => ({
   subject: null,
   downloadLoading: false,
   chanceItems: [1, 2, 3, 4],
+  attachment: null,
   headers: [
     {
       title: 'No',
@@ -209,6 +213,7 @@ export default {
   },
   components: {
     VDataTableVirtual,
+    BaseAttachmentUpload,
   },
   data: () => initialState(),
   computed: {
@@ -219,6 +224,42 @@ export default {
     },
   },
   methods: {
+    async updatePhoto(photo) {
+      // if photo.fieldValue was null, then proceed DELETE
+      if (this.attachment?.id && !photo?.fieldValue) {
+        // Proceed delete
+        this.$store.dispatch('subjects/deleteAttachment', this.attachment?.id);
+
+        this.$refs.attachmentUpload.setPhoto(null);
+        this.attachment = null;
+
+        return;
+      }
+
+      if (this.attachment?.id) {
+        const result = await this.$store.dispatch('subjects/updateAttachment', {
+          ['photo']: photo.fieldValue,
+          attachmentId: this.attachment.id,
+        });
+
+        this.attachment = result.data;
+
+        this.$refs.attachmentUpload.setPhoto(result?.data?.photo);
+        return;
+      }
+
+      const result = await this.$store.dispatch('subjects/uploadAttachment', {
+        ['photo']: photo.fieldValue,
+        type: 'shoka',
+        // Attach subject id
+        attachableId: this.subjectId,
+        attribute: this.chance || 1,
+      });
+
+      this.attachment = result.data;
+
+      this.$refs.attachmentUpload.setPhoto(result?.data?.photo);
+    },
     forceRender() {
       this.renderComponent = false;
 
@@ -281,14 +322,35 @@ export default {
 
       await this.loadShokaBySubject();
     },
+    async loadAttachment(chance = 1) {
+      const data = await this.$store.dispatch('subjects/loadAttachment', {
+        type: 'shoka',
+        attachableId: this.subjectId,
+        attribute: chance,
+      });
+
+      this.attachment = data?.data;
+
+      if (data?.data?.photo) {
+        this.$refs.attachmentUpload.setPhoto(data?.data?.photo);
+      } else {
+        this.$refs.attachmentUpload.setPhoto(null);
+        this.attachment = null;
+      }
+    },
   },
   watch: {
     async chance() {
       await this.loadShokaBySubject(this.chance);
+
+      // Load its attachment
+      this.loadAttachment(this.chance);
     },
   },
   async created() {
     this.loadShokaBySubject(this.chance);
+
+    this.loadAttachment();
   },
 };
 </script>

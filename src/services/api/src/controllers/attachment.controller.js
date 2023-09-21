@@ -35,6 +35,9 @@ const getAttachment = catchAsync(async (req, res) => {
 const updateAttachment = catchAsync(async (req, res) => {
   const attachment = await attachmentService.getAttachmentById(req.params.attachmentId);
   if (!attachment) throw new ApiError(httpStatus.NOT_FOUND, 'Attachment Not Found');
+
+  console.log(req.body.photo);
+  if (req.body.photo == 'undefined' || !req.body.photo) req.body.photo = '';
   const results = await attachmentService.updateAttachment(attachment, req.body);
   res.status(httpStatus.CREATED).send(results);
 });

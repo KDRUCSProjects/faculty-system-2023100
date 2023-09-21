@@ -4,7 +4,7 @@
       :style="{ 'max-width': `${maxWidth}px` }"
       class="filepond"
       ref="pond"
-      :label-idle="$t('Select profile image')"
+      :label-idle="inputTitle"
       v-bind:files="myFiles"
       accepted-file-types="image/jpeg, image/png"
       v-on:init="handleFilePondInit"
@@ -48,6 +48,9 @@ export default {
     maxWidth: {
       type: Number,
       default: 230,
+    },
+    inputTitle: {
+      type: String,
     },
   },
   name: 'app',

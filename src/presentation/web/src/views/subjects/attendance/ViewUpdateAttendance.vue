@@ -220,11 +220,24 @@ export default {
   },
   methods: {
     async updatePhoto(photo) {
+      // if photo.fieldValue was null, then proceed DELETE
+      if (this.attachment?.id && !photo?.fieldValue) {
+        // Proceed delete
+        this.$store.dispatch('subjects/deleteAttachment', this.attachment?.id);
+
+        this.$refs.attachmentUpload.setPhoto(null);
+        this.attachment = null;
+
+        return;
+      }
+
       if (this.attachment?.id) {
         const result = await this.$store.dispatch('subjects/updateAttachment', {
           ['photo']: photo.fieldValue,
           attachmentId: this.attachment.id,
         });
+
+        this.attachment = result.data;
 
         this.$refs.attachmentUpload.setPhoto(result?.data?.photo);
         return;
@@ -237,6 +250,8 @@ export default {
         attachableId: this.subjectId,
         attribute: this.month || 0,
       });
+
+      this.attachment = result.data;
 
       this.$refs.attachmentUpload.setPhoto(result?.data?.photo);
     },
@@ -252,16 +267,21 @@ export default {
       this.month = this.monthNames.findIndex((i) => i === value);
       //   this.forceRender();
     },
-    async loadAttachment() {
+    async loadAttachment(month = 0) {
       const data = await this.$store.dispatch('subjects/loadAttachment', {
         type: 'attendance',
         attachableId: this.subjectId,
-        attribute: 0,
+        attribute: month,
       });
 
       this.attachment = data?.data;
 
-      this.$refs.attachmentUpload.setPhoto(data?.data?.photo);
+      if (data?.data?.photo) {
+        this.$refs.attachmentUpload.setPhoto(data?.data?.photo);
+      } else {
+        this.$refs.attachmentUpload.setPhoto(null);
+        this.attachment = null;
+      }
     },
     async loadAttendanceBySubject(month = this.month) {
       if (!this.subjectId) return false;
@@ -290,6 +310,8 @@ export default {
   watch: {
     async month() {
       await this.loadAttendanceBySubject(this.month);
+
+      this.loadAttachment(this.month);
     },
   },
   async created() {

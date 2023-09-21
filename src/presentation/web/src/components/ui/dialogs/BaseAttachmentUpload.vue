@@ -10,18 +10,29 @@
           <v-card-title class="font-weight-bold"> Upload Attachment </v-card-title>
           <v-card-subtitle> View and update your attachment file</v-card-subtitle>
 
-          <v-spacer></v-spacer>
-          <div class="float-right">
-            <base-update-dialog
-              color="primary"
-              variant="tonal"
-              ref="profilePhotoDialog"
-              :photo="true"
-              :title="$t('Update Attachment')"
-              @update="uploadPhoto"
+          <div class="update_dialog d-flex">
+            <v-btn v-if="attachment" variant="tonal" color="error" size="small" class="mx-1" @click="removePhoto"
+              >Remove</v-btn
             >
-              <v-btn color="primary" variant="outlined" size="small">{{ $t('Upload Attachment') }}</v-btn>
-            </base-update-dialog>
+
+            <div>
+              <base-update-dialog
+                ref="profilePhotoDialog"
+                :photo="true"
+                :title="$t('Select a scan')"
+                :subtitle="'Make sure the image is clear'"
+                :inputTitle="'Select image'"
+                @update="uploadPhoto"
+              >
+                <v-btn color="primary" variant="flat" size="small">{{
+                  attachment ? 'Update' : 'Upload' + ' Attachment'
+                }}</v-btn>
+              </base-update-dialog>
+            </div>
+
+            <div style="position: relative; top: -4px" class="mx-1">
+              <v-btn icon="mdi-close" variant="text" color="error" size="small" @click="dialog = false"></v-btn>
+            </div>
           </div>
         </v-card-item>
 
@@ -33,7 +44,7 @@
             No file found
           </div> -->
 
-          <v-img v-if="attachment" aspect-ratio="1/1" cover :src="`${this.imagesResource}/${this.attachment}`"></v-img>
+          <v-img v-if="attachment" aspect-ratio="16/9" :src="`${this.imagesResource}/${this.attachment}`"> </v-img>
 
           <div class="text-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" v-else>
             <v-card-subtitle class="text-error my-1">No file found</v-card-subtitle>
@@ -76,9 +87,18 @@ export default {
     setPhoto(photo) {
       this.attachment = photo;
     },
+    removePhoto() {
+      this.$emit('upload-photo', null);
+    },
   },
   created() {},
 };
 </script>
 
-<style></style>
+<style scoped>
+.update_dialog {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+}
+</style>
