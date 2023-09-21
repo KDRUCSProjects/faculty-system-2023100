@@ -265,4 +265,94 @@ export default {
       throw e.response.data.message;
     }
   },
+  async uploadAttachment(context, payload) {
+    try {
+      const token = context.rootGetters.token;
+
+      const formData = new FormData();
+
+      for (let key in payload) {
+        formData.append(key, payload[key]);
+      }
+
+      const result = await axios.post(`/api/attachments`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Instead of adding the student, let's reload. This will be changed later as this is not good for performance.
+      // context.commit('setToast', 'Attachment has been added successfully', { root: true });
+
+      return result;
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed uploadting attachment'], { root: true });
+      throw e.response.data.message;
+    }
+  },
+  async updateAttachment(context, payload) {
+    try {
+      const token = context.rootGetters.token;
+
+      const formData = new FormData();
+
+      formData.append('photo', payload.photo);
+
+      const result = await axios.patch(`/api/attachments/${payload.attachmentId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Instead of adding the student, let's reload. This will be changed later as this is not good for performance.
+      // context.commit('setToast', 'Attachment has been updated successfully', { root: true });
+
+      return result;
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed updating attachment'], { root: true });
+      throw e.response.data.message;
+    }
+  },
+  async loadAttachment(context, data) {
+    try {
+      const token = context.rootGetters.token;
+      let url = `/api/attachments/${data.attachableId}?type=${data.type}`;
+
+      if (data.attribute != null || data.attribute != undefined) url = url + `&attribute=${data.attribute}`;
+
+      const response = await axios.get(url, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(response);
+
+      return response;
+    } catch (e) {
+      return null;
+    }
+  },
+  async deleteAttachment(context, attachableId) {
+    try {
+      const token = context.rootGetters.token;
+
+      await axios({
+        url: `/api/attachments/${attachableId}`,
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // context.commit('setToast', 'Attachment successfully deleted', { root: true });
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed deleting attachment'], { root: true });
+      throw e.response.data.message;
+    }
+  },
 };

@@ -114,14 +114,14 @@ components:
       example:
         id: 1,
         token: 728693,
-        expiresIn: "2023-07-06T22:26:46.048Z"
+        expiresIn: '2023-07-06T22:26:46.048Z'
 
     Subject:
       type: object
       properties:
         name:
           type: string
-        semesterId: 
+        semesterId:
           type: number
         teacherId:
           type: number
@@ -129,7 +129,6 @@ components:
         name: Big Data
         semesterId: 6
         teacherId: 12
-
 
     Semester:
       type: object
@@ -190,19 +189,18 @@ components:
         attachment: photo
         notes: Cause was Taajil or Mahromiat
 
-
     ShokaList:
       type: object
       properties:
-        shokaFK: 
+        shokaFK:
           type: number
-        studentFK: 
+        studentFK:
           type: number
-        projectMarks: 
+        projectMarks:
           type: number
-        assignment: 
+        assignment:
           type: number
-        finalMarks: 
+        finalMarks:
           type: number
         practicalWork:
           type: number
@@ -217,11 +215,11 @@ components:
     AttendanceList:
       type: object
       properties:
-        subjectId: 
+        subjectId:
           type: number
-        studentId: 
+        studentId:
           type: number
-        isPresent: 
+        isPresent:
           type: boolean
       example:
         subjectId: 1
@@ -233,7 +231,7 @@ components:
       properties:
         id:
           type: number
-        subjectId: 
+        subjectId:
           type: number
       example:
         id: 1
@@ -244,15 +242,15 @@ components:
       properties:
         id:
           type: number
-        studentId: 
+        studentId:
           type: number
-        educationalYearId: 
+        educationalYearId:
           type: number
-        regNumber: 
+        regNumber:
           type: number
-        attachment: 
+        attachment:
           type: string
-        notes: 
+        notes:
           type: string
       example:
         id: 1
@@ -267,15 +265,15 @@ components:
       properties:
         id:
           type: number
-        studentId: 
+        studentId:
           type: number
-        educationalYearId: 
+        educationalYearId:
           type: number
-        regNumber: 
+        regNumber:
           type: number
-        attachment: 
+        attachment:
           type: string
-        notes: 
+        notes:
           type: string
       example:
         id: 1
@@ -290,11 +288,11 @@ components:
       properties:
         id:
           type: number
-        studentId: 
+        studentId:
           type: number
-        name: 
+        name:
           type: string
-        graduationDate: 
+        graduationDate:
           type: date
       example:
         id: 1
@@ -307,11 +305,11 @@ components:
       properties:
         id:
           type: number
-        studentId: 
+        studentId:
           type: number
-        researchTitle: 
+        researchTitle:
           type: string
-        defenseDate: 
+        defenseDate:
           type: date
       example:
         id: 1
@@ -319,13 +317,12 @@ components:
         name: 'Afghanistan Internet'
         graduationDate: '2023-07-29'
 
-
     StudentList:
       type: object
       properties:
-        studentId: 
+        studentId:
           type: number
-        semesterId: 
+        semesterId:
           type: number
       example:
         subjectFK: 1
@@ -334,9 +331,9 @@ components:
     Shoka:
       type: object
       properties:
-        id: 
+        id:
           type: number
-        subjectId: 
+        subjectId:
           type: number
       example:
         id: 1
@@ -345,23 +342,23 @@ components:
     CustomSubject:
       type: object
       properties:
-        id: 
+        id:
           type: number
-        subjectName: 
+        subjectName:
           type: string
-        subjectCredit: 
+        subjectCredit:
           type: number
-        teacherId: 
+        teacherId:
           type: number
-        semesterId: 
+        semesterId:
           type: number
-        teacherName: 
+        teacherName:
           type: string
-        semesterTitle: 
+        semesterTitle:
           type: number
-        educationalYearId: 
+        educationalYearId:
           type: number
-        educationalYear: 
+        educationalYear:
           type: number
       example:
         id: 38
@@ -377,7 +374,19 @@ components:
     Departments:
       type: object
       properties:
-        name: 
+        name:
+          type: string
+      example:
+        name: Database
+
+    Attachments:
+      type: object
+      properties:
+        attachableId:
+          type: string
+        photo:
+          type: string
+        type:
           type: string
       example:
         name: Database
@@ -386,10 +395,10 @@ components:
       type: array
       items:
         type: object
-        properties: 
+        properties:
           message: string
       example:
-        message: student id 1 and semester id 89 is deleted 
+        message: student id 1 and semester id 89 is deleted
 
   responses:
     # Taajils related responses
@@ -452,14 +461,14 @@ components:
             message: Token is Expired
 
     DuplicateReentry:
-      description: duplicate Reentry 
+      description: duplicate Reentry
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
             code: 406
-            message: student has already taken reentry in the year 
+            message: student has already taken reentry in the year
 
     DuplicateSemester:
       description: Semester is already created
@@ -507,7 +516,7 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             code: 404
-            message: Not 
+            message: Not
     TokenNotFound:
       description: Token Not Found
       content:

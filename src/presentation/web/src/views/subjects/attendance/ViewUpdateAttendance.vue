@@ -5,6 +5,9 @@
         <v-card-title class="text-h5 text-primary text-uppercase font-weight-bold">{{ subject?.name }}</v-card-title>
 
         <div class="float-right d-flex">
+          <!-- Upload and view attachment dialog -->
+          <base-attachment-upload @upload-photo="updatePhoto" ref="attachmentUpload"></base-attachment-upload>
+
           <base-menu
             v-if="month != null"
             :displayPreText="'Month:'"
@@ -117,11 +120,14 @@
 <script>
 import { VDataTableVirtual } from 'vuetify/labs/VDataTable';
 
+import BaseAttachmentUpload from '@/components/ui/dialogs/BaseAttachmentUpload.vue';
+
 const initialState = () => ({
   semester: null,
   month: null,
   renderComponent: true,
   subject: null,
+  attachment: null,
   headers: [
     {
       title: 'No',
@@ -180,6 +186,7 @@ export default {
   },
   components: {
     VDataTableVirtual,
+    BaseAttachmentUpload,
   },
   data: () => initialState(),
   computed: {
@@ -212,6 +219,42 @@ export default {
     },
   },
   methods: {
+    async updatePhoto(photo) {
+      // if photo.fieldValue was null, then proceed DELETE
+      if (this.attachment?.id && !photo?.fieldValue) {
+        // Proceed delete
+        this.$store.dispatch('subjects/deleteAttachment', this.attachment?.id);
+
+        this.$refs.attachmentUpload.setPhoto(null);
+        this.attachment = null;
+
+        return;
+      }
+
+      if (this.attachment?.id) {
+        const result = await this.$store.dispatch('subjects/updateAttachment', {
+          ['photo']: photo.fieldValue,
+          attachmentId: this.attachment.id,
+        });
+
+        this.attachment = result.data;
+
+        this.$refs.attachmentUpload.setPhoto(result?.data?.photo);
+        return;
+      }
+
+      const result = await this.$store.dispatch('subjects/uploadAttachment', {
+        ['photo']: photo.fieldValue,
+        type: 'attendance',
+        // Attach subject id
+        attachableId: this.subjectId,
+        attribute: this.month || 0,
+      });
+
+      this.attachment = result.data;
+
+      this.$refs.attachmentUpload.setPhoto(result?.data?.photo);
+    },
     forceRender() {
       this.renderComponent = false;
 
@@ -223,6 +266,22 @@ export default {
     setMonth(value) {
       this.month = this.monthNames.findIndex((i) => i === value);
       //   this.forceRender();
+    },
+    async loadAttachment(month = 0) {
+      const data = await this.$store.dispatch('subjects/loadAttachment', {
+        type: 'attendance',
+        attachableId: this.subjectId,
+        attribute: month,
+      });
+
+      this.attachment = data?.data;
+
+      if (data?.data?.photo) {
+        this.$refs.attachmentUpload.setPhoto(data?.data?.photo);
+      } else {
+        this.$refs.attachmentUpload.setPhoto(null);
+        this.attachment = null;
+      }
     },
     async loadAttendanceBySubject(month = this.month) {
       if (!this.subjectId) return false;
@@ -251,6 +310,8 @@ export default {
   watch: {
     async month() {
       await this.loadAttendanceBySubject(this.month);
+
+      this.loadAttachment(this.month);
     },
   },
   async created() {
@@ -262,6 +323,8 @@ export default {
     const { data: semester } = await this.$store.dispatch('semesters/loadSemesterById', subject.semesterId);
     this.semester = semester;
     this.month = this.semester.monthStart;
+
+    this.loadAttachment();
   },
 };
 </script>

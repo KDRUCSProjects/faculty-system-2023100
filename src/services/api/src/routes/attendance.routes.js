@@ -3,6 +3,8 @@ const validate = require('../middlewares/validate');
 const auth = require('../middlewares/auth');
 const { attendanceValidation } = require('../validations');
 const { attendanceController } = require('../controllers');
+const upload = require('../middlewares/multer');
+const { attachAttachment } = require('../middlewares/attachFileToBody');
 
 const router = express.Router();
 
@@ -30,9 +32,15 @@ router
 
 router
   .route('/report/:subjectId')
-  .get(validate(attendanceValidation.getAttendanceReport), attendanceController.getAttendanceReport)
-  .post(validate(attendanceValidation.createAttendanceReport), attendanceController.createAttendanceReport)
-  .patch(validate(attendanceValidation.updateAttendanceReport), attendanceController.updateAttendanceReport);
+  .get(auth(), validate(attendanceValidation.getAttendanceReport), attendanceController.getAttendanceReport)
+  .post(
+    auth(),
+    upload.single('photo'),
+    attachAttachment,
+    validate(attendanceValidation.createAttendanceReport),
+    attendanceController.createAttendanceReport
+  )
+  .patch(auth(), validate(attendanceValidation.updateAttendanceReport), attendanceController.updateAttendanceReport);
 
 router
   .route('/subject/:subjectId')
@@ -190,16 +198,19 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               studentId:
  *                 type: number
  *               subjectId:
- *                 type: boolean
+ *                 type: number
  *               month:
  *                 type: number
+ *               photo:
+ *                 type: string
+ *                 format: binary
  *             example:
  *               studentId: 1
  *               subjectId: 1
