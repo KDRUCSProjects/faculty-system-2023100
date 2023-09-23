@@ -8,8 +8,9 @@ const {
   studentListService,
   tabdiliService,
 } = require('../services');
+
 const createMonfaqi = catchAsync(async (req, res) => {
-  const { studentId, year } = req.body;
+  const { studentId, educationalYear } = req.body;
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
 
@@ -23,14 +24,15 @@ const createMonfaqi = catchAsync(async (req, res) => {
   const studentMonfaqi = await monfaqiService.findMonfaqiByStudentId(studentId);
   if (studentMonfaqi) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student already has monfaqi');
 
-  let educationalYearId = await educationalYearService.findEducationalYearByValue(year);
+  let educationalYearId = await educationalYearService.findEducationalYearByValue(educationalYear);
   if (!educationalYearId) {
-    await educationalYearService.createEducationalYear(year);
+    await educationalYearService.createEducationalYear(educationalYear);
   }
 
   // Get student on-going semester id
   const currentSemesterId = await studentListService.findStudentLatestSemesterId(studentId);
   req.body.semesterId = currentSemesterId;
+  req.body.year = educationalYear;
 
   const monfaqi = await monfaqiService.createMonfaqi(req.body);
   return res.status(httpStatus.CREATED).send(monfaqi);

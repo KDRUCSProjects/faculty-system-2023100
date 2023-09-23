@@ -8,4 +8,7 @@ export default {
   tabdiliStudents(state) {
     return state.tabdiliStudents;
   },
+  monfaqiStudents(state) {
+    return state.monfaqiStudents;
+  },
 };

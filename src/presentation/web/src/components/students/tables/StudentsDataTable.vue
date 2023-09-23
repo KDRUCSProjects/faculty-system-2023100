@@ -13,6 +13,8 @@
       :search="searched"
     >
       <template v-slot:[`item.actions`]="{ item }">
+        <v-btn color="error" variant="text" icon="mdi-close-circle" @click="removeStudentStatus(item)"></v-btn>
+
         <v-btn @click="viewStudent(item)" variant="text" color="secondary" text icon="mdi-location-enter"> </v-btn>
       </template>
 
@@ -22,7 +24,7 @@
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
-          <v-menu>
+          <!-- <v-menu>
             <template v-slot:activator="{ props }">
               <v-btn color="cyan" variant="flat" v-bind="props"> {{ studentsTypeText }} </v-btn>
             </template>
@@ -39,7 +41,11 @@
                 <v-list-item-title>{{ item }}</v-list-item-title>
               </v-list-item>
             </v-list>
-          </v-menu>
+          </v-menu> -->
+
+          <div class="px-3">
+            <base-menu :items="statusTypes" @selected="setSelectedStatus"></base-menu>
+          </div>
         </v-toolbar>
 
         <slot v-if="customHeader">
@@ -169,6 +175,13 @@ export default {
     },
   },
   methods: {
+    setSelectedStatus(status) {
+      this.type = status;
+      this.$emit('status', status);
+    },
+    removeStudentStatus({ raw }) {
+      this.$emit('delete-student-status', { id: raw.id, type: this.type });
+    },
     selectStudent(item) {
       const { raw } = item;
       this.$emit('selected-student-id', raw.id);
@@ -199,11 +212,13 @@ export default {
       this.$emit('items-per-page', newValue);
     },
   },
-  emits: ['selected-student-id', 'view-student', 'delete-student'],
+  emits: ['selected-student-id', 'view-student', 'delete-student', 'delete-student-status'],
   async created() {
     if (this.defaultItemsPerPage) {
       this.itemsPerPage = this.defaultItemsPerPage;
     }
+
+    this.type = this.statusTypes[0];
   },
 };
 </script>

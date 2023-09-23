@@ -5,6 +5,8 @@ export default {
     try {
       const token = context.rootGetters.token;
 
+      console.log(type);
+
       const response = await axios.get(`/api/${type}`, {
         headers: {
           'Content-Type': 'application/json',
@@ -23,6 +25,9 @@ export default {
           break;
         case 'reentries':
           context.commit('setReentriesStudents', response.data.results);
+          break;
+        case 'monfaqi':
+          context.commit('setMonfaqiStudents', response.data.results);
           break;
       }
     } catch (e) {
@@ -63,7 +68,26 @@ export default {
       // context.commit('saveYear', response.data);
       context.dispatch('loadConversionStudents', type);
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed adding taajil'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || 'Failed adding conversion'], { root: true });
+      throw e.response.data.message;
+    }
+  },
+  async deleteConversion(context, { id, type }) {
+    try {
+      const token = context.rootGetters.token;
+      const response = await axios({
+        url: `/api/${type}/${id}`,
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // context.commit('saveYear', response.data);
+      context.dispatch('loadConversionStudents', type);
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed removing conversion'], { root: true });
       throw e.response.data.message;
     }
   },

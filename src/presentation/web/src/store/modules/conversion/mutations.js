@@ -8,4 +8,7 @@ export default {
   setReentriesStudents(state, students) {
     state.reentriesStudents = students;
   },
+  setMonfaqiStudents(state, students) {
+    state.monfaqiStudents = students;
+  },
 };

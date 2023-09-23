@@ -93,10 +93,13 @@
           :headers="headers"
           :studentsTypeText="$t('Students Type')"
           @status="setType"
+          @delete-student-status="deleteStudentStatus"
         ></students-data-table>
       </router-view>
     </v-col>
   </v-row>
+
+  <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
 </template>
 
 <script>
@@ -240,12 +243,29 @@ export default {
     setYear(year) {
       this.educationalYear = year;
     },
+    async deleteStudentStatus(data) {
+      // Ask for user assurance
+      let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: this.$t('Warning'),
+        title: this.$t(`Are you sure you want to delete?`),
+        okButton: this.$t('Yes'),
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return false;
+      }
+
+      let { id } = data;
+      await this.$store.dispatch('conversion/deleteConversion', { id, type: this.formType });
+    },
   },
   async created() {
     // Load taajil, tabdil and re-entry students
     await this.$store.dispatch('conversion/loadConversionStudents', 'taajils');
     await this.$store.dispatch('conversion/loadConversionStudents', 'reentries');
     await this.$store.dispatch('conversion/loadConversionStudents', 'tabdili');
+    await this.$store.dispatch('conversion/loadConversionStudents', 'monfaqi');
   },
 };
 </script>
