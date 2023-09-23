@@ -116,12 +116,14 @@ const taajilStudents = catchAsync(async (req, res) => {
     const results = await taajilService.findTaajilById(taajilId);
     if (!results) throw new ApiError(httpStatus.NOT_FOUND, `Taajil Not Found wint id ${taajilId}`);
     return res.status(httpStatus.OK).send(results);
-  } else if (req.query?.kankorId) {
-    const { kankorId } = req.query;
-    const results = await taajilService.findTaajilByStdKankorId(kankorId);
-    if (!results) throw new ApiError(httpStatus.NOT_FOUND, `Taajil Not Found Student With Kankor id ${kankorId}`);
-    return res.status(httpStatus.OK).send(results);
   }
+
+  // else if (req.query?.kankorId) {
+  //   const { kankorId } = req.query;
+  //   const results = await taajilService.findTaajilByStdKankorId(kankorId);
+  //   if (!results) throw new ApiError(httpStatus.NOT_FOUND, `Taajil Not Found Student With Kankor id ${kankorId}`);
+  //   return res.status(httpStatus.OK).send(results);
+  // }
   // calculate query parameters
   const page = req.query?.page ? req.query?.page : 1;
   const limit = req.query?.limit ? req.query?.limit : 2000;
@@ -140,7 +142,7 @@ const taajilStudents = catchAsync(async (req, res) => {
     });
   }
 
-  const { count, rows } = await taajilService.taajilStudents(limit, offset);
+  const { count, rows } = await taajilService.taajilStudents(limit, offset, req.query.kankorId);
   return res.status(httpStatus.OK).send({
     page: parseInt(page, 10),
     totalPages: Math.ceil(count / limit),

@@ -9,6 +9,11 @@ export default {
       tabdiliStudents: [],
       taajilStudents: [],
       reentriesStudents: [],
+      monfaqiStudents: [],
+      taajilsCount: 0,
+      monfaqiCount: 0,
+      tabdiliCount: 0,
+      reentriesCount: 0,
     };
   },
   getters,

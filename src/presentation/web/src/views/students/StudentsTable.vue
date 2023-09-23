@@ -45,8 +45,6 @@
         </v-toolbar>
       </template>
 
-      <!-- <template v-slot:headers></template> -->
-
       <template v-slot:bottom>
         <div class="text-center pt-2">
           <v-pagination v-model="page" :length="pageCount"></v-pagination>

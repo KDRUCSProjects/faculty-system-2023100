@@ -127,12 +127,14 @@ const reentryStudents = catchAsync(async (req, res) => {
     const results = await reentryService.findReentryById(reentryId);
     if (!results) throw new ApiError(httpStatus.NOT_FOUND, `Reentry Not Found with id ${reentryId}`);
     return res.status(httpStatus.OK).send(results);
-  } else if (req.query?.kankorId) {
-    const { kankorId } = req.query;
-    const results = await reentryService.findReentryByStdKankorId(kankorId);
-    if (!results) throw new ApiError(httpStatus.NOT_FOUND, `Reentry Not Found With Student Kankor id ${kankorId}`);
-    return res.status(httpStatus.OK).send(results);
   }
+
+  // else if (req.query?.kankorId) {
+  //   const { kankorId } = req.query;
+  //   const results = await reentryService.findReentryByStdKankorId(kankorId);
+  //   if (!results) throw new ApiError(httpStatus.NOT_FOUND, `Reentry Not Found With Student Kankor id ${kankorId}`);
+  //   return res.status(httpStatus.OK).send(results);
+  // }
   // calculate query parameters
   const page = req.query?.page ? req.query?.page : 1;
   const limit = req.query?.limit ? req.query?.limit : 2000;
@@ -151,7 +153,9 @@ const reentryStudents = catchAsync(async (req, res) => {
     });
   }
 
-  const { count, rows } = await reentryService.reentryStudents(limit, offset);
+  const kankorId = req.query.kankorId;
+
+  const { count, rows } = await reentryService.reentryStudents(limit, offset, kankorId);
   return res.status(httpStatus.OK).send({
     page: parseInt(page, 10),
     totalPages: Math.ceil(count / limit),

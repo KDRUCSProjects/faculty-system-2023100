@@ -25,7 +25,17 @@ const taajilStudents = (limit, offset, like = '') => {
     order: [['createdAt', 'DESC']],
     limit,
     offset,
-    include: [{ model: Student, as: 'Student' }],
+    include: [
+      {
+        model: Student,
+        as: 'Student',
+        where: {
+          ['kankorId']: {
+            [Op.like]: `${like || ''}%`,
+          },
+        },
+      },
+    ],
   });
 
   return results;

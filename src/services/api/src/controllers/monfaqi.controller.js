@@ -8,8 +8,9 @@ const {
   studentListService,
   tabdiliService,
 } = require('../services');
+
 const createMonfaqi = catchAsync(async (req, res) => {
-  const { studentId, year } = req.body;
+  const { studentId, educationalYear } = req.body;
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
 
@@ -23,14 +24,15 @@ const createMonfaqi = catchAsync(async (req, res) => {
   const studentMonfaqi = await monfaqiService.findMonfaqiByStudentId(studentId);
   if (studentMonfaqi) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student already has monfaqi');
 
-  let educationalYearId = await educationalYearService.findEducationalYearByValue(year);
+  let educationalYearId = await educationalYearService.findEducationalYearByValue(educationalYear);
   if (!educationalYearId) {
-    await educationalYearService.createEducationalYear(year);
+    await educationalYearService.createEducationalYear(educationalYear);
   }
 
   // Get student on-going semester id
   const currentSemesterId = await studentListService.findStudentLatestSemesterId(studentId);
   req.body.semesterId = currentSemesterId;
+  req.body.year = educationalYear;
 
   const monfaqi = await monfaqiService.createMonfaqi(req.body);
   return res.status(httpStatus.CREATED).send(monfaqi);
@@ -49,12 +51,14 @@ const getMonfaqies = catchAsync(async (req, res) => {
     if (!results) throw new ApiError(httpStatus.NOT_FOUND, `monfiqi Not Found with id ${monfaqiId}`);
     return res.status(httpStatus.OK).send(results);
   }
-  if (req.query.kankorId) {
-    const { kankorId } = req.query;
-    const results = await monfaqiService.findMonfaqiByStdKankorId(kankorId);
-    if (!results) throw new ApiError(httpStatus.NOT_FOUND, `monfaqi Not Found Student With Kankor id ${kankorId}`);
-    return res.status(httpStatus.OK).send(results);
-  }
+
+  // if (req.query.kankorId) {
+  //   const { kankorId } = req.query;
+  //   const results = await monfaqiService.findMonfaqiByStdKankorId(kankorId);
+  //   if (!results) throw new ApiError(httpStatus.NOT_FOUND, `monfaqi Not Found Student With Kankor id ${kankorId}`);
+  //   return res.status(httpStatus.OK).send(results);
+  // }
+
   // calculate query parameters
   const page = req.query?.page ? req.query?.page : 1;
   const limit = req.query?.limit ? req.query?.limit : 2000;
@@ -72,7 +76,8 @@ const getMonfaqies = catchAsync(async (req, res) => {
     });
   }
 
-  const { count, rows } = await monfaqiService.getMonfaqis(limit, offset);
+  const like = req.query.kankorId;
+  const { count, rows } = await monfaqiService.getMonfaqis(limit, offset, like);
   return res.status(httpStatus.OK).send({
     page: parseInt(page, 10),
     totalPages: Math.ceil(count / limit),
