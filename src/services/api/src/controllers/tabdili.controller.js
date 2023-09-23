@@ -10,7 +10,7 @@ const createTabdili = catchAsync(async (req, res) => {
   const studentTabili = await tabdiliService.findTabdiliByStudentId(studentId);
   if (studentTabili) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'student already has tabdili');
 
-  let educationalYearId = (await educationalYearService.findEducationalYearByValue(educationalYear));
+  let educationalYearId = await educationalYearService.findEducationalYearByValue(educationalYear);
   if (!educationalYearId) {
     await educationalYearService.createEducationalYear(educationalYear);
   }
@@ -37,12 +37,12 @@ const getTabdilis = catchAsync(async (req, res) => {
     if (!results) throw new ApiError(httpStatus.NOT_FOUND, `tabdili Not Found with id ${tabdiliId}`);
     return res.status(httpStatus.OK).send(results);
   }
-  if (req.query.kankorId) {
-    const { kankorId } = req.query;
-    const results = await tabdiliService.findTabdiliByStdKankorId(kankorId);
-    if (!results) throw new ApiError(httpStatus.NOT_FOUND, `tabdili Not Found Student With Kankor id ${kankorId}`);
-    return res.status(httpStatus.OK).send(results);
-  }
+  // if (req.query.kankorId) {
+  //   const { kankorId } = req.query;
+  //   const results = await tabdiliService.findTabdiliByStdKankorId(kankorId);
+  //   if (!results) throw new ApiError(httpStatus.NOT_FOUND, `tabdili Not Found Student With Kankor id ${kankorId}`);
+  //   return res.status(httpStatus.OK).send(results);
+  // }
   // calculate query parameters
   const page = req.query?.page ? req.query?.page : 1;
   const limit = req.query?.limit ? req.query?.limit : 2000;
@@ -61,7 +61,7 @@ const getTabdilis = catchAsync(async (req, res) => {
     });
   }
 
-  const { count, rows } = await tabdiliService.getTabdilis(limit, offset);
+  const { count, rows } = await tabdiliService.getTabdilis(limit, offset, req.query.kankorId);
   return res.status(httpStatus.OK).send({
     page: parseInt(page, 10),
     totalPages: Math.ceil(count / limit),

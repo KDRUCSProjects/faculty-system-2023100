@@ -94,6 +94,12 @@
           :studentsTypeText="$t('Students Type')"
           @status="setType"
           @delete-student-status="deleteStudentStatus"
+          :search="search"
+          :default-items-per-page="itemsPerPage"
+          :dynamic-pagination="true"
+          :page-count="pageCount"
+          @pagination-number="nextConversionStudents"
+          @searched-value="loadSearchedValue"
         ></students-data-table>
       </router-view>
     </v-col>
@@ -111,6 +117,11 @@ export default {
     StudentSearch,
   },
   data: () => ({
+    page: 1,
+    // Default from server/api
+    itemsPerPage: 5,
+    search: '',
+    loading: false,
     type: 'taajil',
     reentrySelectedType: null,
     reentryTypes: ['taajil', 'mahrom', 'special_taajil', 'repeat'],
@@ -127,11 +138,6 @@ export default {
         sortable: false,
       },
       {
-        title: 'Photo',
-        key: 'Student.photo',
-        sortable: false,
-      },
-      {
         title: 'Kankor ID',
         key: 'Student.kankorId',
         sortable: false,
@@ -144,6 +150,11 @@ export default {
       {
         title: 'F Name',
         key: 'Student.fatherName',
+        sortable: false,
+      },
+      {
+        title: 'Year',
+        key: 'year',
         sortable: false,
       },
       {
@@ -185,6 +196,9 @@ export default {
       } else {
         return 'taajils';
       }
+    },
+    pageCount() {
+      return this.$store.getters[`conversion/${this.formType}Count`]?.totalPages;
     },
   },
   methods: {
@@ -229,6 +243,23 @@ export default {
       this.student = student;
       this.studentId = student.id;
     },
+    async nextConversionStudents(page) {
+      this.loading = true;
+      this.loadConversionStudents({ type: this.formType, page, limit: this.itemsPerPage });
+      this.loading = false;
+    },
+    async loadConversionStudents({ type, page, limit, kankorId }) {
+      if (!type) throw 'Set type of conversion';
+      await this.$store.dispatch('conversion/loadConversionStudents', {
+        type: type,
+        page: page,
+        limit: limit,
+        kankorId,
+      });
+    },
+    async loadSearchedValue(value) {
+      await this.loadConversionStudents({ type: this.formType, page: this.page, limit: this.itemsPerPage, kankorId: value });
+    },
     removeStudent() {
       this.student = null;
       this.studentId = null;
@@ -237,8 +268,10 @@ export default {
       const routeData = this.$router.resolve({ name: 'view-student', params: { id: this.student.id } });
       window.open(routeData.href, '_blank');
     },
-    setType(type) {
+    async setType(type) {
       this.type = type.toLowerCase();
+      // When the type is changed, also reload to default conversion students on page 1
+      await this.loadConversionStudents({ type: this.formType, page: this.page, limit: this.itemsPerPage });
     },
     setYear(year) {
       this.educationalYear = year;
@@ -262,10 +295,10 @@ export default {
   },
   async created() {
     // Load taajil, tabdil and re-entry students
-    await this.$store.dispatch('conversion/loadConversionStudents', 'taajils');
-    await this.$store.dispatch('conversion/loadConversionStudents', 'reentries');
-    await this.$store.dispatch('conversion/loadConversionStudents', 'tabdili');
-    await this.$store.dispatch('conversion/loadConversionStudents', 'monfaqi');
+    await this.loadConversionStudents({ type: 'taajils', page: this.page, limit: this.itemsPerPage });
+    await this.loadConversionStudents({ type: 'reentries', page: this.page, limit: this.itemsPerPage });
+    await this.loadConversionStudents({ type: 'tabdili', page: this.page, limit: this.itemsPerPage });
+    await this.loadConversionStudents({ type: 'monfaqi', page: this.page, limit: this.itemsPerPage });
   },
 };
 </script>

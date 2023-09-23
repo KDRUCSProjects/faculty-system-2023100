@@ -1,20 +1,21 @@
 import axios from 'axios';
 
 export default {
-  async loadConversionStudents(context, type) {
+  async loadConversionStudents(context, data) {
     try {
+      const { type, page, limit, kankorId } = data;
       const token = context.rootGetters.token;
 
-      console.log(type);
+      let url = `/api/${type}?page=${page}&limit=${limit}`;
 
-      const response = await axios.get(`/api/${type}`, {
+      if (kankorId?.trim()) url += `&kankorId=${kankorId}`;
+
+      const response = await axios.get(url, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log(response.data.results);
 
       switch (type) {
         case 'taajils':
@@ -30,28 +31,17 @@ export default {
           context.commit('setMonfaqiStudents', response.data.results);
           break;
       }
+
+      // Set count
+      context.commit(`${type}CountsSet`, {
+        total: response.data.total,
+        totalPages: response.data.totalPages,
+        page: response.data.page,
+      });
     } catch (e) {
       throw e.response.data.message;
     }
   },
-  // async deleteEducationalYearById(context, yearId) {
-  //   try {
-  //     const token = context.rootGetters.token;
-
-  //     const response = await axios({
-  //       url: `/api/years/${yearId}`,
-  //       method: 'delete',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     context.commit('removeYear', yearId);
-  //   } catch (e) {
-  //     throw e.response.data.message;
-  //   }
-  // },
   async createConversion(context, { data, type }) {
     try {
       const token = context.rootGetters.token;

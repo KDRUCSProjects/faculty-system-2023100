@@ -11,4 +11,16 @@ export default {
   monfaqiStudents(state) {
     return state.monfaqiStudents;
   },
+  reentriesCount(state) {
+    return state.reentriesCount;
+  },
+  tabdiliCount(state) {
+    return state.tabdiliCount;
+  },
+  monfaqiCount(state) {
+    return state.monfaqiCount;
+  },
+  taajilsCount(state) {
+    return state.taajilsCount;
+  },
 };

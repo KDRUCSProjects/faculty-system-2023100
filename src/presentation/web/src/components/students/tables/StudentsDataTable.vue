@@ -24,24 +24,16 @@
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
-          <!-- <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn color="cyan" variant="flat" v-bind="props"> {{ studentsTypeText }} </v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="(item, index) in statusTypes"
-                :key="index"
-                :value="index"
-                @click="
-                  $emit('status', item);
-                  type = index;
-                "
-              >
-                <v-list-item-title>{{ item }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu> -->
+          <v-text-field
+            style="position: relative; top: 10px; right: 10px"
+            density="compact"
+            color="light"
+            variant="outlined"
+            v-model="searchedValue"
+            :label="$t('Kankor ID')"
+            append-inner-icon="mdi-magnify"
+            :loading="loading"
+          ></v-text-field>
 
           <div class="px-3">
             <base-menu :items="statusTypes" @selected="setSelectedStatus"></base-menu>
@@ -102,7 +94,7 @@
         </v-avatar>
       </template>
 
-      <template v-if="pagination" v-slot:bottom>
+      <template v-if="dynamicPagination" v-slot:bottom>
         <div class="text-center pt-2">
           <v-pagination v-model="page" :length="pageCount"></v-pagination>
         </div>
@@ -150,6 +142,20 @@ export default {
       type: Number,
       default: 8,
     },
+    dynamicPagination: {
+      type: Boolean,
+      default: false,
+    },
+    dynamicTotalCount: {
+      type: Number,
+    },
+    pageCount: {
+      type: Number,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     VDataTable,
@@ -160,7 +166,7 @@ export default {
       page: 1,
       // Default from server/api
       itemsPerPage: 8,
-      loading: false,
+      searchedValue: '',
       errorMessage: null,
       statusTypes: [this.$t('Taajil'), this.$t('Reentry'), this.$t('Tabdili'), this.$t('monfaqi')],
       type: null,
@@ -175,7 +181,12 @@ export default {
     },
   },
   methods: {
+    resetSearchedValue() {
+      this.searchedValue = null;
+    },
     setSelectedStatus(status) {
+      // first, reset input field
+      this.searchedValue = '';
       this.type = status;
       this.$emit('status', status);
     },
@@ -210,6 +221,9 @@ export default {
     },
     itemsPerPage(newValue) {
       this.$emit('items-per-page', newValue);
+    },
+    searchedValue(newValue) {
+      this.$emit('searched-value', newValue);
     },
   },
   emits: ['selected-student-id', 'view-student', 'delete-student', 'delete-student-status'],

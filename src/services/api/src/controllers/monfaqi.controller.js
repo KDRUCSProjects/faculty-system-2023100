@@ -51,12 +51,14 @@ const getMonfaqies = catchAsync(async (req, res) => {
     if (!results) throw new ApiError(httpStatus.NOT_FOUND, `monfiqi Not Found with id ${monfaqiId}`);
     return res.status(httpStatus.OK).send(results);
   }
-  if (req.query.kankorId) {
-    const { kankorId } = req.query;
-    const results = await monfaqiService.findMonfaqiByStdKankorId(kankorId);
-    if (!results) throw new ApiError(httpStatus.NOT_FOUND, `monfaqi Not Found Student With Kankor id ${kankorId}`);
-    return res.status(httpStatus.OK).send(results);
-  }
+
+  // if (req.query.kankorId) {
+  //   const { kankorId } = req.query;
+  //   const results = await monfaqiService.findMonfaqiByStdKankorId(kankorId);
+  //   if (!results) throw new ApiError(httpStatus.NOT_FOUND, `monfaqi Not Found Student With Kankor id ${kankorId}`);
+  //   return res.status(httpStatus.OK).send(results);
+  // }
+
   // calculate query parameters
   const page = req.query?.page ? req.query?.page : 1;
   const limit = req.query?.limit ? req.query?.limit : 2000;
@@ -74,7 +76,8 @@ const getMonfaqies = catchAsync(async (req, res) => {
     });
   }
 
-  const { count, rows } = await monfaqiService.getMonfaqis(limit, offset);
+  const like = req.query.kankorId;
+  const { count, rows } = await monfaqiService.getMonfaqis(limit, offset, like);
   return res.status(httpStatus.OK).send({
     page: parseInt(page, 10),
     totalPages: Math.ceil(count / limit),

@@ -1,5 +1,6 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
+const { QueryTypes, Op } = require('sequelize');
 // Sequelize Models
 const { Reentry, Student } = require('../models');
 /**
@@ -17,12 +18,22 @@ const createReentry = (reentryBody) => {
  * @param {Number} offset
  * @returns {Promise<Reentry>}
  */
-const reentryStudents = (limit, offset) => {
+const reentryStudents = (limit, offset, like = '') => {
   return Reentry.findAndCountAll({
     order: [['createdAt', 'DESC']],
     limit,
     offset,
-    include: [{ model: Student, as: 'Student' }],
+    include: [
+      {
+        model: Student,
+        as: 'Student',
+        where: {
+          ['kankorId']: {
+            [Op.like]: `${like || ''}%`,
+          },
+        },
+      },
+    ],
   });
 };
 
