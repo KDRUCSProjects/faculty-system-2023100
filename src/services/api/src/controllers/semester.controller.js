@@ -39,7 +39,7 @@ const deleteSemester = catchAsync(async (req, res) => {
   const semester = await semesterService.findById(req.params.semesterId);
   if (!semester) throw new ApiError(httpStatus.NOT_FOUND, 'semester not found');
   const subjects = await subjectService.getSemesterStudents(req.params.semesterId);
-  if (subjects.length > 0) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'semester has subjects');
+  if (subjects.length > 0) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'semester has subjects. Delete Subjects First');
   await semesterService.deleteSemester(semester);
   return res.status(httpStatus.NO_CONTENT).send();
 });
@@ -115,7 +115,7 @@ const getSemesters = catchAsync(async (req, res) => {
       reentry,
     };
 
-    for await (const id of semesters?.map((s) => {}))
+    for await (const id of semesters?.map((s) => { }))
       return res.status(httpStatus.OK).send({ year: currentYear, semesters: statistics, onGoingSemesters, sumOfSemesters });
   }
 

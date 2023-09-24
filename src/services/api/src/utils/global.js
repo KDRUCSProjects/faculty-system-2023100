@@ -8,6 +8,9 @@ const {
   reentryService,
   studentListService,
   monfaqiService,
+  subjectService,
+  shokaService,
+  shokaListService,
 } = require('../services');
 const ApiError = require('./ApiError');
 
@@ -184,7 +187,169 @@ const translateFields = (field) => {
   if (t === 'monfaq') return 'منفق';
 };
 
+
+/**
+ * 
+ * @param {ObjectId} studentId 
+ * @param {ObjectId} semesterId 
+ * @returns {Boolean}
+ */
+const isRepeatSemester = async (studentId, semesterId) => {
+  const subjects = await subjectService.getSemesterSubjects(semesterId);
+  let totalCredits = 0;
+  let failedCredits = 0;
+  let semesterMarks = 0;
+
+  for await (const subject of subjects) {
+    const { credit } = subject;
+    totalCredits += credit;
+    const shoka = await shokaService.findShokaBySubjectId(subject.id);
+    const conditions = [
+      `shokalist.deletedAt IS NULL`,
+      `shokalist.shokaId  = ${shoka.id}`,
+      `student.id = ${studentId}`,
+      `semester.id = ${semesterId}`,
+      `shokalist.chance = 1`,
+    ];
+    const subjectMarks = await shokaListService.getStudentMarks(conditions);
+    if (subjectMarks.length === 0) {
+      failedCredits += credit;
+    } else {
+      if (subjectMarks.length === 1) {
+        const projectMarks = subjectMarks[0].projectMarks ? subjectMarks[0].projectMarks : 0;
+        const assignment = subjectMarks[0].assignment ? subjectMarks[0].assignment : 0;
+        const practicalWork = subjectMarks[0].practicalWork ? subjectMarks[0].practicalWork : 0;
+        const finalMarks = subjectMarks[0].finalMarks ? subjectMarks[0].finalMarks : 0;
+        const totalMarks = (projectMarks + assignment + finalMarks + practicalWork);
+        const totalSemMarks = totalMarks * credit;
+        semesterMarks += totalSemMarks;
+        if (totalMarks < 55) {
+          failedCredits += credit;
+        }
+      } else {
+        failedCredits += credit;
+      }
+    }
+  }
+  const percentage = Number(semesterMarks / totalCredits);
+  if (percentage < 55 || (failedCredits > (totalCredits / 2))) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**
+ * find if student has کتبی اخطار 
+ * @param {ObjectId} studentId 
+ * @param {ObjectId} semesterTitle 
+ * @returns {Boolean}
+ */
+const doesStudentHasWarning = async (studentId, semesterId) => {
+  const subjects = await subjectService.getSemesterSubjectsSortedById(semesterId);
+  let totalCredits = 0;
+  const studentMarks = [];
+  // marks to be calculated for percentage
+  let totalMarksForPercentage = 0;
+  for await (const subject of subjects) {
+    const { credit } = subject;
+    // sum of total credits
+    totalCredits += credit;
+    const shoka = await shokaService.findShokaBySubjectId(subject.id);
+    const conditions = [
+      `shokalist.deletedAt IS NULL`,
+      `shokalist.shokaId  = ${shoka.id}`,
+      `student.id = ${studentId}`,
+      `semester.id = ${semesterId}`,
+    ];
+    const subjectMarks = await shokaListService.getStudentMarksSortByName(conditions);
+    const formattedMarks = marksFormatter(subjectMarks);
+    if (formattedMarks[3] && formattedMarks[3] >= 55) {
+      totalMarksForPercentage += (formattedMarks[3] * credit);
+    } else if (formattedMarks[2] && formattedMarks[2] >= 55) {
+      totalMarksForPercentage += (formattedMarks[2] * credit);
+    } else if (formattedMarks[1] && formattedMarks[1] >= 55) {
+      totalMarksForPercentage += (formattedMarks[1] * credit);
+    }
+    studentMarks.push(formattedMarks);
+  }
+  if ((totalMarksForPercentage / totalCredits) >= 55 && (totalMarksForPercentage / totalCredits) <= 60) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// format marks for creating result sheet file in excel
+const marksFormatter = (arr) => {
+  const ob = {};
+
+  // if student does not have marks
+  if (arr.length === 0) {
+    ob[1] = null;
+    ob[2] = null;
+    ob[3] = null;
+  }
+
+  // if student has one chance marks
+  if (arr.length === 1) {
+    if (arr[0].chance === 1) {
+      ob[2] = null;
+      ob[3] = null;
+    }
+    if (arr[0].chance === 2) {
+      ob[1] = null;
+      ob[3] = null;
+    }
+    if (arr[0].chance === 3) {
+      ob[2] = null;
+      ob[1] = null;
+    }
+    arr.map((element) => {
+      const projectMarks = element.projectMarks ? element.projectMarks : 0;
+      const assignment = element.assignment ? element.assignment : 0;
+      const practicalWork = element.practicalWork ? element.practicalWork : 0;
+      const finalMarks = element.finalMarks ? element.finalMarks : 0;
+      const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
+      // const totalWithCredit = totalMarks * element.subjectCredit;
+      ob[element.chance] = totalMarks;
+    });
+  } else if (arr.length === 2) {
+    if (arr[0].chance === 1 && arr[1].chance === 2) {
+      ob[3] = null;
+    }
+    if (arr[0].chance === 1 && arr[1].chance === 3) {
+      ob[2] = null;
+    }
+    if (arr[0].chance === 2 && arr[1].chance === 3) {
+      ob[1] = null;
+    }
+    arr.forEach((element) => {
+      const projectMarks = element.projectMarks ? element.projectMarks : 0;
+      const assignment = element.assignment ? element.assignment : 0;
+      const practicalWork = element.practicalWork ? element.practicalWork : 0;
+      const finalMarks = element.finalMarks ? element.finalMarks : 0;
+      const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
+      // const totalWithCredit = totalMarks * element.subjectCredit;
+      ob[element.chance] = totalMarks;
+    });
+  } else if (arr.length === 3 || arr.length === 4) {
+    arr.forEach((element) => {
+      const projectMarks = element.projectMarks ? element.projectMarks : 0;
+      const assignment = element.assignment ? element.assignment : 0;
+      const practicalWork = element.practicalWork ? element.practicalWork : 0;
+      const finalMarks = element.finalMarks ? element.finalMarks : 0;
+      const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
+      // const totalWithCredit = totalMarks * element.subjectCredit;
+      ob[element.chance] = totalMarks;
+    });
+  }
+  return ob;
+};
+
 module.exports = {
+  marksFormatter,
+  doesStudentHasWarning,
   findEligibleNextSemesterAfterConversion,
   checkStudentEligibilityForNextSemester,
   checkTaajilWithReentry,
@@ -193,4 +358,5 @@ module.exports = {
   matchStudentSemesterWithOnGoingSemester,
   matchSemesterWithOnGoingSemester,
   translateFields,
+  isRepeatSemester,
 };

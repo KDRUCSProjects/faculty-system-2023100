@@ -8,6 +8,7 @@ const {
   tabdiliService,
   educationalYearService,
   monfaqiService,
+  shokaListService,
 } = require('../services');
 const ApiError = require('../utils/ApiError');
 const { checkStudentEligibilityForNextSemester, findEligibleNextSemester } = require('../utils/global');
@@ -145,6 +146,16 @@ const getStudentLists = catchAsync(async (req, res) => {
 const deleteStudentList = catchAsync(async (req, res) => {
   const studentList = await studentListService.findStudentListById(req.params.studentListId);
   if (!studentList) throw new ApiError(httpStatus.NOT_FOUND, 'student list not found');
+  // check student marks in that semester
+  const conditions = [
+    `shokalist.deletedAt IS NULL`,
+    `student.id = ${studentList.studentId}`,
+    `semester.id = ${studentList.semesterId}`,
+  ];
+  const subjectMarks = await shokaListService.getStudentMarksSortByName(conditions);
+  if (subjectMarks.length > 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Student has Marks in this Semester. Delete first that');
+  }
   await studentListService.deleteStudentList(studentList);
   return res.status(httpStatus.NO_CONTENT).send();
 });
@@ -155,8 +166,19 @@ const deleteBunch = catchAsync(async (req, res) => {
   for await (const { studentId, semesterId } of req.body) {
     const studentList = await studentListService.getStudentListByStdIdAndSemesterId(studentId, semesterId);
     if (studentList) {
-      await studentListService.deleteStudentList(studentList);
-      results.push({ message: `student id ${studentId} and semester id ${semesterId} is deleted` });
+      // check student marks in that semester
+      const conditions = [
+        `shokalist.deletedAt IS NULL`,
+        `student.id = ${studentList.studentId}`,
+        `semester.id = ${studentList.semesterId}`,
+      ];
+      const subjectMarks = await shokaListService.getStudentMarksSortByName(conditions);
+      if (subjectMarks.length > 0) {
+        results.push({ message: `student id ${studentId} has marks in ${semesterId} semester` });
+      } else {
+        await studentListService.deleteStudentList(studentList);
+        results.push({ message: `student id ${studentId} and semester id ${semesterId} is deleted` });
+      }
     } else {
       results.push({ message: `student id ${studentId} and semester id ${semesterId} is not Found` });
     }
