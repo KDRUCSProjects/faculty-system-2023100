@@ -15,7 +15,7 @@
     <v-card>
       <v-card-item>
         <v-card-title class="font-weight-bold">{{ title }}</v-card-title>
-        <v-card-subtitle>{{ $t('Please update') }}</v-card-subtitle>
+        <v-card-subtitle>{{ subtitle }}</v-card-subtitle>
       </v-card-item>
       <v-card-text>
         <v-form @submit.prevent="update">
@@ -24,6 +24,7 @@
             :modalWidth="modalWidth"
             @photo="setPhoto"
             @photo-size-change="handlePhotoSize"
+            :inputTitle="inputTitle"
             v-else
           ></base-photo-uploader>
         </v-form>
@@ -99,6 +100,9 @@ export default {
     },
     maxValue: {
       type: Number,
+    },
+    inputTitle: {
+      type: String,
     },
   },
   data: () => initialState(),

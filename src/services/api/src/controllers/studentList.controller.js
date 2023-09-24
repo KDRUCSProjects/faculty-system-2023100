@@ -8,10 +8,15 @@ const {
   tabdiliService,
   educationalYearService,
   monfaqiService,
+  subjectService,
   shokaListService,
 } = require('../services');
 const ApiError = require('../utils/ApiError');
-const { checkStudentEligibilityForNextSemester, findEligibleNextSemester } = require('../utils/global');
+const {
+  checkStudentEligibilityForNextSemester,
+  findEligibleNextSemester,
+  checkStudentMahromiatBySemesterId,
+} = require('../utils/global');
 
 const createStudentList = catchAsync(async (req, res) => {
   const { studentId, semesterId } = req.body;
@@ -198,6 +203,24 @@ const promoteStudents = catchAsync(async (req, res) => {
 
     // First thing first, validate if the student can go to next semester by checking taajil, tabdili, mahromiat and repeat semester
 
+    // Check student mahromiat
+    const { isMahrom, repeatSemester } = await checkStudentMahromiatBySemesterId(studentId, req.params.semesterId);
+
+    // Absent
+    if (isMahrom) {
+      results.push({
+        message: `Student is absent in all subjects`,
+      });
+      continue;
+    }
+
+    if (repeatSemester) {
+      results.push({
+        message: `Student is repeat semester by mahromiat in subjects`,
+      });
+      continue;
+    }
+
     const { message, eligible } = await checkStudentEligibilityForNextSemester(studentId);
 
     if (!eligible) {
@@ -268,6 +291,9 @@ const reviewStudentsPromotion = catchAsync(async (req, res) => {
 
   const results = [];
 
+  // semester subjects
+  const subjects = await subjectService.getSemesterSubjects(req.params.semesterId);
+
   for await (const studentId of studentsIds) {
     // First thing first, validate if the student can go to next semester by checking taajil, tabdili, mahromiat and repeat semester
 
@@ -281,6 +307,46 @@ const reviewStudentsPromotion = catchAsync(async (req, res) => {
         studentId,
         eligibility: 0,
         reason: 'duplicate',
+      });
+      continue;
+    }
+
+    // Check student mahromiat
+    const mahromiat = await checkStudentMahromiatBySemesterId(studentId, req.params.semesterId);
+
+    const { isMahrom, repeatSemester, mahromSubjects } = mahromiat;
+
+    const mahromSubjectsNames = [];
+
+    mahromSubjects.forEach((subject) => {
+      subjects.forEach((s) => {
+        if (s.id === subject.subjectId) {
+          mahromSubjectsNames.push(s.name);
+        }
+      });
+    });
+
+    const mahromSubjectsTitle = mahromSubjectsNames.join(',');
+
+    // Absent
+    if (isMahrom) {
+      results.push({
+        message: `Student is absent in all subjects`,
+        student: theStudent,
+        studentId,
+        eligibility: 0,
+        reason: 'absent',
+      });
+      continue;
+    }
+
+    if (repeatSemester) {
+      results.push({
+        message: `Student is repeat semester in ${mahromSubjectsTitle} by mahromiat`,
+        student: theStudent,
+        studentId,
+        eligibility: 0,
+        reason: 'repeat_semester',
       });
       continue;
     }

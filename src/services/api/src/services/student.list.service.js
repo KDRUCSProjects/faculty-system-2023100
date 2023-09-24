@@ -169,7 +169,7 @@ const findStudentLatestSemesterId = async (studentId) => {
 };
 
 /**
- * find student latest semester
+ * get students by semester id
  * @param {ObjectId} studentId
  * @returns {Promise<StudentsList>}
  */
@@ -205,18 +205,17 @@ const updatedStudentList = (oldStudentList, newStudentList) => {
  * @returns {Promise<StudentsList>}
  */
 const findSemesterStudents = (semesterId) => {
-  return StudentsList.findAll(
-    {
-      where: { semesterId },
-      include: [
-        {
-          model: Student, as: 'Student',
-          attributes: ['id', 'fullName', 'fatherName', 'province', 'kankorId', 'grandFatherName', 'photo', 'csId'],
-        }
-      ],
-      order: [[{ model: Student, as: 'Student' }, 'fullName', 'ASC']],
-    }
-  );
+  return StudentsList.findAll({
+    where: { semesterId },
+    include: [
+      {
+        model: Student,
+        as: 'Student',
+        attributes: ['id', 'fullName', 'fatherName', 'province', 'kankorId', 'grandFatherName', 'photo', 'csId'],
+      },
+    ],
+    order: [[{ model: Student, as: 'Student' }, 'fullName', 'ASC']],
+  });
 };
 
 /**

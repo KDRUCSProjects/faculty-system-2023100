@@ -2,7 +2,7 @@ const { Model } = require('sequelize');
 const BaseModel = require('./basemodel');
 
 module.exports = (sequelize, DataTypes) => {
-  class Semester extends Model {
+  class AttendanceReport extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -10,56 +10,58 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.EducationalYear, { foreignKey: 'educationalYearId', as: 'EducationalYear' });
-      this.hasMany(models.Subject);
-      this.hasMany(models.StudentsList);
+      this.belongsTo(models.Subject, { foreignKey: 'subjectId', as: 'subject' });
     }
   }
-  Semester.init(
+  AttendanceReport.init(
     {
-      title: DataTypes.INTEGER,
-      educationalYearId: {
+      id: {
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+      },
+      subjectId: {
         type: DataTypes.INTEGER,
         required: true,
+        trim: true,
         references: {
-          model: 'EducationalYear',
+          model: 'Subjects',
           key: 'id',
         },
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      totalWeeks: {
+      studentId: {
         type: DataTypes.INTEGER,
-        defaultValue: 16,
         required: true,
+        trim: true,
+        references: {
+          model: 'Students',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
-      monthStart: {
+      month: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
-        required: true,
+        default: 0,
       },
-      monthEnd: {
+      present: {
         type: DataTypes.INTEGER,
-        defaultValue: 3,
-        required: true,
+        default: 0,
       },
-      attendancePercentage: {
+      absent: {
         type: DataTypes.INTEGER,
-        defaultValue: 16,
-        required: true,
-      },
-      completed: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        default: 0,
       },
       ...BaseModel(DataTypes),
     },
     {
       sequelize,
-      modelName: 'Semester',
+      modelName: 'AttendanceReport',
       paranoid: true,
       timestamps: true,
     }
   );
-  return Semester;
+  return AttendanceReport;
 };

@@ -19,3 +19,4 @@ module.exports.monfaqiController = require('./monfaqi.controller');
 module.exports.transcriptController = require('./transcript.controller');
 module.exports.resultSheetController = require('./resultSheet.controller');
 module.exports.reportController = require('./report.controller');
+module.exports.attachmentValidation = require('./attachment.controller');

@@ -2,6 +2,7 @@
 const httpStatus = require('http-status');
 const { Tabdili, Student } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { Op } = require('sequelize');
 
 /**
  * Create a Tabili
@@ -18,12 +19,22 @@ const createTabdili = (tabdiliBody) => {
  * @param {Number} offset
  * @returns {Promise<Tabdili>}
  */
-const getTabdilis = (limit, offset) => {
+const getTabdilis = (limit, offset, like = '') => {
   return Tabdili.findAndCountAll({
     order: [['createdAt', 'DESC']],
     limit,
     offset,
-    include: [{ model: Student, as: 'Student' }],
+    include: [
+      {
+        model: Student,
+        as: 'Student',
+        where: {
+          ['kankorId']: {
+            [Op.like]: `${like || ''}%`,
+          },
+        },
+      },
+    ],
   });
 };
 
@@ -94,7 +105,6 @@ const findTabdiliBySemesterId = async (semesterId, options = { count: false, gen
   return options.count ? await Student.count(studentsQuery) : await Student.findAll(studentsQuery);
 };
 
-
 /**
  * find Tabdili by student kankor id
  * @param {ObjectId} studentKankorId
@@ -105,8 +115,6 @@ const findTabdiliByStdKankorId = (studentKankorId) => {
     include: [{ model: Student, as: 'Student', where: { kankorId: studentKankorId } }],
   });
 };
-
-
 
 /**
  * find Tabdili by educationalYearId
@@ -124,8 +132,6 @@ const findTabdiliByYearId = (limit, offset, year) => {
     include: [{ model: Student, as: 'Student' }],
   });
 };
-
-
 
 module.exports = {
   getTabdilis,

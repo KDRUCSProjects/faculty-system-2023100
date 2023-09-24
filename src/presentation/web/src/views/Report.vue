@@ -182,7 +182,7 @@ export default {
   }),
   computed: {
     showBadlAshaDownload() {
-      const semesterTitle = 2;
+      const semesterTitle = this.currentSemester?.title;
 
       return semesterTitle % 2 === 0 ? true : false;
     },
@@ -231,14 +231,14 @@ export default {
     async downloadBadlAsha() {
       this.downloadBadlAshaLoading = true;
 
-      let title = this.currentSemester.title;
+      let title = this.currentSemester?.title;
       let className = null;
       if (title === 2) className = 1;
       if (title === 4) className = 2;
       if (title === 6) className = 3;
       if (title === 8) className = 4;
       const file = await this.$store.dispatch('semesters/downloadBadlAsha', {
-        year: this.year,
+        year: this.selectedYear,
         classTitle: className,
       });
 

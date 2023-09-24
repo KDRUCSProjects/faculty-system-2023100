@@ -3,21 +3,20 @@
     <v-card class="theShadow">
       <v-card-item class="mt-4">
         <v-card-title class="text-h5 text-primary text-uppercase font-weight-bold">{{ subject?.name }}</v-card-title>
-        <v-btn
-          @click="downloadShoka"
-          class="float-right"
-          prepend-icon="mdi-download-circle"
-          color="primary"
-          variant="tonal"
-          download
-          :loading="downloadLoading"
-        >
-          Download Excel
-        </v-btn>
+
         <div class="float-right d-flex">
+          <!-- Upload and view attachment dialog -->
           <base-attachment-upload @upload-photo="updatePhoto" ref="attachmentUpload"></base-attachment-upload>
 
-          <base-menu :displayPreText="'Chance - '" theme="dark" :items="chanceItems" @selected="setChance"></base-menu>
+          <base-menu
+            v-if="month != null"
+            :displayPreText="'Month:'"
+            theme="dark"
+            :items="monthItems"
+            :theDefault="month"
+            @selected="setMonth"
+          ></base-menu>
+          <base-menu v-else :displayPreText="'loading'" theme="dark" :items="[]" :theDefault="' '"></base-menu>
         </div>
         <v-card-title class="mt-1">Total Credits: {{ subject?.credit }}</v-card-title>
         <v-card-subtitle class="mt-1">Subject Database ID: {{ subject?.id }}</v-card-subtitle>
@@ -43,89 +42,62 @@
             </v-chip>
           </template>
 
-          <template v-slot:item.assignment="{ item }">
-            <div class="text-center" :key="item?.columns?.assignment">
+          <template v-slot:item.present="{ item }">
+            <div class="text-center" :key="item?.columns?.present">
               <base-update-field
-                fieldLabel="Marks"
-                :fieldValue="item.columns.assignment"
-                :fieldName="'assignment'"
-                :rowId="item?.raw?.shokaListId"
+                fieldLabel="Count"
+                :fieldValue="item.columns.present"
+                :fieldName="'present'"
+                :rowId="item?.raw?.reportId"
                 :data="item?.raw"
-                :max-value="10"
+                :max-value="31"
                 @update="updateMarks"
               >
               </base-update-field>
             </div>
           </template>
 
-          <template v-slot:item.finalMarks="{ item }">
-            <div class="text-center" :key="item?.columns?.finalMarks">
+          <template v-slot:item.absent="{ item }">
+            <div class="text-center" :key="item?.columns?.absent">
               <base-update-field
-                fieldLabel="Marks"
-                :fieldValue="item.columns.finalMarks"
-                :fieldName="'finalMarks'"
-                :rowId="item?.raw?.shokaListId"
+                fieldLabel="Count"
+                :fieldValue="item.columns.absent"
+                :fieldName="'absent'"
+                :rowId="item?.raw?.reportId"
                 :data="item?.raw"
-                :max-value="60"
+                :max-value="31"
                 @update="updateMarks"
               >
               </base-update-field>
             </div>
           </template>
 
-          <template v-slot:item.projectMarks="{ item }">
-            <div class="text-center" :key="item?.columns?.projectMarks">
-              <base-update-field
-                fieldLabel="Marks"
-                :fieldValue="item.columns.projectMarks"
-                :fieldName="'projectMarks'"
-                :rowId="item?.raw?.shokaListId"
-                :data="item?.raw"
-                :max-value="20"
-                @update="updateMarks"
-              >
-              </base-update-field>
-            </div>
-          </template>
-
-          <template v-slot:item.practicalWork="{ item }">
-            <div class="text-center" :key="item?.columns?.practicalWork">
-              <base-update-field
-                fieldLabel="Marks"
-                :fieldValue="item.columns.practicalWork"
-                :fieldName="'practicalWork'"
-                :rowId="item?.raw?.shokaListId"
-                :data="item?.raw"
-                :max-value="10"
-                @update="updateMarks"
-              >
-              </base-update-field>
-            </div>
-          </template>
-
-          <template v-slot:item.total="{ item }">
+          <template v-slot:item.isMahrom="{ item }">
             <div class="text-center">
-              <v-chip color="success" variant="tonal" v-if="item.columns.total > 54">
-                {{ item.columns.total }}
+              <v-icon v-if="!!item.columns.isMahrom" icon="mdi-check-circle" color="success"></v-icon>
+              <v-icon v-else icon="mdi-close-circle" color="dark"></v-icon>
+            </div>
+          </template>
+
+          <template v-slot:item.totalPresent="{ item }">
+            <div class="text-center">
+              <v-chip color="success" variant="tonal" v-if="!!!item.columns.isMahrom">
+                {{ item.columns.totalPresent }}
               </v-chip>
-              <v-chip color="error" variant="tonal" v-if="item.columns.total < 54">
-                {{ item.columns.total }}
+              <v-chip color="error" variant="tonal" v-if="!!item.columns.isMahrom">
+                {{ item.columns.totalPresent }}
               </v-chip>
             </div>
           </template>
 
-          <template v-slot:item.message="{ item }">
-            <v-tooltip :text="item.columns.message" location="top">
-              <template v-slot:activator="{ props }">
-                <v-icon v-bind="props" icon="mdi-information" color="dark"></v-icon>
-              </template>
-            </v-tooltip>
-          </template>
-
-          <template v-slot:item.eligibility="{ item }">
+          <template v-slot:item.totalAbsent="{ item }">
             <div class="text-center">
-              <v-icon v-if="!!item.columns.eligibility" icon="mdi-check-circle" color="success"></v-icon>
-              <v-icon v-else icon="mdi-close-circle" color="error"></v-icon>
+              <v-chip color="success" variant="tonal" v-if="!!!item.columns.isMahrom">
+                {{ item.columns.totalAbsent }}
+              </v-chip>
+              <v-chip color="error" variant="tonal" v-if="!!item.columns.isMahrom">
+                {{ item.columns.totalAbsent }}
+              </v-chip>
             </div>
           </template>
 
@@ -147,14 +119,14 @@
 
 <script>
 import { VDataTableVirtual } from 'vuetify/labs/VDataTable';
+
 import BaseAttachmentUpload from '@/components/ui/dialogs/BaseAttachmentUpload.vue';
 
 const initialState = () => ({
-  chance: 1,
+  semester: null,
+  month: null,
   renderComponent: true,
   subject: null,
-  downloadLoading: false,
-  chanceItems: [1, 2, 3, 4],
   attachment: null,
   headers: [
     {
@@ -191,11 +163,12 @@ const initialState = () => ({
       sortable: false,
       key: 'grandFatherName',
     },
-    { title: 'Assignment', key: 'assignment', sortable: false },
-    { title: 'Practical', key: 'practicalWork', sortable: false },
-    { title: 'Mid-Exam', key: 'projectMarks', sortable: false },
-    { title: 'Final-Exam', key: 'finalMarks', sortable: false },
-    { title: 'Total', key: 'total', sortable: false },
+    { title: 'Present', key: 'present', sortable: false },
+    { title: 'Absent', key: 'absent', sortable: false },
+    { title: 'Mahrom', key: 'isMahrom', sortable: false },
+    { title: 'Total Present', key: 'totalPresent', sortable: false },
+    { title: 'Total Absent', key: 'totalAbsent', sortable: false },
+
     // { title: 'Success', key: 'eligibility', sortable: false },
   ],
 });
@@ -218,9 +191,31 @@ export default {
   data: () => initialState(),
   computed: {
     students() {
-      let students = this.$store.getters['subjects/currentShoka'];
+      let students = this.$store.getters['subjects/currentAttendance'];
 
       return students.sort((a, b) => a.fullName.localeCompare(b.fullName));
+    },
+    monthNames() {
+      return ['حمل', 'ثور', 'جوزا', 'سرطان', 'زمری', 'سنبله', 'میزان', 'عقرب', 'قوس', 'جدی', 'دلوه', 'حوت'];
+    },
+    monthItems() {
+      let startOfSemester = 0;
+      let endOfSemester = 0;
+
+      const semester = this.semester;
+      if (!semester) return [];
+
+      const months = [];
+      if (semester) {
+        startOfSemester = semester.monthStart;
+        endOfSemester = semester.monthEnd;
+      }
+
+      for (let i = startOfSemester; i <= endOfSemester; i++) {
+        months.push(this.monthNames[i]);
+      }
+
+      return months;
     },
   },
   methods: {
@@ -250,10 +245,10 @@ export default {
 
       const result = await this.$store.dispatch('subjects/uploadAttachment', {
         ['photo']: photo.fieldValue,
-        type: 'shoka',
+        type: 'attendance',
         // Attach subject id
         attachableId: this.subjectId,
-        attribute: this.chance || 1,
+        attribute: this.month || 0,
       });
 
       this.attachment = result.data;
@@ -268,65 +263,15 @@ export default {
         this.renderComponent = true;
       });
     },
-    setChance(value) {
-      this.chance = value;
-      this.forceRender();
+    setMonth(value) {
+      this.month = this.monthNames.findIndex((i) => i === value);
+      //   this.forceRender();
     },
-    async downloadShoka() {
-      this.downloadLoading = true;
-      const file = await this.$store.dispatch('subjects/downloadSubjectShokaBySubjectId', {
-        subjectId: this.subjectId,
-        chance: this.chance,
-      });
-
-      this.downloadFile(file.data, 'Shoka');
-
-      // Make it a little stylish ;)
-      setTimeout(() => {
-        this.downloadLoading = false;
-      }, 500);
-    },
-    async loadShokaBySubject(chance = this.chance) {
-      if (!this.subjectId) return false;
-      // first, load the subject
-      const subject = await this.$store.dispatch('subjects/loadSubjectById', this.subjectId);
-      this.subject = subject.data;
-
-      await this.$store.dispatch('subjects/loadShokaBySubjectId', { subjectId: this.subjectId, chance });
-    },
-    async updateMarks({ field, fieldValue, rowId, data }) {
-      if (!data.shokaListId) {
-        let res = await this.$refs.baseConfirmDialog.show({
-          warningTitle: this.$t('Warning'),
-          title: this.$t('You are adding marks of a student that has not been added by the teacher? Continue'),
-          okButton: this.$t('Yes'),
-        });
-
-        // If closed, return the function
-        if (!res) {
-          return false;
-        }
-      }
-
-      const type = data.shokaListId ? 'updateShokaByShokaListId' : 'addStudentMarksToShokaBySubjectId';
-
-      await this.$store.dispatch(`subjects/${type}`, {
-        chance: parseInt(this.chance),
-        subjectId: this.subjectId,
-        studentId: data.studentId,
-        shokaListId: rowId,
-        marks: {
-          [field]: parseInt(fieldValue),
-        },
-      });
-
-      await this.loadShokaBySubject();
-    },
-    async loadAttachment(chance = 1) {
+    async loadAttachment(month = 0) {
       const data = await this.$store.dispatch('subjects/loadAttachment', {
-        type: 'shoka',
+        type: 'attendance',
         attachableId: this.subjectId,
-        attribute: chance,
+        attribute: month,
       });
 
       this.attachment = data?.data;
@@ -338,17 +283,46 @@ export default {
         this.attachment = null;
       }
     },
+    async loadAttendanceBySubject(month = this.month) {
+      if (!this.subjectId) return false;
+      // first, load the subject
+      const subject = await this.$store.dispatch('subjects/loadSubjectById', this.subjectId);
+      this.subject = subject.data;
+
+      await this.$store.dispatch('subjects/loadAttendanceBySubjectId', { subjectId: this.subjectId, month });
+    },
+    async updateMarks({ field, fieldValue, rowId, data }) {
+      const type = data.reportId ? 'updateAttendanceByReportId' : 'addStudentCountToAttendanceBySubjectId';
+
+      await this.$store.dispatch(`subjects/${type}`, {
+        month: this.month,
+        subjectId: this.subjectId,
+        studentId: data.studentId,
+        id: rowId,
+        counts: {
+          [field]: parseInt(fieldValue),
+        },
+      });
+
+      await this.loadAttendanceBySubject();
+    },
   },
   watch: {
-    async chance() {
-      await this.loadShokaBySubject(this.chance);
+    async month() {
+      await this.loadAttendanceBySubject(this.month);
 
-      // Load its attachment
-      this.loadAttachment(this.chance);
+      this.loadAttachment(this.month);
     },
   },
   async created() {
-    this.loadShokaBySubject(this.chance);
+    this.loadAttendanceBySubject(this.month);
+
+    // Load subject semester
+    const { data: subject } = await this.$store.dispatch('subjects/loadSubjectById', this.subjectId);
+
+    const { data: semester } = await this.$store.dispatch('semesters/loadSemesterById', subject.semesterId);
+    this.semester = semester;
+    this.month = this.semester.monthStart;
 
     this.loadAttachment();
   },

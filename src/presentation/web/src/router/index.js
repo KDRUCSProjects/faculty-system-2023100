@@ -117,6 +117,15 @@ const routes = [
         component: () => import('@/views/subjects/shoka/ViewUpdateShoka.vue'),
         props: true,
       },
+      {
+        path: 'attendance/:subjectId',
+        name: 'view-attendance',
+        meta: {
+          requiresAuth: true,
+        },
+        component: () => import('@/views/subjects/attendance/ViewUpdateAttendance.vue'),
+        props: true,
+      },
     ],
   },
   {

@@ -2,6 +2,7 @@
 const httpStatus = require('http-status');
 const { Monfaqi, Student } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { QueryTypes, Op } = require('sequelize');
 
 /**
  * Create a Tabili
@@ -16,14 +17,23 @@ const createMonfaqi = (MonfaqiBody) => {
  * Get all Monfaqi
  * @returns {Promise<Monfaqi>}
  */
-const getMonfaqis = (limit, offset,) => {
+const getMonfaqis = (limit, offset, like = '') => {
   return Monfaqi.findAndCountAll({
     order: [['createdAt', 'DESC']],
     limit,
     offset,
-    include: [{ model: Student, as: 'Student' }],
+    include: [
+      {
+        model: Student,
+        as: 'Student',
+        where: {
+          ['kankorId']: {
+            [Op.like]: `${like || ''}%`,
+          },
+        },
+      },
+    ],
   });
-
 };
 
 /**
@@ -93,7 +103,6 @@ const findMonfaqiBySemesterId = async (semesterId, options = { count: false, gen
   return options.count ? await Student.count(studentsQuery) : await Student.findAll(studentsQuery);
 };
 
-
 /**
  * find Monfaqi by student kankor id
  * @param {ObjectId} studentKankorId
@@ -104,8 +113,6 @@ const findMonfaqiByStdKankorId = (studentKankorId) => {
     include: [{ model: Student, as: 'Student', where: { kankorId: studentKankorId } }],
   });
 };
-
-
 
 /**
  * find Monfaqi by educationalYearId
@@ -123,8 +130,6 @@ const findMonfaqiByYearId = (limit, offset, yearId) => {
     include: [{ model: Student, as: 'Student' }],
   });
 };
-
-
 
 module.exports = {
   getMonfaqis,

@@ -6,6 +6,42 @@ const getAttendance = {
   }),
 };
 
+const createAttendanceReport = {
+  params: Joi.object().keys({
+    subjectId: Joi.number().required(),
+  }),
+  body: Joi.object().keys({
+    studentId: Joi.number().required('Student Id is required'),
+    subjectId: Joi.number().required('Subject Id is required'),
+    month: Joi.number().required('Month number is required'),
+    present: Joi.number(),
+    absent: Joi.number(),
+  }),
+};
+
+const updateAttendanceReport = {
+  params: Joi.object().keys({
+    subjectId: Joi.number().required(),
+  }),
+  body: Joi.object().keys({
+    id: Joi.number().required('Report id is required'),
+    studentId: Joi.number().required('Student Id is required'),
+    subjectId: Joi.number().required('Subject Id is required'),
+    month: Joi.number().required('Month number is required'),
+    present: Joi.number(),
+    absent: Joi.number(),
+  }),
+};
+
+const getAttendanceReport = {
+  params: Joi.object().keys({
+    subjectId: Joi.number().required(),
+  }),
+  query: Joi.object().keys({
+    month: Joi.number().required(),
+  }),
+};
+
 const getAttendanceById = {
   params: Joi.object().keys({
     attendanceId: Joi.number().required(),
@@ -71,4 +107,7 @@ module.exports = {
   getTodaysAttendance,
   takeTodaysAttendance,
   takeOneStdAttendance,
+  createAttendanceReport,
+  updateAttendanceReport,
+  getAttendanceReport,
 };

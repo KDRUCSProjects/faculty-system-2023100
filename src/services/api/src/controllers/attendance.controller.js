@@ -11,11 +11,48 @@ const {
   studentService,
 } = require('../services');
 const ApiError = require('../utils/ApiError');
+const { getAttendanceReportBySubjectId } = require('../utils/global');
 
 // const getAttendances = catchAsync(async (req, res) => {
 //   const results = await attendanceService.getAttendances();
 //   return res.status(httpStatus.OK).send(results);
 // });
+
+const createAttendanceReport = catchAsync(async (req, res) => {
+  const { studentId, subjectId, month } = req.body;
+  const student = await studentService.getStudent(studentId);
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+
+  const subject = await subjectService.getSubject(req.params.subjectId);
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+
+  const recordExists = await attendanceService.getAttendanceReport({ studentId, subjectId, month });
+
+  if (recordExists) throw new ApiError(httpStatus.BAD_REQUEST, 'report exists for this month');
+
+  const report = await attendanceService.createAttendanceReport(req.body);
+  return res.status(httpStatus.CREATED).send(report);
+});
+
+const updateAttendanceReport = catchAsync(async (req, res) => {
+  const { studentId, subjectId, month, id } = req.body;
+  const student = await studentService.getStudent(studentId);
+  if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+
+  const subject = await subjectService.getSubject(req.params.subjectId);
+  if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+
+  const theReport = await attendanceService.getAttendanceReport({ subjectId, studentId, month, id });
+  if (!theReport) throw new ApiError(httpStatus.BAD_REQUEST, 'report not found ');
+
+  const report = await attendanceService.updateAttendanceReport(theReport, req.body);
+  return res.status(httpStatus.CREATED).send(report);
+});
+
+const getAttendanceReport = catchAsync(async (req, res) => {
+  const report = await getAttendanceReportBySubjectId(req.params.subjectId, req.query.month);
+  return res.status(httpStatus.CREATED).send(report);
+});
 
 const getAttendance = catchAsync(async (req, res) => {
   const subject = await subjectService.getSubject(req.params.subjectId);
@@ -416,4 +453,7 @@ module.exports = {
   getTodaysAttendance,
   takeTodaysAttendance,
   takeOneStdAttendance,
+  createAttendanceReport,
+  updateAttendanceReport,
+  getAttendanceReport,
 };

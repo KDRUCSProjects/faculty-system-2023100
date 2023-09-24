@@ -35,6 +35,8 @@ export default {
       });
 
       context.commit('setSemester', response.data);
+
+      return response;
     } catch (e) {
       throw e.response.data.message;
     }
@@ -149,6 +151,33 @@ export default {
 
       return response;
     } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+  async updateDuration(context, data) {
+    try {
+      const token = context.rootGetters.token;
+
+      const semesterId = data.semesterId;
+
+      delete data.semesterId;
+
+      console.log(data);
+      console.log(semesterId);
+
+      const response = await axios({
+        url: `/api/semesters/${semesterId}`,
+        method: 'patch',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data: data,
+      });
+
+      context.commit('setToast', [1, 'Migration has been completed successfully'], { root: true });
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
     }
   },

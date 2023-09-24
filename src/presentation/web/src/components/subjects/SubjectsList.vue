@@ -77,10 +77,15 @@ export default {
           onClick: 'viewShoka',
         },
         {
-          icon: 'mdi-passport-biometric',
-          title: this.$t('Download Attendance'),
-          onClick: 'downloadAttendance',
+          icon: 'mdi-counter',
+          title: this.$t('View Attendance'),
+          onClick: 'viewAttendance',
         },
+        // {
+        //   icon: 'mdi-passport-biometric',
+        //   title: this.$t('Download Attendance'),
+        //   onClick: 'downloadAttendance',
+        // },
         {
           icon: 'mdi-delete',
           title: this.$t('Delete'),
@@ -116,6 +121,9 @@ export default {
         console.log(subject);
         this.showShoka(subject.id);
       } else if (action === 'downloadAttendance') {
+        // Do nothing for now
+      } else if (action === 'viewAttendance') {
+        this.$router.push(`/subjects/attendance/${subject.id}`);
       }
     },
     showShoka(subjectId) {
