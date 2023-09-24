@@ -1,5 +1,4 @@
 const httpStatus = require('http-status');
-const { http } = require('../config/logger');
 const {
   semesterService,
   educationalYearService,
@@ -11,7 +10,6 @@ const {
   subjectService,
   shokaService,
   shokaListService,
-  subjectService,
   studentService,
   attendanceService,
 } = require('../services');
