@@ -11,72 +11,21 @@ const {
   shokaService,
 } = require('../services');
 const ApiError = require('../utils/ApiError');
+const { marksFormatter, doesStudentHasWarning } = require('../utils/global');
 
-const marksFormatter = (arr) => {
-  const ob = {};
 
-  // if student does not have marks
-  if (arr.length === 0) {
-    ob[1] = null;
-    ob[2] = null;
-    ob[3] = null;
+const doesStudentFailInFirstChance = (marksObject) => {
+  const projectMarks = marksObject.projectMarks ? marksObject.projectMarks : 0;
+  const assignment = marksObject.assignment ? marksObject.assignment : 0;
+  const practicalWork = marksObject.practicalWork ? marksObject.practicalWork : 0;
+  const finalMarks = marksObject.finalMarks ? marksObject.finalMarks : 0;
+  const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
+  if (totalMarks < 55) {
+    return true;
+  } else {
+    return false;
   }
-
-  // if student has one chance marks
-  if (arr.length === 1) {
-    if (arr[0].chance === 1) {
-      ob[2] = null;
-      ob[3] = null;
-    }
-    if (arr[0].chance === 2) {
-      ob[1] = null;
-      ob[3] = null;
-    }
-    if (arr[0].chance === 3) {
-      ob[2] = null;
-      ob[1] = null;
-    }
-    arr.map((element) => {
-      const projectMarks = element.projectMarks ? element.projectMarks : 0;
-      const assignment = element.assignment ? element.assignment : 0;
-      const practicalWork = element.practicalWork ? element.practicalWork : 0;
-      const finalMarks = element.finalMarks ? element.finalMarks : 0;
-      const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
-      // const totalWithCredit = totalMarks * element.subjectCredit;
-      ob[element.chance] = totalMarks;
-    });
-  } else if (arr.length === 2) {
-    if (arr[0].chance === 1 && arr[1].chance === 2) {
-      ob[3] = null;
-    }
-    if (arr[0].chance === 1 && arr[1].chance === 3) {
-      ob[2] = null;
-    }
-    if (arr[0].chance === 2 && arr[1].chance === 3) {
-      ob[1] = null;
-    }
-    arr.forEach((element) => {
-      const projectMarks = element.projectMarks ? element.projectMarks : 0;
-      const assignment = element.assignment ? element.assignment : 0;
-      const practicalWork = element.practicalWork ? element.practicalWork : 0;
-      const finalMarks = element.finalMarks ? element.finalMarks : 0;
-      const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
-      // const totalWithCredit = totalMarks * element.subjectCredit;
-      ob[element.chance] = totalMarks;
-    });
-  } else if (arr.length === 3 || arr.length === 4) {
-    arr.forEach((element) => {
-      const projectMarks = element.projectMarks ? element.projectMarks : 0;
-      const assignment = element.assignment ? element.assignment : 0;
-      const practicalWork = element.practicalWork ? element.practicalWork : 0;
-      const finalMarks = element.finalMarks ? element.finalMarks : 0;
-      const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
-      // const totalWithCredit = totalMarks * element.subjectCredit;
-      ob[element.chance] = totalMarks;
-    });
-  }
-  return ob;
-};
+}
 
 const createResultSheet = catchAsync(async (req, res) => {
   const { period } = req.params;
@@ -115,13 +64,41 @@ const createResultSheet = catchAsync(async (req, res) => {
   workbook = await workbook.xlsx.readFile(filePath);
 
   for await (const semester of semesters) {
+    let totalRepeatSemester = 0;
+    let totalWarnings = 0;
+    let totalStrongWarnings = 0;
     let row = 12;
+
     const worksheet = workbook.getWorksheet(`sem${semester.title}`);
+    // write semester header text
+    const year = semester?.EducationalYear?.year;
+    const className = semester.title === 1 ? 'لومړی'
+      : semester.title === 2 ? 'دوهم'
+        : semester.title === 3 ? 'دریم'
+          : semester.title === 4 ? 'څلورم'
+            : semester.title === 5 ? 'پنځم'
+              : semester.title === 6 ? 'ښپږم'
+                : semester.title === 7 ? 'اووم'
+                  : semester.title === 8 ? 'اتم'
+                    : '...';
+
+    const headerText = `د ${year} کال د (${className}) سمسټر د نتایجو جدول`
+    // write in the excel file
+    worksheet.getRow(5).getCell(3).value = headerText;
     const semesterStudents = await studentListService.findSemesterStudents(semester.id);
     const subjects = await subjectService.getSemesterSubjectsSortedById(semester.id);
     for await (const student of semesterStudents) {
+      let totalCredits = 0;
+      let failCredits = 0;
       const studentMarks = [];
+      let warning = null;
+      // marks to be calculated for percentage
+      let totalMarksForPercentage = 0;
       for await (const subject of subjects) {
+        const { credit } = subject;
+        // sum of total credits
+        totalCredits += credit;
+
         const shoka = await shokaService.findShokaBySubjectId(subject.id);
         const conditions = [
           `shokalist.deletedAt IS NULL`,
@@ -130,23 +107,50 @@ const createResultSheet = catchAsync(async (req, res) => {
           `semester.id = ${semester.id}`,
         ];
         const subjectMarks = await shokaListService.getStudentMarksSortByName(conditions);
+        // find student first chance marks
+        const studentFirstChanceMarks = subjectMarks.find(item => item.chance === 1);
+        // check if student is pass in first chance
+        if (studentFirstChanceMarks) {
+          if (doesStudentFailInFirstChance(studentFirstChanceMarks)) {
+            failCredits += credit;
+          }
+        } else {
+          failCredits += credit;
+        }
         const formattedMarks = marksFormatter(subjectMarks);
+        if (formattedMarks[3] && formattedMarks[3] >= 55) {
+          totalMarksForPercentage += (formattedMarks[3] * credit);
+        } else if (formattedMarks[2] && formattedMarks[2] >= 55) {
+          totalMarksForPercentage += (formattedMarks[2] * credit);
+        } else if (formattedMarks[1] && formattedMarks[1] >= 55) {
+          totalMarksForPercentage += (formattedMarks[1] * credit);
+        }
         studentMarks.push(formattedMarks);
       }
-      const year = semester?.EducationalYear.year;
-      const className = semester.title === 1 ? 'لومړی'
-        : semester.title === 2 ? 'دوهم'
-          : semester.title === 3 ? 'دریم'
-            : semester.title === 4 ? 'څلورم'
-              : semester.title === 5 ? 'پنځم'
-                : semester.title === 6 ? 'ښپږم'
-                  : semester.title === 7 ? 'اووم'
-                    : semester.title === 8 ? 'اتم'
-                      : '...';
 
-      const headerText = `د ${year} کال د (${className}) سمسټر د نتایجو جدول`
-      // write in the excel file
-      worksheet.getRow(5).getCell(3).value = headerText;
+      // calculate marks for percentage
+      // calculate if student is repeat semester
+      if (failCredits > (totalCredits / 2)) {
+        totalRepeatSemester++;
+        worksheet.getRow(row).getCell(1).value = 'تکرار سمسټر';
+      } else if ((totalMarksForPercentage / totalCredits) >= 55 && (totalMarksForPercentage / totalCredits) <= 60) {
+        if (semester.title !== 1) {
+          const studentAllSemester = await studentListService.findAllStudentListOfSingleStudent(student.studentId);
+          const previousSemesterTitle = (semester.title - 1);
+          const previousSemester = studentAllSemester.find(item => item.Semester.title === previousSemesterTitle);
+          if (doesStudentHasWarning(student.studentId, previousSemester.Semester.id)) {
+            worksheet.getRow(row).getCell(1).value = 'کتبی اخطار';
+            totalStrongWarnings++;
+          } else {
+            worksheet.getRow(row).getCell(1).value = 'شفاهی اخطار';
+            totalWarnings++;
+          }
+        } else {
+          worksheet.getRow(row).getCell(1).value = 'شفاهی اخطار';
+          totalWarnings++;
+        }
+      }
+      // write in file
       row += 3;
       worksheet.getRow(row).getCell(24).value = student.Student.kankorId;
       worksheet.getRow(row).getCell(23).value = student.Student.csId;
@@ -171,6 +175,9 @@ const createResultSheet = catchAsync(async (req, res) => {
       worksheet.getRow(12).getCell(col).value = elem.name;
       worksheet.getRow(13).getCell(col).value = elem.credit;
     });
+    worksheet.getRow(5).getCell(1).value = totalRepeatSemester;
+    worksheet.getRow(6).getCell(1).value = totalWarnings;
+    worksheet.getRow(7).getCell(1).value = totalStrongWarnings;
   }
 
   const now = Date.now().toLocaleString();

@@ -492,6 +492,11 @@ const deleteShokaList = catchAsync(async (req, res) => {
   const { shokalistId } = req.params;
   const shokaList = await shokaListService.getShokaListById(shokalistId);
   if (!shokaList) throw new ApiError(httpStatus.NOT_FOUND, 'shoka marks not found');
+  const nextChanceNumber = shokaList.chance + 1;
+  const nextChanceMarks = await shokaListService.findStdMarksByChanceAndShokaId(shokaList.studentId, shokaList.shokaId, nextChanceNumber);
+  if (nextChanceMarks) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Student has next Chance marks delete first that');
+  }
 
   if (req.user.role === 'admin') {
     await shokaListService.deleteShokaList(shokaList);
