@@ -2,26 +2,28 @@
   <div>
     <v-row>
       <v-col cols="4">
-        <student-photo :student="student" @upload-photo="updatePhoto">
-          <div id="actions" class="ma-4">
-            <v-btn
-              @click="downloadTranscript"
-              class="float-right mb-1"
-              prepend-icon="mdi-download-circle-outline"
-              color="primary"
-              variant="flat"
-              block
-              download
-              :loading="downloadLoading"
-            >
-              Transcript
-            </v-btn>
-            <div class="my-1"></div>
-            <v-btn variant="flat" prepend-icon="mdi-delete-outline" block color="red" @click="deleteStudent(student.id)">
-              {{ $t('Delete') }}
-            </v-btn>
-          </div>
-        </student-photo>
+        <v-banner sticky="true" class="pa-0 ma-0">
+          <student-photo :student="student" @upload-photo="updatePhoto">
+            <div id="actions" class="ma-4">
+              <v-btn
+                @click="downloadTranscript"
+                class="float-right mb-1"
+                prepend-icon="mdi-download-circle-outline"
+                color="primary"
+                variant="flat"
+                block
+                download
+                :loading="downloadLoading"
+              >
+                Transcript
+              </v-btn>
+              <div class="my-1"></div>
+              <v-btn variant="flat" prepend-icon="mdi-delete-outline" block color="red" @click="deleteStudent(student.id)">
+                {{ $t('Delete') }}
+              </v-btn>
+            </div>
+          </student-photo>
+        </v-banner>
       </v-col>
       <v-col cols="8">
         <router-view>
