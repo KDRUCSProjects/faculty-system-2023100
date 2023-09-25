@@ -46,7 +46,7 @@
             </v-chip>
             <v-chip label color="dark" variant="tonal">
               <v-icon start icon="mdi-calendar-month"></v-icon>
-              {{ $t('Kankor Year') }} : {{ student?.educationalYear || 'NA' }}
+              {{ $t('Kankor Year') }} : {{ student?.admissionYear || 'NA' }}
             </v-chip>
           </div>
         </span>

@@ -19,14 +19,22 @@
       </v-card-item>
       <v-card-text>
         <v-form @submit.prevent="update">
-          <v-text-field v-if="!photo" ref="theField" variant="outlined" :label="fieldLabel" v-model="field"></v-text-field>
-          <base-photo-uploader
-            :modalWidth="modalWidth"
-            @photo="setPhoto"
-            @photo-size-change="handlePhotoSize"
-            :inputTitle="inputTitle"
-            v-else
-          ></base-photo-uploader>
+          <div v-if="type === 'autocomplete'">
+            <v-autocomplete v-model="field" :label="fieldLabel" :items="validValues"></v-autocomplete>
+          </div>
+          <div v-else-if="type === 'date'" class="mx-auto text-center">
+            <DatePicker :is-dark="true" v-model="field"></DatePicker>
+          </div>
+          <div v-else>
+            <v-text-field v-if="!photo" ref="theField" variant="outlined" :label="fieldLabel" v-model="field"></v-text-field>
+            <base-photo-uploader
+              :modalWidth="modalWidth"
+              @photo="setPhoto"
+              @photo-size-change="handlePhotoSize"
+              :inputTitle="inputTitle"
+              v-else
+            ></base-photo-uploader>
+          </div>
         </v-form>
         <v-alert v-if="errorMessage" type="error" variant="outlined" :text="errorMessage"></v-alert>
       </v-card-text>
@@ -49,6 +57,11 @@ const initialState = () => ({
   fieldLabel: 'Field name',
   maxPhotoSize: false,
 });
+
+import moment from 'moment';
+import { DatePicker } from 'v-calendar';
+import 'v-calendar/style.css';
+
 export default {
   props: {
     modalWidth: {
@@ -104,12 +117,21 @@ export default {
     inputTitle: {
       type: String,
     },
+    type: {
+      type: String,
+    },
+    validValues: {
+      type: Array,
+    },
   },
   data: () => initialState(),
   computed: {
     disableUpdateButton() {
       return this.maxPhotoSize;
     },
+  },
+  components: {
+    DatePicker,
   },
   methods: {
     setPhoto(photo) {
