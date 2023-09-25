@@ -150,6 +150,7 @@ const findAllStudentListOfSingleStudent = (studentId) => {
   return StudentsList.findAll({
     where: { studentId },
     order: [['createdAt', 'DESC']],
+    include: [{ model: Semester, as: 'Semester' }]
   });
 };
 

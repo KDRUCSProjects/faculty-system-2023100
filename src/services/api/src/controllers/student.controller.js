@@ -56,6 +56,10 @@ const getStudent = catchAsync(async (req, res) => {
 const deleteStudent = catchAsync(async (req, res) => {
   const student = await studentService.getStudent(req.params.studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
+  const studentLists = await studentListService.findAllStudentListOfSingleStudent(student.id);
+  if (studentLists.length > 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Student is enrolled in semesters. delete first that');
+  }
   await studentService.deleteStudent(student);
   res.status(httpStatus.NO_CONTENT).send();
 });

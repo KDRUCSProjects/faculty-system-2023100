@@ -4,8 +4,11 @@ const { educationalYearService, semesterService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const createEducationalYear = catchAsync(async (req, res) => {
-  const year = await educationalYearService.findEducationalYearByValue(req.body.educationalYear);
+  const { educationalYear } = req.body;
+  const year = await educationalYearService.findEducationalYearByValue(educationalYear);
   if (year) throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Year already created');
+  const previousYear = await educationalYearService.findEducationalYearByValue(educationalYear - 1);
+  req.body.period = previousYear?.period ? previousYear.period + 1 : null;
   const results = await educationalYearService.createEducationalYear(req.body.educationalYear);
   res.status(httpStatus.CREATED).send(results);
 });
@@ -86,6 +89,10 @@ const getEducationalYears = catchAsync(async (req, res) => {
 const deleteEducationalYear = catchAsync(async (req, res) => {
   const year = await educationalYearService.getEducationalYear(req.params.yearId);
   if (!year) throw new ApiError(httpStatus.NOT_FOUND, 'year not found');
+  const semesters = await semesterService.getYearSemesters(req.params.yearId);
+  if (semesters.length > 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Year has Semesters. Delete Semesters First');
+  }
   await educationalYearService.deleteEducationalYear(year);
   res.status(httpStatus.NO_CONTENT).send();
 });

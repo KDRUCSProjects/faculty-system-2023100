@@ -9,6 +9,7 @@ const {
   educationalYearService,
   attendanceListService,
   studentService,
+  shokaListService,
 } = require('../services');
 const ApiError = require('../utils/ApiError');
 const { subjectsFormatter } = require('../utils/marks.formatter');
@@ -47,9 +48,17 @@ const getSubjects = catchAsync(async (req, res) => {
 const deleteSubject = catchAsync(async (req, res) => {
   const subject = await subjectService.getSubjectById(req.params.subjectId);
   if (!subject) throw new ApiError(httpStatus.NOT_FOUND, 'subject not found');
+  const shoka = await shokaService.findShokaBySubjectId(subject.id);
+  const conditions = [
+    `shokalist.deletedAt IS NULL`,
+    `shokalist.shokaId  = ${shoka.id}`,
+  ];
+  const subjectMarks = await shokaListService.getStudentMarksSortByName(conditions);
+  if (subjectMarks.length > 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'students has marks in this subject. delete first that');
+  }
   const attendance = await attendanceService.findAttendanceBySubjectId(subject.id);
   if (attendance) await attendanceService.deleteAttendance(attendance);
-  const shoka = await shokaService.findShokaBySubjectId(subject.id);
   if (shoka) await shokaService.deleteShoka(shoka);
   await subjectService.deleteSubject(req.user, subject);
   res.status(httpStatus.NO_CONTENT).send();
