@@ -295,18 +295,18 @@ export default {
       await this.$store.dispatch('subjects/loadShokaBySubjectId', { subjectId: this.subjectId, chance });
     },
     async updateMarks({ field, fieldValue, rowId, data }) {
-      if (!data.shokaListId) {
-        let res = await this.$refs.baseConfirmDialog.show({
-          warningTitle: this.$t('Warning'),
-          title: this.$t('You are adding marks of a student that has not been added by the teacher? Continue'),
-          okButton: this.$t('Yes'),
-        });
+      // if (!data.shokaListId) {
+      //   let res = await this.$refs.baseConfirmDialog.show({
+      //     warningTitle: this.$t('Warning'),
+      //     title: this.$t('You are adding marks of a student that has not been added by the teacher? Continue'),
+      //     okButton: this.$t('Yes'),
+      //   });
 
-        // If closed, return the function
-        if (!res) {
-          return false;
-        }
-      }
+      //   // If closed, return the function
+      //   if (!res) {
+      //     return false;
+      //   }
+      // }
 
       const type = data.shokaListId ? 'updateShokaByShokaListId' : 'addStudentMarksToShokaBySubjectId';
 

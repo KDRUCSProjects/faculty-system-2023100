@@ -79,11 +79,6 @@ const getStatsBySemesterId = async (semesterId, gender, count = true) => {
   return statistics;
 };
 
-(async () => {
-  const semStudents1 = await getStatsBySemesterId(89, 'male', false);
-  console.log(semStudents1);
-})();
-
 const getSemesterTitleByPashto = (title) => {
   let className;
   let semesterName;

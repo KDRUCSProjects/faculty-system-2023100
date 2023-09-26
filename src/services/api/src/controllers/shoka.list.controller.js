@@ -598,7 +598,24 @@ const createShokaInExcel = catchAsync(async (req, res) => {
   const conditions = [`shokalist.shokaId = ${shoka.id}`, `shokalist.deletedAt IS NULL`];
   const year = await educationalYearService.getEducationalYear(semester.educationalYearId);
 
-  const semStudents = await studentListService.findSemesterStudents(semester.id);
+  // const semStudents = await studentListService.findSemesterStudents(semester.id);
+
+  let semStudents = await studentListService.findSemesterStudents(semester.id);
+  // Only show present students
+
+  const semStudentsMale = await getStatsBySemesterId(semester.id, 'male', false);
+  const semStudentsFemale = await getStatsBySemesterId(semester.id, 'female', false);
+
+  const semStudentsPresent = [...semStudentsMale?.present, ...semStudentsFemale?.present]?.map((student) => student.id);
+
+  semStudents = semStudents.filter((student) => {
+    let studentExists = false;
+    semStudentsPresent.forEach((s) => {
+      if (student.id === s) studentExists = true;
+    });
+    if (studentExists) return student;
+  });
+
   if (semStudents.length <= 0) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'You Do not have any student in this semester');
   }
