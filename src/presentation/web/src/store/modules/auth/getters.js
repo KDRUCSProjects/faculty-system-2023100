@@ -28,6 +28,15 @@ export default {
   isAdmin(state) {
     return state.userData && state.userData.role === 'admin' ? true : false;
   },
+  isTeacher(state) {
+    return state.userData && state.userData.role === 'user' ? true : false;
+  },
+  isExecManager(state) {
+    return state.userData && state.userData.role === 'execManager' ? true : false;
+  },
+  isTeachingManager(state) {
+    return state.userData && state.userData.role === 'teachingManager' ? true : false;
+  },
   role(state) {
     return state.userData?.role;
   },

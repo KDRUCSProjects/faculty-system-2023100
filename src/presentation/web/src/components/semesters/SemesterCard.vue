@@ -19,8 +19,10 @@
     <v-card-subtitle class="text-primary" v-if="!periodCard">{{ year }} year</v-card-subtitle>
     <v-card-subtitle class="text-primary" v-if="periodCard">{{ rankSemester(period) }} Period</v-card-subtitle>
     <div class="mt-4"></div>
-    <v-card-subtitle class="text-secondary" v-if="periodCard">Start Year: {{ returnYear(title, 0) }}</v-card-subtitle>
-    <v-card-subtitle class="text-info" v-if="periodCard">End Year: {{ returnYear(title, 1) }}</v-card-subtitle>
+    <v-card-subtitle class="text-secondary" v-if="periodCard"
+      >Start Year: {{ returnYear(title, 0) || year }}</v-card-subtitle
+    >
+    <v-card-subtitle class="text-info" v-if="periodCard">End Year: {{ returnYear(title, 1) || year }}</v-card-subtitle>
 
     <v-card-actions class="mt-3 px-2">
       <!-- <v-btn color="primary" variant="elevated">Profile</v-btn> -->
