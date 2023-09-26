@@ -9,7 +9,7 @@
     </base-select-period-dialog>
   </v-toolbar>
   <v-row no-gutters>
-    <v-col v-for="(semester, index) in semesters" :key="index" cols="3">
+    <v-col v-for="(semester, index) in semesters" :key="semester" cols="3">
       <v-sheet class="ma-2 pa-2">
         <semester-card
           :title="semester?.title"

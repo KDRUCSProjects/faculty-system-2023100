@@ -11,8 +11,11 @@
             <v-card-subtitle>{{ $t('View all the information of this semester') }} </v-card-subtitle>
           </v-card-item>
           <v-card-item class="text-center my-0 py-0">
-            <v-chip label color="primary" size="large" class="mr-1">{{ $t('Semester Title') }} : {{ title }}</v-chip>
-            <v-chip label color="secondary" size="large">{{ $t('Semester Year') }} : {{ year }}</v-chip>
+            <!-- <v-chip label color="primary" size="large" class="mr-1">{{ $t('Semester Title') }} : {{ title }}</v-chip> -->
+            <v-chip class="mx-2" label color="dark"
+              >{{ $t('Start Year') }} : {{ returnYear(currentSemester?.title, 0) }}</v-chip
+            >
+            <v-chip label color="dark">{{ $t('End Year') }} : {{ returnYear(currentSemester?.title, 1) }}</v-chip>
           </v-card-item>
           <v-divider class="mt-3"></v-divider>
           <v-card-text>
@@ -320,6 +323,7 @@ export default {
     mode: 'semester-students',
     downloadLoading: false,
     downloadBadlAshaLoading: false,
+    yearData: null,
     headersReport: [
       // {
       //   title: 'No',
@@ -642,6 +646,17 @@ export default {
       this.semesterEnd = this.monthNames[data?.monthEnd];
       this.attendancePercentage = data?.attendancePercentage;
       this.totalWeeks = data?.totalWeeks;
+
+      // Semester start and end
+      const theYear = this.$store.getters['years/yearById'](data.educationalYearId);
+      this.yearData = theYear;
+    },
+    returnYear(title, shift) {
+      if (shift === 0) {
+        return title % 2 !== 0 ? this.yearData?.firstHalfStart : this.yearData?.SecondHalfStart;
+      } else {
+        return title % 2 !== 0 ? this.yearData?.firstHalfEnd : this.yearData?.SecondHalfEnd;
+      }
     },
   },
   async created() {
