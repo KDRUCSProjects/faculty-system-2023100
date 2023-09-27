@@ -126,6 +126,8 @@ const getShokaList = catchAsync(async (req, res) => {
   const semStudentsMale = await getStatsBySemesterId(semester.id, 'male', false);
   const semStudentsFemale = await getStatsBySemesterId(semester.id, 'female', false);
 
+  console.log(semStudentsMale);
+
   const semStudentsPresent = [...semStudentsMale?.present, ...semStudentsFemale?.present]?.map((student) => student.id);
 
   semStudents = semStudents.filter((student) => {
@@ -136,7 +138,7 @@ const getShokaList = catchAsync(async (req, res) => {
     if (studentExists) return student;
   });
 
-  if (semStudents.length <= 0) {
+  if (semStudentsPresent.length <= 0) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'You Do not have any student in this semester');
   }
   const conditions = [`shokalist.shokaId = ${shoka.id}`, `shokalist.deletedAt IS NULL`];
@@ -616,7 +618,7 @@ const createShokaInExcel = catchAsync(async (req, res) => {
     if (studentExists) return student;
   });
 
-  if (semStudents.length <= 0) {
+  if (semStudentsPresent.length <= 0) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'You Do not have any student in this semester');
   }
   conditions.push(`shokalist.chance = 1`);
