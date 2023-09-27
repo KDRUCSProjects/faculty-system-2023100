@@ -154,6 +154,23 @@ export default {
       throw e.response.data.message;
     }
   },
+  async downloadPeriodResultTable(context, period) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios.get(`/api/resultSheet/${period}`, {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response;
+    } catch (e) {
+      throw e.response.data.message;
+    }
+  },
+
   async updateDuration(context, data) {
     try {
       const token = context.rootGetters.token;
