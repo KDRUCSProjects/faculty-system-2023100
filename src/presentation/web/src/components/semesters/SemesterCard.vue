@@ -19,8 +19,10 @@
     <v-card-subtitle class="text-primary" v-if="!periodCard">{{ year }} year</v-card-subtitle>
     <v-card-subtitle class="text-primary" v-if="periodCard">{{ rankSemester(period) }} Period</v-card-subtitle>
     <div class="mt-4"></div>
-    <v-card-subtitle class="text-secondary" v-if="periodCard">Start Year: 1401</v-card-subtitle>
-    <v-card-subtitle class="text-info" v-if="periodCard">End Year: 1401</v-card-subtitle>
+    <v-card-subtitle class="text-secondary" v-if="periodCard"
+      >Start Year: {{ returnYear(title, 0) || year }}</v-card-subtitle
+    >
+    <v-card-subtitle class="text-info" v-if="periodCard">End Year: {{ returnYear(title, 1) || year }}</v-card-subtitle>
 
     <v-card-actions class="mt-3 px-2">
       <!-- <v-btn color="primary" variant="elevated">Profile</v-btn> -->
@@ -39,6 +41,10 @@ import { rankSemester } from '@/utils/global';
 export default {
   data: () => ({
     menu: false,
+    semester: null,
+    yearData: null,
+    start: 0,
+    end: 0,
   }),
   props: {
     periodCard: {
@@ -75,6 +81,13 @@ export default {
     },
   },
   methods: {
+    returnYear(title, shift) {
+      if (shift === 0) {
+        return title % 2 !== 0 ? this.yearData?.firstHalfStart : this.yearData?.SecondHalfStart;
+      } else {
+        return title % 2 !== 0 ? this.yearData?.firstHalfEnd : this.yearData?.SecondHalfEnd;
+      }
+    },
     viewSemester(semesterId) {
       this.$router.push({
         name: 'view-semester',
@@ -90,6 +103,16 @@ export default {
     rankSemester(title) {
       return rankSemester(title);
     },
+    async loadSemesterData() {
+      const semester = await this.$store.dispatch('semesters/loadSemesterById', this.semesterId);
+      this.semester = semester;
+
+      const theYear = this.$store.getters['years/yearById'](semester?.data?.educationalYearId);
+      this.yearData = theYear;
+    },
+  },
+  async created() {
+    await this.loadSemesterData();
   },
 };
 </script>

@@ -246,6 +246,17 @@ export default {
           title: this.student?.phoneNumber,
           fieldName: 'phoneNumber',
         },
+        {
+          subtitle: this.$t('Tazkera Number'),
+          title: this.student?.tazkeraNumber,
+          fieldName: 'tazkeraNumber',
+        },
+        {
+          subtitle: this.$t('Birth Date'),
+          title: this.student?.dob,
+          fieldName: 'dob',
+          type: 'dob',
+        },
       ];
     },
     personalSecondary() {
@@ -284,6 +295,7 @@ export default {
           subtitle: this.$t('Birth Date'),
           title: this.student?.engDob,
           fieldName: 'engDob',
+          type: 'date',
         },
       ];
     },

@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      // engDob: DataTypes.DATE,
+      engDob: DataTypes.DATE,
       educationalYearId: {
         type: DataTypes.INTEGER,
         required: true,
