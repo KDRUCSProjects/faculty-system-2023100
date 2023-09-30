@@ -9,6 +9,7 @@ const {
   studentListService,
   userService,
   educationalYearService,
+  attachmentService,
 } = require('../services');
 const ApiError = require('../utils/ApiError');
 const { marksFormatter } = require('../utils/marks.formatter');
@@ -43,6 +44,13 @@ const createShokaList = catchAsync(async (req, res) => {
   if (isStudentListed.length === 0) {
     throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Student does not exists in this semester');
   }
+
+  // Before creating / adding a student to shoka, check if attachment of this shoka is uploaded.
+  // If uploaded, then the shoka is locked and should ask admin to unlock (remove attachment) for the teacher
+  const attachment = await attachmentService.getAttachmentByAttachableIdAndType(subjectId, 'shoka', req.query.chance);
+
+  if (attachment) throw new ApiError(httpStatus.UNAUTHORIZED, 'Shoka is locked. Ask admin to unlock it');
+
   if (!req.query.chance) {
     const doesStdHasMarks = await shokaListService.isStudentListedInShokaList(shoka.id, studentId, 1);
     if (doesStdHasMarks)
@@ -480,6 +488,13 @@ const updateShokaList = catchAsync(async (req, res) => {
   const shokaList = await shokaListService.getShokaListById(shokalistId);
   if (!shokaList) throw new ApiError(httpStatus.NOT_FOUND, 'shoka marks not found');
   const { studentId, shokaId, chance } = shokaList;
+
+  // Before updating / adding a student to shoka, check if attachment of this shoka is uploaded.
+  // If uploaded, then the shoka is locked and should ask admin to unlock (remove attachment) for the teacher
+  const attachment = await attachmentService.getAttachmentByAttachableIdAndType(shokaId, 'shoka', chance);
+
+  if (attachment) throw new ApiError(httpStatus.UNAUTHORIZED, 'Shoka is locked. Ask admin to unlock it');
+
   // prevent if the student has further chances marks
   if (chance !== 4) {
     const chanceNumber = chance + 1;
@@ -501,9 +516,9 @@ const updateShokaList = catchAsync(async (req, res) => {
     if (req.user.id !== subject.teacherId) {
       throw new ApiError(httpStatus.FORBIDDEN, 'FORBIDDEN');
     }
-    if (moment() >= moment(shokaList.createdAt).add(3, 'days')) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'FORBIDDEN');
-    }
+    // if (moment() >= moment(shokaList.createdAt).add(3, 'days')) {
+    //   throw new ApiError(httpStatus.FORBIDDEN, 'FORBIDDEN');
+    // }
     const results = await shokaListService.updateShokaList(shokaList, req.body);
     return res.status(httpStatus.ACCEPTED).send(results);
   }

@@ -23,7 +23,7 @@ router
 // Get a user, update a user, delete a user
 router
   .route('/:userId')
-  .get(auth('getUsers'), validate(userValidation.getUser), userController.getUser)
+  .get(auth('viewUser'), validate(userValidation.getUser), userController.getUser)
   .patch(auth(), upload.single('photo'), attachImageToBody, validate(userValidation.updateUser), userController.updateUser)
   .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
 

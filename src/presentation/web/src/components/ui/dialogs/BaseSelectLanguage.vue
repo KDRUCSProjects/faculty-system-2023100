@@ -66,6 +66,8 @@ export default {
 
       this.$i18n.locale = this.selectedLanguage;
 
+      localStorage.setItem('language', this.selectedLanguage);
+
       //   Change app language=
       this.close();
     },

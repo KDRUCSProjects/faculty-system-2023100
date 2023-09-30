@@ -66,7 +66,7 @@ import DownloadAttendance from './dialogs/DownloadAttendance.vue';
 import UpdateSubject from './dialogs/UpdateSubject.vue';
 export default {
   components: { UpdateSubject, DownloadAttendance },
-  props: ['subjects', 'noTeacherView', 'noSubjectUpdate'],
+  props: ['subjects', 'noTeacherView', 'noSubjectUpdate', 'noSubjectDelete'],
   data: () => ({}),
   computed: {
     actions() {
@@ -107,6 +107,10 @@ export default {
           title: this.$t('Update Subject'),
           onClick: 'rename',
         });
+      }
+
+      if (this.noSubjectDelete) {
+        actions.pop();
       }
       return actions;
     },

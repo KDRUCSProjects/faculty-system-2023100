@@ -5,7 +5,9 @@
       <v-card-subtitle> {{ $t('Set your account settings down below') }}</v-card-subtitle>
 
       <v-tabs v-model="tab" color="primary" align-tabs="center">
-        <v-tab v-for="(tab, index) in tabs" :key="index" :value="index" color="light">{{ tab.title }}</v-tab>
+        <div v-for="(tab, index) in tabs" :key="index">
+          <v-tab :value="index" color="light" v-if="show(tab.role)"> {{ tab.title }}</v-tab>
+        </div>
       </v-tabs>
 
       <v-window v-model="tab">
@@ -50,25 +52,45 @@ export default {
       {
         title: 'Profile',
         component: 'ViewEditProfile',
+        role: ['admin', 'user', 'execManager', 'teachingManager'],
       },
       {
         title: 'Change Password',
         component: 'ChangePassword',
+        role: ['admin', 'user', 'execManager', 'teachingManager'],
       },
       {
         title: 'Educational Year',
         component: 'EducationalYear',
+        role: ['admin', 'teachingManager'],
       },
       {
         title: 'Token Generate',
         component: 'TokenGenerate',
+        role: ['admin', 'teachingManager'],
       },
       {
         title: 'System Backup',
         component: 'SystemBackup',
+        role: ['admin', 'teachingManager'],
       },
     ],
   }),
+  computed: {
+    isTeacher() {
+      return this.$store.getters.isTeacher;
+    },
+    role() {
+      return this.$store.getters['role'];
+    },
+  },
+  methods: {
+    show(roles) {
+      let theRole = this.role;
+      let x = roles.includes(theRole);
+      return x;
+    },
+  },
 };
 </script>
 

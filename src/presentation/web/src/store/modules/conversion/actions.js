@@ -56,7 +56,7 @@ export default {
       });
 
       // context.commit('saveYear', response.data);
-      context.dispatch('loadConversionStudents', type);
+      // context.dispatch('loadConversionStudents', type);
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message || 'Failed adding conversion'], { root: true });
       throw e.response.data.message;

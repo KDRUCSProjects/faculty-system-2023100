@@ -2,6 +2,7 @@ const faker = require('faker');
 
 // Register students who have succeed in 1401 kankorYear (educationalYearId)
 // And the last two students at 1400 kankor year
+
 const names = [
   'Muhammad',
   'Najeeb',
@@ -19,7 +20,25 @@ const names = [
   'samiullah',
   'Baseer Ah',
 ];
-// const names = ['محمد', 'نجیب الله', 'احمد', 'نثار', 'بلال', 'شمس الله', 'محمد نبی', 'زیا', 'خان', 'اغا شیرین', 'محمود', 'زدران', 'قدرت الله', 'سمیع الله', 'بصیر احمد'];
+
+// const names = [
+//   'محمد',
+//   'نجیب الله',
+//   'احمد',
+//   'نثار',
+//   'بلال',
+//   'شمس الله',
+//   'محمد نبی',
+//   'زیا',
+//   'خان',
+//   'اغا شیرین',
+//   'محمود',
+//   'زدران',
+//   'قدرت الله',
+//   'سمیع الله',
+//   'بصیر احمد',
+// ];
+
 const students = [...Array(15)].map((student, i) => {
   return {
     kankorId: faker.random.alphaNumeric(8),

@@ -36,6 +36,10 @@ export default {
     // Load statistics of current year
     await this.$store.dispatch('semesters/loadStatistics', this.$store.getters['years/onGoingYear']?.year);
   },
+  mounted() {
+    // Load default language changed by the user
+    this.$i18n.locale = localStorage.getItem('language') || 'en';
+  },
 };
 </script>
 
