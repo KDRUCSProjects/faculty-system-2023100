@@ -65,7 +65,7 @@ export default {
           title: this.$t('Dashboard'),
           icon: 'mdi-poll',
           to: '/dashboard',
-          role: ['admin', 'execManager', 'teachingManager'],
+          role: ['admin'],
         },
         {
           title: this.$t('Home'),
@@ -77,12 +77,12 @@ export default {
           title: this.$t('Teachers'),
           icon: 'mdi-human-male-board',
           to: '/teachers',
-          role: ['execManager', 'admin'],
+          role: ['admin'],
         },
         {
           title: this.$t('Students'),
           icon: 'mdi-account-school',
-          role: ['execManager', 'admin'],
+          role: ['teachingManager', 'admin'],
           children: [
             {
               title: this.$t('All Students'),
@@ -94,13 +94,15 @@ export default {
               icon: 'mdi-account-school',
               to: '/students/new',
             },
-            {
-              title: this.$t('Student Conversion'),
-              icon: 'mdi-swap-horizontal',
-              to: '/students/status-change',
-            },
+
             // { divider: true },
           ],
+        },
+        {
+          title: this.$t('Conversion'),
+          icon: 'mdi-swap-horizontal-circle',
+          to: '/students/status-change',
+          role: ['execManager', 'admin'],
         },
         {
           title: this.$t('Semesters'),
@@ -117,13 +119,13 @@ export default {
           title: this.$t('Periods'),
           icon: 'mdi-school',
           to: '/periods',
-          role: ['teachingManager', 'admin'],
+          role: ['execManager', 'admin'],
         },
         {
           title: this.$t('Report'),
           icon: 'mdi-finance',
           to: '/report',
-          role: ['teachingManager', 'admin'],
+          role: ['execManager', 'admin'],
         },
         // {
         //   title: this.$t('Departments'),

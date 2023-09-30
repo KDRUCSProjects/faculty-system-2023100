@@ -52,27 +52,27 @@ export default {
       {
         title: 'Profile',
         component: 'ViewEditProfile',
-        role: ['admin', 'user'],
+        role: ['admin', 'user', 'execManager', 'teachingManager'],
       },
       {
         title: 'Change Password',
         component: 'ChangePassword',
-        role: ['admin', 'user'],
+        role: ['admin', 'user', 'execManager', 'teachingManager'],
       },
       {
         title: 'Educational Year',
         component: 'EducationalYear',
-        role: ['admin'],
+        role: ['admin', 'teachingManager'],
       },
       {
         title: 'Token Generate',
         component: 'TokenGenerate',
-        role: ['admin'],
+        role: ['admin', 'teachingManager'],
       },
       {
         title: 'System Backup',
         component: 'SystemBackup',
-        role: ['admin'],
+        role: ['admin', 'teachingManager'],
       },
     ],
   }),

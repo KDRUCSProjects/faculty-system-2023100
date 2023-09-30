@@ -6,7 +6,19 @@ import store from '@/store';
 // This happens before the app mount
 store.dispatch('tryLogin');
 
-const redirectPath = store.getters.isTeacher ? '/home' : '/dashboard';
+let redirectPath = '/dashboard';
+
+switch (store.getters.role) {
+  case 'user':
+    redirectPath = '/home';
+    break;
+  case 'teachingManager':
+    redirectPath = '/students/all';
+    break;
+  case 'execManager':
+    redirectPath = '/students-status-change';
+    break;
+}
 
 console.log(redirectPath);
 

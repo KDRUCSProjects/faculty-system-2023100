@@ -33,7 +33,7 @@ export default {
         email: responseData.user.email,
         userData: responseData.user,
       });
-      context.commit('setToast', 'Welcome to CS Faculty Management System', { root: true });
+      // context.commit('setToast', 'Welcome to CS Faculty Management System', { root: true });
     } catch (e) {
       console.log(e);
       throw e.response.data.message;
@@ -79,7 +79,7 @@ export default {
         username: null,
         userData: null,
       });
-      context.commit('setToast', 'System successfully Logout', { root: true });
+      // context.commit('setToast', 'System successfully Logout', { root: true });
 
       // Also, Send a req to the server to remove the token
 
@@ -114,7 +114,6 @@ export default {
       const responseData = response;
 
       context.commit('setToast', 'Password successfully change', { root: true });
-
 
       // Show a success or error message
     } catch (e) {
@@ -174,7 +173,6 @@ export default {
         photo: response.data.photo,
       });
       context.commit('setToast', 'User data successfully updated', { root: true });
-
 
       // Show a success or error message
     } catch (e) {
