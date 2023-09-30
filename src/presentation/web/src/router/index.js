@@ -1,6 +1,15 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router';
 
+import store from '@/store';
+
+// This happens before the app mount
+store.dispatch('tryLogin');
+
+const redirectPath = store.getters.isTeacher ? '/home' : '/dashboard';
+
+console.log(redirectPath);
+
 const routes = [
   {
     path: '/dashboard',
@@ -10,9 +19,15 @@ const routes = [
     },
   },
   {
-    // We will redirect the user to /dashboard once it's ready.
+    path: '/home',
+    component: () => import('@/views/teachers/ViewAccount.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: '/',
-    redirect: '/teachers',
+    redirect: redirectPath,
   },
   {
     path: '/teachers',
@@ -187,20 +202,19 @@ const routes = [
   },
 ];
 
-import store from '@/store';
-
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 
-// This happens before the app mount
-store.dispatch('tryLogin');
-
 router.beforeEach(function (to, _, next) {
   if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
     next('/auth');
   } else if (to.meta.requiresUnauth && store.getters.isAuthenticated) {
+    // Check user role
+    if (store.getters.isTeacher) {
+      return next('/home');
+    }
     next('/dashboard');
   } else {
     next();

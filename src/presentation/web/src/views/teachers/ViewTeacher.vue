@@ -22,6 +22,7 @@
                   :subjects="item.subjects"
                   :no-teacher-view="true"
                   :no-subject-update="true"
+                  :no-subject-delete="true"
                   @action="getAction"
                 ></subjects-list>
               </v-card-text>

@@ -68,6 +68,12 @@ export default {
           role: ['admin', 'execManager', 'teachingManager'],
         },
         {
+          title: this.$t('Home'),
+          icon: 'mdi-home',
+          to: '/home',
+          role: ['user'],
+        },
+        {
           title: this.$t('Teachers'),
           icon: 'mdi-human-male-board',
           to: '/teachers',
@@ -128,7 +134,7 @@ export default {
           title: this.$t('Settings'),
           icon: 'mdi-cog-outline',
           to: '/settings',
-          role: ['teachingManager', 'admin', 'execManager'],
+          role: ['teachingManager', 'admin', 'execManager', 'user'],
         },
       ],
       drawer: true,
