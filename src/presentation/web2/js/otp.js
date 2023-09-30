@@ -15,6 +15,9 @@ const inputs = document.querySelectorAll('.input');
 const profileImg = document.querySelector('.profile-Img');
 const inputFile = document.getElementById('input-file');
 const photoHeadin = document.querySelector('.photo-heading');
+const successIcon = document.querySelector('.success-icon');
+const successDiv = document.querySelector('.success-hidden-div');
+const successBtn = document.querySelector('.success-btn');
 
 ////////////////////////////////////////////////////////////
 //////////  Closing Window Functions  /////////////////////
@@ -24,13 +27,20 @@ function closeWindow(e) {
   overlay.classList.add('hidden');
 }
 
+function closeSuccessWindow() {
+  overlay.classList.add('hidden');
+  successDiv.classList.add('hidden');
+}
+
+successIcon.addEventListener('click', closeSuccessWindow);
+successBtn.addEventListener('click', closeSuccessWindow);
+
 iconClose.addEventListener('click', closeWindow);
 overlay.addEventListener('click', closeWindow);
 
 ////////////////////////////////////////
 
 inputFile.onchange = function (e) {
-  e.preventDefault();
   profileImg.src = URL.createObjectURL(inputFile.files[0]);
   profileImg.classList.remove('hidden');
   photoHeadin.classList.add('hidden');
@@ -98,11 +108,11 @@ let formData;
 form.addEventListener('submit', e => {
   e.preventDefault();
 
-  formData = new FormData(form);
   // const file = document.querySelector('#input-file').files[0];
-  // const data = Object.fromEntries(formData);
-  // console.log(data);
+  formData = new FormData(form);
+  const data = Object.fromEntries(formData);
   // formData.append('photo', file);
+  console.log(data);
 
   overlay.classList.remove('hidden');
   otp.classList.remove('hidden');
@@ -145,6 +155,10 @@ function registerationFun() {
     })
     .then(data => {
       console.log(data);
+      profileImg.classList.add('hidden');
+      photoHeadin.classList.remove('hidden');
+      successDiv.classList.remove('hidden');
+      overlay.classList.remove('hidden');
     })
     .catch(err => {
       console.log(err);
