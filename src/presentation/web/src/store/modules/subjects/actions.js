@@ -74,6 +74,7 @@ export default {
         data: {
           name: payload.name,
           credit: payload.credit,
+          codeNumber: payload.codeNumber,
         },
       });
 

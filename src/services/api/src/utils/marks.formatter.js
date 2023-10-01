@@ -20,7 +20,7 @@ const marksFormatter = (arr) => {
     const assignment = element.assignment ? element.assignment : 0;
     const practicalWork = element.practicalWork ? element.practicalWork : 0;
     const finalMarks = element.finalMarks ? element.finalMarks : 0;
-    const totalMarks = (projectMarks + assignment + finalMarks + practicalWork);
+    const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
     const totalWithCredit = totalMarks * element.subjectCredit;
     return {
       ...element,
@@ -61,8 +61,8 @@ const marksFormatter = (arr) => {
 
   if (totalPercentage !== 0) {
     newArr.push({
-      totalPercentage: String(Number((totalPercentage / semesterNumbers).toFixed(3)) + '%')
-    })
+      totalPercentage: String(Number((totalPercentage / semesterNumbers).toFixed(3)) + '%'),
+    });
   }
 
   return newArr;
@@ -81,7 +81,6 @@ const subjectsFormatter = (arr) => {
     8: { semesterSubject: [] },
   };
 
-
   const newArr = [];
 
   arr.forEach((element) => {
@@ -90,7 +89,6 @@ const subjectsFormatter = (arr) => {
 
   for (const key in semesters) {
     if (semesters[key].semesterSubject.length > 0) {
-
       const semesterId = semesters[key].semesterSubject[0].Semester.id;
       const title = semesters[key].semesterSubject[0].Semester.title;
       const year = semesters[key].semesterSubject[0].Semester.EducationalYear.year;
@@ -101,20 +99,20 @@ const subjectsFormatter = (arr) => {
           subjectId: element.id,
           subjectName: element.name,
           subjectTitle: element.credit,
+          subjectCodeNumber: element.codeNumber,
         });
       });
       newArr.push({
         semesterId,
         title,
         year,
-        subjects
+        subjects,
       });
     }
   }
 
   return newArr;
 };
-
 
 module.exports = {
   marksFormatter,

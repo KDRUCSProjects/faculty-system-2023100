@@ -126,8 +126,15 @@ const createTranscript = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const student = await studentService.getStudent(studentId);
   if (!student) throw new ApiError(httpStatus.NOT_FOUND, 'student not found');
-  const school = await studentService.getStudentSchool(studentId);
-  const monograph = await studentService.getStudentMonograph(studentId);
+  const school = {
+    name: student?.schoolName,
+    graduationDate: student?.schoolGraduationYear,
+  };
+
+  const monograph = {
+    researchTitle: student?.monographTitle,
+    defenseDate: student?.monographDefenseDate,
+  };
 
   const conditions = [`shokalist.deletedAt IS NULL`, `shokalist.studentId = ${studentId}`];
 
@@ -227,8 +234,6 @@ const createTranscript = catchAsync(async (req, res) => {
   worksheet.getRow(10).getCell(27).value = student.engDob;
   worksheet.getRow(11).getCell(27).value = student.birthCityEnglish;
 
-
-
   worksheet.getRow(1).getCell(31).value = student.fullName;
   worksheet.getRow(3).getCell(31).value = student.nickName;
   worksheet.getRow(5).getCell(31).value = student.fatherName;
@@ -236,14 +241,13 @@ const createTranscript = catchAsync(async (req, res) => {
   worksheet.getRow(10).getCell(31).value = student.dob;
   worksheet.getRow(11).getCell(31).value = student.birthCity;
 
+  const kankorType = student?.kankorType === 'general' ? 'عمومي' : 'اختصاصي';
 
-
-  worksheet.getRow(2).getCell(22).value = student.kankorType;
+  worksheet.getRow(2).getCell(22).value = kankorType;
   // remaining parts;
   // worksheet.getRow(3).getCell(22).value = student;
   // worksheet.getRow(3).getCell(22).value = student;
   worksheet.getRow(4).getCell(22).value = student.admissionYear;
-
 
   // school and monograph
   worksheet.getRow(3).getCell(6).value = school?.name;
@@ -253,7 +257,6 @@ const createTranscript = catchAsync(async (req, res) => {
   worksheet.getRow(8).getCell(1).value = monograph?.researchTitle;
   worksheet.getRow(10).getCell(1).value = monograph?.defenseDate;
   worksheet.getRow(11).getCell(1).value = student.phoneNumber;
-
 
   let col;
   let column;
@@ -336,6 +339,8 @@ const createTranscript = catchAsync(async (req, res) => {
       worksheet.getRow(row).getCell(col).value = fourthChance;
       col = column;
     });
+
+    // Here, we should attach subject Code Number in english transcript
 
     i++;
   }
