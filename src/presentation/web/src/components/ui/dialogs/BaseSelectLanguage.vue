@@ -18,10 +18,10 @@
           <template v-slot:default="{ item }">
             <v-list-item>
               <v-btn v-if="item !== selectedLanguage" color="primary" variant="tonal" block @click="selectLanguage(item)">
-                {{ item === 'en' ? 'English' : 'Pashto' }}
+                {{ item === 'en' ? this.$t('English') : this.$t('Pashto') }}
               </v-btn>
               <v-btn v-else color="primary" variant="flat" block @click="selectLanguage(item)">
-                {{ item === 'en' ? 'English' : 'Pashto' }}
+                {{ item === 'en' ? this.$t('English') : this.$t('Pashto') }}
               </v-btn>
             </v-list-item>
           </template>

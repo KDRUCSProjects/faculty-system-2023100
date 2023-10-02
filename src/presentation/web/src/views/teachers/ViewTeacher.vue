@@ -13,9 +13,9 @@
             <v-card v-for="(item, i) in semesterWithSubjects" :key="i" class="theShadow pa-3 ma-2">
               <v-card-item>
                 <v-card-title class="text-primary text-h6 font-weight-bold"
-                  >{{ item.year }}, <span class="text-dark">{{ rankSemester(item.title) }} Semester</span></v-card-title
+                  >{{ item.year }}, <span class="text-dark">{{ rankSemester(item.title) }} {{ $t('Semester') }}</span></v-card-title
                 >
-                <v-card-subtitle>Total subjects: {{ item.subjects.length }}</v-card-subtitle>
+                <v-card-subtitle>{{ $t('Total subjects:') }} {{ item.subjects.length }}</v-card-subtitle>
               </v-card-item>
               <v-card-text>
                 <subjects-list
@@ -29,7 +29,7 @@
             </v-card>
 
             <div class="d-flex align-center justify-center" style="min-height: 500px">
-              <div v-if="semesterWithSubjects?.length === 0" class="text-error">Teacher has no subjects assigned</div>
+              <div v-if="semesterWithSubjects?.length === 0" class="text-error">{{ $t('Teacher has no subjects assigned') }}</div>
             </div>
           </v-card-text>
         </v-card>

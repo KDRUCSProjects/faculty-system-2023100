@@ -6,19 +6,19 @@
       <template v-slot:activator="{ props }">
         <div v-bind="props">
           <slot>
-            <v-btn color="primary"> Download Attendance </v-btn>
+            <v-btn color="primary"> {{ $t('Download Attendance') }} </v-btn>
           </slot>
         </div>
       </template>
 
       <v-card :loading="isLoading">
         <v-toolbar :color="'dark'">
-          <v-toolbar-title class=""> Generate Attendance Report </v-toolbar-title>
+          <v-toolbar-title class=""> {{ $t('Generate Attendance Report') }} </v-toolbar-title>
         </v-toolbar>
 
         <v-card-item>
           <!-- <v-card-title>Add Subject</v-card-title> -->
-          <v-card-subtitle> Pick start and end date of the report </v-card-subtitle>
+          <v-card-subtitle> {{ $t('Pick start and end date of the report') }} </v-card-subtitle>
         </v-card-item>
         <v-card-text class="mx-auto">
           <DatePicker :is-dark="true" v-model.range="range"></DatePicker>
@@ -32,7 +32,7 @@
             color="primary"
             download
             block
-            >Download</v-btn
+            >{{ $t('Download') }}</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -64,7 +64,7 @@ export default {
 
       let { start, end } = this.range;
       if (!start || !end) {
-        return this.$store.commit('setToast', [0, 'Please select dates']);
+        return this.$store.commit('setToast', [0, this.$t('Please select dates')]);
       }
 
       start = moment(start).format('YYYY-MM-DD');

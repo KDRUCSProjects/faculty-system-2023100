@@ -115,14 +115,14 @@ export default {
 
     semestersLabels() {
       return [
-        '1st Semester',
-        '2nd Semester',
-        '3rd Semester',
-        '4th Semester',
-        '5th Semester',
-        '6th Semester',
-        '7th Semester',
-        '8th Semester',
+        this.$t('1st Semester'),
+        this.$t('2nd Semester'),
+        this.$t('3rd Semester'),
+        this.$t('4th Semester'),
+        this.$t('5th Semester'),
+        this.$t('6th Semester'),
+        this.$t('7th Semester'),
+        this.$t('8th Semester'),
       ];
     },
     semestersData() {
@@ -177,32 +177,32 @@ export default {
         {
           icon: 'mdi-calendar-month',
           value: stats?.year + ' / ' + (half ? '1st' : '2nd'),
-          title: 'Educational Year',
+          title: this.$t('Educational Year'),
         },
         {
           icon: 'mdi-account-group',
           value: stats?.sumOfSemesters.total.male + stats?.sumOfSemesters.total.female,
-          title: 'Total Students',
+          title: this.$t('Total Students'),
         },
         {
           icon: 'mdi-account-multiple-check',
           value: stats?.sumOfSemesters.present.male + stats?.sumOfSemesters.present.female,
-          title: 'Present Students',
+          title: this.$t('Present Students'),
         },
         {
           icon: 'mdi-account-multiple-minus',
           value: stats?.sumOfSemesters.taajil.male + stats?.sumOfSemesters.taajil.female,
-          title: 'Taajil Students',
+          title: this.$t('Taajil Students'),
         },
         {
           icon: 'mdi-account-multiple-plus',
           value: stats?.sumOfSemesters.reentry.male + stats?.sumOfSemesters.reentry.female,
-          title: 'Reentry Students',
+          title: this.$t('Reentry Students'),
         },
         {
           icon: 'mdi-account-switch',
           value: stats?.sumOfSemesters.monfaq.male + stats?.sumOfSemesters.monfaq.female,
-          title: 'Monfaq Students',
+          title: this.$t('Monfaq Students'),
         },
       ];
     },

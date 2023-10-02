@@ -123,13 +123,13 @@ export default {
         }
 
         if (this.pSize) {
-          return this.$store.commit('setToast', [0, 'Maximum 2mb phot size allowed']);
+          return this.$store.commit('setToast', [0, this.$t('Photo size should be lesser than 2 MB!')]);
         }
 
         await this.$store.dispatch('teachers/addTeacher', data);
         this.closeDialog();
       } catch (e) {
-        context.commit('setToast', [0, 'Photo size should be less than 2 mb'], { root: true });
+        context.commit('setToast', [0, this.$t('Photo size should be lesser than 2 MB!')], { root: true });
         // Show error message if happened
         this.errorMessage = e;
       } finally {

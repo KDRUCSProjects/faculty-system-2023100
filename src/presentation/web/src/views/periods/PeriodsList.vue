@@ -13,11 +13,11 @@
       download
       :loading="downloadLoading"
     >
-      Result Table
+      {{ $t('Result Table') }}
     </v-btn>
 
     <base-select-period-dialog @select-period="setPeriod" :defaultPeriod="selectedPeriod">
-      {{ selectedPeriod ? `Period ${selectedPeriod}` : 'Select Period' }}
+      {{ selectedPeriod ? `Period ${selectedPeriod}` : this.$t('Select Period') }}
     </base-select-period-dialog>
   </v-toolbar>
   <v-row no-gutters>

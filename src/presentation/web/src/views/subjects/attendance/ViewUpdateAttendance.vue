@@ -18,15 +18,15 @@
           ></base-menu>
           <base-menu v-else :displayPreText="'loading'" theme="dark" :items="[]" :theDefault="' '"></base-menu>
         </div>
-        <v-card-title class="mt-1">Total Credits: {{ subject?.credit }}</v-card-title>
-        <v-card-subtitle class="mt-1">Subject Database ID: {{ subject?.id }}</v-card-subtitle>
+        <v-card-title class="mt-1">{{ $t('Total Credits:') }} {{ subject?.credit }}</v-card-title>
+        <v-card-subtitle class="mt-1">{{ $t('Subject Database ID:') }} {{ subject?.id }}</v-card-subtitle>
       </v-card-item>
       <v-card-text>
         <!-- The Table -->
 
         <v-data-table-virtual
           :loading="loading"
-          loading-text="Loading students please wait"
+          :loading-text="$t('Loading students please wait')"
           :headers="headers"
           :items="students"
         >

@@ -122,7 +122,7 @@ export default {
           role: ['execManager', 'admin'],
         },
         {
-          title: this.$t('Report'),
+          title: this.$t('Reports'),
           icon: 'mdi-finance',
           to: '/report',
           role: ['execManager', 'admin'],

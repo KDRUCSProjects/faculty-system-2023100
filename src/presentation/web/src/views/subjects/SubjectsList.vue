@@ -6,7 +6,7 @@
         clearable=""
         density="compact"
         variant="outlined"
-        label="Find subject by name"
+        :label="$t('Find subject by name')"
         prepend-inner-icon="mdi-magnify"
         single-line
         hide-details

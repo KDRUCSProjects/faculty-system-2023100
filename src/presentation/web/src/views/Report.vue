@@ -25,7 +25,7 @@
         download
         :loading="downloadLoading"
       >
-        EXCEL FILE
+        {{ $t('EXCEL FILE') }}
       </v-btn>
 
       <v-btn
@@ -38,7 +38,7 @@
         download
         :loading="downloadBadlAshaLoading"
       >
-        Badl Asha
+        {{ $t('Badl Asha') }}
       </v-btn>
 
       <span class="mx-3">-----</span>
@@ -80,7 +80,7 @@
                 <v-text-field
                   density="compact"
                   v-model="search"
-                  placeholder="Search anything..."
+                  :placeholder="$t('Search anything...')"
                   variant="outlined"
                 ></v-text-field>
               </v-col>
