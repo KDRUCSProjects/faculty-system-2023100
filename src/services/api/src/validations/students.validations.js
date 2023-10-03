@@ -33,7 +33,7 @@ const registerStudent = {
     schoolName: Joi.string().allow(''),
     schoolGraduationYear: Joi.number().allow(''),
     monographTitle: Joi.string().allow(''),
-    monographDefenseDate: Joi.date().allow(''),
+    monographDefenseDate: Joi.string().allow(''),
   }),
 };
 
@@ -74,7 +74,7 @@ const updateStudent = {
       schoolName: Joi.string().allow(''),
       schoolGraduationYear: Joi.number().allow(''),
       monographTitle: Joi.string().allow(''),
-      monographDefenseDate: Joi.date().allow(''),
+      monographDefenseDate: Joi.string().allow(''),
     })
     .min(1)
     .required(),
@@ -141,7 +141,7 @@ const tempToken = {
       schoolName: Joi.string().allow(''),
       schoolGraduationYear: Joi.number().allow(''),
       monographTitle: Joi.string().allow(''),
-      monographDefenseDate: Joi.date().allow(''),
+      monographDefenseDate: Joi.string().allow(''),
     })
     .min(1)
     .required(),

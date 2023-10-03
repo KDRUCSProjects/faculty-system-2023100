@@ -21,6 +21,10 @@ const setDate = {
       firstHalfEnd: Joi.number().integer().positive(),
       SecondHalfStart: Joi.number().integer().positive(),
       SecondHalfEnd: Joi.number().integer().positive(),
+      firstHalfStartP: Joi.number().integer().positive(),
+      firstHalfEndP: Joi.number().integer().positive(),
+      SecondHalfStartP: Joi.number().integer().positive(),
+      SecondHalfEndP: Joi.number().integer().positive(),
       period: Joi.number().integer().positive(),
     })
     .min(1),

@@ -94,6 +94,7 @@ const getStudentMarks = (conditions) => {
     shoka.id as shokaId, 
     shoka.subjectId,
     subject.name as subjectName,
+    subject.codeNumber as subjectCodeNumber,
     subject.semesterId as semesterId,
     subject.credit as subjectCredit,
     semester.title as semesterTitle,

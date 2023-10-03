@@ -188,11 +188,10 @@ const translateFields = (field) => {
   if (t === 'monfaq') return 'منفق';
 };
 
-
 /**
- * 
- * @param {ObjectId} studentId 
- * @param {ObjectId} semesterId 
+ *
+ * @param {ObjectId} studentId
+ * @param {ObjectId} semesterId
  * @returns {Boolean}
  */
 const isRepeatSemester = async (studentId, semesterId) => {
@@ -221,7 +220,7 @@ const isRepeatSemester = async (studentId, semesterId) => {
         const assignment = subjectMarks[0].assignment ? subjectMarks[0].assignment : 0;
         const practicalWork = subjectMarks[0].practicalWork ? subjectMarks[0].practicalWork : 0;
         const finalMarks = subjectMarks[0].finalMarks ? subjectMarks[0].finalMarks : 0;
-        const totalMarks = (projectMarks + assignment + finalMarks + practicalWork);
+        const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
         const totalSemMarks = totalMarks * credit;
         semesterMarks += totalSemMarks;
         if (totalMarks < 55) {
@@ -233,17 +232,17 @@ const isRepeatSemester = async (studentId, semesterId) => {
     }
   }
   const percentage = Number(semesterMarks / totalCredits);
-  if (percentage < 55 || (failedCredits > (totalCredits / 2))) {
+  if (percentage < 55 || failedCredits > totalCredits / 2) {
     return true;
   } else {
     return false;
   }
-}
+};
 
 /**
- * find if student has کتبی اخطار 
- * @param {ObjectId} studentId 
- * @param {ObjectId} semesterTitle 
+ * find if student has کتبی اخطار
+ * @param {ObjectId} studentId
+ * @param {ObjectId} semesterTitle
  * @returns {Boolean}
  */
 const doesStudentHasWarning = async (studentId, semesterId) => {
@@ -266,20 +265,20 @@ const doesStudentHasWarning = async (studentId, semesterId) => {
     const subjectMarks = await shokaListService.getStudentMarksSortByName(conditions);
     const formattedMarks = marksFormatter(subjectMarks);
     if (formattedMarks[3] && formattedMarks[3] >= 55) {
-      totalMarksForPercentage += (formattedMarks[3] * credit);
+      totalMarksForPercentage += formattedMarks[3] * credit;
     } else if (formattedMarks[2] && formattedMarks[2] >= 55) {
-      totalMarksForPercentage += (formattedMarks[2] * credit);
+      totalMarksForPercentage += formattedMarks[2] * credit;
     } else if (formattedMarks[1] && formattedMarks[1] >= 55) {
-      totalMarksForPercentage += (formattedMarks[1] * credit);
+      totalMarksForPercentage += formattedMarks[1] * credit;
     }
     studentMarks.push(formattedMarks);
   }
-  if ((totalMarksForPercentage / totalCredits) >= 55 && (totalMarksForPercentage / totalCredits) <= 60) {
+  if (totalMarksForPercentage / totalCredits >= 55 && totalMarksForPercentage / totalCredits <= 60) {
     return true;
   } else {
     return false;
   }
-}
+};
 
 // format marks for creating result sheet file in excel
 const marksFormatter = (arr) => {
@@ -558,6 +557,15 @@ const checkStudentStatusBySemesterId = async (studentId, semesterId) => {
   return allStatus;
 };
 
+function toPashtoDigits(x) {
+  if (x == null || x == undefined || x == '') return x;
+  x = x.toString();
+  var id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  return x.replace(/[0-9]/g, function (w) {
+    return id[+w];
+  });
+}
+
 module.exports = {
   checkStudentMahromiatBySubjectId,
   checkStudentMahromiatBySemesterId,
@@ -574,4 +582,5 @@ module.exports = {
   translateFields,
   getAttendanceReportBySubjectId,
   isRepeatSemester,
+  toPashtoDigits,
 };

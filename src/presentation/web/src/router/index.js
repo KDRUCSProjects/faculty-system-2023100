@@ -246,7 +246,7 @@ router.beforeEach(function (to, from, next) {
       },
       {
         role: 'admin',
-        unauth: ['home', 'view-shoka', 'view-attendance'],
+        unauth: ['home'],
       },
       {
         role: 'execManager',

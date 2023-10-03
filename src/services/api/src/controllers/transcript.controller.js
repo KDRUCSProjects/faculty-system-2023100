@@ -5,6 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const { shokaListService, studentService, taajilService } = require('../services');
 const ApiError = require('../utils/ApiError');
 const { marksFormatter } = require('../utils/marks.formatter');
+const { toPashtoDigits } = require('../utils/global');
 
 const reFormatMarks = (allMarks, key) => {
   // semesters array
@@ -21,10 +22,10 @@ const reFormatMarks = (allMarks, key) => {
     if (semesters[key].semesterSubject.length > 0) {
       const subjects = [...semesters[key].semesterSubject];
       semesters[key].semesterSubject.filter((element) => {
-        const { subjectName, subjectId, subjectCredit } = element;
+        const { subjectName, subjectId, subjectCredit, subjectCodeNumber } = element;
         const isRegister = resultArray.find((elem) => elem.subjectId === subjectId);
         if (!isRegister) {
-          const ob = { subjectId, subjectName, subjectCredit };
+          const ob = { subjectId, subjectName, subjectCredit, subjectCodeNumber };
           if (element.chance === 1) {
             const secondChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 2);
             const thirdChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 3);
@@ -226,6 +227,7 @@ const createTranscript = catchAsync(async (req, res) => {
   let workbook = new Excel.Workbook();
   workbook = await workbook.xlsx.readFile(filePath);
   const worksheet = workbook.getWorksheet('Graduation');
+  const worksheetE = workbook.getWorksheet('English Transcript');
   worksheet.getRow(1).getCell(27).value = student.engName;
   worksheet.getRow(3).getCell(27).value = student.engLastName;
   worksheet.getRow(5).getCell(27).value = student.engFatherName;
@@ -238,7 +240,7 @@ const createTranscript = catchAsync(async (req, res) => {
   worksheet.getRow(3).getCell(31).value = student.nickName;
   worksheet.getRow(5).getCell(31).value = student.fatherName;
   worksheet.getRow(7).getCell(31).value = student.grandFatherName;
-  worksheet.getRow(10).getCell(31).value = student.dob;
+  // worksheet.getRow(10).getCell(31).value = student.dob;
   worksheet.getRow(11).getCell(31).value = student.birthCity;
 
   const kankorType = student?.kankorType === 'general' ? 'عمومي' : 'اختصاصي';
@@ -256,7 +258,7 @@ const createTranscript = catchAsync(async (req, res) => {
   worksheet.getRow(7).getCell(6).value = student.kankorMarks;
   worksheet.getRow(8).getCell(1).value = monograph?.researchTitle;
   worksheet.getRow(10).getCell(1).value = monograph?.defenseDate;
-  worksheet.getRow(11).getCell(1).value = student.phoneNumber;
+  worksheet.getRow(11).getCell(1).value = '0' + student.phoneNumber;
 
   let col;
   let column;
@@ -264,63 +266,168 @@ const createTranscript = catchAsync(async (req, res) => {
   let rowNumber;
   let i = 0;
   let marks = [];
+
+  // Here, we should attach subject Code Number in english transcript
+  let columnE;
+  let rowE;
   while (i < 8) {
     if (i === 0) {
       // set header of first semester
-      const semesterTitle = `اول سميسټر( ${firstSemEndDate}-${firstSemStartDate}ل.) تحصيلي کال`;
+      if (firstSemStartDate != firstSemEndDate) {
+        var semesterTitle = `اول سميسټر( ${toPashtoDigits(firstSemEndDate)}-${toPashtoDigits(
+          firstSemStartDate
+        )} ل.) تحصيلي کال`;
+      } else {
+        var semesterTitle = `اول سميسټر( ${toPashtoDigits(firstSemStartDate)} ل.) تحصيلي کال`;
+      }
+
       worksheet.getRow(13).getCell(27).value = semesterTitle;
       marks = [...firstSemesterMarks];
       column = col = 34;
       rowNumber = row = 14;
+
+      // English Transcript starting subject code numbers start
+      columnE = 1;
+      rowE = 15;
     } else if (i === 1) {
       // set header of first semester
-      const semesterTitle = `دوهم سميسټر( ${secondSemEndDate}-${secondSemStartDate}ل.) تحصيلي کال`;
+
+      if (secondSemEndDate != secondSemStartDate) {
+        var semesterTitle = `دوهم سميسټر( ${toPashtoDigits(secondSemEndDate)}-${toPashtoDigits(
+          secondSemStartDate
+        )} ل.) تحصيلي کال`;
+      } else {
+        var semesterTitle = `دوهم سميسټر( ${toPashtoDigits(secondSemStartDate)} ل.) تحصيلي کال`;
+      }
+
       worksheet.getRow(13).getCell(19).value = semesterTitle;
       marks = [...secondSemesterMarks];
       column = col = 26;
       rowNumber = row = 14;
+
+      // English Transcript starting subject code numbers start
+      columnE = 10;
+      rowE = 15;
     } else if (i === 2) {
       // set header of first semester
-      const semesterTitle = `دریم سميسټر( ${thirdSemEndDate}-${thirdSemStartDate}ل.) تحصيلي کال`;
+      // const semesterTitle = `دریم سميسټر( ${thirdSemEndDate}-${thirdSemStartDate}ل.) تحصيلي کال`;
+
+      if (thirdSemEndDate != thirdSemStartDate) {
+        var semesterTitle = `دریم سميسټر( ${toPashtoDigits(thirdSemEndDate)}-${toPashtoDigits(
+          thirdSemStartDate
+        )} ل.) تحصيلي کال`;
+      } else {
+        var semesterTitle = `دریم سميسټر( ${toPashtoDigits(thirdSemStartDate)} ل.) تحصيلي کال`;
+      }
+
       worksheet.getRow(13).getCell(11).value = semesterTitle;
       marks = [...thirdSemesterMarks];
       column = col = 18;
       rowNumber = row = 14;
+
+      // English Transcript starting subject code numbers start
+      columnE = 1;
+      rowE = 30;
     } else if (i === 3) {
       // set header of first semester
-      const semesterTitle = `څلورم سميسټر( ${fourthSemEndDate}-${fourthSemStartDate}ل.) تحصيلي کال`;
+      // const semesterTitle = `څلورم سميسټر( ${fourthSemEndDate}-${fourthSemStartDate}ل.) تحصيلي کال`;
+
+      if (fourthSemEndDate != fourthSemStartDate) {
+        var semesterTitle = `څلورم سميسټر( ${toPashtoDigits(fourthSemEndDate)}-${toPashtoDigits(
+          fourthSemStartDate
+        )} ل.) تحصيلي کال`;
+      } else {
+        var semesterTitle = `څلورم سميسټر( ${toPashtoDigits(fourthSemStartDate)} ل.) تحصيلي کال`;
+      }
+
       worksheet.getRow(13).getCell(1).value = semesterTitle;
       marks = [...fourthSemesterMarks];
       column = col = 8;
       rowNumber = row = 14;
+
+      // English Transcript starting subject code numbers start
+      columnE = 10;
+      rowE = 30;
     } else if (i === 4) {
-      // set header of first semester
-      const semesterTitle = `پنڅم سميسټر( ${fifthSemEndDate}-${fifthSemStartDate}ل.) تحصيلي کال`;
+      // set header of 5th semester
+      // const semesterTitle = `پنڅم سميسټر( ${fifthSemEndDate}-${fifthSemStartDate}ل.) تحصيلي کال`;
+
+      if (fifthSemEndDate != fifthSemStartDate) {
+        var semesterTitle = `پنڅم سميسټر( ${toPashtoDigits(fifthSemEndDate)}-${toPashtoDigits(
+          fifthSemStartDate
+        )} ل.) تحصيلي کال`;
+      } else {
+        var semesterTitle = `پنڅم سميسټر( ${toPashtoDigits(fifthSemStartDate)} ل.) تحصيلي کال`;
+      }
+
       worksheet.getRow(29).getCell(27).value = semesterTitle;
       marks = [...fifthSemesterMarks];
       column = col = 34;
       rowNumber = row = 30;
+
+      // English Transcript starting subject code numbers start
+      columnE = 1;
+      rowE = 45;
     } else if (i === 5) {
       // set header of first semester
-      const semesterTitle = `ښپیږم سميسټر( ${sixthSemEndDate}-${sixthSemStartDate}ل.) تحصيلي کال`;
+      // const semesterTitle = `ښپیږم سميسټر( ${sixthSemEndDate}-${sixthSemStartDate}ل.) تحصيلي کال`;
+
+      if (sixthSemEndDate != sixthSemStartDate) {
+        var semesterTitle = `ښپیږم سميسټر( ${toPashtoDigits(sixthSemEndDate)}-${toPashtoDigits(
+          sixthSemStartDate
+        )} ل.) تحصيلي کال`;
+      } else {
+        var semesterTitle = `ښپیږم سميسټر( ${toPashtoDigits(sixthSemStartDate)} ل.) تحصيلي کال`;
+      }
+
       worksheet.getRow(29).getCell(19).value = semesterTitle;
       marks = [...sixthSemesterMarks];
       column = col = 26;
       rowNumber = row = 30;
+
+      // English Transcript starting subject code numbers start
+      columnE = 10;
+      rowE = 45;
     } else if (i === 6) {
       // set header of first semester
-      const semesterTitle = `اووم سميسټر( ${seventhSemEndDate}-${seventhSemStartDate}ل.) تحصيلي کال`;
+      // const semesterTitle = `اووم سميسټر( ${seventhSemEndDate}-${seventhSemEndDate}ل.) تحصيلي کال`;
+
+      if (seventhSemStartDate != seventhSemEndDate) {
+        var semesterTitle = `اووم سميسټر( ${toPashtoDigits(seventhSemEndDate)}-${toPashtoDigits(
+          seventhSemStartDate
+        )} ل.) تحصيلي کال`;
+      } else {
+        var semesterTitle = `اووم سميسټر( ${toPashtoDigits(seventhSemStartDate)} ل.) تحصيلي کال`;
+      }
+
       worksheet.getRow(29).getCell(11).value = semesterTitle;
       marks = [...seventhSemesterMarks];
       column = col = 18;
       rowNumber = row = 30;
+
+      // English Transcript starting subject code numbers start
+      columnE = 1;
+      rowE = 60;
     } else if (i === 7) {
       // set header of first semester
-      const semesterTitle = `اتم سميسټر( ${eightSemEndDate}-${eightSemStartDate}ل.) تحصيلي کال`;
+      // const semesterTitle = `اتم سميسټر( ${eightSemEndDate}-${eightSemStartDate}ل.) تحصيلي کال`;
+
+      if (eightSemEndDate != eightSemStartDate) {
+        var semesterTitle = `اتم سميسټر( ${toPashtoDigits(eightSemEndDate)}-${toPashtoDigits(
+          eightSemStartDate
+        )} ل.) تحصيلي کال`;
+      } else {
+        var semesterTitle = `اتم سميسټر( ${toPashtoDigits(eightSemStartDate)} ل.) تحصيلي کال`;
+      }
+
       worksheet.getRow(29).getCell(1).value = semesterTitle;
       marks = [...eightSemesterMarks];
       column = col = 8;
       rowNumber = row = 30;
+
+      // English Transcript starting subject code numbers start
+      columnE = 10;
+      rowE = 60;
     }
 
     marks.forEach((element) => {
@@ -340,7 +447,12 @@ const createTranscript = catchAsync(async (req, res) => {
       col = column;
     });
 
-    // Here, we should attach subject Code Number in english transcript
+    // Attach subjects code numbers into English transcript worksheet
+    marks.forEach((element) => {
+      const { subjectCodeNumber } = element;
+      worksheetE.getRow(rowE).getCell(columnE).value = subjectCodeNumber;
+      rowE++;
+    });
 
     i++;
   }

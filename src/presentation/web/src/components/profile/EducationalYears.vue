@@ -42,7 +42,7 @@
         </v-list-item>
         <v-list-item class="mt-2" v-if="year.onGoing">
           <v-form @submit.prevent="setTimes(year.id)">
-            <v-row>
+            <v-row class="ma-0 pa-0">
               <v-col cols="4"
                 ><v-text-field class="mt-2" variant="outlined" v-model.number="period" label="Period"> </v-text-field
               ></v-col>
@@ -53,6 +53,14 @@
               <v-col cols="4"
                 ><v-text-field class="mt-2" variant="outlined" v-model.number="endDate" label="Semester End Date">
                 </v-text-field
+              ></v-col>
+            </v-row>
+            <v-row class="ma-0 pa-0">
+              <v-col cols="6"
+                ><v-text-field variant="outlined" v-model.number="startDateP" label="Semester Start Miladi"> </v-text-field
+              ></v-col>
+              <v-col cols="6"
+                ><v-text-field variant="outlined" v-model.number="endDateP" label="Semester End Miladi"> </v-text-field
               ></v-col>
             </v-row>
             <v-btn block size="large" color="primary" variant="tonal" @click="setTimes(year.id)">Update Information</v-btn>
@@ -80,6 +88,8 @@ export default {
     loader: false,
     startDate: null,
     endDate: null,
+    startDateP: null,
+    endDateP: null,
     period: null,
   }),
   methods: {
@@ -115,6 +125,8 @@ export default {
       const data = {
         [prefix + 'HalfStart']: this.startDate,
         [prefix + 'HalfEnd']: this.endDate,
+        [prefix + 'HalfStartP']: this.startDateP,
+        [prefix + 'HalfEndP']: this.endDateP,
       };
 
       if (yearData.period != this.period) {
@@ -153,6 +165,9 @@ export default {
       }
       this.startDate = yearData[prefix + 'HalfStart'];
       this.endDate = yearData[prefix + 'HalfEnd'];
+
+      this.startDateP = yearData[prefix + 'HalfStartP'];
+      this.endDateP = yearData[prefix + 'HalfEndP'];
       this.period = yearData.period;
     },
   },

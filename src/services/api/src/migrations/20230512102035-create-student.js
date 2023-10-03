@@ -117,7 +117,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       monographDefenseDate: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       gender: {
         type: Sequelize.ENUM('male', 'female'),

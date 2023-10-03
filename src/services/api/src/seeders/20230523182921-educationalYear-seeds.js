@@ -10,10 +10,14 @@ const years = [...Array(13)].map((element, index) => {
     createdAt: new Date(),
     updatedAt: new Date(),
     firstHalf: index === 12 ? 1 : 0,
-    firstHalfStart: index === 12 ? 1402 : null,
-    firstHalfEnd: index === 12 ? 1402 : null,
-    SecondHalfStart: index === 12 ? 1402 : null,
-    SecondHalfEnd: index === 12 ? 1403 : null,
+    firstHalfStart: tempYear,
+    firstHalfEnd: tempYear,
+    SecondHalfStart: tempYear,
+    SecondHalfEnd: tempYear,
+    firstHalfStartP: tempYear,
+    firstHalfEndP: tempYear,
+    SecondHalfStartP: tempYear,
+    SecondHalfEndP: tempYear,
   };
 });
 
