@@ -103,7 +103,11 @@ const getStudentMarks = (conditions) => {
     educationalYear.firstHalfStart,
     educationalYear.firstHalfEnd,
     educationalYear.SecondHalfStart,
-    educationalYear.SecondHalfEnd
+    educationalYear.SecondHalfEnd,
+    educationalYear.firstHalfStartP,
+    educationalYear.firstHalfEndP,
+    educationalYear.SecondHalfStartP,
+    educationalYear.SecondHalfEndP
     from shokalists as shokalist
     inner join shokas as shoka on shoka.id = shokalist.shokaId
     inner join subjects as subject on subject.id = shoka.subjectId

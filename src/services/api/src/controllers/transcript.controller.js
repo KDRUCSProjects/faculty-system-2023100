@@ -174,50 +174,66 @@ const createTranscript = catchAsync(async (req, res) => {
   // first semester
   const firstSemester = formattedMarks.find((element) => element.semesterTitle === 1);
   // first semester start and end date
-  const firstSemStartDate = firstSemester?.firstHalfStart || 1401;
-  const firstSemEndDate = firstSemester?.firstHalfEnd || 1401;
+  const firstSemStartDate = firstSemester?.firstHalfStart || 0;
+  const firstSemStartDateE = firstSemester?.firstHalfStartP || 0;
+  const firstSemEndDate = firstSemester?.firstHalfEnd || 0;
+  const firstSemEndDateE = firstSemester?.firstHalfEndP || 0;
 
   // second semester
   const secondSemester = formattedMarks.find((element) => element.semesterTitle === 2);
   // second semester start and end date
-  const secondSemStartDate = secondSemester?.secondHalfStart || 1401;
-  const secondSemEndDate = secondSemester?.secondHalfEnd || 1401;
+  const secondSemStartDate = secondSemester?.SecondHalfStart || 0;
+  const secondSemStartDateE = secondSemester?.SecondHalfStartP || 0;
+  const secondSemEndDate = secondSemester?.SecondHalfEnd || 0;
+  const secondSemEndDateE = secondSemester?.SecondHalfEndP || 0;
 
   // third semester
   const thirdSemester = formattedMarks.find((element) => element.semesterTitle === 3);
   // third semester start and end date
-  const thirdSemStartDate = thirdSemester?.firstHalfStart || 1401;
-  const thirdSemEndDate = thirdSemester?.firstHalfEnd || 1401;
+  const thirdSemStartDate = thirdSemester?.firstHalfStart || 0;
+  const thirdSemStartDateE = thirdSemester?.firstHalfStartP || 0;
+  const thirdSemEndDate = thirdSemester?.firstHalfEnd || 0;
+  const thirdSemEndDateE = thirdSemester?.firstHalfEndP || 0;
 
   // fourth semester
   const fourthSemester = formattedMarks.find((element) => element.semesterTitle === 4);
   // fourth semester start and end date
-  const fourthSemStartDate = fourthSemester?.secondHalfStart || 1401;
-  const fourthSemEndDate = fourthSemester?.secondHalfEnd || 1401;
+  const fourthSemStartDate = fourthSemester?.SecondHalfStart || 0;
+  const fourthSemStartDateE = fourthSemester?.SecondHalfStartP || 0;
+  const fourthSemEndDate = fourthSemester?.SecondHalfEnd || 0;
+  const fourthSemEndDateE = fourthSemester?.SecondHalfEndP || 0;
 
   // fifth semester
   const fifthSemester = formattedMarks.find((element) => element.semesterTitle === 5);
   // fifth semester start and end date
-  const fifthSemStartDate = fifthSemester?.firstHalfStart || 1401;
-  const fifthSemEndDate = fifthSemester?.firstHalfEnd || 1401;
+  const fifthSemStartDate = fifthSemester?.firstHalfStart || 0;
+  const fifthSemStartDateE = fifthSemester?.firstHalfStartP || 0;
+  const fifthSemEndDate = fifthSemester?.firstHalfEnd || 0;
+  const fifthSemEndDateE = fifthSemester?.firstHalfEndP || 0;
 
   // six semester
   const sixthSemester = formattedMarks.find((element) => element.semesterTitle === 6);
   // sixth semester start and end date
-  const sixthSemStartDate = sixthSemester?.secondHalfStart || 1401;
-  const sixthSemEndDate = sixthSemester?.secondHalfEnd || 1401;
+  const sixthSemStartDate = sixthSemester?.SecondHalfStart || 0;
+  const sixthSemStartDateE = sixthSemester?.SecondHalfStartP || 0;
+  const sixthSemEndDate = sixthSemester?.SecondHalfEnd || 0;
+  const sixthSemEndDateE = sixthSemester?.SecondHalfEndP || 0;
 
   // six semester
   const seventhSemester = formattedMarks.find((element) => element.semesterTitle === 7);
   // seven semester start and end date
-  const seventhSemStartDate = seventhSemester?.firstHalfStart || 1401;
-  const seventhSemEndDate = seventhSemester?.firstHalfEnd || 1401;
+  const seventhSemStartDate = seventhSemester?.firstHalfStart || 0;
+  const seventhSemStartDateE = seventhSemester?.firstHalfStartP || 0;
+  const seventhSemEndDate = seventhSemester?.firstHalfEnd || 0;
+  const seventhSemEndDateE = seventhSemester?.firstHalfEndP || 0;
 
   // eight semester
   const eightSemester = formattedMarks.find((element) => element.semesterTitle === 6);
   // eight semester start and end date
-  const eightSemStartDate = eightSemester?.secondHalfStart || 1401;
-  const eightSemEndDate = eightSemester?.secondHalfEnd || 1401;
+  const eightSemStartDate = eightSemester?.SecondHalfStart || 0;
+  const eightSemStartDateE = eightSemester?.SecondHalfStartP || 0;
+  const eightSemEndDate = eightSemester?.SecondHalfEnd || 0;
+  const eightSemEndDateE = eightSemester?.SecondHalfEndP || 0;
 
   // find student taajil
   const studentTajil = await taajilService.findTaajilByStudentId(studentId);
@@ -228,6 +244,7 @@ const createTranscript = catchAsync(async (req, res) => {
   workbook = await workbook.xlsx.readFile(filePath);
   const worksheet = workbook.getWorksheet('Graduation');
   const worksheetE = workbook.getWorksheet('English Transcript');
+  const worksheetP = workbook.getWorksheet('Pashto Transcript');
   worksheet.getRow(1).getCell(27).value = student.engName;
   worksheet.getRow(3).getCell(27).value = student.engLastName;
   worksheet.getRow(5).getCell(27).value = student.engFatherName;
@@ -270,6 +287,10 @@ const createTranscript = catchAsync(async (req, res) => {
   // Here, we should attach subject Code Number in english transcript
   let columnE;
   let rowE;
+
+  // Location of semesters date (miladi - english transcript)
+
+  let yearTitle = ' ACADEMIC YEAR ';
   while (i < 8) {
     if (i === 0) {
       // set header of first semester
@@ -282,6 +303,7 @@ const createTranscript = catchAsync(async (req, res) => {
       }
 
       worksheet.getRow(13).getCell(27).value = semesterTitle;
+      worksheetP.getRow(10).getCell(25).value = semesterTitle;
       marks = [...firstSemesterMarks];
       column = col = 34;
       rowNumber = row = 14;
@@ -301,6 +323,7 @@ const createTranscript = catchAsync(async (req, res) => {
       }
 
       worksheet.getRow(13).getCell(19).value = semesterTitle;
+      worksheetP.getRow(10).getCell(17).value = semesterTitle;
       marks = [...secondSemesterMarks];
       column = col = 26;
       rowNumber = row = 14;
@@ -321,6 +344,8 @@ const createTranscript = catchAsync(async (req, res) => {
       }
 
       worksheet.getRow(13).getCell(11).value = semesterTitle;
+      worksheetP.getRow(10).getCell(9).value = semesterTitle;
+
       marks = [...thirdSemesterMarks];
       column = col = 18;
       rowNumber = row = 14;
@@ -341,6 +366,7 @@ const createTranscript = catchAsync(async (req, res) => {
       }
 
       worksheet.getRow(13).getCell(1).value = semesterTitle;
+      worksheetP.getRow(10).getCell(1).value = semesterTitle;
       marks = [...fourthSemesterMarks];
       column = col = 8;
       rowNumber = row = 14;
@@ -361,6 +387,8 @@ const createTranscript = catchAsync(async (req, res) => {
       }
 
       worksheet.getRow(29).getCell(27).value = semesterTitle;
+      worksheetP.getRow(26).getCell(25).value = semesterTitle;
+
       marks = [...fifthSemesterMarks];
       column = col = 34;
       rowNumber = row = 30;
@@ -381,6 +409,8 @@ const createTranscript = catchAsync(async (req, res) => {
       }
 
       worksheet.getRow(29).getCell(19).value = semesterTitle;
+      worksheetP.getRow(26).getCell(17).value = semesterTitle;
+
       marks = [...sixthSemesterMarks];
       column = col = 26;
       rowNumber = row = 30;
@@ -401,6 +431,8 @@ const createTranscript = catchAsync(async (req, res) => {
       }
 
       worksheet.getRow(29).getCell(11).value = semesterTitle;
+      worksheetP.getRow(26).getCell(9).value = semesterTitle;
+
       marks = [...seventhSemesterMarks];
       column = col = 18;
       rowNumber = row = 30;
@@ -421,6 +453,8 @@ const createTranscript = catchAsync(async (req, res) => {
       }
 
       worksheet.getRow(29).getCell(1).value = semesterTitle;
+      worksheetP.getRow(26).getCell(1).value = semesterTitle;
+
       marks = [...eightSemesterMarks];
       column = col = 8;
       rowNumber = row = 30;
@@ -456,6 +490,16 @@ const createTranscript = catchAsync(async (req, res) => {
 
     i++;
   }
+
+  // Attach educational year as miladi to english transcript
+  // 1-2
+  worksheetE.getRow(12).getCell(1).value = `ACADEMIC YEAR ${firstSemStartDateE}-${secondSemEndDateE}`;
+  // 3-4
+  worksheetE.getRow(27).getCell(1).value = `ACADEMIC YEAR ${thirdSemStartDateE}-${fourthSemEndDateE}`;
+  // 5-6
+  worksheetE.getRow(42).getCell(1).value = `ACADEMIC YEAR ${fifthSemStartDateE}-${sixthSemEndDateE}`;
+  // 7-8
+  worksheetE.getRow(57).getCell(1).value = `ACADEMIC YEAR ${seventhSemStartDateE}-${eightSemEndDateE}`;
 
   const now = Date.now().toLocaleString();
   const newPath = path.join(__dirname, '../', 'storage', 'files', `${now}.xlsx`);
