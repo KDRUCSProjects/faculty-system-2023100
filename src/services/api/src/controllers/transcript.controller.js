@@ -22,10 +22,10 @@ const reFormatMarks = (allMarks, key) => {
     if (semesters[key].semesterSubject.length > 0) {
       const subjects = [...semesters[key].semesterSubject];
       semesters[key].semesterSubject.filter((element) => {
-        const { subjectName, subjectId, subjectCredit, subjectCodeNumber } = element;
+        const { subjectName, subjectPashtoName, subjectId, subjectCredit, subjectCodeNumber } = element;
         const isRegister = resultArray.find((elem) => elem.subjectId === subjectId);
         if (!isRegister) {
-          const ob = { subjectId, subjectName, subjectCredit, subjectCodeNumber };
+          const ob = { subjectId, subjectName, subjectPashtoName, subjectCredit, subjectCodeNumber };
           if (element.chance === 1) {
             const secondChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 2);
             const thirdChance = subjects.find((elem) => elem.subjectId === subjectId && elem.chance === 3);
@@ -466,8 +466,9 @@ const createTranscript = catchAsync(async (req, res) => {
 
     marks.forEach((element) => {
       ++row;
-      const { subjectName, subjectCredit, firstChance, secondChance, thirdChance, fourthChance } = element;
-      worksheet.getRow(row).getCell(col).value = subjectName;
+      const { subjectName, subjectPashtoName, subjectCredit, firstChance, secondChance, thirdChance, fourthChance } =
+        element;
+      worksheet.getRow(row).getCell(col).value = subjectPashtoName;
       --col;
       worksheet.getRow(row).getCell(col).value = subjectCredit;
       --col;
@@ -483,8 +484,9 @@ const createTranscript = catchAsync(async (req, res) => {
 
     // Attach subjects code numbers into English transcript worksheet
     marks.forEach((element) => {
-      const { subjectCodeNumber } = element;
+      const { subjectCodeNumber, subjectName } = element;
       worksheetE.getRow(rowE).getCell(columnE).value = subjectCodeNumber;
+      worksheetE.getRow(rowE).getCell(1 + columnE).value = subjectName;
       rowE++;
     });
 

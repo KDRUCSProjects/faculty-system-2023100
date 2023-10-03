@@ -73,6 +73,7 @@ export default {
         },
         data: {
           name: payload.name,
+          pashtoName: payload.pashtoName,
           credit: payload.credit,
           codeNumber: payload.codeNumber,
         },

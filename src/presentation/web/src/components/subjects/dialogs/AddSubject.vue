@@ -30,6 +30,13 @@
               :label="$t('Subject Name')"
             ></v-text-field>
             <v-text-field
+              :rules="rules.pashtoName"
+              v-model="pashtoName"
+              type="text"
+              variant="outlined"
+              :label="$t('Subject Name')"
+            ></v-text-field>
+            <v-text-field
               :rules="rules.credit"
               v-model="credit"
               type="number"
@@ -72,6 +79,7 @@ export default {
     dialog: false,
     teacherId: null,
     name: null,
+    pashtoName: null,
     credit: null,
     codeNumber: null,
     show: true,
@@ -85,6 +93,7 @@ export default {
     rules() {
       return {
         name: [(v) => !!v || this.$t('Please enter subject name')],
+        pashtoName: [(v) => !!v || this.$t('Please enter pashto subject name')],
         credit: [(v) => !!v || this.$t('Please enter subject credits')],
         codeNumber: [(v) => !!v || this.$t('Please enter subject code number')],
       };
@@ -107,6 +116,7 @@ export default {
 
         const data = {
           name: this.name,
+          pashtoName: this.pashtoName,
           credit: this.credit,
           teacherId: this.teacherId,
           semesterId: this.semesterId,
