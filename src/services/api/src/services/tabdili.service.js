@@ -48,6 +48,16 @@ const findTabdiliByStudentId = (studentId) => {
 };
 
 /**
+ * find tabdili by student id and semester id
+ * @param {ObjectId} studentId
+ * @param {ObjectId} semesterId
+ * @returns {Promise<Tabdili>}
+ */
+const findTabdiliByStudentIdAndSemesterId = (studentId, semesterId) => {
+  return Tabdili.findOne({ where: { studentId, semesterId } });
+};
+
+/**
  * find tabdili by id
  * @param {ObjectId} tabdiliId
  * @returns {Promise<Tabdili>}
@@ -143,4 +153,5 @@ module.exports = {
   findTabdiliByStudentId,
   findTabdiliBySemesterId,
   findTabdiliByStdKankorId,
+  findTabdiliByStudentIdAndSemesterId,
 };

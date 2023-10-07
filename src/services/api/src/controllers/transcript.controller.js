@@ -5,6 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const { shokaListService, studentService, taajilService } = require('../services');
 const ApiError = require('../utils/ApiError');
 const { marksFormatter } = require('../utils/marks.formatter');
+const { isRepeatSemester, checkStudentMahromiatBySemesterId } = require('../utils/global');
 
 const reFormatMarks = (allMarks, key) => {
   // semesters array
@@ -129,10 +130,41 @@ const createTranscript = catchAsync(async (req, res) => {
   const school = await studentService.getStudentSchool(studentId);
   const monograph = await studentService.getStudentMonograph(studentId);
 
+
+
   const conditions = [`shokalist.deletedAt IS NULL`, `shokalist.studentId = ${studentId}`];
 
   // get student all marks
-  const studentMarks = await shokaListService.getStudentMarks(conditions);
+  let studentMarks = [];
+  const studentMarksFirstCheck = await shokaListService.getStudentMarks(conditions);
+  const semesterIds = [];
+  studentMarksFirstCheck.forEach(item => {
+    const id = item?.semesterId;
+    const consistId = semesterIds.find(item => item === id);
+    if (!consistId) {
+      semesterIds.push(id);
+    }
+  });
+
+  const semestersToBeSkipped = [];
+
+  for await (const id of semesterIds) {
+    const isFailed = await isRepeatSemester(studentId, id);
+    const { isMahrom } = await checkStudentMahromiatBySemesterId(studentId, id);
+
+    if (isFailed || isMahrom) {
+      semestersToBeSkipped.push(id);
+    }
+  }
+
+  studentMarksFirstCheck.forEach(item => {
+    const { semesterId } = item;
+    const toSkip = semestersToBeSkipped.find(itemId => itemId === semesterId);
+    if (!toSkip) {
+      studentMarks.push(item);
+    }
+  });
+
   // format students marks
   const formattedMarks = marksFormatter(studentMarks);
   // make format for transcript
@@ -172,8 +204,8 @@ const createTranscript = catchAsync(async (req, res) => {
   // second semester
   const secondSemester = formattedMarks.find((element) => element.semesterTitle === 2);
   // second semester start and end date
-  const secondSemStartDate = secondSemester?.secondHalfStart || 1401;
-  const secondSemEndDate = secondSemester?.secondHalfEnd || 1401;
+  const secondSemStartDate = secondSemester?.SecondHalfStart || 1401;
+  const secondSemEndDate = secondSemester?.SecondHalfEnd || 1401;
 
   // third semester
   const thirdSemester = formattedMarks.find((element) => element.semesterTitle === 3);
@@ -184,8 +216,8 @@ const createTranscript = catchAsync(async (req, res) => {
   // fourth semester
   const fourthSemester = formattedMarks.find((element) => element.semesterTitle === 4);
   // fourth semester start and end date
-  const fourthSemStartDate = fourthSemester?.secondHalfStart || 1401;
-  const fourthSemEndDate = fourthSemester?.secondHalfEnd || 1401;
+  const fourthSemStartDate = fourthSemester?.SecondHalfStart || 1401;
+  const fourthSemEndDate = fourthSemester?.SecondHalfEnd || 1401;
 
   // fifth semester
   const fifthSemester = formattedMarks.find((element) => element.semesterTitle === 5);
@@ -196,8 +228,8 @@ const createTranscript = catchAsync(async (req, res) => {
   // six semester
   const sixthSemester = formattedMarks.find((element) => element.semesterTitle === 6);
   // sixth semester start and end date
-  const sixthSemStartDate = sixthSemester?.secondHalfStart || 1401;
-  const sixthSemEndDate = sixthSemester?.secondHalfEnd || 1401;
+  const sixthSemStartDate = sixthSemester?.SecondHalfStart || 1401;
+  const sixthSemEndDate = sixthSemester?.SecondHalfEnd || 1401;
 
   // six semester
   const seventhSemester = formattedMarks.find((element) => element.semesterTitle === 7);
@@ -208,11 +240,12 @@ const createTranscript = catchAsync(async (req, res) => {
   // eight semester
   const eightSemester = formattedMarks.find((element) => element.semesterTitle === 6);
   // eight semester start and end date
-  const eightSemStartDate = eightSemester?.secondHalfStart || 1401;
-  const eightSemEndDate = eightSemester?.secondHalfEnd || 1401;
+  const eightSemStartDate = eightSemester?.SecondHalfStart || 1401;
+  const eightSemEndDate = eightSemester?.SecondHalfEnd || 1401;
 
   // find student taajil
   const studentTajil = await taajilService.findTaajilByStudentId(studentId);
+
 
   const filePath = path.join(__dirname, '../', 'storage', 'exportable', 'templates', '2023-Graduation.xlsx');
 

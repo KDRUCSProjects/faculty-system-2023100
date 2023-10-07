@@ -208,7 +208,7 @@ const isRepeatSemester = async (studentId, semesterId) => {
     const conditions = [
       `shokalist.deletedAt IS NULL`,
       `shokalist.shokaId  = ${shoka.id}`,
-      `student.id = ${studentId}`,
+      `shokalist.studentId = ${studentId}`,
       `semester.id = ${semesterId}`,
       `shokalist.chance = 1`,
     ];
@@ -241,7 +241,7 @@ const isRepeatSemester = async (studentId, semesterId) => {
 }
 
 /**
- * find if student has کتبی اخطار 
+ * find if student has کتبی اخطار or شفاهی اخطار
  * @param {ObjectId} studentId 
  * @param {ObjectId} semesterTitle 
  * @returns {Boolean}
