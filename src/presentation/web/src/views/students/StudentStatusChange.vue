@@ -15,6 +15,9 @@
             </template>
             <template v-slot:subtitle>
               <v-list-item-subtitle> {{ $t('Kankor ID') }} : {{ student?.kankorId }} </v-list-item-subtitle>
+              <v-list-item-subtitle>
+                {{ $t('Semester') }} : {{ rankSemester(studentSemester) || 'Reserved' }}
+              </v-list-item-subtitle>
             </template>
             <template v-slot:prepend>
               <v-avatar color="secondary" variant="tonal">
@@ -111,6 +114,7 @@
 <script>
 import StudentsDataTable from '@/components/students/tables/StudentsDataTable.vue';
 import StudentSearch from '@/components/students/search/StudentSearch.vue';
+import { rankSemester } from '@/utils/global';
 export default {
   components: {
     StudentsDataTable,
@@ -127,6 +131,7 @@ export default {
     reentryTypes: ['taajil', 'mahrom', 'special_taajil', 'repeat'],
     specialTaajil: false,
     student: null,
+    studentSemester: null,
     studentId: null,
     regNumber: null,
     educationalYear: null,
@@ -202,6 +207,9 @@ export default {
     },
   },
   methods: {
+    rankSemester(v) {
+      return rankSemester(v);
+    },
     async submitForm() {
       const { valid } = await this.$refs.statusForm.validate();
 
@@ -235,13 +243,22 @@ export default {
           type: this.formType,
           data,
         });
+
+        // Reload conversions
+        // Reset page
+        this.page = 1;
+        await this.loadConversionStudents({ type: this.formType, page: this.page, limit: this.itemsPerPage });
       } catch (e) {
         this.errorMessage = e;
       }
     },
-    setStudentId(student) {
+    async setStudentId(student) {
       this.student = student;
       this.studentId = student.id;
+
+      const { data } = await this.$store.dispatch('students/loadStudentById', student.id);
+
+      this.studentSemester = data?.latestSemester;
     },
     async nextConversionStudents(page) {
       this.loading = true;
@@ -291,6 +308,9 @@ export default {
 
       let { id } = data;
       await this.$store.dispatch('conversion/deleteConversion', { id, type: this.formType });
+
+      // Reload data
+      await this.loadConversionStudents({ type: this.formType, page: this.page, limit: this.itemsPerPage });
     },
   },
   async created() {

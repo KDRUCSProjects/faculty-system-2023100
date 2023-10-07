@@ -11,11 +11,13 @@
           <v-card-subtitle> View and update your attachment file</v-card-subtitle>
 
           <div class="update_dialog d-flex">
-            <v-btn v-if="attachment" variant="tonal" color="error" size="small" class="mx-1" @click="removePhoto"
+            <!-- Enable remove only for admins -->
+            <v-btn v-if="attachment && isAdmin" variant="tonal" color="error" size="small" class="mx-1" @click="removePhoto"
               >Remove</v-btn
             >
 
-            <div>
+            <!-- Disable Post Requests now -->
+            <div v-if="!attachment">
               <base-update-dialog
                 ref="profilePhotoDialog"
                 :photo="true"
@@ -75,7 +77,11 @@ export default {
     },
   },
   data: () => initialState(),
-  computed: {},
+  computed: {
+    isAdmin() {
+      return this.$store.getters['isAdmin'];
+    },
+  },
   methods: {
     close() {
       this.dialog = false;

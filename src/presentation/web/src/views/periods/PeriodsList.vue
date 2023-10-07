@@ -4,12 +4,24 @@
     <v-divider class="mx-4" inset vertical></v-divider>
     <v-spacer></v-spacer>
 
+    <v-btn
+      @click="downloadReport"
+      class="float-right mx-1"
+      prepend-icon="mdi-download-circle"
+      color="indigo"
+      variant="elevated"
+      download
+      :loading="downloadLoading"
+    >
+      Result Table
+    </v-btn>
+
     <base-select-period-dialog @select-period="setPeriod" :defaultPeriod="selectedPeriod">
       {{ selectedPeriod ? `Period ${selectedPeriod}` : 'Select Period' }}
     </base-select-period-dialog>
   </v-toolbar>
   <v-row no-gutters>
-    <v-col v-for="(semester, index) in semesters" :key="index" cols="3">
+    <v-col v-for="(semester, index) in semesters" :key="semester" cols="3">
       <v-sheet class="ma-2 pa-2">
         <semester-card
           :title="semester?.title"
@@ -30,6 +42,7 @@ import SemesterCard from '@/components/semesters/SemesterCard.vue';
 export default {
   data: () => ({
     selectedPeriod: null,
+    downloadLoading: false,
   }),
   components: {
     SemesterCard,
@@ -43,6 +56,20 @@ export default {
     },
   },
   methods: {
+    async downloadReport() {
+      this.downloadLoading = true;
+
+      if (!this.selectedPeriod) return false;
+
+      const file = await this.$store.dispatch('semesters/downloadPeriodResultTable', this.selectedPeriod);
+
+      this.downloadFile(file.data, `Period ${this.selectedPeriod} Result Table`);
+
+      // Make it a little stylish ;)
+      setTimeout(() => {
+        this.downloadLoading = false;
+      }, 500);
+    },
     async setPeriod(value) {
       this.selectedPeriod = value;
       this.$store.commit('semesters/setSelectedPeriodByUser', value);

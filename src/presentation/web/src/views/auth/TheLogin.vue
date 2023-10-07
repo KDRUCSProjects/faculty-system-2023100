@@ -66,7 +66,12 @@ export default {
         await this.$store.dispatch('auth', data);
 
         // If no error, redirect the user to dashboard
-        this.$router.replace('/dashboard');
+
+        if (this.$store.getters.isTeacher) {
+          return this.$router.replace('/home');
+        } else {
+          this.$router.replace('/dashboard');
+        }
       } catch (e) {
         this.serverResponse = e;
       } finally {
@@ -81,9 +86,7 @@ export default {
           (v) => !!v || this.$t('Please enter email address'),
           (v) => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
         ],
-        password: [
-          (v) => !!v || this.$t('Please enter password'),
-        ],
+        password: [(v) => !!v || this.$t('Please enter password')],
       };
     },
   },

@@ -107,6 +107,18 @@ module.exports = {
       csId: {
         type: Sequelize.STRING,
       },
+      schoolName: {
+        type: Sequelize.STRING,
+      },
+      schoolGraduationYear: {
+        type: Sequelize.STRING,
+      },
+      monographTitle: {
+        type: Sequelize.STRING,
+      },
+      monographDefenseDate: {
+        type: Sequelize.DATE,
+      },
       gender: {
         type: Sequelize.ENUM('male', 'female'),
         defaultValue: 'male',

@@ -29,18 +29,18 @@
             {{ $t('Secondary Language') }}
           </v-chip>
 
+          <!-- Personal Info -->
           <v-divider></v-divider>
-          <v-list-item v-for="rec in currentPersonalData" :key="rec.title">
+          <v-list-item v-for="rec in currentPersonalData" :key="rec.title" class="border ma-1">
             <v-list-item-title :class="{ 'text-error': !rec.title }" class="font-weight-bold" style="font-family: monospace">
               {{ rec.title || 'N/A' }}
             </v-list-item-title>
             <v-list-item-subtitle style="font-size: 13px">{{ rec.subtitle }}</v-list-item-subtitle>
-            <template v-slot:prepend>
+            <!-- <template v-slot:prepend>
               <v-avatar color="dark" variant="flat">
-                <!-- <v-icon color="white">mdi-account</v-icon> -->
                 <span class="h5-text" color="white">{{ buildAbbreviation(rec.subtitle) }}</span>
               </v-avatar>
-            </template>
+            </template> -->
 
             <template v-slot:append>
               <base-update-dialog
@@ -49,40 +49,137 @@
                 :fieldLabel="rec.subtitle"
                 :fieldValue="rec.title"
                 :fieldName="rec.fieldName"
+                :type="rec.type"
+                :validValues="rec.validValues"
               >
                 <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
               </base-update-dialog>
             </template>
           </v-list-item>
-          <v-divider></v-divider>
 
-          <v-chip prepend-icon="mdi-map-marker" label color="secondary" class="px-5 my-1">{{ $t('Location') }}</v-chip>
+          <!-- locations info -->
+          <div v-if="!showSecondaryLanguage">
+            <div class="my-1"></div>
+            <v-chip prepend-icon="mdi-map-marker" label color="secondary" class="px-5 my-1">{{ $t('Location') }}</v-chip>
 
-          <v-list-item v-for="location in locations" :key="location.title">
-            <v-list-item-title :class="{ 'text-error': !location.title }">
-              {{ location.title || 'N/A' }}
-            </v-list-item-title>
-            <v-list-item-subtitle style="font-size: 13px">{{ location.subtitle }}</v-list-item-subtitle>
+            <v-list-item v-for="location in locations" :key="location.title" class="border ma-1">
+              <v-list-item-title :class="{ 'text-error': !location.title }">
+                {{ location.title || 'N/A' }}
+              </v-list-item-title>
+              <v-list-item-subtitle style="font-size: 13px">{{ location.subtitle }}</v-list-item-subtitle>
+              <!-- 
+              <template v-slot:prepend>
+                <v-avatar color="dark" variant="flat">
+                  <span class="h5-text" color="white">{{ buildAbbreviation(location.subtitle) }}</span>
+                </v-avatar>
+              </template> -->
 
-            <template v-slot:prepend>
-              <v-avatar color="dark" variant="flat">
-                <!-- <v-icon color="white">{{ location.icon }}</v-icon> -->
-                <span class="h5-text" color="white">{{ buildAbbreviation(location.subtitle) }}</span>
-              </v-avatar>
-            </template>
+              <template v-slot:append>
+                <base-update-dialog
+                  :title="location.subtitle"
+                  @update="updateField"
+                  :fieldLabel="location.subtitle"
+                  :fieldValue="location.title"
+                  :fieldName="location.fieldName"
+                  :type="location.type"
+                  :validValues="location.validValues"
+                >
+                  <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
+                </base-update-dialog>
+              </template>
+            </v-list-item>
+          </div>
 
-            <template v-slot:append>
-              <base-update-dialog
-                :title="location.subtitle"
-                @update="updateField"
-                :fieldLabel="location.subtitle"
-                :fieldValue="location.title"
-                :fieldName="location.fieldName"
-              >
-                <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
-              </base-update-dialog>
-            </template>
-          </v-list-item>
+          <div v-if="!showSecondaryLanguage">
+            <!-- Kankor Info -->
+
+            <v-chip prepend-icon="mdi-card-account-details" label color="dark" class="px-5 my-1">{{
+              $t('Kankor Information')
+            }}</v-chip>
+
+            <v-list-item v-for="location in kankorInfo" :key="location.title" class="border ma-1">
+              <v-list-item-title :class="{ 'text-error': !location.title }">
+                {{ location.title || 'N/A' }}
+              </v-list-item-title>
+              <v-list-item-subtitle style="font-size: 13px">{{ location.subtitle }}</v-list-item-subtitle>
+
+              <!-- <template v-slot:prepend>
+                <v-avatar color="dark" variant="flat">
+                  <span class="h5-text" color="white">{{ buildAbbreviation(location.subtitle) }}</span>
+                </v-avatar>
+              </template> -->
+
+              <template v-slot:append>
+                <base-update-dialog
+                  :title="location.subtitle"
+                  @update="updateField"
+                  :fieldLabel="location.subtitle"
+                  :fieldValue="location.title"
+                  :fieldName="location.fieldName"
+                  :type="location.type"
+                  :validValues="location.validValues"
+                >
+                  <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
+                </base-update-dialog>
+              </template>
+            </v-list-item>
+          </div>
+
+          <div v-if="!showSecondaryLanguage">
+            <!-- School Info -->
+
+            <v-chip prepend-icon="mdi-school" label color="dark" class="px-5 my-1">{{ $t('School Information') }}</v-chip>
+
+            <v-list-item v-for="location in schoolInfo" :key="location.title" class="border ma-1">
+              <v-list-item-title :class="{ 'text-error': !location.title }">
+                {{ location.title || 'N/A' }}
+              </v-list-item-title>
+              <v-list-item-subtitle style="font-size: 13px">{{ location.subtitle }}</v-list-item-subtitle>
+
+              <template v-slot:append>
+                <base-update-dialog
+                  :title="location.subtitle"
+                  @update="updateField"
+                  :fieldLabel="location.subtitle"
+                  :fieldValue="location.title"
+                  :fieldName="location.fieldName"
+                  :type="location.type"
+                  :validValues="location.validValues"
+                >
+                  <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
+                </base-update-dialog>
+              </template>
+            </v-list-item>
+          </div>
+
+          <div v-if="!showSecondaryLanguage">
+            <!-- School Info -->
+
+            <v-chip prepend-icon="mdi-book-open-variant" label color="dark" class="px-5 my-1">{{
+              $t('Monograph Information')
+            }}</v-chip>
+
+            <v-list-item v-for="location in monographInfo" :key="location.title" class="border ma-1">
+              <v-list-item-title :class="{ 'text-error': !location.title }">
+                {{ location.title || 'N/A' }}
+              </v-list-item-title>
+              <v-list-item-subtitle style="font-size: 13px">{{ location.subtitle }}</v-list-item-subtitle>
+
+              <template v-slot:append>
+                <base-update-dialog
+                  :title="location.subtitle"
+                  @update="updateField"
+                  :fieldLabel="location.subtitle"
+                  :fieldValue="location.title"
+                  :fieldName="location.fieldName"
+                  :type="location.type"
+                  :validValues="location.validValues"
+                >
+                  <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
+                </base-update-dialog>
+              </template>
+            </v-list-item>
+          </div>
         </v-list>
       </v-card-text>
     </v-card>
@@ -92,6 +189,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   props: {
     id: {
@@ -135,6 +234,29 @@ export default {
           title: this.student?.grandFatherName,
           fieldName: 'grandFatherName',
         },
+        {
+          subtitle: this.$t('Gender'),
+          title: this.student?.gender,
+          fieldName: 'gender',
+          type: 'autocomplete',
+          validValues: ['male', 'female'],
+        },
+        {
+          subtitle: this.$t('Phone Number'),
+          title: this.student?.phoneNumber,
+          fieldName: 'phoneNumber',
+        },
+        {
+          subtitle: this.$t('Tazkera Number'),
+          title: this.student?.tazkeraNumber,
+          fieldName: 'tazkeraNumber',
+        },
+        {
+          subtitle: this.$t('Birth Date'),
+          title: this.student?.dob,
+          fieldName: 'dob',
+          type: 'dob',
+        },
       ];
     },
     personalSecondary() {
@@ -158,6 +280,22 @@ export default {
           subtitle: this.$t('Grand Father Name'),
           title: this.student?.engGrandFatherName,
           fieldName: 'engGrandFatherName',
+        },
+        {
+          subtitle: this.$t('Birth City'),
+          title: this.student?.birthCityEnglish,
+          fieldName: 'birthCityEnglish',
+        },
+        {
+          subtitle: this.$t('Birth Country'),
+          title: this.student?.birthCountryEnglish,
+          fieldName: 'birthCountryEnglish',
+        },
+        {
+          subtitle: this.$t('Birth Date'),
+          title: this.student?.engDob,
+          fieldName: 'engDob',
+          type: 'date',
         },
       ];
     },
@@ -184,10 +322,93 @@ export default {
           title: this.student?.district,
           fieldName: 'district',
         },
+        {
+          color: 'amber',
+          icon: 'mdi-gesture-tap-button',
+          subtitle: this.$t('Birth City'),
+          title: this.student?.birthCity,
+          fieldName: 'birthCity',
+        },
+        {
+          color: 'amber',
+          icon: 'mdi-gesture-tap-button',
+          subtitle: this.$t('Birth Country'),
+          title: this.student?.birthCountry,
+          fieldName: 'birthCountry',
+        },
+      ];
+    },
+    kankorInfo() {
+      return [
+        {
+          color: 'blue',
+          subtitle: this.$t('KankorId'),
+          title: this.student?.kankorId,
+          fieldName: 'kankorId',
+        },
+        {
+          color: 'amber',
+          subtitle: this.$t('KankorMarks'),
+          title: this.student?.kankorMarks,
+          fieldName: 'kankorMarks',
+        },
+        {
+          color: 'amber',
+          subtitle: this.$t('KankorYear'),
+          title: this.student?.admissionYear,
+          fieldName: 'admissionYear',
+        },
+        {
+          color: 'amber',
+          subtitle: this.$t('Faculty ID'),
+          title: this.student?.csId,
+          fieldName: 'csId',
+        },
+      ];
+    },
+    schoolInfo() {
+      return [
+        {
+          color: 'blue',
+          subtitle: this.$t('School Name'),
+          title: this.student?.schoolName,
+          fieldName: 'schoolName',
+        },
+        {
+          color: 'amber',
+          subtitle: this.$t('Graduation Year'),
+          title: this.student?.schoolGraduationYear,
+          fieldName: 'schoolGraduationYear',
+        },
+      ];
+    },
+    monographInfo() {
+      return [
+        {
+          color: 'blue',
+          subtitle: this.$t('Research Title'),
+          title: this.student?.monographTitle,
+          fieldName: 'monographTitle',
+        },
+        {
+          color: 'amber',
+          subtitle: this.$t('Research Defense Date'),
+          title: this.student?.monographDefenseDate,
+          fieldName: 'monographDefenseDate',
+        },
       ];
     },
     student() {
-      return this.$store.getters['students/currentStudent'];
+      const data = this.$store.getters['students/currentStudent'];
+
+      if (data?.dob) {
+        data.dob = moment(data?.dob).format('YYYY-MM-DD');
+      }
+
+      if (data?.engDob) {
+        data.engDob = moment(data?.engDob).format('YYYY-MM-DD');
+      }
+      return data;
     },
     currentPersonalData() {
       return !this.showSecondaryLanguage ? this.personal : this.personalSecondary;

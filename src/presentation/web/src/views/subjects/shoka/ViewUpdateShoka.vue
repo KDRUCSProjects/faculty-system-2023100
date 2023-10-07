@@ -227,6 +227,19 @@ export default {
     async updatePhoto(photo) {
       // if photo.fieldValue was null, then proceed DELETE
       if (this.attachment?.id && !photo?.fieldValue) {
+        // Show confirmation message for delete:
+
+        let res = await this.$refs.baseConfirmDialog.show({
+          warningTitle: this.$t('Warning'),
+          title: this.$t('Are you sure you want to delete?'),
+          okButton: this.$t('Delete'),
+        });
+
+        // If closed, return the function
+        if (!res) {
+          return;
+        }
+
         // Proceed delete
         this.$store.dispatch('subjects/deleteAttachment', this.attachment?.id);
 
@@ -248,6 +261,18 @@ export default {
         return;
       }
 
+      // Begin uploading file
+
+      let res = await this.$refs.baseConfirmDialog.show({
+        warningTitle: this.$t('Warning'),
+        title: this.$t('Are you sure? This will lock shoka and you wont be able to bring changes anymore.'),
+        okButton: this.$t('Submit'),
+      });
+
+      // If closed, return the function
+      if (!res) {
+        return;
+      }
       const result = await this.$store.dispatch('subjects/uploadAttachment', {
         ['photo']: photo.fieldValue,
         type: 'shoka',
@@ -295,18 +320,18 @@ export default {
       await this.$store.dispatch('subjects/loadShokaBySubjectId', { subjectId: this.subjectId, chance });
     },
     async updateMarks({ field, fieldValue, rowId, data }) {
-      if (!data.shokaListId) {
-        let res = await this.$refs.baseConfirmDialog.show({
-          warningTitle: this.$t('Warning'),
-          title: this.$t('You are adding marks of a student that has not been added by the teacher? Continue'),
-          okButton: this.$t('Yes'),
-        });
+      // if (!data.shokaListId) {
+      //   let res = await this.$refs.baseConfirmDialog.show({
+      //     warningTitle: this.$t('Warning'),
+      //     title: this.$t('You are adding marks of a student that has not been added by the teacher? Continue'),
+      //     okButton: this.$t('Yes'),
+      //   });
 
-        // If closed, return the function
-        if (!res) {
-          return false;
-        }
-      }
+      //   // If closed, return the function
+      //   if (!res) {
+      //     return false;
+      //   }
+      // }
 
       const type = data.shokaListId ? 'updateShokaByShokaListId' : 'addStudentMarksToShokaBySubjectId';
 

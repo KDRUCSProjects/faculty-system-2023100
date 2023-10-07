@@ -22,6 +22,7 @@
                   :subjects="item.subjects"
                   :no-teacher-view="true"
                   :no-subject-update="true"
+                  :no-subject-delete="true"
                   @action="getAction"
                 ></subjects-list>
               </v-card-text>
@@ -34,51 +35,53 @@
         </v-card>
       </v-col>
       <v-col cols="5">
-        <v-card class="mx-auto pa-3 theShadow">
-          <v-card-item>
-            <v-card-title class="text-h5 font-weight-bold">{{ $t('View Profile') }}</v-card-title>
-            <v-card-subtitle>{{ $t('Biography') }}</v-card-subtitle>
-          </v-card-item>
-          <v-divider></v-divider>
-          <v-card-text class="text-center">
-            <v-avatar class="my-2" size="160" color="secondary" variant="tonal">
-              <v-img v-if="teacher?.photo" :src="`${imagesResource}/${teacher?.photo}`" alt="user" />
-              <div v-else>
-                <span class="text-h5">{{ abbreviation }}</span>
-              </div>
-            </v-avatar>
-            <v-card-title class="pb-0 text-h5 mt-3" style="font-family: monospace">{{ teacher?.name }}</v-card-title>
-            <v-card-subtitle v-if="teacher?.lastName" class="py-0 my-0 text-center" style="font-family: monospace">
-              {{ teacher.lastName ? teacher.lastName : 'No NickName' }}
-            </v-card-subtitle>
-            <!-- <v-divider></v-divider> -->
-            <v-card-subtitle class="text-primary mt-3">{{ teacher?.email }}</v-card-subtitle>
-          </v-card-text>
-          <div class="d-flex w-100 flex-column justify-items-center align-items-center px-2">
-            <update-teacher v-if="id" :teacherId="id" activator-color="text">
-              <v-btn variant="tonal" color="primary" class="px-6 mb-1" prepend-icon="mdi-account" block>
-                {{ $t('Update Biography') }}
-              </v-btn>
-            </update-teacher>
-            <!-- Reset Teacher Password -->
-            <reset-teacher-password v-if="id" :teacherId="id" activator-color="text">
-              <v-btn variant="tonal" color="dark" class="px-6 mb-1" prepend-icon="mdi-account" block>
-                {{ $t('Change Password') }}
-              </v-btn>
-            </reset-teacher-password>
+        <v-banner sticky="true" class="ma-0 pa-0">
+          <v-card class="mx-auto pa-3 theShadow">
+            <v-card-item>
+              <v-card-title class="text-h5 font-weight-bold">{{ $t('View Profile') }}</v-card-title>
+              <v-card-subtitle>{{ $t('Biography') }}</v-card-subtitle>
+            </v-card-item>
+            <v-divider></v-divider>
+            <v-card-text class="text-center">
+              <v-avatar class="my-2" size="160" color="secondary" variant="tonal">
+                <v-img v-if="teacher?.photo" :src="`${imagesResource}/${teacher?.photo}`" alt="user" />
+                <div v-else>
+                  <span class="text-h5">{{ abbreviation }}</span>
+                </div>
+              </v-avatar>
+              <v-card-title class="pb-0 text-h5 mt-3" style="font-family: monospace">{{ teacher?.name }}</v-card-title>
+              <v-card-subtitle v-if="teacher?.lastName" class="py-0 my-0 text-center" style="font-family: monospace">
+                {{ teacher.lastName ? teacher.lastName : 'No NickName' }}
+              </v-card-subtitle>
+              <!-- <v-divider></v-divider> -->
+              <v-card-subtitle class="text-primary mt-3">{{ teacher?.email }}</v-card-subtitle>
+            </v-card-text>
+            <div class="d-flex w-100 flex-column justify-items-center align-items-center px-2">
+              <update-teacher v-if="id" :teacherId="id" activator-color="text">
+                <v-btn variant="tonal" color="primary" class="px-6 mb-1" prepend-icon="mdi-account" block>
+                  {{ $t('Update Biography') }}
+                </v-btn>
+              </update-teacher>
+              <!-- Reset Teacher Password -->
+              <reset-teacher-password v-if="id" :teacherId="id" activator-color="text">
+                <v-btn variant="tonal" color="dark" class="px-6 mb-1" prepend-icon="mdi-account" block>
+                  {{ $t('Change Password') }}
+                </v-btn>
+              </reset-teacher-password>
 
-            <v-btn
-              variant="tonal"
-              color="error"
-              class="px-6 mb-1"
-              prepend-icon="mdi-account"
-              block
-              @click="deleteTeacher(id)"
-              >{{ $t('Delete Account') }}</v-btn
-            >
-          </div>
-          <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
-        </v-card>
+              <v-btn
+                variant="tonal"
+                color="error"
+                class="px-6 mb-1"
+                prepend-icon="mdi-account"
+                block
+                @click="deleteTeacher(id)"
+                >{{ $t('Delete Account') }}</v-btn
+              >
+            </div>
+            <base-confirm-dialog ref="baseConfirmDialog"></base-confirm-dialog>
+          </v-card>
+        </v-banner>
       </v-col>
     </v-row>
   </div>
