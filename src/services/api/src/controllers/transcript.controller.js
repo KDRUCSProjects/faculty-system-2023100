@@ -144,17 +144,15 @@ const createTranscript = catchAsync(async (req, res) => {
     defenseDate: student?.monographDefenseDate,
   };
 
-
-
   const conditions = [`shokalist.deletedAt IS NULL`, `shokalist.studentId = ${studentId}`];
 
   // get student all marks
   let studentMarks = [];
   const studentMarksFirstCheck = await shokaListService.getStudentMarks(conditions);
   const semesterIds = [];
-  studentMarksFirstCheck.forEach(item => {
+  studentMarksFirstCheck.forEach((item) => {
     const id = item?.semesterId;
-    const consistId = semesterIds.find(item => item === id);
+    const consistId = semesterIds.find((item) => item === id);
     if (!consistId) {
       semesterIds.push(id);
     }
@@ -171,9 +169,9 @@ const createTranscript = catchAsync(async (req, res) => {
     }
   }
 
-  studentMarksFirstCheck.forEach(item => {
+  studentMarksFirstCheck.forEach((item) => {
     const { semesterId } = item;
-    const toSkip = semestersToBeSkipped.find(itemId => itemId === semesterId);
+    const toSkip = semestersToBeSkipped.find((itemId) => itemId === semesterId);
     if (!toSkip) {
       studentMarks.push(item);
     }
@@ -226,7 +224,6 @@ const createTranscript = catchAsync(async (req, res) => {
   const secondSemEndDate = secondSemester?.SecondHalfEnd || 0;
   const secondSemEndDateE = secondSemester?.SecondHalfEndP || 0;
 
-
   // third semester
   const thirdSemester = formattedMarks.find((element) => element.semesterTitle === 3);
   // third semester start and end date
@@ -244,7 +241,6 @@ const createTranscript = catchAsync(async (req, res) => {
   const fourthSemEndDate = fourthSemester?.SecondHalfEnd || 0;
   const fourthSemEndDateE = fourthSemester?.SecondHalfEndP || 0;
 
-
   // fifth semester
   const fifthSemester = formattedMarks.find((element) => element.semesterTitle === 5);
   // fifth semester start and end date
@@ -256,12 +252,11 @@ const createTranscript = catchAsync(async (req, res) => {
   // six semester
   const sixthSemester = formattedMarks.find((element) => element.semesterTitle === 6);
   // sixth semester start and end date
-  
+
   const sixthSemStartDate = sixthSemester?.SecondHalfStart || 0;
   const sixthSemStartDateE = sixthSemester?.SecondHalfStartP || 0;
   const sixthSemEndDate = sixthSemester?.SecondHalfEnd || 0;
   const sixthSemEndDateE = sixthSemester?.SecondHalfEndP || 0;
-
 
   // six semester
   const seventhSemester = formattedMarks.find((element) => element.semesterTitle === 7);
@@ -280,10 +275,8 @@ const createTranscript = catchAsync(async (req, res) => {
   const eightSemEndDate = eightSemester?.SecondHalfEnd || 0;
   const eightSemEndDateE = eightSemester?.SecondHalfEndP || 0;
 
-
   // find student taajil
   const studentTajil = await taajilService.findTaajilByStudentId(studentId);
-
 
   const filePath = path.join(__dirname, '../', 'storage', 'exportable', 'templates', '2023-Graduation.xlsx');
 
