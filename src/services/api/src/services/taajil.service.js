@@ -151,11 +151,24 @@ const deleteTaajil = (taajilBody) => {
 /**
  * find tajil by student id and taajil type
  * @param {ObjectId} studentKankorId
+ * @param {String} type
  * @returns {Promise<Taajil>}
  */
 const findTaajilByStudentIdAndType = async (studentId, type) => {
   return await Taajil.findOne({
     where: { studentId, type },
+  });
+};
+
+/**
+ * find taajil by student id and semester id
+ * @param {ObjectId} studentId
+ * @param {ObjectId} semesterId
+ * @returns {Promise<Taajil>}
+ */
+const findTaajilByStudentAndSemId = (studentId, semesterId) => {
+  return Taajil.findOne({
+    where: { studentId, semesterId },
   });
 };
 
@@ -195,4 +208,5 @@ module.exports = {
   deleteTaajilByStudentId,
   findTaajilByStudentIdAndType,
   findTaajilBySemesterId,
+  findTaajilByStudentAndSemId,
 };
