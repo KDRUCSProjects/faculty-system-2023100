@@ -93,9 +93,7 @@
           <div v-if="!showSecondaryLanguage">
             <!-- Kankor Info -->
 
-            <v-chip prepend-icon="mdi-card-account-details" label color="dark" class="px-5 my-1">{{
-              $t('Kankor Information')
-            }}</v-chip>
+            <v-chip prepend-icon="mdi-card-account-details" label color="dark" class="px-5 my-1">{{ $t('Kankor ') }}</v-chip>
 
             <v-list-item v-for="location in kankorInfo" :key="location.title" class="border ma-1">
               <v-list-item-title :class="{ 'text-error': !location.title }">
@@ -128,7 +126,7 @@
           <div v-if="!showSecondaryLanguage">
             <!-- School Info -->
 
-            <v-chip prepend-icon="mdi-school" label color="dark" class="px-5 my-1">{{ $t('School Information') }}</v-chip>
+            <v-chip prepend-icon="mdi-school" label color="dark" class="px-5 my-1">{{ $t('School') }}</v-chip>
 
             <v-list-item v-for="location in schoolInfo" :key="location.title" class="border ma-1">
               <v-list-item-title :class="{ 'text-error': !location.title }">
@@ -153,13 +151,40 @@
           </div>
 
           <div v-if="!showSecondaryLanguage">
-            <!-- School Info -->
+            <!-- Monograph Info -->
 
-            <v-chip prepend-icon="mdi-book-open-variant" label color="dark" class="px-5 my-1">{{
-              $t('Monograph Information')
-            }}</v-chip>
+            <v-chip prepend-icon="mdi-book-open-variant" label color="dark" class="px-5 my-1">{{ $t('Monograph ') }}</v-chip>
 
             <v-list-item v-for="location in monographInfo" :key="location.title" class="border ma-1">
+              <v-list-item-title :class="{ 'text-error': !location.title }">
+                {{ location.title || 'N/A' }}
+              </v-list-item-title>
+              <v-list-item-subtitle style="font-size: 13px">{{ location.subtitle }}</v-list-item-subtitle>
+
+              <template v-slot:append>
+                <base-update-dialog
+                  :title="location.subtitle"
+                  @update="updateField"
+                  :fieldLabel="location.subtitle"
+                  :fieldValue="location.title"
+                  :fieldName="location.fieldName"
+                  :type="location.type"
+                  :validValues="location.validValues"
+                >
+                  <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
+                </base-update-dialog>
+              </template>
+            </v-list-item>
+          </div>
+
+          <div v-if="!showSecondaryLanguage">
+            <!-- Semester Info -->
+
+            <v-chip prepend-icon="mdi-google-classroom" label color="dark" class="px-5 my-1">{{
+              $t('Semester Info')
+            }}</v-chip>
+
+            <v-list-item v-for="location in semesterInfo" :key="location.title" class="border ma-1">
               <v-list-item-title :class="{ 'text-error': !location.title }">
                 {{ location.title || 'N/A' }}
               </v-list-item-title>
@@ -395,6 +420,22 @@ export default {
           subtitle: this.$t('Research Defense Date'),
           title: this.student?.monographDefenseDate,
           fieldName: 'monographDefenseDate',
+        },
+      ];
+    },
+    semesterInfo() {
+      return [
+        {
+          color: 'blue',
+          subtitle: this.$t('Repeat Semester Year'),
+          title: this.student?.repeatSemesterYear,
+          fieldName: 'repeatSemesterYear',
+        },
+        {
+          color: 'amber',
+          subtitle: this.$t('Mahrom Semester Year'),
+          title: this.student?.mahromSemesterYear,
+          fieldName: 'mahromSemesterYear',
         },
       ];
     },

@@ -2,7 +2,13 @@ const httpStatus = require('http-status');
 const Excel = require('exceljs');
 const path = require('path');
 const catchAsync = require('../utils/catchAsync');
-const { shokaListService, studentService, taajilService } = require('../services');
+const {
+  shokaListService,
+  studentService,
+  taajilService,
+  studentListService,
+  educationalYearService,
+} = require('../services');
 const ApiError = require('../utils/ApiError');
 const { marksFormatter } = require('../utils/marks.formatter');
 const { toPashtoDigits } = require('../utils/global');
@@ -228,7 +234,7 @@ const createTranscript = catchAsync(async (req, res) => {
   const seventhSemEndDateE = seventhSemester?.firstHalfEndP || 0;
 
   // eight semester
-  const eightSemester = formattedMarks.find((element) => element.semesterTitle === 6);
+  const eightSemester = formattedMarks.find((element) => element.semesterTitle === 8);
   // eight semester start and end date
   const eightSemStartDate = eightSemester?.SecondHalfStart || 0;
   const eightSemStartDateE = eightSemester?.SecondHalfStartP || 0;
@@ -266,7 +272,41 @@ const createTranscript = catchAsync(async (req, res) => {
   // remaining parts;
   // worksheet.getRow(3).getCell(22).value = student;
   // worksheet.getRow(3).getCell(22).value = student;
-  worksheet.getRow(4).getCell(22).value = student.admissionYear;
+  worksheet.getRow(3).getCell(22).value = student.admissionYear;
+
+  const studentSemesters = await studentListService.findAllStudentListOfSingleStudent(student.id);
+  if (studentSemesters.length != 0) {
+    // First year
+    const yearId = studentSemesters[0]?.Semester.educationalYearId;
+    const { firstHalfStart: firstSemesterYear, firstHalfStartP: firstSemesterYearP } =
+      await educationalYearService.getEducationalYear(yearId);
+
+    // Attach it pashto and english transcript
+    worksheet.getRow(4).getCell(22).value = firstSemesterYear;
+    worksheetE.getRow(10).getCell(3).value = firstSemesterYearP;
+
+    // Latest semester year
+    const latestSemester = studentSemesters[studentSemesters.length - 1]?.Semester;
+    if (latestSemester.title == 8) {
+      const yearId = studentSemesters[studentSemesters.length - 1]?.Semester.educationalYearId;
+      const { SecondHalfEnd: latestSemesterYear, SecondHalfEndP: latestSemesterYearP } =
+        await educationalYearService.getEducationalYear(yearId);
+
+      // Attach it pashto and english transcript
+      worksheet.getRow(8).getCell(22).value = latestSemesterYear;
+      worksheetE.getRow(10).getCell(12).value = latestSemesterYearP;
+    }
+  }
+
+  // Attach Taajil Year
+  const allTaajils = await taajilService.findStudentAllTajils(student.id);
+  if (allTaajils.length != 0) {
+    worksheet.getRow(5).getCell(22).value = allTaajils[0].year;
+  } else {
+    worksheet.getRow(5).getCell(22).value = 0;
+  }
+
+  // Repeat Semester and Mahromiat Years
 
   // school and monograph
   worksheet.getRow(3).getCell(6).value = school?.name;

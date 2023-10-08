@@ -34,7 +34,7 @@
               v-model="pashtoName"
               type="text"
               variant="outlined"
-              :label="$t('Subject Name')"
+              :label="$t('Subject Name Pashto')"
             ></v-text-field>
             <v-text-field
               :rules="rules.credit"

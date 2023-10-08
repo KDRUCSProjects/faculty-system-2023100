@@ -104,6 +104,14 @@ module.exports = {
       admissionYear: {
         type: Sequelize.INTEGER,
       },
+      repeatSemesterYear: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
+      mahromSemesterYear: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
       csId: {
         type: Sequelize.STRING,
       },

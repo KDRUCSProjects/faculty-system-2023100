@@ -72,6 +72,8 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 'male',
       },
       admissionYear: DataTypes.INTEGER,
+      mahromSemesterYear: DataTypes.INTEGER,
+      repeatSemesterYear: DataTypes.INTEGER,
       schoolName: DataTypes.STRING,
       schoolGraduationYear: DataTypes.STRING,
       monographTitle: DataTypes.STRING,
