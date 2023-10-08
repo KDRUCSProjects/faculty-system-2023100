@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
         trim: true,
         allowNull: false,
       },
+      pashtoName: {
+        type: DataTypes.STRING,
+        required: true,
+        trim: true,
+      },
       credit: {
         type: DataTypes.INTEGER,
         required: true,

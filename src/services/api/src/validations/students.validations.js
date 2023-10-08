@@ -16,6 +16,8 @@ const registerStudent = {
     engGrandFatherName: Joi.string().allow(''),
     educationalYear: Joi.date(),
     admissionYear: Joi.number().positive().integer(),
+    mahromSemesterYear: Joi.number().positive().integer(),
+    repeatSemesterYear: Joi.number().positive().integer(),
     photo: Joi.string().allow(null).allow(''),
     dob: Joi.date(),
     engDob: Joi.date(),
@@ -33,7 +35,7 @@ const registerStudent = {
     schoolName: Joi.string().allow(''),
     schoolGraduationYear: Joi.number().allow(''),
     monographTitle: Joi.string().allow(''),
-    monographDefenseDate: Joi.date().allow(''),
+    monographDefenseDate: Joi.string().allow(''),
   }),
 };
 
@@ -57,6 +59,8 @@ const updateStudent = {
       engGrandFatherName: Joi.string().allow(''),
       educationalYear: Joi.date(),
       admissionYear: Joi.number().positive().integer(),
+      mahromSemesterYear: Joi.number().positive().integer(),
+      repeatSemesterYear: Joi.number().positive().integer(),
       photo: Joi.string().allow(null).allow(''),
       dob: Joi.date(),
       engDob: Joi.date(),
@@ -74,7 +78,7 @@ const updateStudent = {
       schoolName: Joi.string().allow(''),
       schoolGraduationYear: Joi.number().allow(''),
       monographTitle: Joi.string().allow(''),
-      monographDefenseDate: Joi.date().allow(''),
+      monographDefenseDate: Joi.string().allow(''),
     })
     .min(1)
     .required(),
@@ -124,6 +128,8 @@ const tempToken = {
       engGrandFatherName: Joi.string().allow(''),
       educationalYear: Joi.date(),
       admissionYear: Joi.number().positive().integer(),
+      mahromSemesterYear: Joi.number().positive().integer(),
+      repeatSemesterYear: Joi.number().positive().integer(),
       photo: Joi.string().allow(null).allow(''),
       dob: Joi.date(),
       engDob: Joi.date(),
@@ -141,7 +147,7 @@ const tempToken = {
       schoolName: Joi.string().allow(''),
       schoolGraduationYear: Joi.number().allow(''),
       monographTitle: Joi.string().allow(''),
-      monographDefenseDate: Joi.date().allow(''),
+      monographDefenseDate: Joi.string().allow(''),
     })
     .min(1)
     .required(),

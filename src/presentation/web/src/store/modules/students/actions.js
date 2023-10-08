@@ -131,7 +131,7 @@ export default {
         if (value) {
           formData.append(key, payload[key]);
         } else {
-          formData.append(key, null);
+          formData.append(key, '');
         }
       }
 

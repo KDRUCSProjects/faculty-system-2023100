@@ -16,11 +16,9 @@ switch (store.getters.role) {
     redirectPath = '/students/all';
     break;
   case 'execManager':
-    redirectPath = '/students-status-change';
+    redirectPath = '/students/status-change';
     break;
 }
-
-console.log(redirectPath);
 
 const routes = [
   {
@@ -29,6 +27,7 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    name: 'dashboard',
   },
   {
     path: '/home',
@@ -36,6 +35,7 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    name: 'home',
   },
   {
     path: '/',
@@ -43,6 +43,7 @@ const routes = [
   },
   {
     path: '/teachers',
+    name: 'teachers',
     meta: {
       requiresAuth: true,
     },
@@ -74,6 +75,7 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    name: 'settings',
     component: () => import('@/views/Settings.vue'),
   },
   {
@@ -82,9 +84,11 @@ const routes = [
     meta: {
       requiresUnauth: true,
     },
+    name: 'auth',
   },
   {
     path: '/students',
+    name: 'students',
     component: () => import('@/views/students/Students.vue'),
     children: [
       {
@@ -133,6 +137,7 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    name: 'subjects',
     component: () => import('@/views/subjects/Subject.vue'),
     children: [
       {
@@ -160,6 +165,7 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    name: 'semesters',
     component: () => import('@/views/semesters/Semesters.vue'),
     children: [
       {
@@ -182,7 +188,9 @@ const routes = [
     path: '/periods',
     meta: {
       requiresAuth: true,
+      role: ['execManager'],
     },
+    name: 'periods',
     component: () => import('@/views/periods/Periods.vue'),
     children: [
       {
@@ -206,6 +214,7 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    name: 'report',
     component: () => import('@/views/Report.vue'),
   },
   {
@@ -219,7 +228,7 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(function (to, _, next) {
+router.beforeEach(function (to, from, next) {
   if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
     next('/auth');
   } else if (to.meta.requiresUnauth && store.getters.isAuthenticated) {
@@ -229,7 +238,58 @@ router.beforeEach(function (to, _, next) {
     }
     next('/dashboard');
   } else {
-    next();
+    const role = store.getters?.role || null;
+    const rules = [
+      {
+        role: 'user',
+        auth: ['home', 'view-shoka', 'view-attendance', 'auth'],
+      },
+      {
+        role: 'admin',
+        unauth: ['home'],
+      },
+      {
+        role: 'execManager',
+        unauth: ['home', 'view-shoka', 'view-attendance', 'dashboard'],
+      },
+      {
+        role: 'teachingManager',
+        unauth: ['home', 'view-shoka', 'view-attendance', 'dashboard'],
+      },
+    ];
+
+    // Admin rules
+    if (role === 'admin') {
+      if (rules[1].unauth.includes(to?.name)) {
+        router.replace('/dashboard');
+      } else {
+        next();
+      }
+    } else if (role === 'user') {
+      // Teacher rules
+      if (!rules[0].auth.includes(to?.name)) {
+        router.replace('/home');
+      } else {
+        next();
+      }
+    } else if (role === 'execManager') {
+      // Executive Manager rules
+      if (rules[2].unauth.includes(to?.name)) {
+        router.replace('/students/status-change');
+      } else {
+        next();
+      }
+    } else if (role === 'teachingManager') {
+      // Teaching Manager rules
+      if (rules[3].unauth.includes(to?.name)) {
+        router.replace('/students/all');
+      } else {
+        next();
+      }
+    } else {
+      // Default fallback
+      next();
+    }
   }
 });
 

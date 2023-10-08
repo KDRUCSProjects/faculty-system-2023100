@@ -15,6 +15,12 @@
           <v-form @submit.prevent="submitForm" ref="updateSubjectForm">
             <v-text-field :rules="rules.name" v-model="name" variant="outlined" :label="$t('Subject Name')"></v-text-field>
             <v-text-field
+              :rules="rules.pashtoName"
+              v-model="pashtoName"
+              variant="outlined"
+              :label="$t('Subject Pashto Name')"
+            ></v-text-field>
+            <v-text-field
               :rules="rules.credit"
               v-model="credit"
               type="number"
@@ -74,6 +80,7 @@ export default {
     alert: false,
     dialog: false,
     name: null,
+    pashtoName: null,
     credit: null,
     codeNumber: null,
     teacherId: null,
@@ -88,6 +95,7 @@ export default {
     rules() {
       return {
         name: [(v) => !!v || this.$t('Please enter subject name')],
+        pashtoName: [(v) => !!v || this.$t('Please enter subject pashto name')],
         credit: [(v) => !!v || this.$t('Please enter subject credits')],
         codeNumber: [(v) => !!v || this.$t('Please enter subject code number')],
       };
@@ -100,10 +108,10 @@ export default {
       if (!response.data) return false;
 
       this.name = response.data.name;
+      this.pashtoName = response.data.pashtoName;
       this.credit = response.data.credit;
-      this.teacherId= response.data.teacherId;
+      this.teacherId = response.data.teacherId;
       this.codeNumber = response.data.codeNumber;
-
     },
     async submitForm() {
       // Validate the form first
@@ -121,6 +129,7 @@ export default {
           subjectId: this.subjectId,
           // Data starts here...
           name: this.name,
+          pashtoName: this.pashtoName,
           credit: this.credit,
           teacherId: this.teacherId,
           codeNumber: this.codeNumber,
@@ -147,7 +156,6 @@ export default {
   emits: ['dialog-close'],
   async created() {
     await this.setSubject();
-
   },
 };
 </script>
