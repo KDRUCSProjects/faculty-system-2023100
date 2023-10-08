@@ -64,18 +64,37 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <v-text-field
-                    variant="outlined"
-                    :label="$t('Father Name')"
-                    v-model="fatherName"
-                    :rules="rules.fatherName"
-                  ></v-text-field>
-                  <v-text-field
-                    variant="outlined"
-                    :label="$t('Grand Father Name')"
-                    v-model="grandFatherName"
-                    :rules="rules.grandFatherName"
-                  ></v-text-field>
+                  <v-row>
+                    <v-col cols="6">
+                      <v-text-field
+                        variant="outlined"
+                        :label="$t('Father Name')"
+                        v-model="fatherName"
+                        :rules="rules.fatherName"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        variant="outlined"
+                        :label="$t('Grand Father Name')"
+                        v-model="grandFatherName"
+                        :rules="rules.grandFatherName"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="6">
+                      <v-select variant="outlined" label="Gender" :items="['male', 'female']" v-model="gender"></v-select>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-select
+                        variant="outlined"
+                        label="Kankor Type"
+                        :items="['general', 'pass14']"
+                        v-model="kankorType"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
                 </v-window-item>
                 <v-window-item :value="2">
                   <v-chip prepend-icon="mdi-map-marker" label color="light" variant="flat" class="px-5 my-1 mb-3">
@@ -137,6 +156,8 @@ export default {
     fullName: null,
     lastName: null,
     fatherName: null,
+    gender: 'male',
+    kankorType: 'general',
     grandFatherName: null,
     photo: null,
     province: null,
@@ -202,6 +223,9 @@ export default {
             engFatherName: this.engFatherName,
             engGrandFatherName: this.engGrandFatherName,
             educationalYear: this.educationalYear,
+            // user can later change this @ update student profile
+            kankorType: this.kankorType,
+            gender: this.gender,
           });
         } else {
           return this.$store.commit('setToast', [0, this.$t('Photo size should be lesser than 2 MB!')]);

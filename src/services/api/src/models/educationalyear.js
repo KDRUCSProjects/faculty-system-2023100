@@ -62,6 +62,18 @@ module.exports = (sequelize, DataTypes) => {
         // The actual start date of second semester (shamsi maybe)
         type: DataTypes.INTEGER,
       },
+      firstHalfStartP: {
+        type: DataTypes.INTEGER,
+      },
+      firstHalfEndP: {
+        type: DataTypes.INTEGER,
+      },
+      SecondHalfStartP: {
+        type: DataTypes.INTEGER,
+      },
+      SecondHalfEndP: {
+        type: DataTypes.INTEGER,
+      },
       ...BaseModel(DataTypes),
     },
     {
@@ -71,5 +83,45 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
     }
   );
+
+  // Schema Hooks--------------------------------------------------
+
+  EducationalYear.beforeCreate('beforeYearCreation', (data) => {
+    console.log(data);
+    const { year } = data;
+    if (!data.firstHalfStart) {
+      data.firstHalfStart = year;
+    }
+
+    if (!data.firstHalfEnd) {
+      data.firstHalfEnd = year;
+    }
+
+    if (!data.SecondHalfStart) {
+      data.SecondHalfStart = year;
+    }
+
+    if (!data.SecondHalfEnd) {
+      data.SecondHalfEnd = year;
+    }
+
+    // Secondary (Pashto) Language Start and End
+    if (!data.firstHalfStartP) {
+      data.firstHalfStartP = year;
+    }
+
+    if (!data.firstHalfEndP) {
+      data.firstHalfEndP = year;
+    }
+
+    if (!data.SecondHalfStartP) {
+      data.SecondHalfStartP = year;
+    }
+
+    if (!data.SecondHalfEndP) {
+      data.SecondHalfEndP = year;
+    }
+  });
+
   return EducationalYear;
 };

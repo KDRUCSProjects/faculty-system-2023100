@@ -6,6 +6,7 @@
           <student-photo :student="student" @upload-photo="updatePhoto">
             <div id="actions" class="ma-4">
               <v-btn
+                v-if="role === 'execManager' || role === 'admin'"
                 @click="downloadTranscript"
                 class="float-right mb-1"
                 prepend-icon="mdi-download-circle-outline"
@@ -97,6 +98,9 @@ export default {
   computed: {
     student() {
       return this.$store.getters['students/currentStudent'];
+    },
+    role() {
+      return this.$store.getters['role'];
     },
   },
   async created() {

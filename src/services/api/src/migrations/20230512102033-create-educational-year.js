@@ -17,7 +17,7 @@ module.exports = {
         allowNull: true,
       },
       year: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       onGoing: {
@@ -45,6 +45,18 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       SecondHalfEnd: {
+        type: Sequelize.INTEGER,
+      },
+      firstHalfStartP: {
+        type: Sequelize.INTEGER,
+      },
+      firstHalfEndP: {
+        type: Sequelize.INTEGER,
+      },
+      SecondHalfStartP: {
+        type: Sequelize.INTEGER,
+      },
+      SecondHalfEndP: {
         type: Sequelize.INTEGER,
       },
       ...BaseModel(Sequelize),

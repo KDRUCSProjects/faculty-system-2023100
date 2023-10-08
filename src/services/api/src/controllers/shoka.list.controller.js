@@ -134,16 +134,14 @@ const getShokaList = catchAsync(async (req, res) => {
   const semStudentsMale = await getStatsBySemesterId(semester.id, 'male', false);
   const semStudentsFemale = await getStatsBySemesterId(semester.id, 'female', false);
 
-  console.log(semStudentsMale);
-
   const semStudentsPresent = [...semStudentsMale?.present, ...semStudentsFemale?.present]?.map((student) => student.id);
 
-  semStudents = semStudents.filter((student) => {
+  semStudents = semStudents.filter((shokaList) => {
     let studentExists = false;
     semStudentsPresent.forEach((s) => {
-      if (student.id === s) studentExists = true;
+      if (shokaList.studentId === s) studentExists = true;
     });
-    if (studentExists) return student;
+    if (studentExists) return shokaList;
   });
 
   if (semStudentsPresent.length <= 0) {
@@ -625,12 +623,12 @@ const createShokaInExcel = catchAsync(async (req, res) => {
 
   const semStudentsPresent = [...semStudentsMale?.present, ...semStudentsFemale?.present]?.map((student) => student.id);
 
-  semStudents = semStudents.filter((student) => {
+  semStudents = semStudents.filter((shokaList) => {
     let studentExists = false;
     semStudentsPresent.forEach((s) => {
-      if (student.id === s) studentExists = true;
+      if (shokaList.studentId === s) studentExists = true;
     });
-    if (studentExists) return student;
+    if (studentExists) return shokaList;
   });
 
   if (semStudentsPresent.length <= 0) {
