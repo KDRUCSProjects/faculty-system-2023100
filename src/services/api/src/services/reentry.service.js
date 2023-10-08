@@ -79,6 +79,21 @@ const findReentryByStudentId = (studentId) => {
 };
 
 /**
+ * find reentry by student id and semester id
+ * @param {ObjectId} studentId
+ * @param {ObjectId} semesterId
+ * @returns {Promise<Reentry>}
+ */
+const findReentryByStudentIdAndSemesterId = (studentId, semesterId) => {
+  return Reentry.findOne({
+    where: {
+      studentId,
+      semesterId,
+    },
+  });
+};
+
+/**
  * find reentry by student kankor id
  * @param {ObjectId} studentKankorId
  * @returns {Promise<Reentry>}
@@ -176,4 +191,5 @@ module.exports = {
   findReentryByStdIdAndYearId,
   findReentryByStudentIdAndReason,
   findReentryBySemesterIdAndType,
+  findReentryByStudentIdAndSemesterId,
 };
