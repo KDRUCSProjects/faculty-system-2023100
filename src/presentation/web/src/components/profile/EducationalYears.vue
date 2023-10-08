@@ -44,17 +44,18 @@
           <v-form @submit.prevent="setTimes(year.id)">
             <v-row class="ma-0 pa-0">
               <v-col cols="4"
-                ><v-text-field class="mt-2" variant="outlined" v-model.number="period" label="Period"> </v-text-field
+                ><v-text-field class="mt-2" variant="outlined" v-model.number="period" :label="$t('Period')"> </v-text-field
               ></v-col>
               <v-col cols="4"
-                ><v-text-field class="mt-2" variant="outlined" v-model.number="startDate" label="Semester Start Date">
+                ><v-text-field class="mt-2" variant="outlined" v-model.number="startDate" :label="$t('Semester Start Date')">
                 </v-text-field
               ></v-col>
               <v-col cols="4"
-                ><v-text-field class="mt-2" variant="outlined" v-model.number="endDate" label="Semester End Date">
+                ><v-text-field class="mt-2" variant="outlined" v-model.number="endDate" :label="$t('Semester End Date')">
                 </v-text-field
               ></v-col>
             </v-row>
+
             <v-row class="ma-0 pa-0">
               <v-col cols="6"
                 ><v-text-field variant="outlined" v-model.number="startDateP" label="Semester Start Miladi"> </v-text-field
@@ -63,7 +64,7 @@
                 ><v-text-field variant="outlined" v-model.number="endDateP" label="Semester End Miladi"> </v-text-field
               ></v-col>
             </v-row>
-            <v-btn block size="large" color="primary" variant="tonal" @click="setTimes(year.id)">Update Information</v-btn>
+            <v-btn block size="large" color="primary" variant="tonal" @click="setTimes(year.id)">{{ $t('Update Information') }}</v-btn>
           </v-form>
         </v-list-item>
       </div>

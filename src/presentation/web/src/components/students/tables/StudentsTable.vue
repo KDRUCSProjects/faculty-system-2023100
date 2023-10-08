@@ -30,7 +30,7 @@
       <template v-slot:top v-if="!hideToolbar">
         <v-toolbar :color="enrollmentMode ? 'dark' : 'primary'">
           <v-toolbar-title>
-            {{ enrollmentMode ? 'Reserved  Students' : 'Semester Students' }}
+            {{ enrollmentMode ? $t('Reserved  Students') : $t('Semester Students') }}
           </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
@@ -55,7 +55,7 @@
             @click="switchMode"
             :prepend-icon="enrollmentMode ? 'mdi-account-group' : 'mdi-plus-outline'"
           >
-            {{ enrollmentMode ? 'Semester Students' : 'Student Enrollment' }}
+            {{ enrollmentMode ? $t('Semester Students') : $t('Student Enrollment') }}
           </v-btn>
         </v-toolbar>
       </template>

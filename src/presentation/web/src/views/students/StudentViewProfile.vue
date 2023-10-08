@@ -16,7 +16,7 @@
                 download
                 :loading="downloadLoading"
               >
-                Transcript
+                {{ $t('Transcript') }}
               </v-btn>
               <div class="my-1"></div>
               <v-btn variant="flat" prepend-icon="mdi-delete-outline" block color="red" @click="deleteStudent(student.id)">

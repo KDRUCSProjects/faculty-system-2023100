@@ -7,7 +7,7 @@
           <template v-slot:activator="{ props }">
             <div v-bind="props">
               <slot>
-                <v-btn color="primary"> Change Password </v-btn>
+                <v-btn color="primary"> {{ $t('Change Password') }} </v-btn>
               </slot>
             </div>
           </template>

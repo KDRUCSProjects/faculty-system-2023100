@@ -6,7 +6,7 @@
       <template v-slot:activator="{ props }">
         <div v-bind="props">
           <slot>
-            <v-btn color="primary"> Update Teacher </v-btn>
+            <v-btn color="primary"> {{ $t('Update Teacher') }} </v-btn>
           </slot>
         </div>
       </template>
@@ -18,7 +18,7 @@
 
         <v-card-text>
           <v-form @submit.prevent="submitForm" ref="updateTeacherForm">
-            <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo"></base-photo-uploader>
+            <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo" @photo-size-change="handlePhotoSize"></base-photo-uploader>
 
             <v-text-field :rules="rules.name" v-model="name" variant="outlined" :label="$t('Full Name')"></v-text-field>
             <v-text-field v-model="lastName" variant="outlined" :label="$t('Nick Name')"></v-text-field>
@@ -70,6 +70,7 @@ export default {
     photo: null,
     newPhoto: null,
     show: true,
+    pSize:null,
     isLoading: false,
     errorMessage: null,
     password: null,
@@ -86,11 +87,11 @@ export default {
       ];
 
       let validations = {
-        name: [(v) => !!v || 'Please enter teacher name'],
+        name: [(v) => !!v || this.$t('Please enter teacher name')],
         // email validation
         email: [
-          (v) => !!v || 'Please enter teacher email address',
-          (v) => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+          (v) => !!v || this.$t('Please enter teacher email address'),
+          (v) => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || this.$t('E-mail must be valid'),
         ],
       };
 
@@ -104,6 +105,9 @@ export default {
   methods: {
     getPhoto(photo) {
       this.newPhoto = photo;
+    },
+    handlePhotoSize: function (photoSize) {
+      this.pSize = photoSize;
     },
     async setTeacher() {
       if (!this.dialog) return;
@@ -136,6 +140,10 @@ export default {
 
         if (this.newPhoto) {
           data['photo'] = this.newPhoto;
+        }
+
+        if (this.pSize) {
+          return this.$store.commit('setToast', [0, this.$t('Photo size should be lesser than 2 MB!')]);
         }
 
         if (this.password) {

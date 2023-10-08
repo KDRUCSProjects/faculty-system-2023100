@@ -93,7 +93,7 @@ export default {
     items() {
       return [
         {
-          title: 'Settings',
+          title: this.$t('Settings'),
           icon: 'mdi-cog-outline',
           to: '/settings',
         },

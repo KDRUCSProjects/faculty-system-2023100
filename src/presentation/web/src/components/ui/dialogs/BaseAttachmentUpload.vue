@@ -2,18 +2,18 @@
   <v-overlay v-model="dialog" scrim="#000"></v-overlay>
 
   <v-btn variant="tonal" color="dark" prepend-icon="mdi-file-document">
-    <slot> View Attachment </slot>
+    <slot> {{ $t('View Attachment') }} </slot>
 
     <v-dialog class="ma-5" v-model="dialog" fullscreen="" activator="parent" transition="slide-y-transition">
       <v-card>
         <v-card-item>
-          <v-card-title class="font-weight-bold"> Upload Attachment </v-card-title>
-          <v-card-subtitle> View and update your attachment file</v-card-subtitle>
+          <v-card-title class="font-weight-bold"> {{ $t('Upload Attachment') }} </v-card-title>
+          <v-card-subtitle> {{ $t('View and update your attachment file') }}</v-card-subtitle>
 
           <div class="update_dialog d-flex">
             <!-- Enable remove only for admins -->
             <v-btn v-if="attachment && isAdmin" variant="tonal" color="error" size="small" class="mx-1" @click="removePhoto"
-              >Remove</v-btn
+              >{{ $t('Remove') }}</v-btn
             >
 
             <!-- Disable Post Requests now -->
@@ -22,8 +22,8 @@
                 ref="profilePhotoDialog"
                 :photo="true"
                 :title="$t('Select a scan')"
-                :subtitle="'Make sure the image is clear'"
-                :inputTitle="'Select image'"
+                :subtitle="$t('Make sure the image is clear')"
+                :inputTitle="$t('Select image')"
                 @update="uploadPhoto"
               >
                 <v-btn color="primary" variant="flat" size="small">{{
@@ -49,7 +49,7 @@
           <v-img v-if="attachment" aspect-ratio="16/9" :src="`${this.imagesResource}/${this.attachment}`"> </v-img>
 
           <div class="text-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" v-else>
-            <v-card-subtitle class="text-error my-1">No file found</v-card-subtitle>
+            <v-card-subtitle class="text-error my-1">{{ $t('No file found') }}</v-card-subtitle>
           </div>
         </v-card-text>
 

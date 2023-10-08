@@ -201,13 +201,13 @@
                         <v-col cols="6">
                           <v-select
                             variant="outlined"
-                            label="Semester Start"
+                            :label="$t('Semester Start')"
                             :items="monthNames"
                             v-model="semesterStart"
                           ></v-select>
                         </v-col>
                         <v-col cols="6">
-                          <v-select label="Semester End" :items="monthNames" variant="outlined" v-model="semesterEnd">
+                          <v-select :label="$t('Semester End')" :items="monthNames" variant="outlined" v-model="semesterEnd">
                           </v-select>
                         </v-col>
                       </v-row>
@@ -215,7 +215,7 @@
                       <v-row class="pa-0 ma-0">
                         <v-col cols="6">
                           <v-text-field
-                            label="Total Duration (Weeks)"
+                            :label="$t('Total Duration (Weeks)')"
                             variant="outlined"
                             prepend-inner-icon="mdi-clock-time-eight-outline"
                             v-model="totalWeeks"
@@ -223,7 +223,7 @@
                         </v-col>
                         <v-col cols="6">
                           <v-text-field
-                            label="Attendance Percentage"
+                            :label="$t('Attendance Percentage')"
                             variant="outlined"
                             prepend-inner-icon="mdi-list-status"
                             v-model="attendancePercentage"
