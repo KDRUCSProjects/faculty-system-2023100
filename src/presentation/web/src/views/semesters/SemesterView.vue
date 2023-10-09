@@ -271,6 +271,7 @@ import { rankSemester } from '@/utils/global';
 import AddSubject from '@/components/subjects/dialogs/AddSubject.vue';
 import MigrationReview from '@/components/semesters/dialogs/MigrationReview';
 import BaseBars from '@/components/ui/charts/BaseBars.vue';
+
 export default {
   provide() {
     return {
@@ -562,7 +563,7 @@ export default {
         warningTitle: this.$t('Warning'),
         title: this.$t('Are you sure you want to delete this student from this semester?'),
         subtitle: studentId,
-        okButton: this.$('Yes, continue'),
+        okButton: this.$t('Yes, continue'),
       });
 
       // If closed, return the function

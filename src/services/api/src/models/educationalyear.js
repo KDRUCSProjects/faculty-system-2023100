@@ -79,7 +79,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'EducationalYear',
-      paranoid: true,
       timestamps: true,
     }
   );
