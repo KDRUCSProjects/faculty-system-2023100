@@ -7,12 +7,24 @@
     <v-dialog class="ma-5" v-model="dialog" fullscreen="" activator="parent" transition="slide-y-transition">
       <v-card>
         <v-card-item>
-          <v-card-title class="font-weight-bold"> {{ $t('Upload Attachment') }} </v-card-title>
-          <v-card-subtitle> {{ $t('View and update your attachment file') }}</v-card-subtitle>
+          <v-card-title class="font-weight-bold">
+            <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+              {{ $t('Upload Attachment') }}
+            </span>
+          </v-card-title>
+          <v-card-subtitle :class="{ pashtoFont: $i18n.locale === 'pa' }">
+            {{ $t('View and update your attachment file') }}</v-card-subtitle
+          >
 
-          <div class="update_dialog d-flex">
+          <div class="update_dialog d-flex" :class="{ toLeft: $i18n.locale === 'pa' }">
             <!-- Enable remove only for admins -->
-            <v-btn v-if="attachment && isAdmin" variant="tonal" color="error" size="small" class="mx-1" @click="removePhoto"
+            <v-btn
+              v-if="attachment && isAdmin"
+              variant="tonal"
+              color="error"
+              size="small"
+              class="mx-1"
+              @click="removePhoto"
               >{{ $t('Remove') }}</v-btn
             >
 
@@ -49,7 +61,9 @@
           <v-img v-if="attachment" aspect-ratio="16/9" :src="`${this.imagesResource}/${this.attachment}`"> </v-img>
 
           <div class="text-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" v-else>
-            <v-card-subtitle class="text-error my-1">{{ $t('No file found') }}</v-card-subtitle>
+            <v-card-subtitle class="text-error my-1" :class="{ pashtoFont: $i18n.locale === 'pa' }">{{
+              $t('No file found')
+            }}</v-card-subtitle>
           </div>
         </v-card-text>
 
@@ -106,5 +120,10 @@ export default {
   position: absolute;
   top: 30px;
   right: 30px;
+}
+
+.toLeft {
+  left: 30px !important;
+  right: auto;
 }
 </style>

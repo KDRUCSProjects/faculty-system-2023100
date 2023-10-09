@@ -2,10 +2,17 @@
   <div>
     <v-card class="theShadow">
       <v-card-item class="mt-4">
-        <v-card-title class="text-h5 text-primary text-uppercase font-weight-bold">{{ subject?.name }}</v-card-title>
+        <v-card-title
+          class="text-h5 text-primary mb-2 text-uppercase font-weight-bold"
+          style="font-family: monospace !important"
+        >
+          <span>
+            {{ subject?.name }}
+          </span>
+        </v-card-title>
         <v-btn
           @click="downloadShoka"
-          class="float-right"
+          class="float-right mx-1"
           prepend-icon="mdi-download-circle"
           color="primary"
           variant="tonal"
@@ -19,8 +26,8 @@
 
           <base-menu :displayPreText="'Chance - '" theme="dark" :items="chanceItems" @selected="setChance"></base-menu>
         </div>
-        <v-card-title class="mt-1">{{ $t('Total Credits:') }} {{ subject?.credit }}</v-card-title>
-        <v-card-subtitle class="mt-1">{{ $t('Subject Database ID:') }} {{ subject?.id }}</v-card-subtitle>
+        <!-- <v-card-subtitle class="mt-1 mx-2">{{ $t('Total Credits:') }} {{ subject?.credit }}</v-card-subtitle> -->
+        <!-- <v-card-subtitle class="mt-1">{{ $t('Subject Database ID:') }} {{ subject?.id }}</v-card-subtitle> -->
       </v-card-item>
       <v-card-text>
         <!-- The Table -->
@@ -164,49 +171,6 @@ const initialState = () => ({
   chanceItems: [1, 2, 3, 4],
   attachment: null,
   postLoader: false,
-  headers: [
-    {
-      title: 'No',
-      sortable: false,
-      key: 'no',
-    },
-    {
-      title: 'Photo',
-      key: 'photo',
-      sortable: false,
-    },
-    {
-      title: 'Kankor ID',
-      align: 'start',
-      key: 'kankorId',
-      sortable: false,
-    },
-    {
-      title: 'Name',
-      align: 'start',
-      sortable: false,
-      key: 'fullName',
-    },
-    {
-      title: 'Father Name',
-      align: 'start',
-      sortable: false,
-      key: 'fatherName',
-    },
-    {
-      title: 'Grand Father Name',
-      align: 'start',
-      sortable: false,
-      key: 'grandFatherName',
-    },
-    { title: 'Assignment', key: 'assignment', sortable: false },
-    { title: 'Practical', key: 'practicalWork', sortable: false },
-    { title: 'Mid-Exam', key: 'projectMarks', sortable: false },
-    { title: 'Final-Exam', key: 'finalMarks', sortable: false },
-    { title: 'Total', key: 'total', sortable: false },
-    { title: 'Delete', key: 'delete', sortable: false },
-    // { title: 'Success', key: 'eligibility', sortable: false },
-  ],
 });
 
 export default {
@@ -226,6 +190,51 @@ export default {
   },
   data: () => initialState(),
   computed: {
+    headers() {
+      return [
+        {
+          title: this.$t('Number'),
+          sortable: false,
+          key: 'no',
+        },
+        {
+          title: this.$t('Photo'),
+          key: 'photo',
+          sortable: false,
+        },
+        {
+          title: this.$t('Kankor ID'),
+          align: 'start',
+          key: 'kankorId',
+          sortable: false,
+        },
+        {
+          title: this.$t('Full Name'),
+          align: 'start',
+          sortable: false,
+          key: 'fullName',
+        },
+        {
+          title: this.$t('Father Name'),
+          align: 'start',
+          sortable: false,
+          key: 'fatherName',
+        },
+        {
+          title: this.$t('Grand Father Name'),
+          align: 'start',
+          sortable: false,
+          key: 'grandFatherName',
+        },
+        { title: this.$t('Assignment'), key: 'assignment', sortable: false },
+        { title: this.$t('Practical'), key: 'practicalWork', sortable: false },
+        { title: this.$t('Mid-Exam'), key: 'projectMarks', sortable: false },
+        { title: this.$t('Final-Exam'), key: 'finalMarks', sortable: false },
+        { title: this.$t('Total'), key: 'total', sortable: false },
+        { title: this.$t('Delete'), key: 'delete', sortable: false },
+        // { title: 'Success', key: 'eligibility', sortable: false },
+      ];
+    },
     students() {
       let students = this.$store.getters['subjects/currentShoka'];
 
@@ -303,7 +312,7 @@ export default {
       });
     },
     setChance(value) {
-      this.chance = value;
+      this.chance = parseInt(value);
       this.forceRender();
     },
     async downloadShoka() {

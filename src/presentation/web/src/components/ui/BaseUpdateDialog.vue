@@ -12,10 +12,14 @@
     :persistent="persistent"
     activator="parent"
   >
-    <v-card>
+    <v-card :class="{ pashtoFont: $i18n.locale === 'pa' }">
       <v-card-item>
-        <v-card-title class="font-weight-bold">{{ title }}</v-card-title>
-        <v-card-subtitle>{{ subtitle }}</v-card-subtitle>
+        <v-card-title class="font-weight-bold">
+          <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+            {{ title }}
+          </span>
+        </v-card-title>
+        <v-card-subtitle :class="{ pashtoFont: $i18n.locale === 'pa' }">{{ subtitle }}</v-card-subtitle>
       </v-card-item>
       <v-card-text>
         <v-form @submit.prevent="update">

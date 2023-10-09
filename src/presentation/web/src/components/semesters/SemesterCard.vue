@@ -9,11 +9,12 @@
     </span>
 
     <v-card-title class="pb-0"
-      ><span class="text-secondary">{{ rankSemester(title) }}</span> {{ $t('Semester') }}</v-card-title
-    >
+      ><span class="text-secondary" :class="{ pashtoFont: $i18n.locale === 'pa' }">{{ rankSemester(title) }}</span>
+      {{ $t('Semester') }}
+    </v-card-title>
 
     <v-card-subtitle v-if="!periodCard" class="py-0 my-0" style="font-family: monospace">
-      {{ subjectsCount }} {{ $t('subjects') }}
+      <span :class="{ pashtoFont: $i18n.locale === 'pa' }"> {{ subjectsCount }} {{ $t('subjects') }} </span>
     </v-card-subtitle>
     <v-divider></v-divider>
     <v-card-subtitle class="text-primary" v-if="!periodCard">{{ year }} {{ $t('Year') }}</v-card-subtitle>

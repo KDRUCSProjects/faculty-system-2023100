@@ -3,7 +3,11 @@
     <v-card elevation="0" width="400">
       <v-card-item>
         <v-form ref="loginForm" :fast-fail="false" @submit.prevent="submitForm">
-          <v-card-title class="text-h4">{{ $t('LOGIN') }}</v-card-title>
+          <v-card-title class="text-h4">
+            <span :class="{ pashtoFont: $i18n.locale === 'pa' }" class="font-weight-bold">
+              {{ $t('LOGIN') }}
+            </span>
+          </v-card-title>
           <v-card-subtitle class="mt-1"> {{ $t('Welcome back. Please enter your details') }} </v-card-subtitle>
 
           <div class="my-3"></div>

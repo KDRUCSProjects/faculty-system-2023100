@@ -1,5 +1,12 @@
 <template>
-  <v-snackbar v-if="toast" v-model="toast" :timeout="timeout" :variant="'flat'" color="grey-darken-4">
+  <v-snackbar
+    v-if="toast"
+    v-model="toast"
+    :timeout="timeout"
+    :variant="'flat'"
+    color="grey-darken-4"
+    :class="{ pashtoFont: $i18n.locale === 'pa' }"
+  >
     <div id="singleText">
       <div class="">
         <v-list-item class="px-0 mx-0" density="compact">

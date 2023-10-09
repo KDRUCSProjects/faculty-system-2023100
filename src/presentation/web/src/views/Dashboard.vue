@@ -6,14 +6,20 @@
           <v-col class="pa-2" cols="4" v-for="(item, index) in statistics" :key="index">
             <v-card class="pa-3 theShadow">
               <v-card-title class="">
-                <v-icon color="primary">{{ item.icon }}</v-icon>
-                <span class="mx-4 med-size">{{ item.title }}</span>
-                <span
-                  class="text-dark med-size"
-                  :class="{ 'float-left': $i18n.locale === 'pa', 'float-right': $i18n.locale !== 'pa' }"
-                >
-                  {{ item.value }}
-                </span>
+                <div :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                  <v-icon color="primary">{{ item.icon }}</v-icon>
+                  <span class="mx-4 med-size" :class="{ pashtoFont: $i18n.locale === 'pa' }">{{ item.title }}</span>
+                  <span
+                    class="text-dark med-size"
+                    :class="{
+                      'float-left': $i18n.locale === 'pa',
+                      'float-right': $i18n.locale !== 'pa',
+                      pashtoFont: $i18n.locale === 'pa',
+                    }"
+                  >
+                    {{ item.value }}
+                  </span>
+                </div>
               </v-card-title>
               <!-- <v-card-text class="text-right">
                 <span class="text-dark text-h6">

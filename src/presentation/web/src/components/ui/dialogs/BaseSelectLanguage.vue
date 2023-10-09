@@ -11,7 +11,7 @@
       transition="slide-y-transition"
       style="overflow: hidden"
     >
-      <v-card class="mx-auto" width="250" max-width="400">
+      <v-card class="mx-auto" width="250" max-width="400" :class="{ pashtoFont: $i18n.locale === 'pa' }">
         <v-card-title class="bg-dark text-center"> {{ $t('Select App Language') }} </v-card-title>
 
         <v-virtual-scroll :items="items" height="300" item-height="50" class="my-1">

@@ -1,7 +1,7 @@
 <template>
   <v-overlay scrim="#000"></v-overlay>
   <v-dialog v-model="dialog" :max-width="modalWidth" transition="slide-y-transition">
-    <div class="text-center">
+    <div class="text-center" :class="{ pashtoFont: $i18n.locale === 'pa' }">
       <v-sheet
         :width="modalWidth"
         class="font-poppins px-7 pt-7 pb-4 mx-auto text-center d-inline-block"

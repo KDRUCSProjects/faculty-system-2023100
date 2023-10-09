@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ pashtoFont: $i18n.locale === 'pa' }">
     <v-autocomplete
       v-model="select"
       variant="outlined"
