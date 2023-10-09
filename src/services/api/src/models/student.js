@@ -77,6 +77,7 @@ module.exports = (sequelize, DataTypes) => {
       schoolName: DataTypes.STRING,
       schoolGraduationYear: DataTypes.STRING,
       monographTitle: DataTypes.STRING,
+      resultsTableNumber: DataTypes.INTEGER,
       monographDefenseDate: DataTypes.STRING,
       ...BaseModel(DataTypes),
     },

@@ -341,6 +341,8 @@ const createTranscript = catchAsync(async (req, res) => {
   }
 
   // Repeat Semester and Mahromiat Years
+  worksheet.getRow(6).getCell(22).value = student?.repeatSemesterYear;
+  worksheet.getRow(7).getCell(22).value = student?.mahromSemesterYear;
 
   // school and monograph
   worksheet.getRow(3).getCell(6).value = school?.name;
@@ -350,6 +352,9 @@ const createTranscript = catchAsync(async (req, res) => {
   worksheet.getRow(8).getCell(1).value = monograph?.researchTitle;
   worksheet.getRow(10).getCell(1).value = monograph?.defenseDate;
   worksheet.getRow(11).getCell(1).value = '0' + student.phoneNumber;
+
+  // Results table number
+  worksheet.getRow(47).getCell(1).value = `(${toPashtoDigits(student?.resultsTableNumber)}) شماره`;
 
   let col;
   let column;

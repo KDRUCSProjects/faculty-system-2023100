@@ -16,6 +16,7 @@ const {
   checkStudentEligibilityForNextSemester,
   findEligibleNextSemester,
   checkStudentMahromiatBySemesterId,
+  isRepeatSemester,
 } = require('../utils/global');
 
 const createStudentList = catchAsync(async (req, res) => {
@@ -58,7 +59,7 @@ const createStudentList = catchAsync(async (req, res) => {
   if (semester.title !== 1 && studentType !== 'pass14')
     throw new ApiError(httpStatus.ACCEPTED, `You can only enroll the student at first semester`);
 
-  if (semester.title !== 5 && studentType === 'general')
+  if (semester.title !== 5 && studentType !== 'general')
     throw new ApiError(httpStatus.ACCEPTED, `You can only enroll the student at 5h semester. Student is 14 Pass`);
 
   const result = await studentListService.createStudentList(req.body);
@@ -340,9 +341,21 @@ const reviewStudentsPromotion = catchAsync(async (req, res) => {
       continue;
     }
 
+    // Check if student is repeat semester in subjects
+    const repeatSemesterBySubjects = await isRepeatSemester(studentId, req.params.semesterId);
+
     if (repeatSemester) {
       results.push({
         message: `Student is repeat semester in ${mahromSubjectsTitle} by mahromiat`,
+        student: theStudent,
+        studentId,
+        eligibility: 0,
+        reason: 'repeat_semester',
+      });
+      continue;
+    } else if (repeatSemesterBySubjects) {
+      results.push({
+        message: `Student is repeat semester by failing in subjects`,
         student: theStudent,
         studentId,
         eligibility: 0,

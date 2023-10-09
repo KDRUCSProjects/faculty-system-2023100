@@ -471,20 +471,31 @@ const getShokaList = catchAsync(async (req, res) => {
 });
 
 const updateShokaList = catchAsync(async (req, res) => {
-  // prevent greater then 100 marks
-  const projectMarks = req.body.projectMarks || 0;
-  const assignment = req.body.assignment || 0;
-  const finalMarks = req.body.finalMarks || 0;
-  const practicalWork = req.body.practicalWork || 0;
-  const totalMarks = projectMarks + assignment + finalMarks + practicalWork;
+  // prevent greater then 100 Marks
+
+  const _projectMarks = req.body.projectMarks || 0;
+  const _assignment = req.body.assignment || 0;
+  const _finalMarks = req.body.finalMarks || 0;
+  const _practicalWork = req.body.practicalWork || 0;
+
+  const { shokalistId } = req.params;
+
+  const shokaList = await shokaListService.getShokaListById(shokalistId);
+  if (!shokaList) throw new ApiError(httpStatus.NOT_FOUND, 'shoka marks not found');
+
+  const { projectMarks, assignment, finalMarks, practicalWork } = shokaList;
+
+  // Old marks
+  let totalMarks =
+    (_projectMarks || projectMarks || 0) +
+    (_assignment || assignment || 0) +
+    (_finalMarks || finalMarks || 0) +
+    (_practicalWork || practicalWork || 0);
 
   if (totalMarks > 100) {
     throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'Total Marks are Above 100');
   }
 
-  const { shokalistId } = req.params;
-  const shokaList = await shokaListService.getShokaListById(shokalistId);
-  if (!shokaList) throw new ApiError(httpStatus.NOT_FOUND, 'shoka marks not found');
   const { studentId, shokaId, chance } = shokaList;
 
   // Before updating / adding a student to shoka, check if attachment of this shoka is uploaded.

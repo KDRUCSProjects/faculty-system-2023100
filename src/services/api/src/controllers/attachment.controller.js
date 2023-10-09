@@ -44,6 +44,8 @@ const updateAttachment = catchAsync(async (req, res) => {
 
 const deleteAttachment = catchAsync(async (req, res) => {
   const attachment = await attachmentService.getAttachmentById(req.params.attachmentId);
+  // Delete attachment from storage as well
+  // ...
   if (!attachment) throw new ApiError(httpStatus.NOT_FOUND, 'Attachment Not Found');
   await attachmentService.deleteAttachment(attachment);
   res.status(httpStatus.NO_CONTENT).send();
