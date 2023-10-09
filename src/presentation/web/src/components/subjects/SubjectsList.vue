@@ -7,7 +7,7 @@
         <v-list-item-subtitle>{{ $t('Credit') }} : {{ subject.credit }}</v-list-item-subtitle>
 
         <template v-slot:prepend>
-          <v-chip variant="flat" class="mr-4" color="dark">{{ i + 1 }}</v-chip>
+          <v-chip variant="flat" class="mx-2" color="dark">{{ i + 1 }}</v-chip>
         </template>
 
         <template v-slot:append>

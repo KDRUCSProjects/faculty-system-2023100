@@ -5,7 +5,11 @@
       <v-col cols="7">
         <v-card class="theShadow pa-3">
           <v-card-item>
-            <v-card-title class="text-h5 font-weight-bold">{{ $t('Assigned Subjects') }}</v-card-title>
+            <v-card-title class="text-h5 font-weight-bold">
+              <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                {{ $t('Assigned Subjects') }}
+              </span>
+            </v-card-title>
             <v-card-subtitle>{{ $t('The list of all assigned subjects to this teacher') }}</v-card-subtitle>
           </v-card-item>
           <v-divider></v-divider>
@@ -13,7 +17,10 @@
             <v-card v-for="(item, i) in semesterWithSubjects" :key="i" class="theShadow pa-3 ma-2">
               <v-card-item>
                 <v-card-title class="text-primary text-h6 font-weight-bold"
-                  >{{ item.year }}, <span class="text-dark">{{ rankSemester(item.title) }} {{ $t('Semester') }}</span></v-card-title
+                  >{{ item.year }},
+                  <span class="text-dark" :class="{ pashtoFont: $i18n.locale === 'pa' }"
+                    >{{ rankSemester(item.title) }} {{ $t('Semester') }}</span
+                  ></v-card-title
                 >
                 <v-card-subtitle>{{ $t('Total subjects:') }} {{ item.subjects.length }}</v-card-subtitle>
               </v-card-item>
@@ -29,7 +36,9 @@
             </v-card>
 
             <div class="d-flex align-center justify-center" style="min-height: 500px">
-              <div v-if="semesterWithSubjects?.length === 0" class="text-error">{{ $t('Teacher has no subjects assigned') }}</div>
+              <div v-if="semesterWithSubjects?.length === 0" class="text-error">
+                {{ $t('Teacher has no subjects assigned') }}
+              </div>
             </div>
           </v-card-text>
         </v-card>
@@ -38,7 +47,11 @@
         <v-banner sticky="true" class="ma-0 pa-0">
           <v-card class="mx-auto pa-3 theShadow">
             <v-card-item>
-              <v-card-title class="text-h5 font-weight-bold">{{ $t('View Profile') }}</v-card-title>
+              <v-card-title class="text-h5 font-weight-bold">
+                <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                  {{ $t('View Profile') }}
+                </span>
+              </v-card-title>
               <v-card-subtitle>{{ $t('Biography') }}</v-card-subtitle>
             </v-card-item>
             <v-divider></v-divider>
@@ -110,7 +123,7 @@ export default {
   },
   methods: {
     rankSemester(title) {
-      return rankSemester(title);
+      return rankSemester(title, this.appLanguage);
     },
     async loadTeacherById(id) {
       await this.$store.dispatch('teachers/loadTeacherById', id);

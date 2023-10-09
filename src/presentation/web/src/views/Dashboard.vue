@@ -8,7 +8,10 @@
               <v-card-title class="">
                 <v-icon color="primary">{{ item.icon }}</v-icon>
                 <span class="mx-4 med-size">{{ item.title }}</span>
-                <span class="text-dark float-right med-size">
+                <span
+                  class="text-dark med-size"
+                  :class="{ 'float-left': $i18n.locale === 'pa', 'float-right': $i18n.locale !== 'pa' }"
+                >
                   {{ item.value }}
                 </span>
               </v-card-title>

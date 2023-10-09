@@ -4,8 +4,10 @@
       <v-col cols="5">
         <v-card class="h-100 theShadow">
           <v-card-item class="text-center my-4">
-            <v-card-title class="text-h5 font-weight-bold">
-              <v-card-title class="text-primary d-inline text-h4">{{ title }}</v-card-title>
+            <v-card-title class="text-h5 font-weight-bold" :class="{ pashtoFont: $i18n.locale === 'pa' }">
+              <v-card-title class="text-primary d-inline text-h4" :class="{ pashtoFont: $i18n.locale === 'pa' }">{{
+                title
+              }}</v-card-title>
               {{ $t('Semester Overview') }}
             </v-card-title>
             <v-card-subtitle>{{ $t('View all the information of this semester') }} </v-card-subtitle>
@@ -431,7 +433,7 @@ export default {
       return this.$store.getters['semesters/semesterSubjects'];
     },
     title() {
-      return rankSemester(this.$route.query.semester);
+      return rankSemester(this.$route.query.semester, this.appLanguage);
     },
     year() {
       return this.$route.query.year;
@@ -637,7 +639,7 @@ export default {
       await this.loadStudents();
     },
     semesterName(number) {
-      return rankSemester(number);
+      return rankSemester(number, this.appLanguage);
     },
     viewTeacher() {},
     async setSemesterData(semesterId) {

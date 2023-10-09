@@ -7,7 +7,7 @@ module.exports = {
       [
         {
           name: 'TheAdmin',
-          email: 'admin@example.com',
+          email: 'admin@cs.com',
           password: '$2a$08$Kf7rr0FazlKmp1Xr5SJ3SOAgafLae821r38VrV9tLJyObZ1zapBny',
           // Password: password1 (Only for development)
           role: 'admin',
@@ -16,7 +16,7 @@ module.exports = {
         },
         {
           name: 'TheExecManager',
-          email: 'execManager@example.com',
+          email: 'execManager@cs.com',
           password: '$2a$08$Kf7rr0FazlKmp1Xr5SJ3SOAgafLae821r38VrV9tLJyObZ1zapBny',
           // Password: password1 (Only for development)
           role: 'execManager',
@@ -25,7 +25,7 @@ module.exports = {
         },
         {
           name: 'TheTeachingManager',
-          email: 'teachingManager@example.com',
+          email: 'teachingManager@cs.com',
           password: '$2a$08$Kf7rr0FazlKmp1Xr5SJ3SOAgafLae821r38VrV9tLJyObZ1zapBny',
           // Password: password1 (Only for development)
           role: 'teachingManager',

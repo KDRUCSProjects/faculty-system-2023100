@@ -25,7 +25,7 @@
           <v-spacer></v-spacer>
 
           <v-text-field
-            style="position: relative; top: 10px; right: 10px"
+            style="position: relative; top: 10px; right: 20px"
             density="compact"
             color="light"
             variant="outlined"

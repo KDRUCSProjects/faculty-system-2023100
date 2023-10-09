@@ -1,12 +1,12 @@
 const faker = require('faker');
 
 const subjects = [
-  { name: 'C Programming Language', credit: 4, semesterId: 89, teacherId: 1 },
-  { name: 'Introduction to Computer Science', credit: 4, semesterId: 89, teacherId: 1 },
-  { name: 'English I', credit: 4, semesterId: 89, teacherId: 1 },
-  { name: 'Islamic', credit: 1, semesterId: 89, teacherId: 1 },
-  { name: 'Math I', credit: 4, semesterId: 89, teacherId: 1 },
-  { name: 'Modern History', credit: 2, semesterId: 89, teacherId: 1 },
+  { name: 'C Programming Language', pashtoName: 'سی پروګرامینګ', credit: 4, semesterId: 89, teacherId: 1 },
+  { name: 'Introduction to CS', pashtoName: 'کمپیوتر ښودنه', credit: 4, semesterId: 89, teacherId: 1 },
+  { name: 'English I', pashtoName: 'انګلیسی ۱', credit: 4, semesterId: 89, teacherId: 1 },
+  { name: 'Islamic', pashtoName: 'اسلامی ۱', credit: 1, semesterId: 89, teacherId: 1 },
+  { name: 'Math I', pashtoName: 'ریاضی ۱', credit: 4, semesterId: 89, teacherId: 1 },
+  { name: 'Modern History', pashtoName: 'تاریخ', credit: 2, semesterId: 89, teacherId: 1 },
   { name: 'C++ Programming Language', credit: 4, semesterId: 90, teacherId: 2 },
   { name: 'Theoretical Computer Science', credit: 2, semesterId: 90, teacherId: 2 },
   { name: 'English II', credit: 4, semesterId: 90, teacherId: 2 },

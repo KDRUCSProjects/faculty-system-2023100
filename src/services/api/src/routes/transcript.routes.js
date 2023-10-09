@@ -8,7 +8,7 @@ const router = express.Router();
 
 router
   .route('/:studentId')
-  .get(auth('manageUsers'), validate(transcriptValidation.createFile), transcriptController.createTranscript);
+  .get(auth('transcript'), validate(transcriptValidation.createFile), transcriptController.createTranscript);
 
 module.exports = router;
 

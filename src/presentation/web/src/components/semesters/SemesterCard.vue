@@ -13,7 +13,7 @@
     >
 
     <v-card-subtitle v-if="!periodCard" class="py-0 my-0" style="font-family: monospace">
-      {{ subjectsCount }} {{ $t("subjects") }}
+      {{ subjectsCount }} {{ $t('subjects') }}
     </v-card-subtitle>
     <v-divider></v-divider>
     <v-card-subtitle class="text-primary" v-if="!periodCard">{{ year }} {{ $t('Year') }}</v-card-subtitle>
@@ -22,7 +22,9 @@
     <v-card-subtitle class="text-secondary" v-if="periodCard"
       >{{ $t('Start Year:') }} {{ returnYear(title, 0) || year }}</v-card-subtitle
     >
-    <v-card-subtitle class="text-info" v-if="periodCard">{{ $t('End Year:') }} {{ returnYear(title, 1) || year }}</v-card-subtitle>
+    <v-card-subtitle class="text-info" v-if="periodCard"
+      >{{ $t('End Year:') }} {{ returnYear(title, 1) || year }}</v-card-subtitle
+    >
 
     <v-card-actions class="mt-3 px-2">
       <!-- <v-btn color="primary" variant="elevated">Profile</v-btn> -->
@@ -101,7 +103,7 @@ export default {
       });
     },
     rankSemester(title) {
-      return rankSemester(title);
+      return rankSemester(title, this.appLanguage);
     },
     async loadSemesterData() {
       const semester = await this.$store.dispatch('semesters/loadSemesterById', this.semesterId);

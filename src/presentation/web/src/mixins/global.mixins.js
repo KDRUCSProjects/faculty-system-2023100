@@ -4,6 +4,9 @@ export default {
     imagesResource() {
       return 'http://localhost:4000/storage/images';
     },
+    appLanguage() {
+      return this.$i18n.locale;
+    },
   },
   methods: {
     attachTableNumber(array, page, itemsPerPage) {

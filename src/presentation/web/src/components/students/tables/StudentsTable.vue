@@ -49,7 +49,7 @@
           <v-btn
             v-if="enableStudentsAddition"
             :color="enrollmentMode ? 'primary' : 'light'"
-            class="ml-1"
+            class="mx-3"
             variant="flat"
             link
             @click="switchMode"
