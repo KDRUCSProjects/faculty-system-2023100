@@ -205,6 +205,33 @@
               </template>
             </v-list-item>
           </div>
+
+          <div v-if="!showSecondaryLanguage">
+            <!-- Semester Info -->
+
+            <v-chip prepend-icon="mdi-table-large" label color="dark" class="px-5 my-1">{{ $t('Results Table') }}</v-chip>
+
+            <v-list-item v-for="location in resultsTableInfo" :key="location.title" class="border ma-1">
+              <v-list-item-title :class="{ 'text-error': !location.title }">
+                {{ location.title || 'N/A' }}
+              </v-list-item-title>
+              <v-list-item-subtitle style="font-size: 13px">{{ location.subtitle }}</v-list-item-subtitle>
+
+              <template v-slot:append>
+                <base-update-dialog
+                  :title="location.subtitle"
+                  @update="updateField"
+                  :fieldLabel="location.subtitle"
+                  :fieldValue="location.title"
+                  :fieldName="location.fieldName"
+                  :type="location.type"
+                  :validValues="location.validValues"
+                >
+                  <v-btn color="grey-lighten-1" icon="mdi-form-textbox" variant="text"></v-btn>
+                </base-update-dialog>
+              </template>
+            </v-list-item>
+          </div>
         </v-list>
       </v-card-text>
     </v-card>
@@ -276,12 +303,12 @@ export default {
           title: this.student?.tazkeraNumber,
           fieldName: 'tazkeraNumber',
         },
-        {
-          subtitle: this.$t('Birth Date'),
-          title: this.student?.dob,
-          fieldName: 'dob',
-          type: 'dob',
-        },
+        // {
+        //   subtitle: this.$t('Birth Date'),
+        //   title: this.student?.dob,
+        //   fieldName: 'dob',
+        //   type: 'dob',
+        // },
       ];
     },
     personalSecondary() {
@@ -436,6 +463,16 @@ export default {
           subtitle: this.$t('Mahrom Semester Year'),
           title: this.student?.mahromSemesterYear,
           fieldName: 'mahromSemesterYear',
+        },
+      ];
+    },
+    resultsTableInfo() {
+      return [
+        {
+          color: 'amber',
+          subtitle: this.$t('Page Number'),
+          title: this.student?.resultsTableNumber,
+          fieldName: 'resultsTableNumber',
         },
       ];
     },

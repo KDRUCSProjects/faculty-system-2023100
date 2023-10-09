@@ -14,8 +14,8 @@
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn v-if="enrollmentMode" @click="selectStudent(item)" variant="text" color="primary" text icon="mdi-plus-thick">
         </v-btn>
-        <v-btn v-if="!enrollmentMode" @click="deleteStudent(item)" variant="text" color="red" text icon="mdi-delete-outline">
-        </v-btn>
+        <!-- <v-btn v-if="!enrollmentMode" @click="deleteStudent(item)" variant="text" color="red" text icon="mdi-delete-outline">
+        </v-btn> -->
         <v-btn
           v-if="!enrollmentMode"
           @click="viewStudent(item)"
@@ -141,6 +141,7 @@ export default {
     },
     deleteStudent(item) {
       const { raw } = item;
+
       this.$emit('delete-student', raw.studentId);
     },
     editStudent() {},

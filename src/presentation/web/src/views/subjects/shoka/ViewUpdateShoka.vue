@@ -51,7 +51,6 @@
                 :fieldName="'assignment'"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
-                :max-value="10"
                 @update="updateMarks"
               >
               </base-update-field>
@@ -66,7 +65,6 @@
                 :fieldName="'finalMarks'"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
-                :max-value="60"
                 @update="updateMarks"
               >
               </base-update-field>
@@ -81,7 +79,6 @@
                 :fieldName="'projectMarks'"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
-                :max-value="20"
                 @update="updateMarks"
               >
               </base-update-field>
@@ -96,7 +93,6 @@
                 :fieldName="'practicalWork'"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
-                :max-value="10"
                 @update="updateMarks"
               >
               </base-update-field>
@@ -129,6 +125,17 @@
             </div>
           </template>
 
+          <template v-slot:item.delete="{ item }">
+            <v-btn
+              v-if="item.raw?.shokaListId"
+              variant="text"
+              color="error"
+              icon="mdi-delete-outline"
+              @click="deleteShokaListId(item.raw?.shokaListId)"
+            ></v-btn>
+            <v-btn v-else variant="text" color="dark" icon="mdi-circle-outline"></v-btn>
+          </template>
+
           <template v-slot:item.photo="{ item }">
             <v-avatar class="my-2" color="primary" variant="tonal">
               <v-img v-if="item.columns?.photo" :src="`${imagesResource}/${item.columns?.photo}`" alt="user" />
@@ -156,6 +163,7 @@ const initialState = () => ({
   downloadLoading: false,
   chanceItems: [1, 2, 3, 4],
   attachment: null,
+  postLoader: false,
   headers: [
     {
       title: 'No',
@@ -196,6 +204,7 @@ const initialState = () => ({
     { title: 'Mid-Exam', key: 'projectMarks', sortable: false },
     { title: 'Final-Exam', key: 'finalMarks', sortable: false },
     { title: 'Total', key: 'total', sortable: false },
+    { title: 'Delete', key: 'delete', sortable: false },
     // { title: 'Success', key: 'eligibility', sortable: false },
   ],
 });
@@ -319,6 +328,10 @@ export default {
 
       await this.$store.dispatch('subjects/loadShokaBySubjectId', { subjectId: this.subjectId, chance });
     },
+    async deleteShokaListId(id) {
+      await this.$store.dispatch('subjects/deleteShokaListId', id);
+      await this.loadShokaBySubject();
+    },
     async updateMarks({ field, fieldValue, rowId, data }) {
       // if (!data.shokaListId) {
       //   let res = await this.$refs.baseConfirmDialog.show({
@@ -335,6 +348,11 @@ export default {
 
       const type = data.shokaListId ? 'updateShokaByShokaListId' : 'addStudentMarksToShokaBySubjectId';
 
+      if (type === 'addStudentMarksToShokaBySubjectId') {
+        this.postLoader = true;
+        // show a loader and disable inputs
+      }
+
       await this.$store.dispatch(`subjects/${type}`, {
         chance: parseInt(this.chance),
         subjectId: this.subjectId,
@@ -346,6 +364,7 @@ export default {
       });
 
       await this.loadShokaBySubject();
+      this.postLoader = false;
     },
     async loadAttachment(chance = 1) {
       const data = await this.$store.dispatch('subjects/loadAttachment', {

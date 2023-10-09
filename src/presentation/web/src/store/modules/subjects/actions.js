@@ -138,7 +138,26 @@ export default {
         data: marks,
       });
 
-      context.commit('setToast', 'Marks successfully updated', { root: true });
+      // context.commit('setToast', 'Marks successfully updated', { root: true });
+    } catch (e) {
+      context.commit('setToast', [0, e.response.data.message || 'Failed updating student marks'], { root: true });
+      throw e.response.data.message;
+    }
+  },
+  async deleteShokaListId(context, id) {
+    try {
+      const token = context.rootGetters.token;
+
+      const response = await axios({
+        url: `/api/shokaList/${id}`,
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      context.commit('setToast', 'Marks deleted successfully', { root: true });
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message || 'Failed updating student marks'], { root: true });
       throw e.response.data.message;
