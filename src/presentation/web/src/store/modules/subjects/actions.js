@@ -80,9 +80,11 @@ export default {
       });
 
       context.commit('updateSubject', response.data);
-      context.commit('setToast', 'Subject data successfully updated', { root: true });
+      context.commit('setToast', context.rootState.$t('Subject info updated'), { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed updating Subject data'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed updating Subject data')], {
+        root: true,
+      });
       throw e.response.data.message;
     }
   },

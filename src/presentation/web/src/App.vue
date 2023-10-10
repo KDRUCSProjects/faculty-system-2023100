@@ -19,13 +19,19 @@
 <script>
 export default {
   data: () => ({}),
-  methods: {},
+  methods: {
+    initTranslator() {
+      this.$store.state.$t = (value) => this.$t(value);
+    },
+  },
   computed: {
     toastMessages() {
       return this.$store.getters['toastMessages'];
     },
   },
   async created() {
+    // Activate translator
+    this.initTranslator();
     // Load all years
     await this.$store.dispatch('years/loadEducationalYears');
     // Load current on-going educational year
