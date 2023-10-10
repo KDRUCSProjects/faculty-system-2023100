@@ -58,6 +58,18 @@
         </v-chip>
       </template>
 
+      <template v-slot:item.gender="{ item }">
+        <div v-if="item.columns.gender">
+          {{ $t(item.columns?.gender) }}
+        </div>
+      </template>
+
+      <template v-slot:item.kankorType="{ item }">
+        <div v-if="item.columns.kankorType">
+          {{ $t(item.columns?.kankorType) }}
+        </div>
+      </template>
+
       <!-- <template v-slot:item.status="{ item }">
         <v-chip color="primary">
           {{ selectedStatus }}
@@ -120,6 +132,12 @@ export default {
           align: 'start',
           sortable: true,
           key: 'fatherName',
+        },
+        {
+          title: this.$t('Gender'),
+          align: 'start',
+          sortable: true,
+          key: 'gender',
         },
         {
           title: this.$t('Province'),

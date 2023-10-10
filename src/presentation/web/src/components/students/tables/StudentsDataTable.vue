@@ -64,6 +64,14 @@
         </v-chip>
       </template>
 
+      <template v-slot:item.gender="{ item }">
+        {{ $t(item.columns.gender) }}
+      </template>
+
+      <template v-slot:item.kankorType="{ item }">
+        {{ $t(item.columns.kankorType) }}
+      </template>
+
       <!-- Number Slot -->
       <template v-slot:item.no="{ index }" v-if="showNumbers">
         <v-chip class="" variant="flat">

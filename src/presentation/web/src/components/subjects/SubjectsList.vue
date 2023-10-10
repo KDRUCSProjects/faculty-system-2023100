@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-list>
+    <v-list :class="{ pashtoFont: $i18n.locale === 'pa' }">
       <!-- <v-list-subheader>Subjects</v-list-subheader> -->
       <v-list-item v-for="(subject, i) in subjects" :key="i" class="my-1 border" variant="outline">
         <v-list-item-title>{{ subject.name }}</v-list-item-title>
@@ -20,6 +20,7 @@
               <v-list-item v-for="(action, i) in actions" :key="i">
                 <update-subject v-if="action.onClick === 'rename'" :subject-id="subject.id" @dialog-close="menu = false">
                   <v-btn
+                    :class="{ pashtoFont: $i18n.locale === 'pa' }"
                     :prepend-icon="action.icon"
                     variant="text"
                     color="dark"
@@ -45,6 +46,7 @@
                   variant="text"
                   color="dark"
                   @click="takeAction({ action: action.onClick, subject: subject })"
+                  :class="{ pashtoFont: $i18n.locale === 'pa' }"
                 >
                   {{ action.title }}
                 </v-btn>

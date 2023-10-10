@@ -19,7 +19,7 @@
             {{ title }}
           </span>
         </v-card-title>
-        <v-card-subtitle :class="{ pashtoFont: $i18n.locale === 'pa' }">{{ subtitle }}</v-card-subtitle>
+        <v-card-subtitle :class="{ pashtoFont: $i18n.locale === 'pa' }">{{ $t(subtitle) }}</v-card-subtitle>
       </v-card-item>
       <v-card-text>
         <v-form @submit.prevent="update">

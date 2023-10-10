@@ -9,7 +9,7 @@
           <v-toolbar-title class=""> {{ $t('Add New Teacher Account') }} </v-toolbar-title>
         </v-toolbar> -->
 
-        <v-card class="" :loading="isLoading">
+        <v-card class="" :loading="isLoading" :class="{ pashtoFont: $i18n.locale === 'pa' }">
           <!-- <v-card-item>
             <v-card-title class="font-weight-bold">Teacher Registration</v-card-title>
             <v-card-subtitle>Fill the form to add new teacher account</v-card-subtitle>

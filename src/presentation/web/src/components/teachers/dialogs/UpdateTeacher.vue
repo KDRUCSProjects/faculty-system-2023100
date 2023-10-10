@@ -11,14 +11,18 @@
         </div>
       </template>
 
-      <v-card :loading="isLoading" class="pb-5 pt-3">
+      <v-card :loading="isLoading" class="pb-5 pt-3" :class="{ pashtoFont: $i18n.locale === 'pa' }">
         <!-- <v-toolbar :color="'dark'">
           <v-toolbar-title class=""> {{ $t('Update Teacher Account') }} </v-toolbar-title>
         </v-toolbar> -->
 
         <v-card-text>
           <v-form @submit.prevent="submitForm" ref="updateTeacherForm">
-            <base-photo-uploader @photo="getPhoto" :defaultPhoto="photo" @photo-size-change="handlePhotoSize"></base-photo-uploader>
+            <base-photo-uploader
+              @photo="getPhoto"
+              :defaultPhoto="photo"
+              @photo-size-change="handlePhotoSize"
+            ></base-photo-uploader>
 
             <v-text-field :rules="rules.name" v-model="name" variant="outlined" :label="$t('Full Name')"></v-text-field>
             <v-text-field v-model="lastName" variant="outlined" :label="$t('Nick Name')"></v-text-field>
@@ -70,7 +74,7 @@ export default {
     photo: null,
     newPhoto: null,
     show: true,
-    pSize:null,
+    pSize: null,
     isLoading: false,
     errorMessage: null,
     password: null,

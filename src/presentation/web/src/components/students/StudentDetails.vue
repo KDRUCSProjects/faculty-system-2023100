@@ -32,7 +32,7 @@
           <!-- Personal Info -->
           <v-divider></v-divider>
           <v-list-item v-for="rec in currentPersonalData" :key="rec.title" class="border ma-1">
-            <v-list-item-title :class="{ 'text-error': !rec.title }" class="font-weight-bold" style="font-family: monospace">
+            <v-list-item-title :class="{ 'text-error': !rec.title }" class="font-weight-bold">
               {{ rec.title || 'N/A' }}
             </v-list-item-title>
             <v-list-item-subtitle style="font-size: 13px">{{ rec.subtitle }}</v-list-item-subtitle>
@@ -93,7 +93,9 @@
           <div v-if="!showSecondaryLanguage">
             <!-- Kankor Info -->
 
-            <v-chip prepend-icon="mdi-card-account-details" label color="dark" class="px-5 my-1">{{ $t('Kankor ') }}</v-chip>
+            <v-chip prepend-icon="mdi-card-account-details" label color="dark" class="px-5 my-1">
+              {{ $t('Kankor') }}
+            </v-chip>
 
             <v-list-item v-for="location in kankorInfo" :key="location.title" class="border ma-1">
               <v-list-item-title :class="{ 'text-error': !location.title }">
@@ -153,7 +155,7 @@
           <div v-if="!showSecondaryLanguage">
             <!-- Monograph Info -->
 
-            <v-chip prepend-icon="mdi-book-open-variant" label color="dark" class="px-5 my-1">{{ $t('Monograph ') }}</v-chip>
+            <v-chip prepend-icon="mdi-book-open-variant" label color="dark" class="px-5 my-1">{{ $t('Monograph') }}</v-chip>
 
             <v-list-item v-for="location in monographInfo" :key="location.title" class="border ma-1">
               <v-list-item-title :class="{ 'text-error': !location.title }">

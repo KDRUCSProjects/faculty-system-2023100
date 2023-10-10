@@ -11,7 +11,7 @@
         </div>
       </template>
 
-      <v-card class="ma-0 pa-0">
+      <v-card class="ma-0 pa-0" :class="{ pashtoFont: $i18n.locale === 'pa' }">
         <v-card-text class="ma-0 pa-0" style="overflow-y: hidden">
           <v-window v-model="step">
             <v-window-item :value="1">
@@ -19,12 +19,16 @@
                 <v-card-text class="d-flex justify-center align-center" style="height: 100vh">
                   <v-card-item class="text-center mx-auto">
                     <v-card-title class="text-h4 pb-2 text-uppercase font-weight-bold">
-                      {{ $t('Welcome to students migration') }}
+                      <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                        {{ $t('Welcome to students migration') }}
+                      </span>
                     </v-card-title>
-                    <v-card-title class="text-h4 pb-2 text-uppercase text-secondary font-weight-bold">{{
-                      $t('Overview')
-                    }}</v-card-title>
-                    <v-card-subtitle class="mt-4">
+                    <v-card-title class="text-h4 pb-2 text-uppercase text-secondary font-weight-bold">
+                      <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                        {{ $t('Overview') }}
+                      </span>
+                    </v-card-title>
+                    <v-card-subtitle class="mt-4" dir="ltr">
                       {{ $t('Please review your migration before submitting the process.') }} <br />{{
                         $t('Here you will see which students are eligible for the next semester.')
                       }}<br />

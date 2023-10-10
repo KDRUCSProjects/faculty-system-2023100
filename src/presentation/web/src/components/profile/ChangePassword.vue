@@ -1,7 +1,11 @@
 <template>
   <v-card class="mx-auto theShadow" max-width="550">
     <v-card-item>
-      <v-card-title class="text-center font-weight-bold text-h5 mt-5"> {{ $t('Change account password') }} </v-card-title>
+      <v-card-title class="text-center font-weight-bold text-h5 mt-5">
+        <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+          {{ $t('Change account password') }}
+        </span>
+      </v-card-title>
       <v-card-subtitle class="text-center">
         <p>{{ $t('Just type it twice and try not to forget it') }}</p>
       </v-card-subtitle>
@@ -43,7 +47,9 @@
             :placeholder="$t('Enter the above password')"
             variant="outlined"
           ></v-text-field>
-          <span class="text-error" v-if="passwordComparison"> {{ $t('New password and confirm password does not match') }} </span>
+          <span class="text-error" v-if="passwordComparison">
+            {{ $t('New password and confirm password does not match') }}
+          </span>
           <v-btn
             :disabled="disabledBtn"
             type="submit"

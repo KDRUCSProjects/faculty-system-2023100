@@ -88,15 +88,43 @@
                   </v-row>
                   <v-row>
                     <v-col cols="6">
-                      <v-select variant="outlined" label="Gender" :items="['male', 'female']" v-model="gender"></v-select>
+                      <v-select variant="outlined" :label="$t('Gender')" :items="['male', 'female']" v-model="gender">
+                        <template v-slot:selection="{ item }">
+                          <span>
+                            {{ $t(item.title) }}
+                          </span>
+                        </template>
+
+                        <template v-slot:item="{ props, item }">
+                          <v-list-item
+                            :class="{ pashtoFont: $i18n.locale === 'pa' }"
+                            v-bind="props"
+                            :title="$t(item.title)"
+                          ></v-list-item>
+                        </template>
+                      </v-select>
                     </v-col>
                     <v-col cols="6">
                       <v-select
                         variant="outlined"
-                        label="Kankor Type"
+                        :label="$t('Kankor Type')"
                         :items="['general', 'pass14']"
                         v-model="kankorType"
-                      ></v-select>
+                      >
+                        <template v-slot:selection="{ item }">
+                          <span>
+                            {{ $t(item.title) }}
+                          </span>
+                        </template>
+
+                        <template v-slot:item="{ props, item }">
+                          <v-list-item
+                            :class="{ pashtoFont: $i18n.locale === 'pa' }"
+                            v-bind="props"
+                            :title="$t(item.title)"
+                          ></v-list-item>
+                        </template>
+                      </v-select>
                     </v-col>
                   </v-row>
                 </v-window-item>
