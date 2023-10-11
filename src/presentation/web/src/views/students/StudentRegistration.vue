@@ -5,7 +5,11 @@
         <v-card class="theShadow maxHeight">
           <base-photo-uploader @photo="setPhoto" @photo-size-change="handlePhotoSize"></base-photo-uploader>
           <v-card-item class="text-center">
-            <v-card-title class="text-h5">{{ profilePhotoTitle }}</v-card-title>
+            <v-card-title class="text-h5">
+              <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                {{ profilePhotoTitle }}
+              </span>
+            </v-card-title>
             <v-card-subtitle class="my-1">{{ profilePhotoSubtitle }}</v-card-subtitle>
           </v-card-item>
         </v-card>
@@ -84,15 +88,43 @@
                   </v-row>
                   <v-row>
                     <v-col cols="6">
-                      <v-select variant="outlined" label="Gender" :items="['male', 'female']" v-model="gender"></v-select>
+                      <v-select variant="outlined" :label="$t('Gender')" :items="['male', 'female']" v-model="gender">
+                        <template v-slot:selection="{ item }">
+                          <span>
+                            {{ $t(item.title) }}
+                          </span>
+                        </template>
+
+                        <template v-slot:item="{ props, item }">
+                          <v-list-item
+                            :class="{ pashtoFont: $i18n.locale === 'pa' }"
+                            v-bind="props"
+                            :title="$t(item.title)"
+                          ></v-list-item>
+                        </template>
+                      </v-select>
                     </v-col>
                     <v-col cols="6">
                       <v-select
                         variant="outlined"
-                        label="Kankor Type"
+                        :label="$t('Kankor Type')"
                         :items="['general', 'pass14']"
                         v-model="kankorType"
-                      ></v-select>
+                      >
+                        <template v-slot:selection="{ item }">
+                          <span>
+                            {{ $t(item.title) }}
+                          </span>
+                        </template>
+
+                        <template v-slot:item="{ props, item }">
+                          <v-list-item
+                            :class="{ pashtoFont: $i18n.locale === 'pa' }"
+                            v-bind="props"
+                            :title="$t(item.title)"
+                          ></v-list-item>
+                        </template>
+                      </v-select>
                     </v-col>
                   </v-row>
                 </v-window-item>
@@ -117,14 +149,18 @@
                   </v-chip>
                   <v-row>
                     <v-col cols="6">
-                      <v-text-field variant="outlined" label="Full Name" v-model="engName"></v-text-field>
+                      <v-text-field variant="outlined" :label="$t('Full Name')" v-model="engName"></v-text-field>
                     </v-col>
                     <v-col cols="6">
-                      <v-text-field variant="outlined" label="Last Name" v-model="engLastName"></v-text-field>
+                      <v-text-field variant="outlined" :label="$t('Last Name')" v-model="engLastName"></v-text-field>
                     </v-col>
                   </v-row>
-                  <v-text-field variant="outlined" label="Father Name" v-model="engFatherName"></v-text-field>
-                  <v-text-field variant="outlined" label="Grand Father Name" v-model="engGrandFatherName"></v-text-field>
+                  <v-text-field variant="outlined" :label="$t('Father Name')" v-model="engFatherName"></v-text-field>
+                  <v-text-field
+                    variant="outlined"
+                    :label="$t('Grand Father Name')"
+                    v-model="engGrandFatherName"
+                  ></v-text-field>
                 </v-window-item>
               </v-window>
             </v-form>

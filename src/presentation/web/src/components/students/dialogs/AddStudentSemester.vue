@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="theShadow border py-4 mt-2">
+    <v-card class="theShadow border py-4 mt-2" :class="{ pashtoFont: $i18n.locale === 'pa' }">
       <v-card-item>
         <!-- <v-card-title>Enroll Student</v-card-title> -->
         <v-card-subtitle>{{ $t('Find student and then add to semester') }}</v-card-subtitle>

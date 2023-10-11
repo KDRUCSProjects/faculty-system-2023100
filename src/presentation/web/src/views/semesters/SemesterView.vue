@@ -4,17 +4,25 @@
       <v-col cols="5">
         <v-card class="h-100 theShadow">
           <v-card-item class="text-center my-4">
-            <v-card-title class="text-h5 font-weight-bold">
-              <v-card-title class="text-primary d-inline text-h4">{{ title }}</v-card-title>
-              {{ $t('Semester Overview') }}
+            <v-card-title class="text-h5 font-weight-bold" :class="{ pashtoFont: $i18n.locale === 'pa' }">
+              <h3 class="text-primary d-inline text-h4" :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                  {{ title }}
+                </span>
+              </h3>
+              <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                {{ ' ' + $t('Semester Overview') }}
+              </span>
             </v-card-title>
             <v-card-subtitle>{{ $t('View all the information of this semester') }} </v-card-subtitle>
           </v-card-item>
           <v-card-item class="text-center my-0 py-0">
             <!-- <v-chip label color="primary" size="large" class="mr-1">{{ $t('Semester Title') }} : {{ title }}</v-chip> -->
-            <v-chip class="mx-2" label color="dark"
-              >{{ $t('Start Year') }} : {{ returnYear(currentSemester?.title, 0) }}</v-chip
-            >
+            <v-chip class="mx-2" label color="dark">
+              <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                {{ $t('Start Year') }} : {{ returnYear(currentSemester?.title, 0) }}
+              </span>
+            </v-chip>
             <v-chip label color="dark">{{ $t('End Year') }} : {{ returnYear(currentSemester?.title, 1) }}</v-chip>
           </v-card-item>
           <v-divider class="mt-3"></v-divider>
@@ -115,7 +123,11 @@
               <v-window-item :value="4">
                 <v-card class="mt-7">
                   <v-card-item>
-                    <v-card-title class="text-dark font-weight-bold text-h5">{{ $t('Students Migration') }}</v-card-title>
+                    <v-card-title class="text-dark font-weight-bold text-h5">
+                      <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                        {{ $t('Students Migration') }}
+                      </span>
+                    </v-card-title>
                   </v-card-item>
                   <v-card-text>
                     <p>
@@ -169,15 +181,15 @@
               <v-window-item :value="5">
                 <v-card class="mt-7">
                   <v-card-item>
-                    <v-card-title class="text-dark font-weight-bold text-h5">{{ $t('Attendance') }}</v-card-title>
+                    <v-card-title class="text-dark font-weight-bold text-h5">
+                      <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                        {{ $t('Attendance') }}
+                      </span>
+                    </v-card-title>
                   </v-card-item>
                   <v-card-text class="my-0 py-0">
                     <p>
-                      {{
-                        $t(
-                          'Set semester attendance duration, start and end of months and attendance percentage that the students  should complete.'
-                        )
-                      }}
+                      {{ $t('setSemesterAttendanceInfo') }}
                     </p>
 
                     <v-form @submit.prevent="submitSemesterDuration" ref="semesterDurationForm">
@@ -271,6 +283,7 @@ import { rankSemester } from '@/utils/global';
 import AddSubject from '@/components/subjects/dialogs/AddSubject.vue';
 import MigrationReview from '@/components/semesters/dialogs/MigrationReview';
 import BaseBars from '@/components/ui/charts/BaseBars.vue';
+
 export default {
   provide() {
     return {
@@ -324,69 +337,77 @@ export default {
     downloadLoading: false,
     downloadBadlAshaLoading: false,
     yearData: null,
-    headersReport: [
-      // {
-      //   title: 'No',
-      //   sortable: false,
-      //   key: 'no',
-      // },
-      {
-        title: 'Kankor ID',
-        align: 'start',
-        key: 'kankorId',
-      },
-      {
-        title: 'Name',
-        align: 'start',
-        sortable: true,
-        key: 'fullName',
-      },
-      {
-        title: 'Father Name',
-        align: 'start',
-        sortable: true,
-        key: 'fatherName',
-      },
-    ],
-    headers: [
-      // {
-      //   title: 'No',
-      //   sortable: false,
-      //   key: 'no',
-      // },
-      {
-        title: 'Photo',
-        key: 'photo',
-        sortable: false,
-      },
-      {
-        title: 'Kankor ID',
-        align: 'start',
-        key: 'kankorId',
-      },
-      {
-        title: 'Name',
-        align: 'start',
-        sortable: true,
-        key: 'fullName',
-      },
-      {
-        title: 'Father Name',
-        align: 'start',
-        sortable: true,
-        key: 'fatherName',
-      },
-      // {
-      //   title: 'Kankor Year',
-      //   align: 'start',
-      //   sortable: true,
-      //   key: 'kankorYear',
-      // },
-      { title: 'Actions', key: 'actions', sortable: false },
-    ],
-    statisticsLabels: ['Total', 'Present', 'Taajil', 'Reentry', 'Monfaq', 'Tabdil'],
   }),
   computed: {
+    statisticsLabels() {
+      return [
+        this.$t('Total'),
+        this.$t('Present'),
+        this.$t('Taajil'),
+        this.$t('Reentry'),
+        this.$t('Monfaqi'),
+        this.$t('Tabdili'),
+      ];
+    },
+    headersReport() {
+      return [
+        // {
+        //   title: 'No',
+        //   sortable: false,
+        //   key: 'no',
+        // },
+        {
+          title: this.$t('Kankor ID'),
+          align: 'start',
+          key: 'kankorId',
+        },
+        {
+          title: this.$t('Full Name'),
+          align: 'start',
+          sortable: true,
+          key: 'fullName',
+        },
+        {
+          title: this.$t('Father Name'),
+          align: 'start',
+          sortable: true,
+          key: 'fatherName',
+        },
+      ];
+    },
+    headers() {
+      return [
+        // {
+        //   title: 'No',
+        //   sortable: false,
+        //   key: 'no',
+        // },
+        {
+          title: this.$t('Photo'),
+          key: 'photo',
+          sortable: false,
+        },
+        {
+          title: this.$t('Kankor ID'),
+          align: 'start',
+          key: 'kankorId',
+        },
+        {
+          title: this.$t('Full Name'),
+          align: 'start',
+          sortable: true,
+          key: 'fullName',
+        },
+        {
+          title: this.$t('Father Name'),
+          align: 'start',
+          sortable: true,
+          key: 'fatherName',
+        },
+
+        { title: this.$t('Actions'), key: 'actions', sortable: false },
+      ];
+    },
     enableSemesterAddition() {
       const semesterTitle = this.$route.query.semester == 1 || this.$route.query.semester == 5 ? true : false;
 
@@ -430,7 +451,7 @@ export default {
       return this.$store.getters['semesters/semesterSubjects'];
     },
     title() {
-      return rankSemester(this.$route.query.semester);
+      return rankSemester(this.$route.query.semester, this.appLanguage);
     },
     year() {
       return this.$route.query.year;
@@ -562,7 +583,7 @@ export default {
         warningTitle: this.$t('Warning'),
         title: this.$t('Are you sure you want to delete this student from this semester?'),
         subtitle: studentId,
-        okButton: this.$('Yes, continue'),
+        okButton: this.$t('Yes, continue'),
       });
 
       // If closed, return the function
@@ -636,7 +657,7 @@ export default {
       await this.loadStudents();
     },
     semesterName(number) {
-      return rankSemester(number);
+      return rankSemester(number, this.appLanguage);
     },
     viewTeacher() {},
     async setSemesterData(semesterId) {

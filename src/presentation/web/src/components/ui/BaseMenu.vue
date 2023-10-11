@@ -1,9 +1,9 @@
 <template>
-  <div class="mx-1">
+  <div class="mx-1" :class="{ pashtoFont: $i18n.locale === 'pa' }">
     <v-menu>
       <template v-slot:activator="{ props }">
         <v-btn :color="theme || 'primary'" :variant="variant || 'flat'" v-bind="props" :block="block">
-          {{ displayPreText ? displayPreText + ' ' + selected : selected || defaultItem }}
+          {{ btnTitle }}
         </v-btn>
       </template>
       <v-list>
@@ -15,7 +15,11 @@
           :class="{ 'bg-primary': item === selected }"
           :variant="item === selected ? 'tonal' : 'flat'"
         >
-          <v-list-item-title>{{ item }}</v-list-item-title>
+          <v-list-item-title>
+            <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+              {{ $t(item.toString()) }}
+            </span>
+          </v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -37,6 +41,13 @@ export default {
   watch: {
     selected(v) {
       this.$emit('selected', v);
+    },
+  },
+  computed: {
+    btnTitle() {
+      return this.displayPreText
+        ? this.$t(this?.displayPreText.toString()) + this.$t(this?.selected.toString())
+        : this.$t(this?.selected.toString()) || this.$t(this?.defaultItem.toString());
     },
   },
   emits: ['selected'],

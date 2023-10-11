@@ -49,7 +49,7 @@
           <v-btn
             v-if="enableStudentsAddition"
             :color="enrollmentMode ? 'primary' : 'light'"
-            class="ml-1"
+            class="mx-3"
             variant="flat"
             link
             @click="switchMode"
@@ -64,6 +64,14 @@
         <v-chip class="" variant="flat">
           {{ item.columns.kankorId }}
         </v-chip>
+      </template>
+
+      <template v-slot:item.gender="{ item }">
+        {{ $t(item.columns.gender) }}
+      </template>
+
+      <template v-slot:item.kankorType="{ item }">
+        {{ $t(item.columns.kankorType) }}
       </template>
 
       <!-- Number Slot -->
@@ -141,6 +149,7 @@ export default {
     },
     deleteStudent(item) {
       const { raw } = item;
+
       this.$emit('delete-student', raw.studentId);
     },
     editStudent() {},

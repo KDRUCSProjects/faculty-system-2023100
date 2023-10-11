@@ -6,16 +6,23 @@
         <v-col cols="12">
           <v-card class="theShadow pa-3">
             <v-card-item>
-              <v-card-title class="text-h5 font-weight-bold">{{ $t('Assigned Subjects') }}</v-card-title>
-              <v-card-subtitle>{{ $t('The list of all assigned subjects to you in this semester') }}</v-card-subtitle>
+              <v-card-title class="text-h5 font-weight-bold">
+                <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                  {{ $t('Assigned Subjects') }}
+                </span>
+              </v-card-title>
+              <v-card-subtitle>{{ $t('The list of all assigned subjects to this teacher') }}</v-card-subtitle>
             </v-card-item>
             <v-divider></v-divider>
             <v-card-text>
               <v-card v-for="(item, i) in semesterWithSubjects" :key="i" class="theShadow pa-3 ma-2">
                 <v-card-item>
-                  <v-card-title class="text-primary text-h6 font-weight-bold"
-                    >{{ item.year }}, <span class="text-dark">{{ rankSemester(item.title) }} {{ $t('Semester') }}</span></v-card-title
-                  >
+                  <v-card-title class="text-primary text-h6 font-weight-bold">
+                    <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+                      {{ item.year }},
+                      <span class="text-dark">{{ rankSemester(item.title) }} {{ $t('Semester') }}</span>
+                    </span>
+                  </v-card-title>
                   <v-card-subtitle>{{ $t('Total subjects:') }} {{ item.subjects.length }}</v-card-subtitle>
                 </v-card-item>
                 <v-card-text>
@@ -65,7 +72,7 @@ export default {
   },
   methods: {
     rankSemester(title) {
-      return rankSemester(title);
+      return rankSemester(title, this.appLanguage);
     },
     async loadTeacherById(id) {
       await this.$store.dispatch('teachers/loadTeacherById', id);

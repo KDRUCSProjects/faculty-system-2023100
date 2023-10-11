@@ -3,7 +3,11 @@
     <!-- App/Drawer name -->
     <v-list-item class="my-4">
       <v-list-item-content>
-        <v-list-item-title class="text-center text-h6 font-weight-bold"> {{ $t('First') }} </v-list-item-title>
+        <v-list-item-title class="text-center text-h6 font-weight-bold">
+          <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+            {{ $t('First') }}
+          </span>
+        </v-list-item-title>
         <v-list-item-subtitle class="text-center"> {{ $t('Second') }} </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>

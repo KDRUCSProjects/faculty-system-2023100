@@ -112,6 +112,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         defaultValue: 0,
       },
+      resultsTableNumber: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
       csId: {
         type: Sequelize.STRING,
       },

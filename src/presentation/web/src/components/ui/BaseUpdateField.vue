@@ -1,5 +1,6 @@
 <template>
   <v-text-field
+    :class="{ pashtoFont: $i18n.locale === 'pa' }"
     ref="theField"
     variant="outlined"
     v-model.number="field"

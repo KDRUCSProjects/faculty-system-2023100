@@ -3,7 +3,11 @@
     <v-col cols="5">
       <v-card class="h-100 theShadow py-0 my-0">
         <v-card-item class="text-center bg-primary">
-          <v-card-title class="text-h5"> {{ capitalizeFirstLetter(type) }} {{ $t('form') }} </v-card-title>
+          <v-card-title class="text-h5">
+            <span :class="{ pashtoFont: $i18n.locale === 'pa' }">
+              {{ $t(capitalizeFirstLetter(type)) }} {{ $t('form') }}
+            </span>
+          </v-card-title>
           <v-card-subtitle>{{ $t('For conversion blew instruction is important') }}</v-card-subtitle>
         </v-card-item>
 
@@ -136,42 +140,44 @@ export default {
     regNumber: null,
     educationalYear: null,
     errorMessage: null,
-    headers: [
-      {
-        title: 'ID#',
-        key: 'id',
-        sortable: false,
-      },
-      {
-        title: 'Kankor ID',
-        key: 'Student.kankorId',
-        sortable: false,
-      },
-      {
-        title: 'Name',
-        key: 'Student.fullName',
-        sortable: false,
-      },
-      {
-        title: 'F Name',
-        key: 'Student.fatherName',
-        sortable: false,
-      },
-      {
-        title: 'Year',
-        key: 'year',
-        sortable: false,
-      },
-      {
-        title: 'Notes',
-        align: 'start',
-        sortable: false,
-        key: 'notes',
-      },
-      { title: 'Actions', key: 'actions', sortable: false },
-    ],
   }),
   computed: {
+    headers() {
+      return [
+        {
+          title: this.$t('Number'),
+          key: 'id',
+          sortable: false,
+        },
+        {
+          title: this.$t('Kankor ID'),
+          key: 'Student.kankorId',
+          sortable: false,
+        },
+        {
+          title: this.$t('Full Name'),
+          key: 'Student.fullName',
+          sortable: false,
+        },
+        {
+          title: this.$t('Father Name'),
+          key: 'Student.fatherName',
+          sortable: false,
+        },
+        {
+          title: this.$t('Year'),
+          key: 'year',
+          sortable: false,
+        },
+        {
+          title: this.$t('Notes'),
+          align: 'start',
+          sortable: false,
+          key: 'notes',
+        },
+        { title: this.$t('Actions'), key: 'actions', sortable: false },
+      ];
+    },
     students() {
       return this.$store.getters[`conversion/${this.formType}Students`];
     },
@@ -208,7 +214,7 @@ export default {
   },
   methods: {
     rankSemester(v) {
-      return rankSemester(v);
+      return rankSemester(v, this.appLanguage);
     },
     async submitForm() {
       const { valid } = await this.$refs.statusForm.validate();

@@ -2,7 +2,13 @@
   <div>
     <!-- Default Btn/Slot -->
 
-    <v-dialog max-width="550" activator="parent" v-model="dialog" transition="slide-y-transition">
+    <v-dialog
+      max-width="550"
+      activator="parent"
+      v-model="dialog"
+      transition="slide-y-transition"
+      :class="{ pashtoFont: $i18n.locale === 'pa' }"
+    >
       <template v-slot:activator="{ props }">
         <div v-bind="props">
           <slot>
@@ -10,7 +16,7 @@
           </slot>
         </div>
       </template>
-      <v-card class="pa-1" :loading="isLoading">
+      <v-card class="pa-1" :loading="isLoading" :class="{ pashtoFont: $i18n.locale === 'pa' }">
         <v-card-text>
           <v-form @submit.prevent="submitForm" ref="updateSubjectForm">
             <v-text-field :rules="rules.name" v-model="name" variant="outlined" :label="$t('Subject Name')"></v-text-field>

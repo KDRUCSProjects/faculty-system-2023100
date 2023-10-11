@@ -2,7 +2,7 @@
   <v-overlay v-model="dialog" scrim="#000"></v-overlay>
 
   <v-dialog v-model="dialog" :max-width="modalWidth" transition="slide-y-transition" persistent="">
-    <v-card>
+    <v-card :class="{ pashtoFont: $i18n.locale === 'pa' }">
       <v-card-item>
         <v-card-title class="font-weight-bold">{{ $t('Confirm Identity') }}</v-card-title>
         <v-card-subtitle>{{ $t('Type your password to continue') }}</v-card-subtitle>

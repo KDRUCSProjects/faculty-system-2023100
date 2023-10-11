@@ -48,35 +48,37 @@ export default {
   },
   data: () => ({
     tab: null,
-    tabs: [
-      {
-        title: 'Profile',
-        component: 'ViewEditProfile',
-        role: ['admin', 'user', 'execManager', 'teachingManager'],
-      },
-      {
-        title: 'Change Password',
-        component: 'ChangePassword',
-        role: ['admin', 'user', 'execManager', 'teachingManager'],
-      },
-      {
-        title: 'Educational Year',
-        component: 'EducationalYear',
-        role: ['admin', 'teachingManager'],
-      },
-      {
-        title: 'Token Generate',
-        component: 'TokenGenerate',
-        role: ['admin', 'teachingManager'],
-      },
-      {
-        title: 'System Backup',
-        component: 'SystemBackup',
-        role: ['admin', 'teachingManager'],
-      },
-    ],
   }),
   computed: {
+    tabs() {
+      return [
+        {
+          title: this.$t('Profile'),
+          component: 'ViewEditProfile',
+          role: ['admin', 'user', 'execManager', 'teachingManager'],
+        },
+        {
+          title: this.$t('Change Password'),
+          component: 'ChangePassword',
+          role: ['admin', 'user', 'execManager', 'teachingManager'],
+        },
+        {
+          title: this.$t('Educational Year'),
+          component: 'EducationalYear',
+          role: ['admin', 'teachingManager'],
+        },
+        {
+          title: this.$t('Token Generate'),
+          component: 'TokenGenerate',
+          role: ['admin', 'teachingManager'],
+        },
+        {
+          title: this.$t('System Backup'),
+          component: 'SystemBackup',
+          role: ['admin', 'teachingManager'],
+        },
+      ];
+    },
     isTeacher() {
       return this.$store.getters.isTeacher;
     },

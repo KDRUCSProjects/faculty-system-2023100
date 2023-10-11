@@ -25,7 +25,7 @@
           <v-spacer></v-spacer>
 
           <v-text-field
-            style="position: relative; top: 10px; right: 10px"
+            class="mx-1"
             density="compact"
             color="light"
             variant="outlined"
@@ -33,6 +33,7 @@
             :label="$t('Kankor ID')"
             append-inner-icon="mdi-magnify"
             :loading="loading"
+            hide-details=""
           ></v-text-field>
 
           <div class="px-3">
@@ -61,6 +62,14 @@
         <v-chip class="" variant="flat">
           {{ item.raw.Student.kankorId }}
         </v-chip>
+      </template>
+
+      <template v-slot:item.gender="{ item }">
+        {{ $t(item.columns.gender) }}
+      </template>
+
+      <template v-slot:item.kankorType="{ item }">
+        {{ $t(item.columns.kankorType) }}
       </template>
 
       <!-- Number Slot -->
@@ -168,7 +177,7 @@ export default {
       itemsPerPage: 8,
       searchedValue: '',
       errorMessage: null,
-      statusTypes: [this.$t('Taajil'), this.$t('Reentry'), this.$t('Tabdili'), this.$t('monfaqi')],
+      statusTypes: ['Taajil', 'Reentry', 'Tabdili', 'monfaqi'],
       type: null,
     };
   },

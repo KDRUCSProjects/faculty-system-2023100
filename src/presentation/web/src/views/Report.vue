@@ -9,7 +9,7 @@
       <base-menu
         :items="reportItems"
         @selected="setReport"
-        display-pre-text="Report -    "
+        display-pre-text="Report - "
         theme="ternary"
         :variant="'flat'"
         :the-default="'present'"
@@ -125,62 +125,60 @@ export default {
     search: null,
     downloadLoading: false,
     downloadBadlAshaLoading: false,
-    headersReport: [
-      //   {
-      //     title: 'No',
-      //     sortable: false,
-      //     key: 'no',
-      //   },
-      {
-        title: 'Photo',
-        key: 'photo',
-        sortable: false,
-      },
-      {
-        title: 'Kankor ID',
-        align: 'start',
-        key: 'kankorId',
-      },
-      {
-        title: 'Name',
-        align: 'start',
-        sortable: true,
-        key: 'fullName',
-      },
-      {
-        title: 'Father Name',
-        align: 'start',
-        sortable: true,
-        key: 'fatherName',
-      },
-      {
-        title: 'Grand F Name',
-        align: 'start',
-        sortable: true,
-        key: 'grandFatherName',
-      },
-      {
-        title: 'Gender',
-        align: 'start',
-        sortable: true,
-        key: 'gender',
-      },
-      {
-        title: 'Province',
-        align: 'start',
-        sortable: true,
-        key: 'province',
-      },
-      {
-        title: 'Kankor Type',
-        align: 'start',
-        sortable: true,
-        key: 'kankorType',
-      },
-    ],
     semesterItems: [1, 2, 3, 4, 5, 6, 7, 8],
   }),
   computed: {
+    headersReport() {
+      return [
+        {
+          title: this.$t('Photo'),
+          key: 'photo',
+          sortable: false,
+        },
+        {
+          title: this.$t('Kankor ID'),
+          align: 'start',
+          key: 'kankorId',
+          sortable: false,
+        },
+        {
+          title: this.$t('Full Name'),
+          align: 'start',
+          sortable: false,
+          key: 'fullName',
+        },
+        {
+          title: this.$t('Father Name'),
+          align: 'start',
+          sortable: false,
+          key: 'fatherName',
+        },
+        {
+          title: this.$t('Grand Father Name'),
+          align: 'start',
+          sortable: false,
+          key: 'grandFatherName',
+        },
+        {
+          title: this.$t('Gender'),
+          align: 'start',
+          sortable: true,
+          key: 'gender',
+        },
+        {
+          title: this.$t('Province'),
+          align: 'start',
+          sortable: true,
+          key: 'province',
+        },
+        {
+          title: this.$t('Kankor Type'),
+          align: 'start',
+          sortable: true,
+          key: 'kankorType',
+        },
+      ];
+    },
     showBadlAshaDownload() {
       const semesterTitle = this.currentSemester?.title;
 

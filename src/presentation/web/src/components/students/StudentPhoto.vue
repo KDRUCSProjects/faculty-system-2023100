@@ -2,7 +2,7 @@
   <div>
     <v-card class="theShadow py-5 pa-3">
       <span class="pro" v-if="!studentRegistration">
-        {{ latestSemester ? `${rankSemester(latestSemester)} Semester` : 'Reserved' }}
+        {{ latestSemester ? `${rankSemester(latestSemester)} ${$t('Semester')}` : $t('Reserved') }}
       </span>
 
       <v-card-item class="text-center mb-1">
@@ -94,7 +94,7 @@ export default {
       // Once emitted,
     },
     rankSemester(p) {
-      return rankSemester(p);
+      return rankSemester(p, this.appLanguage);
     },
   },
   emits: ['upload-photo'],

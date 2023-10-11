@@ -2,10 +2,17 @@
   <div>
     <v-card class="theShadow">
       <v-card-item class="mt-4">
-        <v-card-title class="text-h5 text-primary text-uppercase font-weight-bold">{{ subject?.name }}</v-card-title>
+        <v-card-title
+          class="text-h5 text-primary mb-2 text-uppercase font-weight-bold"
+          style="font-family: monospace !important"
+        >
+          <span>
+            {{ subject?.name }}
+          </span>
+        </v-card-title>
         <v-btn
           @click="downloadShoka"
-          class="float-right"
+          class="float-right mx-1"
           prepend-icon="mdi-download-circle"
           color="primary"
           variant="tonal"
@@ -19,8 +26,8 @@
 
           <base-menu :displayPreText="'Chance - '" theme="dark" :items="chanceItems" @selected="setChance"></base-menu>
         </div>
-        <v-card-title class="mt-1">{{ $t('Total Credits:') }} {{ subject?.credit }}</v-card-title>
-        <v-card-subtitle class="mt-1">{{ $t('Subject Database ID:') }} {{ subject?.id }}</v-card-subtitle>
+        <!-- <v-card-subtitle class="mt-1 mx-2">{{ $t('Total Credits:') }} {{ subject?.credit }}</v-card-subtitle> -->
+        <!-- <v-card-subtitle class="mt-1">{{ $t('Subject Database ID:') }} {{ subject?.id }}</v-card-subtitle> -->
       </v-card-item>
       <v-card-text>
         <!-- The Table -->
@@ -51,7 +58,6 @@
                 :fieldName="'assignment'"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
-                :max-value="10"
                 @update="updateMarks"
               >
               </base-update-field>
@@ -66,7 +72,6 @@
                 :fieldName="'finalMarks'"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
-                :max-value="60"
                 @update="updateMarks"
               >
               </base-update-field>
@@ -81,7 +86,6 @@
                 :fieldName="'projectMarks'"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
-                :max-value="20"
                 @update="updateMarks"
               >
               </base-update-field>
@@ -96,7 +100,6 @@
                 :fieldName="'practicalWork'"
                 :rowId="item?.raw?.shokaListId"
                 :data="item?.raw"
-                :max-value="10"
                 @update="updateMarks"
               >
               </base-update-field>
@@ -129,6 +132,17 @@
             </div>
           </template>
 
+          <template v-slot:item.delete="{ item }">
+            <v-btn
+              v-if="item.raw?.shokaListId"
+              variant="text"
+              color="error"
+              icon="mdi-delete-outline"
+              @click="deleteShokaListId(item.raw?.shokaListId)"
+            ></v-btn>
+            <v-btn v-else variant="text" color="dark" icon="mdi-circle-outline"></v-btn>
+          </template>
+
           <template v-slot:item.photo="{ item }">
             <v-avatar class="my-2" color="primary" variant="tonal">
               <v-img v-if="item.columns?.photo" :src="`${imagesResource}/${item.columns?.photo}`" alt="user" />
@@ -156,48 +170,7 @@ const initialState = () => ({
   downloadLoading: false,
   chanceItems: [1, 2, 3, 4],
   attachment: null,
-  headers: [
-    {
-      title: 'No',
-      sortable: false,
-      key: 'no',
-    },
-    {
-      title: 'Photo',
-      key: 'photo',
-      sortable: false,
-    },
-    {
-      title: 'Kankor ID',
-      align: 'start',
-      key: 'kankorId',
-      sortable: false,
-    },
-    {
-      title: 'Name',
-      align: 'start',
-      sortable: false,
-      key: 'fullName',
-    },
-    {
-      title: 'Father Name',
-      align: 'start',
-      sortable: false,
-      key: 'fatherName',
-    },
-    {
-      title: 'Grand Father Name',
-      align: 'start',
-      sortable: false,
-      key: 'grandFatherName',
-    },
-    { title: 'Assignment', key: 'assignment', sortable: false },
-    { title: 'Practical', key: 'practicalWork', sortable: false },
-    { title: 'Mid-Exam', key: 'projectMarks', sortable: false },
-    { title: 'Final-Exam', key: 'finalMarks', sortable: false },
-    { title: 'Total', key: 'total', sortable: false },
-    // { title: 'Success', key: 'eligibility', sortable: false },
-  ],
+  postLoader: false,
 });
 
 export default {
@@ -217,6 +190,51 @@ export default {
   },
   data: () => initialState(),
   computed: {
+    headers() {
+      return [
+        {
+          title: this.$t('Number'),
+          sortable: false,
+          key: 'no',
+        },
+        {
+          title: this.$t('Photo'),
+          key: 'photo',
+          sortable: false,
+        },
+        {
+          title: this.$t('Kankor ID'),
+          align: 'start',
+          key: 'kankorId',
+          sortable: false,
+        },
+        {
+          title: this.$t('Full Name'),
+          align: 'start',
+          sortable: false,
+          key: 'fullName',
+        },
+        {
+          title: this.$t('Father Name'),
+          align: 'start',
+          sortable: false,
+          key: 'fatherName',
+        },
+        {
+          title: this.$t('Grand Father Name'),
+          align: 'start',
+          sortable: false,
+          key: 'grandFatherName',
+        },
+        { title: this.$t('Assignment'), key: 'assignment', sortable: false },
+        { title: this.$t('Practical'), key: 'practicalWork', sortable: false },
+        { title: this.$t('Mid-Exam'), key: 'projectMarks', sortable: false },
+        { title: this.$t('Final-Exam'), key: 'finalMarks', sortable: false },
+        { title: this.$t('Total'), key: 'total', sortable: false },
+        { title: this.$t('Delete'), key: 'delete', sortable: false },
+        // { title: 'Success', key: 'eligibility', sortable: false },
+      ];
+    },
     students() {
       let students = this.$store.getters['subjects/currentShoka'];
 
@@ -294,7 +312,7 @@ export default {
       });
     },
     setChance(value) {
-      this.chance = value;
+      this.chance = parseInt(value);
       this.forceRender();
     },
     async downloadShoka() {
@@ -319,6 +337,10 @@ export default {
 
       await this.$store.dispatch('subjects/loadShokaBySubjectId', { subjectId: this.subjectId, chance });
     },
+    async deleteShokaListId(id) {
+      await this.$store.dispatch('subjects/deleteShokaListId', id);
+      await this.loadShokaBySubject();
+    },
     async updateMarks({ field, fieldValue, rowId, data }) {
       // if (!data.shokaListId) {
       //   let res = await this.$refs.baseConfirmDialog.show({
@@ -335,6 +357,11 @@ export default {
 
       const type = data.shokaListId ? 'updateShokaByShokaListId' : 'addStudentMarksToShokaBySubjectId';
 
+      if (type === 'addStudentMarksToShokaBySubjectId') {
+        this.postLoader = true;
+        // show a loader and disable inputs
+      }
+
       await this.$store.dispatch(`subjects/${type}`, {
         chance: parseInt(this.chance),
         subjectId: this.subjectId,
@@ -346,6 +373,7 @@ export default {
       });
 
       await this.loadShokaBySubject();
+      this.postLoader = false;
     },
     async loadAttachment(chance = 1) {
       const data = await this.$store.dispatch('subjects/loadAttachment', {

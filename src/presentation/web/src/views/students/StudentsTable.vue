@@ -22,7 +22,8 @@
           <v-spacer></v-spacer>
 
           <v-text-field
-            style="position: relative; top: 10px; right: 10px"
+            style="position: relative; top: 10px"
+            class="mx-2"
             density="compact"
             color="light"
             variant="outlined"
@@ -55,6 +56,18 @@
         <v-chip class="" variant="flat">
           {{ item.columns.kankorId }}
         </v-chip>
+      </template>
+
+      <template v-slot:item.gender="{ item }">
+        <div v-if="item.columns.gender">
+          {{ $t(item.columns?.gender) }}
+        </div>
+      </template>
+
+      <template v-slot:item.kankorType="{ item }">
+        <div v-if="item.columns.kankorType">
+          {{ $t(item.columns?.kankorType) }}
+        </div>
       </template>
 
       <!-- <template v-slot:item.status="{ item }">
@@ -119,6 +132,12 @@ export default {
           align: 'start',
           sortable: true,
           key: 'fatherName',
+        },
+        {
+          title: this.$t('Gender'),
+          align: 'start',
+          sortable: true,
+          key: 'gender',
         },
         {
           title: this.$t('Province'),

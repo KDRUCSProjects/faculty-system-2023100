@@ -11,7 +11,7 @@
         </div>
       </template>
 
-      <v-card :loading="isLoading">
+      <v-card :loading="isLoading" :class="{ pashtoFont: $i18n.locale === 'pa' }">
         <v-toolbar :color="'dark'">
           <v-toolbar-title class=""> {{ $t('Add New Subject') }} </v-toolbar-title>
         </v-toolbar>
