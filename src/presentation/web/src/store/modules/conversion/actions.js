@@ -58,7 +58,7 @@ export default {
       // context.commit('saveYear', response.data);
       // context.dispatch('loadConversionStudents', type);
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed adding conversion'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState('Failed adding conversion')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -77,7 +77,7 @@ export default {
       // context.commit('saveYear', response.data);
       context.dispatch('loadConversionStudents', type);
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed removing conversion'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed removing conversion')], { root: true });
       throw e.response.data.message;
     }
   },

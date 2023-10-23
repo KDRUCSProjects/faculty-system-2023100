@@ -43,11 +43,11 @@ export default createStore({
           },
         });
 
-        context.commit('setToast', [1, response.data.message || 'DB backup successfully started'], {
+        context.commit('setToast', [1, response.data.message || context.rootState.$t('DB backup successfully started')], {
           root: true,
         });
       } catch (e) {
-        context.commit('setToast', [0, e.response.data.message || 'Failed generating db backup'], {
+        context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed generating db backup')], {
           root: true,
         });
 

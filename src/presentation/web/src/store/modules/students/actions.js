@@ -43,7 +43,7 @@ export default {
         page: response.data.page,
       });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'All Student load failed'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('All Student load failed') ], { root: true });
       throw e.response.data.message;
     }
   },
@@ -64,7 +64,7 @@ export default {
 
       return response;
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Student load by failed'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Student load by failed')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -81,10 +81,10 @@ export default {
 
       // Instead of committing, let's reload all students
       context.dispatch('loadStudents');
-      context.commit('setToast', 'Student successfully deleted', { root: true });
+      context.commit('setToast', context.rootState.$t('Student successfully deleted'), { root: true });
       return response;
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed deleting Student'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed deleting Student') ], { root: true });
       throw e.response.data.message;
     }
   },
@@ -114,9 +114,9 @@ export default {
       });
 
       context.commit('setStudent', response.data);
-      context.commit('setToast', 'Student data successfully updated', { root: true });
+      context.commit('setToast', context.rootState.$t('Student data successfully updated'), { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed updating Student data'], { root: true });
+      context.commit('setToast', [0, e.response.data.message ||  context.rootState.$t('Failed updating Student data') ], { root: true });
       throw e.response.data.message;
     }
   },
@@ -144,9 +144,9 @@ export default {
 
       // Instead of adding the student, let's reload. This will be changed later as this is not good for performance.
       context.dispatch('loadStudents');
-      context.commit('setToast', 'Student account has been added successfully', { root: true });
+      context.commit('setToast', context.rootState.$t('Student account has been added successfully'), { root: true });
     } catch (e) {
-      context.commit('setToast', [0, 'Failed adding Student account'], { root: true });
+      context.commit('setToast', [0, context.rootState.$t('Failed adding Student account')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -169,7 +169,7 @@ export default {
       // Plus, also load current semester data
       context.dispatch('semesters/loadSemesterById', semesterId, { root: true });
     } catch (e) {
-      context.commit('setToast', [0, 'Semester students load filed'], { root: true });
+      context.commit('setToast', [0, context.rootState.$t('Semester students load filed')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -215,7 +215,7 @@ export default {
 
       // Let's reload the students
       context.dispatch('loadStudentsListBySemesterId', semesterId);
-      context.commit('setToast', 'Student added successfully to Semester', { root: true });
+      context.commit('setToast', context.rootState.$t('Student added successfully to Semester'), { root: true });
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
@@ -243,7 +243,7 @@ export default {
       });
       // Let's reload the students
       context.dispatch('loadStudentsListBySemesterId', semesterId);
-      context.commit('setToast', 'Student successfully remove from Semester', { root: true });
+      context.commit('setToast', context.rootState.$t('Student successfully remove from Semester'), { root: true });
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;

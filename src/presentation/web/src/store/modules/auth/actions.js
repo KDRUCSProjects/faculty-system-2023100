@@ -113,7 +113,7 @@ export default {
 
       const responseData = response;
 
-      context.commit('setToast', 'Password successfully change', { root: true });
+      context.commit('setToast', context.rootState.$t('Password successfully change') , { root: true });
 
       // Show a success or error message
     } catch (e) {
@@ -172,7 +172,7 @@ export default {
         lastName: response.data.lastName,
         photo: response.data.photo,
       });
-      context.commit('setToast', 'User data successfully updated', { root: true });
+      context.commit('setToast', context.rootState.$t('User data successfully updated'), { root: true });
 
       // Show a success or error message
     } catch (e) {

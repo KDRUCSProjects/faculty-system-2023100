@@ -16,7 +16,7 @@ export default {
 
       context.commit('setTeachers', response.data);
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'All Teacher load failed'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('All Teacher load failed') ], { root: true });
       throw e.response.data.message;
     }
   },
@@ -38,9 +38,9 @@ export default {
       });
 
       context.commit('saveTeacher', response.data);
-      context.commit('setToast', 'Teacher account has been added successfully', { root: true });
+      context.commit('setToast', context.rootState.$t('Teacher account has been added successfully'), { root: true });
     } catch (e) {
-      context.commit('setToast', [0, 'Failed adding Teacher account'], { root: true });
+      context.commit('setToast', [0, context.rootState.$t('Failed adding Teacher account') ], { root: true });
       throw e.response.data.message;
     }
   },
@@ -58,9 +58,9 @@ export default {
       });
 
       context.commit('removeTeacher', teacherId);
-      context.commit('setToast', 'Teacher successfully deleted', { root: true });
+      context.commit('setToast', context.rootState.$t('Teacher successfully deleted'), { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed deleting Teacher'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed deleting Teacher')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -85,11 +85,11 @@ export default {
       });
 
       context.commit('updateTeacher', response.data);
-      context.commit('setToast', 'Teacher data successfully updated', { root: true });
+      context.commit('setToast', context.rootState.$t('Teacher data successfully updated'), { root: true });
       // Plus, also update existing teacher data
       // await context.dispatch('loadTeacherById', payload.teacherId);
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed updating Teacher data'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed updating Teacher data') ], { root: true });
       throw e.response.data.message;
     }
   },
