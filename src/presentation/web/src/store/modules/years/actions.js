@@ -10,7 +10,7 @@ export default {
 
       context.commit('setYears', response.data);
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed load of all Educational year'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed load of all Educational year')], { root: true });
 
       throw e.response.data.message;
     }
@@ -32,11 +32,11 @@ export default {
       // Just reload all years
       context.dispatch('loadEducationalYears');
       context.dispatch('loadCurrentOnGoingYear');
-      context.commit('setToast', [1, response.data.message || 'Year information has been updated successfully'], {
+      context.commit('setToast', [1, response.data.message ||  context.rootState.$t('Year information has been updated successfully') ], {
         root: true,
       });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed load of all Educational year'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed load of all Educational year') ], { root: true });
 
       throw e.response.data.message;
     }
@@ -76,9 +76,9 @@ export default {
       });
 
       context.commit('saveYear', response.data);
-      context.commit('setToast', 'Educational year successfully added', { root: true });
+      context.commit('setToast', context.rootState.$t('Educational year successfully added'), { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed adding of Educational year'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed adding of Educational year')], { root: true });
 
       throw e.response.data.message;
     }
@@ -98,7 +98,7 @@ export default {
 
       context.commit('setOnGoingYearAndFirstHalf', response.data);
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed loading current educational year'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed loading current educational year')], { root: true });
 
       throw e.response.data.message;
     }
@@ -134,7 +134,7 @@ export default {
       // Now, load all educational years
       await context.dispatch('loadEducationalYears', response.data);
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed setting current educational year'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed setting current educational year')], { root: true });
 
       throw e.response.data.message;
     }

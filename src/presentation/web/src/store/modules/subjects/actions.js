@@ -34,9 +34,9 @@ export default {
       });
 
       context.commit('saveSubject', response.data);
-      context.commit('setToast', 'Subject has been added successfully', { root: true });
+      context.commit('setToast',  context.rootState.$t('Subject has been added successfully') , { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed adding Subject'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed adding Subject')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -54,9 +54,9 @@ export default {
       });
 
       context.commit('removeSubject', subjectId);
-      context.commit('setToast', 'Subject successfully deleted', { root: true });
+      context.commit('setToast', context.rootState.$t('Subject successfully deleted'), { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed deleting Subject'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed deleting Subject')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -142,7 +142,7 @@ export default {
 
       // context.commit('setToast', 'Marks successfully updated', { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed updating student marks'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed updating student marks')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -159,9 +159,9 @@ export default {
         },
       });
 
-      context.commit('setToast', 'Marks deleted successfully', { root: true });
+      context.commit('setToast', context.rootState.$t('Marks deleted successfully'), { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed updating student marks'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed updating student marks')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -183,9 +183,9 @@ export default {
         data: { ...marks, subjectId, studentId },
       });
 
-      context.commit('setToast', 'Marks has been added successfully', { root: true });
+      context.commit('setToast', context.rootState.$t('Marks has been added successfully'), { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed adding student marks to shoka'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed adding student marks to shoka')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -258,9 +258,9 @@ export default {
       });
 
       context.commit('setAttendance', response.data);
-      context.commit('setToast', 'Attendance has been added successfully', { root: true });
+      context.commit('setToast', context.rootState.$t('Attendance has been added successfully'), { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed adding student attendance report'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed adding student attendance report')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -280,9 +280,9 @@ export default {
 
       context.commit('setAttendance', response.data);
 
-      context.commit('setToast', 'Attendance has been updated successfully', { root: true });
+      context.commit('setToast', context.rootState.$t('Attendance has been updated successfully'), { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed updating student attendance report'], {
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed updating student attendance report')], {
         root: true,
       });
       throw e.response.data.message;
@@ -310,7 +310,7 @@ export default {
 
       return result;
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed uploadting attachment'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed uploading attachment')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -334,7 +334,7 @@ export default {
 
       return result;
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed updating attachment'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed updating attachment')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -374,7 +374,7 @@ export default {
 
       // context.commit('setToast', 'Attachment successfully deleted', { root: true });
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'Failed deleting attachment'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('Failed deleting attachment')], { root: true });
       throw e.response.data.message;
     }
   },

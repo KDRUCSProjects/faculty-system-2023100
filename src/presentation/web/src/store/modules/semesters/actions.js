@@ -17,7 +17,7 @@ export default {
       context.commit('setCurrentYearSemesters', response.data);
       context.commit('setCurrentYear', payload);
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'All semesters load failed'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('All semesters load failed')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -72,7 +72,7 @@ export default {
         },
       });
 
-      context.commit('setToast', [1, 'Migration has been completed successfully'], { root: true });
+      context.commit('setToast', [1, context.rootState.$t('Migration has been completed successfully')], { root: true });
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
@@ -94,7 +94,7 @@ export default {
       context.commit('setCurrentPeriodSemesters', response.data?.unorderedSemesters);
       context.commit('setCurrentPeriod', payload);
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'All semesters load failed'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('All semesters load failed')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -113,7 +113,7 @@ export default {
 
       context.commit('setStatistics', response.data);
     } catch (e) {
-      context.commit('setToast', [0, e.response.data.message || 'All semesters load failed'], { root: true });
+      context.commit('setToast', [0, e.response.data.message || context.rootState.$t('All semesters load failed')], { root: true });
       throw e.response.data.message;
     }
   },
@@ -192,7 +192,7 @@ export default {
         data: data,
       });
 
-      context.commit('setToast', [1, 'Migration has been completed successfully'], { root: true });
+      context.commit('setToast', [1, context.rootState.$t('Migration has been completed successfully')], { root: true });
     } catch (e) {
       context.commit('setToast', [0, e.response.data.message], { root: true });
       throw e.response.data.message;
